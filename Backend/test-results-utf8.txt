@@ -1,0 +1,36 @@
+◇ injected env (1) from .env // tip: ⌘ suppress logs { quiet: true }
+Successfully loaded 9 CourseContent chunks into memory.
+
+=== Tokenization Check ===
+Q: "Why does mass affect acceleration?"
+Tokens: [ 'mass', 'acceleration' ]
+Q: "Explain quantum entanglement"
+Tokens: [ 'quantum', 'entanglement' ]
+Q: "What is momentum?"
+Tokens: [ 'momentum' ]
+Q: "What's the difference between mass and weight?"
+Tokens: [ 'mass', 'weight' ]
+Q: "What is the syllabus for this subject"
+Tokens: []
+
+=== Retrieval Score Check ===
+Q: "Why does mass affect acceleration?"
+  Top Match: chunk_1 - Score: 0.331
+  Threshold Check (>0.30): PASS
+Q: "Explain quantum entanglement"
+  Top Match: chunk_1 - Score: 0.000
+  Threshold Check (>0.30): FAIL (insufficient_evidence)
+Q: "What is momentum?"
+  Top Match: chunk_9 - Score: 0.512
+  Threshold Check (>0.30): PASS
+Q: "What's the difference between mass and weight?"
+  Top Match: chunk_9 - Score: 0.181
+  Threshold Check (>0.30): FAIL (insufficient_evidence)
+Q: "What is the syllabus for this subject"
+  Top Match: chunk_1 - Score: 0.000
+  Threshold Check (>0.30): FAIL (insufficient_evidence)
+
+=== Gap Detection Check ===
+Top chunk for 'Why does mass affect acceleration?': chunk_1
+  Gaps for s1: [ 'chunk_7', 'chunk_8' ]
+  Gaps for s2: []
