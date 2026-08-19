@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import StudentChat from './components/StudentChat'
 import TeacherDashboard from './components/TeacherDashboard'
+import { supabase } from './lib/supabaseClient'
+
 
 function App() {
   const [activeView, setActiveView] = useState('chat')
 
+  console.log(supabase);
   return (
     <div className="app-container">
       <div className="nav-bar">
