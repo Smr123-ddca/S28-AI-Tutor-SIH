@@ -37,8 +37,8 @@ function TeacherDashboard({ session }) {
 
     return (
         <div>
-            <h2 style={{ color: 'var(--blue)', marginTop: 0 }}>Class Misconceptions</h2>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+            <h2 style={{ color: 'var(--text-primary)', marginTop: 0, fontSize: '2.5rem' }}>Class Misconceptions</h2>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.1rem', fontWeight: 500 }}>
                 Overview of topics where students struggle. Rows exceeding 40% fail rate are highlighted.
             </p>
 

@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react'
 import StudentChat from './components/StudentChat'
 import TeacherDashboard from './components/TeacherDashboard'
 import Login from './components/Login'
+import Navbar from './components/Navbar'
+import Home from './components/Home'
+import About from './components/About'
 import { supabase } from './lib/supabaseClient'
 
 function App() {
   const [session, setSession] = useState(null)
   const [role, setRole] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [view, setView] = useState('home')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -56,6 +60,7 @@ function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
+    setView('home')
   }
 
   if (loading) {
@@ -66,22 +71,28 @@ function App() {
     return <Login />
   }
 
-  return (
-    <div className="app-container">
-      <div className="nav-bar" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button
-          className="nav-btn active"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </div>
+  const displayName = session.user?.user_metadata?.display_name || session.user?.email || 'User';
 
-      <div style={{ marginTop: '2rem' }}>
-        {role === 'student' && <StudentChat session={session} />}
-        {role === 'teacher' && <TeacherDashboard session={session} />}
-        {!role && <div>Error: Role not found for this user.</div>}
-      </div>
+  return (
+    <div className="app-wrapper">
+      <Navbar
+        setView={setView}
+        currentView={view}
+        handleLogout={handleLogout}
+        displayName={displayName}
+        role={role}
+      />
+
+      {view === 'home' && <Home role={role} setView={setView} />}
+      {view === 'about' && <About />}
+
+      {view === 'app' && (
+        <div className="app-container" style={{ paddingTop: '2rem' }}>
+          {role === 'student' && <StudentChat session={session} />}
+          {role === 'teacher' && <TeacherDashboard session={session} />}
+          {!role && <div>Error: Role not found for this user.</div>}
+        </div>
+      )}
     </div>
   )
 }

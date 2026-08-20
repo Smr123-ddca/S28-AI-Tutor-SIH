@@ -91,7 +91,7 @@ export default function Login() {
                                     value="student"
                                     checked={role === 'student'}
                                     onChange={(e) => setRole(e.target.value)}
-                                    style={{ accentColor: 'var(--blue)' }}
+                                    style={{ accentColor: 'var(--amber)' }}
                                 /> Student
                             </label>
                             <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
@@ -100,7 +100,7 @@ export default function Login() {
                                     value="teacher"
                                     checked={role === 'teacher'}
                                     onChange={(e) => setRole(e.target.value)}
-                                    style={{ accentColor: 'var(--blue)' }}
+                                    style={{ accentColor: 'var(--amber)' }}
                                 /> Teacher
                             </label>
                         </div>
