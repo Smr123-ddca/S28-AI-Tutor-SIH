@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function TeacherDashboard() {
+function TeacherDashboard({ session }) {
     const [misconceptions, setMisconceptions] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -8,7 +8,11 @@ function TeacherDashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/misconceptions')
+                const response = await fetch('/api/misconceptions', {
+                    headers: {
+                        'Authorization': `Bearer ${session?.access_token}`
+                    }
+                })
                 if (!response.ok) throw new Error('API fetch failed')
                 const data = await response.json()
                 setMisconceptions(data.misconceptions || [])

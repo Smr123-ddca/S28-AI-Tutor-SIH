@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 
-function StudentChat() {
+function StudentChat({ session }) {
     const [messages, setMessages] = useState([])
     const [question, setQuestion] = useState('')
     const [studentId, setStudentId] = useState('s1')
@@ -27,7 +27,10 @@ function StudentChat() {
         try {
             const response = await fetch('/api/explain', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.access_token}`
+                },
                 body: JSON.stringify({
                     question: userMsg.text,
                     student_id: studentId || undefined
