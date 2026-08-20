@@ -2,6 +2,7 @@ const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
 const retrievalService = require('../services/retrieval.service');
 const { getLikelyGaps } = require('./gap.controller');
 const { getChunks } = require('../data/store');
+const { recordChatLog } = require('./chatlog.controller');
 
 // Initialize Gemini
 // In a real app we'd want to handle missing env keys more robustly, 
@@ -77,11 +78,24 @@ async function callGemini(promptText) {
 }
 
 async function explain(req, res) {
-    const { question, student_id } = req.body;
+    const { question, student_id, session_id } = req.body;
 
     if (!question || typeof question !== 'string') {
         return res.status(400).json({ error: 'Please provide a valid "question" string in the JSON payload.' });
     }
+
+    // Helper to log and respond
+    const respondAndLog = (statusObj) => {
+        if (student_id || session_id) {
+            recordChatLog({
+                student_id,
+                session_id: session_id || 'untracked',
+                question,
+                response: statusObj
+            });
+        }
+        return res.json(statusObj);
+    };
 
     try {
         // a. Call existing retrieval logic
@@ -89,7 +103,7 @@ async function explain(req, res) {
 
         // b. Fallback if no sufficient evidence
         if (!results || results.length === 0 || results[0].score < 0.30) {
-            return res.json({
+            return respondAndLog({
                 status: "insufficient_evidence",
                 message: "I don't have approved course material covering this.",
                 results: results
@@ -107,7 +121,7 @@ async function explain(req, res) {
         console.log("----------------------------");
 
         if (classificationResult.classification === "graded_work_request") {
-            return res.json({
+            return respondAndLog({
                 status: "guided_mode",
                 message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
                 top_topic: results[0].topic,
@@ -178,11 +192,21 @@ Generate exactly 2 short practice questions based on the same material.
                 console.error("Gemini call or parse failed:", err);
                 attempts++;
                 if (attempts >= maxAttempts) {
-                    return res.status(500).json({
+                    const errorObj = {
                         status: "error",
                         message: "Could not generate a response.",
                         results: contextChunks
-                    });
+                    };
+                    if (student_id || session_id) {
+                        // Use raw return and manually record since it's a 500
+                        recordChatLog({
+                            student_id,
+                            session_id: session_id || 'untracked',
+                            question,
+                            response: errorObj
+                        });
+                    }
+                    return res.status(500).json(errorObj);
                 }
             }
         }
@@ -198,7 +222,7 @@ Generate exactly 2 short practice questions based on the same material.
         }
 
         // Return combined JSON
-        return res.json({
+        return respondAndLog({
             status: parsedResult.status || "answered",
             ...(gapData || {}),
             explanation_segments: parsedResult.explanation_segments || [],
@@ -207,6 +231,17 @@ Generate exactly 2 short practice questions based on the same material.
         });
     } catch (error) {
         console.error("Error in explain endpoint:", error);
+
+        // Log the catastropic error as well
+        if (student_id || session_id) {
+            recordChatLog({
+                student_id,
+                session_id: session_id || 'untracked',
+                question,
+                response: { status: "error", message: "Internal Server Error" }
+            });
+        }
+
         return res.status(500).json({ error: "Internal Server Error" });
     }
 }

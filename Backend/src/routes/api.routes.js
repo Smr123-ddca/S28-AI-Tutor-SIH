@@ -3,6 +3,7 @@ const { retrieve } = require('../controllers/retrieval.controller');
 const { explain } = require('../controllers/explain.controller');
 const { recordSessionEvent, detectGap } = require('../controllers/gap.controller');
 const { getMisconceptions } = require('../controllers/misconception.controller');
+const { getChatLogs } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload } = require('../controllers/ingest.controller');
 
@@ -14,7 +15,10 @@ router.post('/retrieve', retrieve);
 router.post('/explain', explain);
 router.post('/session-event', recordSessionEvent);
 router.post('/detect-gap', detectGap);
+const { debugGetEvents } = require('../controllers/gap.controller');
+router.get('/session-events', debugGetEvents);
 router.get('/misconceptions', requireRole('teacher'), getMisconceptions);
+router.get('/chat-logs', getChatLogs); // explicitly mentioned no auth-gating required yet, but it falls under authenticate middleware
 
 // Ingestion Sub-layer A (Upload)
 router.post('/ingest/upload', requireRole('teacher'), uploadMiddleware, handleUpload);

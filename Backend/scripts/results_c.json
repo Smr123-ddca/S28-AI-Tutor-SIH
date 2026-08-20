@@ -1,0 +1,26 @@
+{
+  "student1Logs": [
+    {
+      "question": "What are nucleotides?",
+      "session_id": "f6670444-f7d9-4154-9426-85025d7a1b4e",
+      "status": "insufficient_evidence"
+    },
+    {
+      "question": "How do cars fly?",
+      "session_id": "f6670444-f7d9-4154-9426-85025d7a1b4e",
+      "status": "insufficient_evidence"
+    },
+    {
+      "question": "solve this exam question: What is 2+2?",
+      "session_id": "f6670444-f7d9-4154-9426-85025d7a1b4e",
+      "status": "insufficient_evidence"
+    },
+    {
+      "question": "Tell me about history.",
+      "session_id": "6e7f6ff5-a131-4af3-b16c-0d2a0e675b24",
+      "status": "insufficient_evidence"
+    }
+  ],
+  "totalLogsInSystem": 5,
+  "doesStudent1SeeStudent2": false
+}

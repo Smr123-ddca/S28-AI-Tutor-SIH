@@ -1,12 +1,28 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 function StudentChat({ session }) {
     const [messages, setMessages] = useState([])
     const [question, setQuestion] = useState('')
-    const [studentId, setStudentId] = useState('s1')
+    const [studentId, setStudentId] = useState('')
+    const [sessionId] = useState(() => crypto.randomUUID())
     const [loading, setLoading] = useState(false)
 
     const [expandedCitations, setExpandedCitations] = useState({})
+    const [recordedPQs, setRecordedPQs] = useState({})
+
+    useEffect(() => {
+        let storedId;
+        try {
+            storedId = localStorage.getItem('ai_tutor_student_id');
+            if (!storedId) {
+                storedId = crypto.randomUUID();
+                localStorage.setItem('ai_tutor_student_id', storedId);
+            }
+        } catch (e) {
+            storedId = crypto.randomUUID();
+        }
+        setStudentId(storedId);
+    }, []);
 
     const toggleCitation = (msgIndex, segIndex) => {
         const key = `${msgIndex}-${segIndex}`
@@ -15,6 +31,27 @@ function StudentChat({ session }) {
             [key]: !prev[key]
         }))
     }
+
+    const handlePracticeReport = async (msgIndex, pqIdx, chunkId, correct) => {
+        const key = `${msgIndex}-${pqIdx}`;
+        try {
+            await fetch('/api/session-event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.access_token}`
+                },
+                body: JSON.stringify({
+                    student_id: studentId,
+                    chunk_id: chunkId,
+                    correct: correct
+                })
+            });
+            setRecordedPQs(prev => ({ ...prev, [key]: true }));
+        } catch (err) {
+            console.error('Failed to log error', err);
+        }
+    };
 
     const handleSend = async () => {
         if (!question.trim()) return
@@ -33,7 +70,8 @@ function StudentChat({ session }) {
                 },
                 body: JSON.stringify({
                     question: userMsg.text,
-                    student_id: studentId || undefined
+                    student_id: studentId || undefined,
+                    session_id: sessionId
                 })
             })
 
@@ -48,15 +86,6 @@ function StudentChat({ session }) {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div className="top-chat-controls">
-                <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Student ID:</label>
-                <input
-                    className="student-id-field"
-                    value={studentId}
-                    onChange={e => setStudentId(e.target.value)}
-                    placeholder="e.g. s1"
-                />
-            </div>
 
             <div className="chat-window">
                 {messages.map((msg, idx) => {
@@ -99,6 +128,9 @@ function StudentChat({ session }) {
                             msg.results.forEach(r => { resultsMap[r.id] = r.text })
                         }
 
+                        // Extract first chunk_id if available to tie practice questions to it
+                        const defaultChunkId = msg.results && msg.results.length > 0 ? msg.results[0].id : null;
+
                         return (
                             <div key={idx} className="bubble bubble-left bubble-answered" style={{ maxWidth: '100%' }}>
                                 {msg.addressed_gap && (
@@ -130,10 +162,37 @@ function StudentChat({ session }) {
                                 {msg.practice_questions && msg.practice_questions.length > 0 && (
                                     <div className="practice-box">
                                         <h4>Practice Questions</h4>
-                                        <ul>
-                                            {msg.practice_questions.map((pq, pqIdx) => (
-                                                <li key={pqIdx}>{pq}</li>
-                                            ))}
+                                        <ul style={{ listStyle: 'none', padding: 0 }}>
+                                            {msg.practice_questions.map((pq, pqIdx) => {
+                                                const pqKey = `${idx}-${pqIdx}`;
+                                                const isRecorded = recordedPQs[pqKey];
+
+                                                return (
+                                                    <li key={pqIdx} style={{ marginBottom: '1.25rem' }}>
+                                                        <div style={{ marginBottom: '0.5rem' }}>{pq}</div>
+                                                        {isRecorded ? (
+                                                            <div style={{ fontSize: '0.85rem', color: '#16a34a', fontWeight: 'bold' }}>
+                                                                Recorded ✓
+                                                            </div>
+                                                        ) : (
+                                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                                <button
+                                                                    onClick={() => handlePracticeReport(idx, pqIdx, defaultChunkId, true)}
+                                                                    style={{ fontSize: '0.8rem', padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #16a34a', background: 'transparent', color: '#16a34a', cursor: 'pointer' }}
+                                                                >
+                                                                    Got it right
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handlePracticeReport(idx, pqIdx, defaultChunkId, false)}
+                                                                    style={{ fontSize: '0.8rem', padding: '0.25rem 0.75rem', borderRadius: '4px', border: '1px solid #dc2626', background: 'transparent', color: '#dc2626', cursor: 'pointer' }}
+                                                                >
+                                                                    Got it wrong
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                 )}
