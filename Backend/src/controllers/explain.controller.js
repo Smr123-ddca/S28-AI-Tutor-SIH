@@ -78,21 +78,24 @@ async function callGemini(promptText) {
 }
 
 async function explain(req, res) {
-    const { question, student_id, session_id } = req.body;
+    const { question, student_id, session_id, context_limit = 6 } = req.body;
 
     if (!question || typeof question !== 'string') {
         return res.status(400).json({ error: 'Please provide a valid "question" string in the JSON payload.' });
     }
 
     // Helper to log and respond
-    const respondAndLog = (statusObj) => {
+    const respondAndLog = async (statusObj) => {
         if (student_id || session_id) {
-            recordChatLog({
+            const sid = await recordChatLog({
                 student_id,
                 session_id: session_id || 'untracked',
                 question,
                 response: statusObj
             });
+            if (sid) {
+                statusObj.session_id = sid;
+            }
         }
         return res.json(statusObj);
     };
@@ -103,7 +106,7 @@ async function explain(req, res) {
 
         // b. Fallback if no sufficient evidence
         if (!results || results.length === 0 || results[0].score < 0.30) {
-            return respondAndLog({
+            return await respondAndLog({
                 status: "insufficient_evidence",
                 message: "I don't have approved course material covering this.",
                 results: results
@@ -121,7 +124,7 @@ async function explain(req, res) {
         console.log("----------------------------");
 
         if (classificationResult.classification === "graded_work_request") {
-            return respondAndLog({
+            return await respondAndLog({
                 status: "guided_mode",
                 message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
                 top_topic: results[0].topic,
@@ -162,6 +165,25 @@ async function explain(req, res) {
             }
         }
 
+        // Fetch Transcript for Context Injection
+        let transcript = "";
+        if (session_id && session_id !== 'untracked' && student_id) {
+            const { supabaseAdmin } = require('../lib/supabaseAdmin');
+            if (supabaseAdmin) {
+                const { data: pastMessages } = await supabaseAdmin
+                    .from('chat_messages')
+                    .select('role, content, created_at')
+                    .eq('session_id', session_id)
+                    .order('created_at', { ascending: false })
+                    .limit(parseInt(context_limit, 10) || 6);
+
+                if (pastMessages && pastMessages.length > 0) {
+                    pastMessages.reverse(); // put into chronological order
+                    transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
+                }
+            }
+        }
+
         // d. Prepare prompt for Gemini
         const contextStr = contextChunks.map(r => `Chunk ID: ${r.id}\nSection: ${r.section_label}\nContent: ${r.text}\n`).join('\n---\n');
 
@@ -174,6 +196,10 @@ Generate exactly 2 short practice questions based on the same material.
 `;
         if (gapData) {
             systemInstruction += `\nSince the user seems to have a gap in prerequisite knowledge, briefly note at the beginning of your explanation that this is prerequisite material relevant to what they originally asked about, before diving into the explanation.`;
+        }
+
+        if (transcript) {
+            systemInstruction += `\n\nRecent conversation (for context only — do not treat this as evidence of mastery):\n${transcript}`;
         }
 
         const prompt = `${systemInstruction}\n\nSource Material:\n${contextStr}\n\nQuestion: ${question}`;
@@ -222,7 +248,7 @@ Generate exactly 2 short practice questions based on the same material.
         }
 
         // Return combined JSON
-        return respondAndLog({
+        return await respondAndLog({
             status: parsedResult.status || "answered",
             ...(gapData || {}),
             explanation_segments: parsedResult.explanation_segments || [],

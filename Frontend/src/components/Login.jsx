@@ -19,7 +19,7 @@ export default function Login() {
 
         try {
             if (isSignUp) {
-                const { error: signUpError } = await supabase.auth.signUp({
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -27,6 +27,15 @@ export default function Login() {
                     }
                 });
                 if (signUpError) throw signUpError;
+
+                if (signUpData.user) {
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .upsert({ id: signUpData.user.id, role, display_name: displayName });
+
+                    if (profileError) throw profileError;
+                }
+
                 setSuccessMsg('Sign up successful! Please check your email to confirm your account.');
             } else {
                 const { error: signInError } = await supabase.auth.signInWithPassword({

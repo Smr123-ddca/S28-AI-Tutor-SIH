@@ -1,4 +1,5 @@
 import React from 'react';
+import TinyShapes from './TinyShapes';
 
 export default function Home({ role, setView }) {
     const isStudent = role === 'student';
@@ -85,23 +86,32 @@ export default function Home({ role, setView }) {
             <div className="blob blob-orange"></div>
             <div className="blob blob-green"></div>
 
+            {/* Floating Messy Shapes */}
+            <TinyShapes />
+
             {/* Hero Section */}
-            <header className="hero-section">
-                <h1 className="hero-title">
-                    {isStudent ? "Master concepts, " : "Empower your "}
-                    <span className="text-accent">{isStudent ? "not just facts." : "students."}</span>
-                </h1>
-                <p className="hero-subtitle">
-                    {isStudent
-                        ? "Your adaptive AI tutor grounded strictly in your coursework."
-                        : "Monitor misconceptions, customize material, and guide learning effectively."}
-                </p>
-                <button
-                    className="primary-btn hero-cta"
-                    onClick={() => setView('app')}
-                >
-                    {isStudent ? "Start learning" : "Go to dashboard"}
-                </button>
+            <header className="hero-section" style={{ display: 'flex', alignItems: 'center', gap: '3rem', textAlign: 'left', maxWidth: '1000px' }}>
+                <div style={{ flex: 1 }}>
+                    <h1 className="hero-title" style={{ textAlign: 'left', fontSize: '3.5rem' }}>
+                        {isStudent ? "Master concepts, " : "Empower your "}
+                        <span className="text-accent">{isStudent ? "not just facts." : "students."}</span>
+                    </h1>
+                    <p className="hero-subtitle" style={{ textAlign: 'left' }}>
+                        {isStudent
+                            ? "Your adaptive AI tutor grounded strictly in your coursework."
+                            : "Monitor misconceptions, customize material, and guide learning effectively."}
+                    </p>
+                    <button
+                        className="primary-btn hero-cta"
+                        onClick={() => setView('app')}
+                    >
+                        {isStudent ? "Start learning" : "Go to dashboard"}
+                    </button>
+                </div>
+
+                {/* Robot Illustration Area */}
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+                </div>
             </header>
 
             {/* Feature Showcase */}

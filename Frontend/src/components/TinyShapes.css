@@ -1,0 +1,39 @@
+.tiny-shapes-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    /* just above the background blur blobs but below standard content */
+    overflow: hidden;
+}
+
+.tiny-shape-wrapper {
+    position: absolute;
+    display: inline-flex;
+}
+
+.tiny-svg {
+    overflow: visible;
+    /* so the spilled paint doesn't clip */
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    33% {
+        transform: translate(15px, -20px) rotate(15deg);
+    }
+
+    66% {
+        transform: translate(-10px, 15px) rotate(-10deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
