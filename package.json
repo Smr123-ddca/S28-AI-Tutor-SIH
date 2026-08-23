@@ -1,0 +1,26 @@
+{
+  "name": "s28-ai-tutor-sih",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">",
+  "main": "index.js",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix Frontend",
+    "dev:backend": "npm start --prefix Backend",
+    "iter": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Smr123-ddca/S28-AI-Tutor-SIH.git"
+  },
+  "keywords": [],
+  "author": "Debojeet",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Smr123-ddca/S28-AI-Tutor-SIH/issues"
+  },
+  "homepage": "https://github.com/Smr123-ddca/S28-AI-Tutor-SIH#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}

@@ -33,27 +33,21 @@ export function IconRail() {
   const handleRoleToggle = () => {
     const nextRole = role === 'student' ? 'teacher' : 'student';
     switchRole(nextRole);
-    navigate(nextRole === 'teacher' ? '/teacher' : '/dashboard');
+    navigate(nextRole === 'teacher' ? '/teacher' : '/chat');
   };
 
-  // Filter navigation items strictly by active role
+  // Filter navigation items strictly by active role per spec
   const allNavItems = [
     {
       to: '/',
       icon: Home,
-      title: 'Course Catalog & Landing',
+      title: 'Home & Features',
       roles: ['student', 'teacher']
-    },
-    {
-      to: '/dashboard',
-      icon: LayoutDashboard,
-      title: 'Student Dashboard',
-      roles: ['student']
     },
     {
       to: '/chat',
       icon: MessageSquareText,
-      title: 'AI Avatar Tutor',
+      title: 'AI Tutor (Ask a Doubt & Socratic Hints)',
       roles: ['student']
     },
     {
@@ -105,7 +99,7 @@ export function IconRail() {
             color: '#ffffff',
             boxShadow: 'var(--shadow-orange)'
           }}
-          title="BODH | Study-app"
+          title="LearnifyTutor"
         >
           <Sparkles size={22} />
         </NavLink>

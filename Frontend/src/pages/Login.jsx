@@ -99,18 +99,13 @@ export function Login() {
           .single();
 
         const userRole = profile?.role || 'student';
-        navigate(userRole === 'teacher' ? '/teacher' : '/dashboard');
+        navigate(userRole === 'teacher' ? '/teacher' : '/chat');
       }
     } catch (err) {
       setError(err.message || 'Authentication failed.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDevBypass = (chosenRole) => {
-    switchRole(chosenRole);
-    navigate(chosenRole === 'teacher' ? '/teacher' : '/dashboard');
   };
 
   return (
@@ -153,12 +148,12 @@ export function Login() {
             <Sparkles size={26} />
           </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-ink)' }}>
-            {isSignUp ? 'Join Study-app' : 'Welcome to BODH'}
+            {isSignUp ? 'Join LearnifyTutor' : 'Welcome to LearnifyTutor'}
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             {isSignUp
               ? 'Create your personalized syllabus AI tutoring account'
-              : 'Log in to continue your learning journey'}
+              : 'Log in to continue your curriculum tutoring session'}
           </p>
         </div>
 
@@ -373,7 +368,7 @@ export function Login() {
         </form>
 
         {/* Toggle Sign up / Log in */}
-        <div style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
           {isSignUp ? 'Already have an account? ' : "Don't have an account yet? "}
           <button
             type="button"
@@ -386,36 +381,6 @@ export function Login() {
           >
             {isSignUp ? 'Log In' : 'Sign Up'}
           </button>
-        </div>
-
-        {/* Dev Fast-Track Mock Login Bypass */}
-        <div
-          style={{
-            marginTop: '2rem',
-            paddingTop: '1.5rem',
-            borderTop: '1px dashed var(--color-border)',
-            textAlign: 'center'
-          }}
-        >
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>
-            ⚡ Fast-Track Dev Bypass
-          </div>
-          <div style={{ display: 'flex', gap: '0.65rem', justifyContent: 'center' }}>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleDevBypass('student')}
-            >
-              Enter as Student
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleDevBypass('teacher')}
-            >
-              Enter as Teacher
-            </Button>
-          </div>
         </div>
       </div>
     </div>

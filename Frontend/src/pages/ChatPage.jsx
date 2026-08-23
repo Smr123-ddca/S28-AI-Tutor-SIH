@@ -4,9 +4,13 @@ import {
   Send,
   Plus,
   Edit2,
-  Sparkles
+  Sparkles,
+  BookOpen,
+  ShieldCheck,
+  Lightbulb,
+  Clock,
+  ArrowRight
 } from 'lucide-react';
-import { AvatarTutor } from '../components/tutor/AvatarTutor';
 import { MessageBubble } from '../components/tutor/MessageBubble';
 import { ModeSelector } from '../components/tutor/ModeSelector';
 import { HintSystem } from '../components/tutor/HintSystem';
@@ -33,10 +37,8 @@ export function ChatPage() {
   const [inputQuery, setInputQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeMode, setActiveMode] = useState('ask_doubt'); // 'ask_doubt' | 'practice_test' | 'study_plan'
-  const [tutorState, setTutorState] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [studentId, setStudentId] = useState('');
-  const [currentTopic, setCurrentTopic] = useState('Data Structures & Algorithms');
+  const [currentTopic, setCurrentTopic] = useState('Data Structures: Binary Search Trees & Recursion');
 
   const messagesEndRef = useRef(null);
 
@@ -72,6 +74,7 @@ export function ChatPage() {
       handleSelectSession(sessionIdParam);
     } else if (queryParam) {
       setInputQuery(queryParam);
+      handleSend(queryParam);
     }
   }, [searchParams]);
 
@@ -84,7 +87,6 @@ export function ChatPage() {
     playSound('click');
     setCurrentSessionId(sid);
     setLoading(true);
-    setTutorState('thinking');
     try {
       const data = await fetchSessionMessages(sid, session?.access_token);
       const formatted = (data.messages || []).map((m) => {
@@ -92,10 +94,8 @@ export function ChatPage() {
         return { role: 'bot', ...(m.response_json || { status: 'answered', message: m.content }) };
       });
       setMessages(formatted);
-      setTutorState('idle');
     } catch (e) {
       console.error('Error fetching session messages:', e);
-      setTutorState('idle');
     } finally {
       setLoading(false);
     }
@@ -105,8 +105,6 @@ export function ChatPage() {
     playSound('click');
     setCurrentSessionId(null);
     setMessages([]);
-    setTutorState('idle');
-    setIsSpeaking(false);
   };
 
   const handleRenameTitle = async (sid, oldTitle) => {
@@ -126,7 +124,6 @@ export function ChatPage() {
     setMessages((prev) => [...prev, userMsg]);
     setInputQuery('');
     setLoading(true);
-    setTutorState('thinking');
 
     try {
       const data = await explainQuestion({
@@ -136,10 +133,7 @@ export function ChatPage() {
         token: session?.access_token
       });
 
-      // Response arrived: switch to speaking state with speech simulation
       playSound('responseReady');
-      setTutorState('speaking');
-      setIsSpeaking(true);
 
       if (data.results && data.results.length > 0 && data.results[0].topic) {
         setCurrentTopic(data.results[0].topic);
@@ -152,12 +146,6 @@ export function ChatPage() {
         const refetched = await fetchSessions(session?.access_token);
         setSessions(refetched.sessions || []);
       }
-
-      // Simulate tutor vocalization / presence window
-      setTimeout(() => {
-        setIsSpeaking(false);
-        setTutorState('idle');
-      }, 4000);
     } catch (err) {
       setMessages((prev) => [
         ...prev,
@@ -167,12 +155,16 @@ export function ChatPage() {
           message: 'Could not connect to AI Tutor backend. Please check connection.'
         }
       ]);
-      setTutorState('idle');
-      setIsSpeaking(false);
     } finally {
       setLoading(false);
     }
   };
+
+  const suggestedDoubts = [
+    'Why does BST search degrade to O(n) in worst case?',
+    'Walk me through AVL Tree single and double rotations.',
+    'Explain Call Stack memory during recursive unwinding.'
+  ];
 
   return (
     <div
@@ -187,7 +179,7 @@ export function ChatPage() {
       }}
     >
       {/* =====================================================================
-          LEFT COLUMN: HISTORY SIDEBAR (Collapsible on Mobile)
+          COLUMN 1: HISTORY SIDEBAR
           ===================================================================== */}
       <aside
         style={{
@@ -200,7 +192,7 @@ export function ChatPage() {
           flexShrink: 0
         }}
       >
-        {/* New Chat Button */}
+        {/* New Session Button */}
         <div style={{ padding: '1.25rem', borderBottom: '1px solid var(--color-border)' }}>
           <Button
             variant="orange"
@@ -221,369 +213,545 @@ export function ChatPage() {
               fontWeight: 700,
               color: 'var(--color-text-muted)',
               textTransform: 'uppercase',
-              letterSpacing: '0.05em',
+              letterSpacing: '0.06em',
               marginBottom: '0.65rem',
               paddingLeft: '0.5rem'
             }}
           >
-            Recent History
+            Recent Sessions
           </div>
 
-          {sessions.map((s) => {
-            const isCurrent = currentSessionId === s.id;
-            return (
-              <div
-                key={s.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.65rem 0.75rem',
-                  borderRadius: 'var(--radius-md)',
-                  marginBottom: '0.25rem',
-                  cursor: 'pointer',
-                  backgroundColor: isCurrent ? 'var(--color-orange-subtle)' : 'transparent',
-                  border: isCurrent ? '1px solid #fed7aa' : '1px solid transparent',
-                  transition: 'background var(--transition-fast)'
-                }}
-              >
+          {sessions.length === 0 ? (
+            <div style={{ padding: '1rem 0.5rem', fontSize: '0.82rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+              No past sessions yet. Start asking a doubt!
+            </div>
+          ) : (
+            sessions.map((s) => {
+              const isCurrent = currentSessionId === s.id;
+              return (
                 <div
-                  onClick={() => handleSelectSession(s.id)}
+                  key={s.id}
                   style={{
-                    flex: 1,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    fontSize: '0.85rem',
-                    fontWeight: isCurrent ? 700 : 500,
-                    color: isCurrent ? 'var(--color-orange)' : 'var(--color-ink)'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.65rem 0.75rem',
+                    borderRadius: 'var(--radius-md)',
+                    marginBottom: '0.35rem',
+                    cursor: 'pointer',
+                    backgroundColor: isCurrent ? 'var(--color-orange-subtle)' : 'transparent',
+                    border: isCurrent ? '1.5px solid #fed7aa' : '1.5px solid transparent',
+                    transition: 'all var(--transition-fast)'
                   }}
                 >
-                  {s.title || 'Untitled Session'}
-                </div>
+                  <div
+                    onClick={() => handleSelectSession(s.id)}
+                    style={{
+                      flex: 1,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      fontSize: '0.85rem',
+                      fontWeight: isCurrent ? 700 : 500,
+                      color: isCurrent ? 'var(--color-orange)' : 'var(--color-ink)'
+                    }}
+                  >
+                    {s.title || 'Untitled Session'}
+                  </div>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRenameTitle(s.id, s.title);
-                  }}
-                  style={{
-                    opacity: isCurrent ? 1 : 0.3,
-                    color: 'var(--color-text-muted)',
-                    padding: '0.2rem'
-                  }}
-                  title="Rename"
-                >
-                  <Edit2 size={13} />
-                </button>
-              </div>
-            );
-          })}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRenameTitle(s.id, s.title);
+                    }}
+                    style={{
+                      opacity: isCurrent ? 1 : 0.35,
+                      color: 'var(--color-text-muted)',
+                      padding: '0.2rem',
+                      cursor: 'pointer'
+                    }}
+                    title="Rename"
+                  >
+                    <Edit2 size={13} />
+                  </button>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Sidebar Footer Info */}
+        <div
+          style={{
+            padding: '1rem',
+            borderTop: '1px solid var(--color-border)',
+            backgroundColor: 'var(--color-offwhite)',
+            fontSize: '0.72rem',
+            color: 'var(--color-text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem'
+          }}
+        >
+          <ShieldCheck size={14} style={{ color: 'var(--color-green)' }} />
+          <span>Curriculum Grounded • Zero Hallucinations</span>
         </div>
       </aside>
 
       {/* =====================================================================
-          MAIN TWO-PANE TUTOR WORKSPACE (Expanded Video-Call Presence Layout)
+          COLUMN 2: CONTENT PANE (Context Header + 3 Mode Tabs)
           ===================================================================== */}
-      <div
+      <main
         style={{
           flex: 1,
-          display: 'grid',
-          gridTemplateColumns: 'minmax(420px, 490px) 1fr',
+          display: 'flex',
+          flexDirection: 'column',
           height: '100%',
           minHeight: 0,
+          backgroundColor: 'var(--color-white)',
           overflow: 'hidden'
         }}
       >
-        {/* PANE 1: PERSISTENT AVATAR TUTOR PRESENCE PANEL */}
+        {/* Topic Context Strip */}
+        <div
+          style={{
+            padding: '0.85rem 2rem',
+            backgroundColor: 'var(--color-offwhite)',
+            borderBottom: '1px solid var(--color-border)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '0.75rem'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-orange)', textTransform: 'uppercase' }}>
+              Active Module:
+            </span>
+            <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--color-ink)' }}>
+              {currentTopic}
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Pill color="sky" size="sm" icon={BookOpen}>
+              Approved Textbook Chunks
+            </Pill>
+            <span style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+              Cosine Sim &gt; 0.30
+            </span>
+          </div>
+        </div>
+
+        {/* Three Mode Tabs Selector */}
+        <div style={{ padding: '1rem 2rem 0.5rem', borderBottom: '1px solid var(--color-border)', backgroundColor: 'var(--color-white)' }}>
+          <ModeSelector
+            activeMode={activeMode}
+            onSelectMode={(mode) => {
+              playSound('click');
+              setActiveMode(mode);
+            }}
+          />
+        </div>
+
+        {/* Mode Viewport */}
         <div
           className="smooth-scroll"
           style={{
-            padding: '1.5rem',
-            borderRight: '1px solid var(--color-border)',
-            backgroundColor: 'var(--color-offwhite)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
+            flex: 1,
             minHeight: 0,
             overflowY: 'auto',
-            scrollBehavior: 'smooth'
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <AvatarTutor
-              state={tutorState}
-              isSpeaking={isSpeaking}
-              isThinking={loading}
-              topic={currentTopic}
-            />
-
-            {/* Quick Socratic Prompts */}
-            <div className="card-white" style={{ padding: '1.25rem' }}>
-              <div
-                style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 700,
-                  color: 'var(--color-orange)',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.65rem'
-                }}
-              >
-                Suggested Doubts
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {[
-                  'Why does BST search degrade to O(n) in worst case?',
-                  'Walk me through AVL Tree single and double rotations.',
-                  'Explain Call Stack memory during recursive unwinding.'
-                ].map((doubt, dIdx) => (
-                  <button
-                    key={dIdx}
-                    type="button"
-                    onClick={() => handleSend(doubt)}
-                    style={{
-                      textAlign: 'left',
-                      fontSize: '0.82rem',
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      backgroundColor: 'var(--color-offwhite)',
-                      border: '1px solid var(--color-border)',
-                      color: 'var(--color-ink)',
-                      fontWeight: 500,
-                      lineHeight: 1.35,
-                      cursor: 'pointer',
-                      transition: 'border-color var(--transition-fast)'
-                    }}
-                  >
-                    💡 {doubt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '1rem' }}>
-            Protected by Verified Retrieval • Zero Hallucinations
-          </div>
-        </div>
-
-        {/* PANE 2: INTERACTION PANE (3 MODES + MESSAGES + INPUT) */}
-        <div
-          style={{
+            padding: '1.75rem 2rem',
+            scrollBehavior: 'smooth',
             display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            minHeight: 0,
-            backgroundColor: 'var(--color-white)',
-            position: 'relative',
-            overflow: 'hidden'
+            flexDirection: 'column'
           }}
         >
-          {/* Top Mode Selector Bar */}
-          <div style={{ padding: '1.25rem 2rem 0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <ModeSelector
-              activeMode={activeMode}
-              onSelectMode={(mode) => {
-                playSound('click');
-                setActiveMode(mode);
-              }}
-            />
-          </div>
+          {/* =====================================================================
+              TAB 2: SOCRATIC HINTS
+              ===================================================================== */}
+          {activeMode === 'practice_test' && (
+            <HintSystem onComplete={() => setActiveMode('ask_doubt')} />
+          )}
 
-          {/* Mode Viewport */}
-          <div
-            className="smooth-scroll"
-            style={{
-              flex: 1,
-              minHeight: 0,
-              overflowY: 'auto',
-              padding: '1.5rem 2rem',
-              scrollBehavior: 'smooth'
-            }}
-          >
-            {/* MODE 2: PRACTICE TEST (Socratic Progressive Hints) */}
-            {activeMode === 'practice_test' && (
-              <HintSystem onComplete={() => setActiveMode('ask_doubt')} />
-            )}
-
-            {/* MODE 3: STUDY PLAN / MOCK TEST */}
-            {activeMode === 'study_plan' && (
-              <div className="card-white" style={{ padding: '2rem' }}>
-                <Pill color="yellow" size="sm" style={{ marginBottom: '0.75rem' }}>
-                  Custom Syllabus Diagnostic
-                </Pill>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                  Diagnostic Study Plan: Algorithms & Trees
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
-                  AI Tutor generated a 3-step mastery checkpoint based on your recent practice self-reports:
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-orange)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 1: Prerequisite Re-alignment</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Review Call Stack Frame allocation in recursion (15 mins).</div>
-                  </div>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-purple)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 2: Interactive Tree Rotations</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Practice 4 AVL rebalancing questions with escalating hints (20 mins).</div>
-                  </div>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-yellow)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 3: Timed Mock Assessment</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>5-question syllabus check with instant teacher analytics sync (10 mins).</div>
-                  </div>
-                </div>
-
-                <Button variant="orange" size="md" onClick={() => setActiveMode('practice_test')}>
-                  Begin Diagnostic Practice →
-                </Button>
-              </div>
-            )}
-
-            {/* MODE 1: ASK A DOUBT (Main Chat & Q&A) */}
-            {activeMode === 'ask_doubt' && (
-              <>
-                {messages.length === 0 && !loading && (
-                  <div
-                    style={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      color: 'var(--color-text-muted)',
-                      padding: '2rem'
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '20px',
-                        backgroundColor: 'var(--color-orange-subtle)',
-                        color: 'var(--color-orange)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '1rem'
-                      }}
-                    >
-                      <Sparkles size={32} />
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
-                      What do you want to learn today?
-                    </h3>
-                    <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
-                      Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
-                    </p>
-                  </div>
-                )}
-
-                {messages.map((msg, idx) => (
-                  <MessageBubble
-                    key={idx}
-                    message={msg}
-                    msgIndex={idx}
-                    studentId={studentId}
-                    onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
-                  />
-                ))}
-
-                {loading && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
-                    <div
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--color-purple-light)',
-                        color: 'var(--color-purple)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <Sparkles size={16} className="animate-float" />
-                    </div>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
-                      Tutor is retrieving syllabus material and grounding explanation...
-                    </span>
-                  </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </>
-            )}
-          </div>
-
-          {/* Bottom Chat Input Bar */}
-          {activeMode === 'ask_doubt' && (
+          {/* =====================================================================
+              TAB 3: STUDY PLAN / MOCK TEST (ROADMAP)
+              ===================================================================== */}
+          {activeMode === 'study_plan' && (
             <div
+              className="card-white"
               style={{
-                padding: '1.25rem 2rem',
-                borderTop: '1px solid var(--color-border)',
-                backgroundColor: 'var(--color-white)'
+                padding: '2.25rem',
+                borderRadius: 'var(--radius-xl)',
+                border: '1.5px solid var(--color-border)',
+                backgroundColor: 'var(--color-white)',
+                boxShadow: 'var(--shadow-sm)'
               }}
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSend();
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  position: 'relative'
-                }}
-              >
-                <input
-                  type="text"
-                  value={inputQuery}
-                  onChange={(e) => {
-                    setInputQuery(e.target.value);
-                    if (tutorState === 'idle') setTutorState('listening');
-                  }}
-                  onBlur={() => {
-                    if (tutorState === 'listening') setTutorState('idle');
-                  }}
-                  placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
-                  disabled={loading}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
+                <div>
+                  <Pill color="yellow" size="sm" style={{ marginBottom: '0.65rem' }}>
+                    Personalized Syllabus Diagnostic
+                  </Pill>
+                  <h3 style={{ fontSize: '1.45rem', fontWeight: 700, color: 'var(--color-ink)', lineHeight: 1.2 }}>
+                    Diagnostic Study Plan: {currentTopic}
+                  </h3>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+                  <Clock size={16} /> Total Est. Time: ~45 Mins
+                </div>
+              </div>
+
+              <p style={{ fontSize: '0.92rem', color: 'var(--color-text-secondary)', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+                LearnifyTutor analyzed your practice self-reports and generated a 3-step targeted roadmap to eliminate prerequisite misconceptions before exams:
+              </p>
+
+              {/* Numbered Steps */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem', marginBottom: '2rem' }}>
+                {/* Step 1 */}
+                <div
                   style={{
-                    flex: 1,
-                    padding: '0.9rem 3.5rem 0.9rem 1.4rem',
-                    borderRadius: 'var(--radius-full)',
-                    border: '1.5px solid var(--color-border)',
-                    outline: 'none',
-                    fontSize: '0.95rem',
+                    padding: '1.25rem',
+                    borderRadius: 'var(--radius-md)',
                     backgroundColor: 'var(--color-offwhite)',
-                    transition: 'border-color var(--transition-fast)'
+                    border: '1.5px solid var(--color-border)',
+                    borderLeft: '5px solid var(--color-orange)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
                   }}
-                />
-                <button
-                  type="submit"
-                  disabled={loading || !inputQuery.trim()}
-                  className="btn-orange btn-icon"
-                  style={{
-                    position: 'absolute',
-                    right: '6px',
-                    width: '40px',
-                    height: '40px',
-                    opacity: loading || !inputQuery.trim() ? 0.4 : 1,
-                    cursor: loading || !inputQuery.trim() ? 'not-allowed' : 'pointer'
-                  }}
-                  aria-label="Send Doubt"
                 >
-                  <Send size={18} />
-                </button>
-              </form>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-orange)', textTransform: 'uppercase' }}>
+                        Step 1
+                      </span>
+                      <Pill color="orange" size="sm">Prerequisite Gap</Pill>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      Call Stack Memory & Frame Offsets
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
+                      Review how local activation records are pushed during recursive BST traversals.
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-text-secondary)', backgroundColor: 'var(--color-white)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--color-border)' }}>
+                    ⏱ 15 mins
+                  </span>
+                </div>
+
+                {/* Step 2 */}
+                <div
+                  style={{
+                    padding: '1.25rem',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: 'var(--color-offwhite)',
+                    border: '1.5px solid var(--color-border)',
+                    borderLeft: '5px solid var(--color-purple)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-purple)', textTransform: 'uppercase' }}>
+                        Step 2
+                      </span>
+                      <Pill color="purple" size="sm">Socratic Clues</Pill>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      Interactive Degeneracy & Tree Rotations
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
+                      Work through 3 guided questions with progressive hints to master worst-case O(n) shapes.
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-text-secondary)', backgroundColor: 'var(--color-white)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--color-border)' }}>
+                    ⏱ 20 mins
+                  </span>
+                </div>
+
+                {/* Step 3 */}
+                <div
+                  style={{
+                    padding: '1.25rem',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: 'var(--color-offwhite)',
+                    border: '1.5px solid var(--color-border)',
+                    borderLeft: '5px solid var(--color-yellow)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#b45309', textTransform: 'uppercase' }}>
+                        Step 3
+                      </span>
+                      <Pill color="yellow" size="sm">Assessment Check</Pill>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-ink)' }}>
+                      Timed Syllabus Diagnostic Check
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
+                      5-question syllabus checkpoint that updates your professor's mastery analytics.
+                    </div>
+                  </div>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-text-secondary)', backgroundColor: 'var(--color-white)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--color-border)' }}>
+                    ⏱ 10 mins
+                  </span>
+                </div>
+              </div>
+
+              {/* Action CTA */}
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <Button
+                  variant="orange"
+                  size="lg"
+                  onClick={() => {
+                    playSound('click');
+                    setActiveMode('practice_test');
+                  }}
+                  icon={ArrowRight}
+                  iconPosition="right"
+                >
+                  Begin Diagnostic Practice
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => handleSend(`Can you give me a comprehensive overview of ${currentTopic}?`)}
+                >
+                  Ask Tutor for Concept Overview
+                </Button>
+              </div>
             </div>
           )}
+
+          {/* =====================================================================
+              TAB 1: ASK A DOUBT (DIRECT Q&A)
+              ===================================================================== */}
+          {activeMode === 'ask_doubt' && (
+            <>
+              {/* Empty state welcome card */}
+              {messages.length === 0 && !loading && (
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    color: 'var(--color-text-muted)',
+                    padding: '2rem'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '68px',
+                      height: '68px',
+                      borderRadius: '22px',
+                      backgroundColor: 'var(--color-orange-subtle)',
+                      color: 'var(--color-orange)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1.25rem',
+                      boxShadow: 'var(--shadow-sm)'
+                    }}
+                  >
+                    <Sparkles size={34} />
+                  </div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.5rem' }}>
+                    What doubt can I help you resolve?
+                  </h3>
+                  <p style={{ fontSize: '0.92rem', maxWidth: '460px', lineHeight: 1.6, marginBottom: '1.75rem' }}>
+                    Ask any question from your curriculum. The tutor retrieves verified textbook citations, provides step-by-step explanations, and gives you practice checks.
+                  </p>
+
+                  {/* Suggested Doubt Chips */}
+                  <div style={{ width: '100%', maxWidth: '600px' }}>
+                    <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-orange)', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>
+                      Suggested Doubts for Current Module:
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                      {suggestedDoubts.map((doubt, dIdx) => (
+                        <button
+                          key={dIdx}
+                          type="button"
+                          onClick={() => handleSend(doubt)}
+                          style={{
+                            textAlign: 'left',
+                            fontSize: '0.88rem',
+                            padding: '0.75rem 1.1rem',
+                            borderRadius: 'var(--radius-md)',
+                            backgroundColor: 'var(--color-offwhite)',
+                            border: '1.5px solid var(--color-border)',
+                            color: 'var(--color-ink)',
+                            fontWeight: 500,
+                            lineHeight: 1.4,
+                            cursor: 'pointer',
+                            transition: 'all var(--transition-fast)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.65rem'
+                          }}
+                        >
+                          <Lightbulb size={16} style={{ color: 'var(--color-orange)', flexShrink: 0 }} />
+                          <span>{doubt}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Message History */}
+              {messages.map((msg, idx) => (
+                <MessageBubble
+                  key={idx}
+                  message={msg}
+                  msgIndex={idx}
+                  studentId={studentId}
+                  onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
+                />
+              ))}
+
+              {/* Loading Indicator */}
+              {loading && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
+                  <div
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--color-purple-light)',
+                      color: 'var(--color-purple)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <Sparkles size={18} className="animate-float" />
+                  </div>
+                  <span style={{ fontSize: '0.92rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                    Tutor is retrieving verified syllabus citations and grounding explanation...
+                  </span>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </>
+          )}
         </div>
-      </div>
+
+        {/* Suggested Prompts Strip (above input dock in Tab 1) */}
+        {activeMode === 'ask_doubt' && messages.length > 0 && (
+          <div
+            style={{
+              padding: '0.5rem 2rem',
+              backgroundColor: 'var(--color-offwhite)',
+              borderTop: '1px solid var(--color-border)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.65rem',
+              overflowX: 'auto'
+            }}
+          >
+            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
+              💡 Follow-up:
+            </span>
+            {suggestedDoubts.map((doubt, dIdx) => (
+              <button
+                key={dIdx}
+                type="button"
+                onClick={() => handleSend(doubt)}
+                style={{
+                  fontSize: '0.78rem',
+                  padding: '0.25rem 0.65rem',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: 'var(--color-white)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-ink)',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer'
+                }}
+              >
+                {doubt}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Bottom Chat Input Bar for Tab 1 */}
+        {activeMode === 'ask_doubt' && (
+          <div
+            style={{
+              padding: '1.25rem 2rem',
+              borderTop: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-white)'
+            }}
+          >
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                position: 'relative'
+              }}
+            >
+              <input
+                type="text"
+                value={inputQuery}
+                onChange={(e) => setInputQuery(e.target.value)}
+                placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
+                disabled={loading}
+                style={{
+                  flex: 1,
+                  padding: '0.95rem 3.5rem 0.95rem 1.4rem',
+                  borderRadius: 'var(--radius-full)',
+                  border: '1.5px solid var(--color-border)',
+                  outline: 'none',
+                  fontSize: '0.95rem',
+                  backgroundColor: 'var(--color-offwhite)',
+                  transition: 'border-color var(--transition-fast)'
+                }}
+              />
+              <button
+                type="submit"
+                disabled={loading || !inputQuery.trim()}
+                className="btn-orange btn-icon"
+                style={{
+                  position: 'absolute',
+                  right: '6px',
+                  width: '42px',
+                  height: '42px',
+                  opacity: loading || !inputQuery.trim() ? 0.4 : 1,
+                  cursor: loading || !inputQuery.trim() ? 'not-allowed' : 'pointer'
+                }}
+                aria-label="Send Doubt"
+              >
+                <Send size={18} />
+              </button>
+            </form>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

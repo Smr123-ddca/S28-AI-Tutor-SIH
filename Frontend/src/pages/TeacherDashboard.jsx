@@ -8,7 +8,10 @@ import {
   CheckCircle2,
   BookOpen,
   TrendingUp,
-  Search
+  Search,
+  Sparkles,
+  X,
+  Send
 } from 'lucide-react';
 import { Pill } from '../components/common/Pill';
 import { ProgressBar } from '../components/common/AvatarStack';
@@ -22,9 +25,11 @@ import {
 } from '../services/mockData';
 import { fetchMisconceptions } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useSoundManager } from '../services/soundManager';
 
 export function TeacherDashboard() {
   const { session, displayName } = useAuth();
+  const { playSound } = useSoundManager();
   const [activeTab, setActiveTab] = useState('analytics'); // 'analytics' | 'ingestion' | 'cohort'
   const [misconceptions, setMisconceptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,6 +45,13 @@ export function TeacherDashboard() {
   // Student filter state
   const [cohortFilter, setCohortFilter] = useState('All');
   const [studentSearch, setStudentSearch] = useState('');
+
+  // Modals state
+  const [historyStudent, setHistoryStudent] = useState(null);
+  const [refresherStudent, setRefresherStudent] = useState(null);
+  const [selectedRefresherTopic, setSelectedRefresherTopic] = useState('Recursion Call Stack');
+  const [assignmentNote, setAssignmentNote] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
     async function loadData() {
@@ -64,6 +76,7 @@ export function TeacherDashboard() {
     if (!uploadFileName.trim()) return;
 
     setIsUploading(true);
+    playSound('click');
     setTimeout(() => {
       const newDoc = {
         id: `doc-${Date.now()}`,
@@ -81,8 +94,18 @@ export function TeacherDashboard() {
       setUploadSuccess(true);
       setUploadFileName('');
       setUploadChapter('');
+      playSound('correct');
       setTimeout(() => setUploadSuccess(false), 4000);
     }, 1200);
+  };
+
+  const handleConfirmRefresher = (e) => {
+    e.preventDefault();
+    playSound('correct');
+    setToastMessage(`Assigned "${selectedRefresherTopic}" refresher to ${refresherStudent.studentName}. Prompt pushed to next student session.`);
+    setRefresherStudent(null);
+    setAssignmentNote('');
+    setTimeout(() => setToastMessage(''), 5000);
   };
 
   const filteredStudents = MOCK_STUDENT_GAPS.filter((st) => {
@@ -101,6 +124,37 @@ export function TeacherDashboard() {
 
   return (
     <div className="page-container" style={{ paddingBottom: '4rem' }}>
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: 'var(--color-ink)',
+            color: '#ffffff',
+            padding: '1rem 1.5rem',
+            borderRadius: 'var(--radius-md)',
+            boxShadow: 'var(--shadow-lg)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            zIndex: 100,
+            animation: 'float-subtle 0.3s ease'
+          }}
+        >
+          <Sparkles size={18} style={{ color: 'var(--color-orange)' }} />
+          <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{toastMessage}</span>
+          <button
+            type="button"
+            onClick={() => setToastMessage('')}
+            style={{ color: 'rgba(255, 255, 255, 0.7)', marginLeft: '0.5rem', cursor: 'pointer' }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
       {/* =====================================================================
           TEACHER DASHBOARD HEADER
           ===================================================================== */}
@@ -130,14 +184,14 @@ export function TeacherDashboard() {
               onClick={() => setActiveTab('ingestion')}
               icon={UploadCloud}
             >
-              + Upload Syllabus Material
+              + Ingest New Syllabus File
             </Button>
           </div>
         </div>
       </section>
 
       {/* =====================================================================
-          TEACHER KPI STATS ROW
+          TEACHER KPI STATS ROW (4 STAT CARDS)
           ===================================================================== */}
       <section
         style={{
@@ -154,9 +208,9 @@ export function TeacherDashboard() {
             </span>
             <Users size={18} style={{ color: 'var(--color-purple)' }} />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-ink)' }}>48</div>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-ink)' }}>142</div>
           <div style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
-            Across 3 active class sections
+            Across 4 active syllabus sections
           </div>
         </div>
 
@@ -195,7 +249,7 @@ export function TeacherDashboard() {
             </span>
             <TrendingUp size={18} style={{ color: '#22c55e' }} />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#16a34a' }}>74.5%</div>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#16a34a' }}>88.4%</div>
           <div style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             +8.2% after AI gap refreshers
           </div>
@@ -209,7 +263,10 @@ export function TeacherDashboard() {
         <SegmentedControl
           options={tabOptions}
           value={activeTab}
-          onChange={setActiveTab}
+          onChange={(tab) => {
+            playSound('click');
+            setActiveTab(tab);
+          }}
         />
       </section>
 
@@ -348,28 +405,19 @@ export function TeacherDashboard() {
                             </span>
                           </td>
 
-                          <td style={{ padding: '1.1rem 1.5rem', color: 'var(--color-text-secondary)', fontWeight: 500 }}>
-                            {item.total_attempts} checks
+                          <td style={{ padding: '1.1rem 1.5rem', color: 'var(--color-text-secondary)' }}>
+                            {item.total_attempts} student checks
                           </td>
 
                           <td style={{ padding: '1.1rem 1.5rem' }}>
                             {item.most_common_gap ? (
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                <span style={{ fontWeight: 600, color: isHighAlert ? '#991b1b' : 'var(--color-ink)' }}>
-                                  {item.most_common_gap.section_label}
-                                </span>
-                                <span
-                                  style={{
-                                    fontSize: '0.75rem',
-                                    color: isHighAlert ? '#dc2626' : 'var(--color-text-muted)',
-                                    fontWeight: 700
-                                  }}
-                                >
-                                  ({item.most_common_gap.frequency} students)
-                                </span>
-                              </div>
+                              <Pill color="orange" size="sm">
+                                {item.most_common_gap.section_label}
+                              </Pill>
                             ) : (
-                              <span style={{ color: 'var(--color-text-muted)' }}>—</span>
+                              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                                No prerequisite gap detected
+                              </span>
                             )}
                           </td>
                         </tr>
@@ -381,48 +429,59 @@ export function TeacherDashboard() {
             </div>
           </section>
 
-          {/* Recommended AI Interventions */}
+          {/* AI Recommended Interventions */}
           <section>
             <div style={{ marginBottom: '1.25rem' }}>
               <h2 className="text-h2" style={{ fontSize: '1.35rem' }}>
-                Recommended AI Remediation Plans
+                AI Recommended Class Remediation
               </h2>
             </div>
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '1.5rem'
-              }}
-            >
-              {MOCK_INTERVENTIONS.map((inter) => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+              {MOCK_INTERVENTIONS.map((int) => (
                 <div
-                  key={inter.id}
+                  key={int.id}
                   className="card-white"
                   style={{
                     padding: '1.5rem',
-                    borderLeft: `4px solid ${inter.priority === 'Urgent' ? '#ef4444' : 'var(--color-purple)'}`
+                    borderLeft: `4px solid ${int.priority === 'Urgent' ? 'var(--color-orange)' : 'var(--color-purple)'}`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-ink)' }}>
-                      {inter.topic}
-                    </h3>
-                    <Pill color={inter.priority === 'Urgent' ? 'red' : 'purple'} size="sm">
-                      {inter.priority}
-                    </Pill>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
+                      <Pill color={int.priority === 'Urgent' ? 'orange' : 'purple'} size="sm">
+                        {int.priority} Priority
+                      </Pill>
+                      <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                        {int.targetStudents} Affected Students
+                      </span>
+                    </div>
+
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--color-ink)' }}>
+                      {int.topic}
+                    </h4>
+
+                    <p style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                      {int.recommendation}
+                    </p>
                   </div>
-                  <p style={{ fontSize: '0.86rem', color: 'var(--color-text-secondary)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                    {inter.recommendation}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="ink"
-                    onClick={() => alert(`Remediation Plan launched for ${inter.targetStudents} students.`)}
-                  >
-                    Deploy Automated Refresher ({inter.targetStudents} students)
-                  </Button>
+
+                  <div style={{ marginTop: '1.25rem' }}>
+                    <Button
+                      variant={int.priority === 'Urgent' ? 'orange' : 'outline'}
+                      size="sm"
+                      onClick={() => {
+                        playSound('correct');
+                        setToastMessage(`Dispatched targeted remediation for "${int.topic}" across ${int.targetStudents} students.`);
+                      }}
+                      icon={Sparkles}
+                    >
+                      Deploy Automated Remediation
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -431,43 +490,56 @@ export function TeacherDashboard() {
       )}
 
       {/* =====================================================================
-          TAB 2: SYLLABUS INGESTION & DOCUMENT UPLOADS
+          TAB 2: SYLLABUS INGESTION & UPLOADS
           ===================================================================== */}
       {activeTab === 'ingestion' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
           {/* Upload Form */}
           <div className="card-white" style={{ padding: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <Pill color="orange" size="sm" icon={UploadCloud}>
-                Ingest New Material
-              </Pill>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+              <div
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  backgroundColor: 'var(--color-orange-subtle)',
+                  color: 'var(--color-orange)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <UploadCloud size={20} />
+              </div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 700 }}>
+                Upload Syllabus Document
+              </h3>
             </div>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.35rem' }}>
-              Add Approved Course Documents
-            </h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
-              PDF and PPTX files are automatically chunked, vectorized, and linked to the AI Tutor's grounding knowledge store.
+              Upload official textbooks, lecture notes, or slides. Documents are vectorized into 500-token chunks for grounded zero-hallucination student retrieval.
             </p>
 
             {uploadSuccess && (
               <div
                 style={{
+                  padding: '1rem',
                   backgroundColor: 'var(--color-green-light)',
-                  color: '#15803d',
-                  padding: '0.85rem 1rem',
+                  border: '1.5px solid #86efac',
                   borderRadius: 'var(--radius-md)',
-                  marginBottom: '1.25rem',
+                  color: '#15803d',
                   fontSize: '0.88rem',
+                  marginBottom: '1.25rem',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.5rem'
                 }}
               >
-                <CheckCircle2 size={18} /> Document successfully vectorized and added to curriculum library!
+                <CheckCircle2 size={18} />
+                <span>Document successfully ingested and indexed into knowledge base!</span>
               </div>
             )}
 
-            <form onSubmit={handleUploadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleUploadSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
               <div>
                 <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
                   Document Name / Title
@@ -476,7 +548,7 @@ export function TeacherDashboard() {
                   type="text"
                   value={uploadFileName}
                   onChange={(e) => setUploadFileName(e.target.value)}
-                  placeholder="e.g. Graph_Algorithms_Advanced.pdf"
+                  placeholder="e.g. Graph_Algorithms_CLRS_Notes.pdf"
                   required
                   style={{
                     width: '100%',
@@ -492,7 +564,7 @@ export function TeacherDashboard() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-                    Subject
+                    Subject Area
                   </label>
                   <select
                     value={uploadSubject}
@@ -707,20 +779,225 @@ export function TeacherDashboard() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => alert(`Viewing full doubt history for ${st.studentName}`)}
+                    onClick={() => {
+                      playSound('click');
+                      setHistoryStudent(st);
+                    }}
                   >
                     View History
                   </Button>
                   <Button
                     size="sm"
                     variant="orange"
-                    onClick={() => alert(`Assigned custom prerequisite refresher module to ${st.studentName}`)}
+                    onClick={() => {
+                      playSound('click');
+                      setRefresherStudent(st);
+                      if (st.failingConcepts.length > 0) {
+                        setSelectedRefresherTopic(st.failingConcepts[0]);
+                      }
+                    }}
                   >
                     Assign Refresher
                   </Button>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          VIEW HISTORY MODAL
+          ===================================================================== */}
+      {historyStudent && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(21, 19, 19, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+            padding: '1.5rem'
+          }}
+        >
+          <div
+            className="card-white"
+            style={{
+              width: '100%',
+              maxWidth: '620px',
+              padding: '2rem',
+              borderRadius: 'var(--radius-xl)',
+              maxHeight: '85vh',
+              overflowY: 'auto'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+              <div>
+                <Pill color={historyStudent.riskLevel === 'High' ? 'red' : 'yellow'} size="sm" style={{ marginBottom: '0.4rem' }}>
+                  {historyStudent.riskLevel} Risk Profile
+                </Pill>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--color-ink)' }}>
+                  {historyStudent.studentName} — Doubt & Practice Record
+                </h3>
+                <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>
+                  {historyStudent.email} • Last active: {historyStudent.lastActive}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setHistoryStudent(null)}
+                className="btn-icon btn-ghost"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '1rem', backgroundColor: 'var(--color-offwhite)', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>
+                  Identified Prerequisite Gaps:
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.4rem' }}>
+                  {historyStudent.failingConcepts.map((c, cIdx) => (
+                    <Pill key={cIdx} color="orange" size="sm">
+                      ⚠️ {c}
+                    </Pill>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ padding: '1rem', backgroundColor: 'var(--color-offwhite)', borderRadius: 'var(--radius-md)' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
+                  Recent Tutor Practice Checks:
+                </div>
+                <ul style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', paddingLeft: '1.25rem', lineHeight: 1.6 }}>
+                  <li>Q: "Binary Search Tree worst-case height" — <strong style={{ color: '#dc2626' }}>Marked Incorrect</strong></li>
+                  <li>Q: "Recursive Stack Frame allocation" — <strong style={{ color: '#dc2626' }}>Marked Incorrect</strong></li>
+                  <li>Q: "Asymptotic Big-O comparisons" — <strong style={{ color: '#16a34a' }}>Marked Correct (+10 XP)</strong></li>
+                </ul>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <Button variant="outline" size="md" onClick={() => setHistoryStudent(null)}>
+                Close
+              </Button>
+              <Button
+                variant="orange"
+                size="md"
+                onClick={() => {
+                  const target = historyStudent;
+                  setHistoryStudent(null);
+                  setRefresherStudent(target);
+                }}
+              >
+                Assign Refresher Module
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          ASSIGN REFRESHER MODAL
+          ===================================================================== */}
+      {refresherStudent && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(21, 19, 19, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 100,
+            padding: '1.5rem'
+          }}
+        >
+          <div
+            className="card-white"
+            style={{
+              width: '100%',
+              maxWidth: '540px',
+              padding: '2rem',
+              borderRadius: 'var(--radius-xl)',
+              boxShadow: 'var(--shadow-lg)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+              <div>
+                <Pill color="orange" size="sm" style={{ marginBottom: '0.4rem' }}>
+                  Targeted Remediation
+                </Pill>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--color-ink)' }}>
+                  Assign Refresher to {refresherStudent.studentName}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRefresherStudent(null)}
+                className="btn-icon btn-ghost"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleConfirmRefresher} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+              <div>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  Select Prerequisite Remediation Module
+                </label>
+                <select
+                  value={selectedRefresherTopic}
+                  onChange={(e) => setSelectedRefresherTopic(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1.5px solid var(--color-border)',
+                    outline: 'none',
+                    fontSize: '0.9rem',
+                    backgroundColor: 'var(--color-white)'
+                  }}
+                >
+                  <option value="Recursion Call Stack">Recursion & Call Stack Memory Frames (15 mins)</option>
+                  <option value="BST Tree Rotations">BST Worst-Case Degeneracy & AVL Rotations (20 mins)</option>
+                  <option value="Base Pointer Offsets">Memory Offset & Pointer Arithmetic (10 mins)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  Instructor Note for Student (Optional)
+                </label>
+                <textarea
+                  value={assignmentNote}
+                  onChange={(e) => setAssignmentNote(e.target.value)}
+                  placeholder="e.g., Please complete this 3-step Socratic walkthrough before Friday's quiz."
+                  rows={3}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1.5px solid var(--color-border)',
+                    outline: 'none',
+                    fontSize: '0.9rem',
+                    fontFamily: 'inherit'
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <Button variant="outline" size="md" type="button" onClick={() => setRefresherStudent(null)}>
+                  Cancel
+                </Button>
+                <Button variant="orange" size="md" type="submit" icon={Send}>
+                  Dispatch Refresher to Student
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}

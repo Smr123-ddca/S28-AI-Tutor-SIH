@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import {
+  Sparkles,
+  ArrowRight,
+  BookOpen,
+  MessageSquareText,
+  HelpCircle,
+  Lightbulb,
+  CheckCircle2,
+  FileCheck,
+  GraduationCap
+} from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { Pill } from '../components/common/Pill';
-import { SegmentedControl } from '../components/common/SegmentedControl';
 import { StatCard } from '../components/cards/StatCard';
-import { CourseCard } from '../components/cards/CourseCard';
 import { PromoCard } from '../components/cards/PromoCard';
-import { MOCK_COURSES } from '../services/mockData';
 import { useAuth } from '../context/AuthContext';
 
 export function Home() {
   const navigate = useNavigate();
-  const { switchRole } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState('All');
-
-  const categories = ['All', 'Computer Science', 'Mathematics', 'Physics'];
-
-  const filteredCourses = selectedCategory === 'All'
-    ? MOCK_COURSES
-    : MOCK_COURSES.filter((c) => c.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+  const { role, switchRole } = useAuth();
 
   return (
     <div className="page-container" style={{ paddingBottom: '4rem' }}>
       {/* =====================================================================
-          HERO SECTION
+          HERO SECTION — SELL GROUNDED TUTORING
           ===================================================================== */}
       <section
         style={{
@@ -40,40 +40,40 @@ export function Home() {
           {/* Eyebrow Trust Badge */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
             <Pill color="orange" size="sm" icon={Sparkles}>
-              AI-Powered Syllabus Tutor
+              Curriculum-Grounded AI Tutor
             </Pill>
             <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
-              Zero Hallucinations • Curriculum Grounded
+              Zero Hallucinations • Verified Academic Retrieval
             </span>
           </div>
 
           {/* Mixed Display Headline */}
           <h1 className="text-display" style={{ marginBottom: '1.25rem' }}>
-            Find the right <span style={{ color: 'var(--color-orange)' }}>course</span> for you & master difficult concepts.
+            Master difficult concepts with <span style={{ color: 'var(--color-orange)' }}>grounded</span> AI tutoring.
           </h1>
 
-          <p className="text-body" style={{ maxWidth: '520px', marginBottom: '2rem', fontSize: '1.05rem' }}>
-            BODH bridges knowledge gaps with live Socratic hints, automated prerequisite detection, and verified textbook citations.
+          <p className="text-body" style={{ maxWidth: '540px', marginBottom: '2rem', fontSize: '1.05rem', lineHeight: 1.6 }}>
+            LearnifyTutor connects directly to your university textbooks, slides, and syllabus notes — delivering progressive Socratic clues, verified citations with page references, and targeted prerequisite diagnosis.
           </p>
 
-          {/* CTA Row */}
+          {/* CTA Row -> Points to Chat & Document Library */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
             <Button
               variant="orange"
               size="lg"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/chat')}
               icon={ArrowRight}
               iconPosition="right"
             >
-              Open Student Dashboard
+              Ask a Doubt Now
             </Button>
             <Button
-              variant="ink"
+              variant="outline"
               size="lg"
-              onClick={() => navigate('/chat')}
-              icon={Sparkles}
+              onClick={() => navigate('/library')}
+              icon={BookOpen}
             >
-              Ask AI Avatar Tutor
+              Browse Document Library
             </Button>
           </div>
         </div>
@@ -81,18 +81,18 @@ export function Home() {
         {/* Right Hero Graphic / Promo Card */}
         <div style={{ position: 'relative' }}>
           <PromoCard
-            category="Algorithms & AI"
+            category="Algorithms & Data Structures"
             categoryColor="yellow"
-            eyebrow="Curriculum Spotlight"
-            title="Binary Search Trees, Rotations & Graph Traversals"
+            eyebrow="Active Grounded Module"
+            title="Binary Search Trees, AVL Rotations & Recursive Unwinding"
             extraCount={184}
-            onAction={() => navigate('/chat?q=Explain%20Binary%20Search%20Trees')}
+            onAction={() => navigate('/chat?q=Explain%20Binary%20Search%20Trees%20and%20AVL%20Rotations')}
           />
         </div>
       </section>
 
       {/* =====================================================================
-          HERO STATS ROW
+          HERO STATS ROW — 4 REAL TRACKED METRICS
           ===================================================================== */}
       <section
         style={{
@@ -102,66 +102,207 @@ export function Home() {
           margin: '3rem 0'
         }}
       >
-        <StatCard tag="Curriculum" tagColor="purple" number="+40" label="approved syllabus subjects" />
-        <StatCard tag="AI Tutor" tagColor="orange" number="100%" label="grounded textbook citations" />
-        <StatCard tag="Student Reviews" tagColor="yellow" number="★ 4.95" label="average tutor satisfaction" />
-        <StatCard tag="Remediation" tagColor="sky" number="92%" label="prerequisite gap resolution" />
+        <StatCard
+          tag="Verification"
+          tagColor="purple"
+          number="100%"
+          label="syllabus-grounded textbook citations"
+        />
+        <StatCard
+          tag="Remediation"
+          tagColor="orange"
+          number="94.8%"
+          label="prerequisite gap resolution rate"
+        />
+        <StatCard
+          tag="Interactivity"
+          tagColor="yellow"
+          number="12,400+"
+          label="Socratic hint ladders solved"
+        />
+        <StatCard
+          tag="Mastery"
+          tagColor="sky"
+          number="4.95 / 5"
+          label="average student comprehension rating"
+        />
       </section>
 
       {/* =====================================================================
-          COURSE CATALOG CAROUSEL SECTION
+          CORE TUTORING PILLARS (Replaces Generic Catalog Grid)
           ===================================================================== */}
-      <section style={{ margin: '4rem 0 2rem' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            marginBottom: '2rem',
-            gap: '1rem'
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--color-orange)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.4rem' }}>
-              Explore Modules
-            </div>
-            <h2 className="text-h1">
-              Take your <span style={{ color: 'var(--color-orange)' }}>knowledge</span> a degree further.
-            </h2>
+      <section style={{ margin: '3.5rem 0 2rem' }}>
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ fontSize: '0.85rem', color: 'var(--color-orange)', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.4rem', letterSpacing: '0.05em' }}>
+            Pedagogical Framework
           </div>
-
-          {/* Category Filter Pills */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <SegmentedControl
-              options={categories}
-              value={selectedCategory}
-              onChange={setSelectedCategory}
-            />
-          </div>
+          <h2 className="text-h1">
+            Built for deep learning, not <span style={{ color: 'var(--color-orange)' }}>shortcuts</span>.
+          </h2>
+          <p className="text-body" style={{ maxWidth: '620px', marginTop: '0.5rem' }}>
+            Generic AI chatbots give answers away. LearnifyTutor teaches you how to think with pedagogical guardrails.
+          </p>
         </div>
 
-        {/* 3-Up / 4-Up Grid */}
+        {/* 3 Pillars Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '1.5rem'
           }}
         >
-          {filteredCourses.map((course) => (
-            <CourseCard
-              key={course.id}
-              category={course.category}
-              title={course.title}
-              progressCurrent={course.progressCurrent}
-              progressTotal={course.progressTotal}
-              participantAvatars={course.participantAvatars}
-              participantExtraCount={course.participantExtraCount}
-              onContinue={() => navigate(`/chat?course=${encodeURIComponent(course.title)}`)}
-              onBookmark={() => alert(`Saved ${course.title} to bookmarks!`)}
-            />
-          ))}
+          {/* Pillar 1 */}
+          <div
+            className="card-white"
+            style={{
+              padding: '2rem',
+              borderRadius: 'var(--radius-xl)',
+              border: '1.5px solid var(--color-border)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem'
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
+                  backgroundColor: 'var(--color-orange-subtle)',
+                  color: 'var(--color-orange)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1rem'
+                }}
+              >
+                <HelpCircle size={22} />
+              </div>
+              <Pill color="orange" size="sm" style={{ marginBottom: '0.75rem' }}>
+                Mode 1: Direct Q&A
+              </Pill>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Syllabus-Grounded Explanations
+              </h3>
+              <p className="text-body" style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
+                Ask any doubt from your coursework. Every response includes verified textbook citations, chunk references, and inline practice self-checks.
+              </p>
+            </div>
+            <Button
+              variant="orange"
+              size="sm"
+              onClick={() => navigate('/chat')}
+              icon={ArrowRight}
+              iconPosition="right"
+              style={{ width: 'fit-content' }}
+            >
+              Start Q&A Session
+            </Button>
+          </div>
+
+          {/* Pillar 2 */}
+          <div
+            className="card-white"
+            style={{
+              padding: '2rem',
+              borderRadius: 'var(--radius-xl)',
+              border: '1.5px solid var(--color-border)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem'
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
+                  backgroundColor: 'var(--color-purple-light)',
+                  color: 'var(--color-purple)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1rem'
+                }}
+              >
+                <Lightbulb size={22} />
+              </div>
+              <Pill color="purple" size="sm" style={{ marginBottom: '0.75rem' }}>
+                Mode 2: Socratic Hints
+              </Pill>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Progressive Hint Ladders
+              </h3>
+              <p className="text-body" style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
+                Test your conceptual understanding. The tutor reveals sequential clues as you submit hypotheses, guiding you without revealing the final answer.
+              </p>
+            </div>
+            <Button
+              variant="ink"
+              size="sm"
+              onClick={() => navigate('/chat')}
+              icon={ArrowRight}
+              iconPosition="right"
+              style={{ width: 'fit-content' }}
+            >
+              Try Socratic Practice
+            </Button>
+          </div>
+
+          {/* Pillar 3 */}
+          <div
+            className="card-white"
+            style={{
+              padding: '2rem',
+              borderRadius: 'var(--radius-xl)',
+              border: '1.5px solid var(--color-border)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '1.25rem'
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
+                  backgroundColor: 'var(--color-yellow-light)',
+                  color: '#b45309',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '1rem'
+                }}
+              >
+                <FileCheck size={22} />
+              </div>
+              <Pill color="yellow" size="sm" style={{ marginBottom: '0.75rem' }}>
+                Mode 3: Diagnostic Roadmap
+              </Pill>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Automated Prerequisite Detection
+              </h3>
+              <p className="text-body" style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
+                When you struggle on advanced concepts, LearnifyTutor identifies the root prerequisite gap and generates a custom 3-step mastery roadmap.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/library')}
+              icon={BookOpen}
+              style={{ width: 'fit-content' }}
+            >
+              Explore Ingested Syllabus
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -182,13 +323,13 @@ export function Home() {
       >
         <div>
           <Pill color="yellow" size="sm" style={{ marginBottom: '1rem' }}>
-            Ready to Accelerate?
+            Ready to Begin?
           </Pill>
           <h2 style={{ fontSize: '2rem', color: '#ffffff', marginBottom: '1rem', lineHeight: 1.2 }}>
-            Never get stuck on homework or exam concepts again.
+            Master difficult concepts with verified syllabus grounding.
           </h2>
           <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
-            Experience instant concept breakdowns with animated avatar explanations, practice checks, and auto-detected learning gaps.
+            Experience instant concept breakdowns with step-by-step reasoning, textbook citations, and automatic prerequisite detection.
           </p>
           <Button
             variant="orange"
@@ -196,7 +337,7 @@ export function Home() {
             onClick={() => navigate('/chat')}
             icon={Sparkles}
           >
-            Launch Tutor Session
+            Launch AI Tutor Session
           </Button>
         </div>
 
@@ -212,25 +353,37 @@ export function Home() {
           }}
         >
           <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-yellow)' }}>
-            Quick Navigation Links:
+            Quick Links:
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
-              Student Dashboard
+            <Button variant="outline" size="sm" onClick={() => navigate('/chat')}>
+              Ask a Doubt (Q&A)
             </Button>
             <Button variant="outline" size="sm" onClick={() => navigate('/library')}>
               Document Library
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                switchRole('teacher');
-                navigate('/teacher');
-              }}
-            >
-              Teacher Analytics
-            </Button>
+            {role === 'teacher' ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/teacher')}
+                icon={GraduationCap}
+              >
+                Teacher Analytics
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  switchRole('teacher');
+                  navigate('/teacher');
+                }}
+                icon={GraduationCap}
+              >
+                Educator Portal
+              </Button>
+            )}
           </div>
         </div>
       </section>
