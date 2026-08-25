@@ -6,31 +6,18 @@ function StudentChat({ session }) {
     const [currentSessionId, setCurrentSessionId] = useState(null)
     const [messages, setMessages] = useState([])
     const [question, setQuestion] = useState('')
-    const [studentId, setStudentId] = useState('')
     const [loading, setLoading] = useState(false)
 
     const [expandedCitations, setExpandedCitations] = useState({})
     const [recordedPQs, setRecordedPQs] = useState({})
 
-    useEffect(() => {
-        let storedId;
-        try {
-            storedId = localStorage.getItem('ai_tutor_student_id');
-            if (!storedId) {
-                storedId = crypto.randomUUID();
-                localStorage.setItem('ai_tutor_student_id', storedId);
-            }
-        } catch (e) {
-            storedId = crypto.randomUUID();
-        }
-        setStudentId(storedId);
-    }, []);
+
 
     useEffect(() => {
-        if (studentId && session?.access_token) {
+        if (session?.access_token) {
             loadSessions();
         }
-    }, [studentId, session?.access_token]);
+    }, [session?.access_token]);
 
     const loadSessions = async () => {
         try {
@@ -111,7 +98,6 @@ function StudentChat({ session }) {
                     'Authorization': `Bearer ${session?.access_token}`
                 },
                 body: JSON.stringify({
-                    student_id: studentId,
                     chunk_id: chunkId,
                     correct: correct
                 })
@@ -141,7 +127,6 @@ function StudentChat({ session }) {
                 },
                 body: JSON.stringify({
                     question: userMsg.text,
-                    student_id: studentId || undefined,
                     session_id: currentSessionId || 'untracked'
                 })
             })

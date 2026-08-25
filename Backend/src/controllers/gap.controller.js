@@ -1,33 +1,46 @@
+const { supabaseAdmin } = require('../lib/supabaseAdmin');
 const prerequisites = require('../data/prerequisites.json');
 const { getChunks } = require('../data/store');
 
-// In-memory session log
-const sessionEvents = [];
-
-function recordSessionEvent(req, res) {
-    const { student_id, chunk_id, correct } = req.body;
+async function recordSessionEvent(req, res) {
+    const { chunk_id, correct } = req.body;
+    const student_id = req.user.id;
 
     if (!student_id || !chunk_id || typeof correct !== 'boolean') {
         return res.status(400).json({ error: "Missing required fields: student_id, chunk_id, correct (boolean)" });
     }
 
-    const event = {
+    const { data: event, error } = await supabaseAdmin.from('session_events').insert({
         student_id,
         chunk_id,
-        correct,
-        timestamp: new Date().toISOString()
-    };
+        correct
+    }).select().single();
 
-    sessionEvents.push(event);
+    if (error || !event) {
+        console.error("Failed to record session event:", error);
+        return res.status(500).json({ error: "Database error" });
+    }
 
     return res.json({ success: true, recorded: event });
 }
 
-function getLikelyGaps(student_id, chunk_id) {
+async function getLikelyGaps(student_id, chunk_id) {
     const prereqs = prerequisites[chunk_id] || [];
     if (prereqs.length === 0) return [];
 
-    const studentHistory = sessionEvents.filter(e => e.student_id === student_id);
+    // Fetch from Supabase instead of sessionEvents array
+    const { data: studentHistory, error } = await supabaseAdmin
+        .from('session_events')
+        .select('*')
+        .eq('student_id', student_id)
+        .in('chunk_id', prereqs)
+        .order('timestamp', { ascending: true }); // chronological order
+
+    if (error) {
+        console.error("Failed to fetch session events:", error);
+        return [];
+    }
+
     const likely_gaps = [];
 
     for (const prereq_id of prereqs) {
@@ -61,14 +74,15 @@ function getLikelyGaps(student_id, chunk_id) {
     return enrichedGaps;
 }
 
-function detectGap(req, res) {
-    const { student_id, chunk_id } = req.body;
+async function detectGap(req, res) {
+    const { chunk_id } = req.body;
+    const student_id = req.user.id;
 
     if (!student_id || !chunk_id) {
         return res.status(400).json({ error: "Missing required fields: student_id, chunk_id" });
     }
 
-    const likely_gaps = getLikelyGaps(student_id, chunk_id);
+    const likely_gaps = await getLikelyGaps(student_id, chunk_id);
 
     return res.json({
         target_chunk_id: chunk_id,
@@ -76,19 +90,19 @@ function detectGap(req, res) {
     });
 }
 
-// Exposed purely so we can inspect memory easily if needed
-function getSessionEvents() {
-    return sessionEvents;
-}
+async function debugGetEvents(req, res) {
+    const student_id = req.user.id;
+    const { data: events, error } = await supabaseAdmin
+        .from('session_events')
+        .select('*')
+        .eq('student_id', student_id);
 
-function debugGetEvents(req, res) {
-    res.json({ events: sessionEvents });
+    res.json({ events: events || [] });
 }
 
 module.exports = {
     recordSessionEvent,
     detectGap,
     debugGetEvents,
-    getLikelyGaps,
-    getSessionEvents
+    getLikelyGaps
 };

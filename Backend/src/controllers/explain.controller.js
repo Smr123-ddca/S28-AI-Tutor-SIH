@@ -78,7 +78,8 @@ async function callGemini(promptText) {
 }
 
 async function explain(req, res) {
-    const { question, student_id, session_id, context_limit = 6 } = req.body;
+    const { question, session_id, context_limit = 6 } = req.body;
+    const student_id = req.user.id;
 
     if (!question || typeof question !== 'string') {
         return res.status(400).json({ error: 'Please provide a valid "question" string in the JSON payload.' });
@@ -139,7 +140,7 @@ async function explain(req, res) {
 
         if (classificationResult.classification === "concept_question" && student_id) {
             const topChunkId = results[0].id;
-            const likelyGaps = getLikelyGaps(student_id, topChunkId);
+            const likelyGaps = await getLikelyGaps(student_id, topChunkId);
 
             if (likelyGaps.length > 0) {
                 const firstGap = likelyGaps[0];
@@ -170,16 +171,26 @@ async function explain(req, res) {
         if (session_id && session_id !== 'untracked' && student_id) {
             const { supabaseAdmin } = require('../lib/supabaseAdmin');
             if (supabaseAdmin) {
-                const { data: pastMessages } = await supabaseAdmin
-                    .from('chat_messages')
-                    .select('role, content, created_at')
-                    .eq('session_id', session_id)
-                    .order('created_at', { ascending: false })
-                    .limit(parseInt(context_limit, 10) || 6);
+                // Verify student owns this session
+                const { data: validSession } = await supabaseAdmin
+                    .from('chat_sessions')
+                    .select('id')
+                    .eq('id', session_id)
+                    .eq('student_id', student_id)
+                    .single();
 
-                if (pastMessages && pastMessages.length > 0) {
-                    pastMessages.reverse(); // put into chronological order
-                    transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
+                if (validSession) {
+                    const { data: pastMessages } = await supabaseAdmin
+                        .from('chat_messages')
+                        .select('role, content, created_at')
+                        .eq('session_id', session_id)
+                        .order('created_at', { ascending: false })
+                        .limit(parseInt(context_limit, 10) || 6);
+
+                    if (pastMessages && pastMessages.length > 0) {
+                        pastMessages.reverse(); // put into chronological order
+                        transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
+                    }
                 }
             }
         }
@@ -230,7 +241,7 @@ Generate exactly 2 short practice questions based on the same material.
                             session_id: session_id || 'untracked',
                             question,
                             response: errorObj
-                        });
+                        }).catch(e => console.error("Error logging inner fail:", e));
                     }
                     return res.status(500).json(errorObj);
                 }
@@ -265,7 +276,7 @@ Generate exactly 2 short practice questions based on the same material.
                 session_id: session_id || 'untracked',
                 question,
                 response: { status: "error", message: "Internal Server Error" }
-            });
+            }).catch(e => console.error("Error logging catastrophic fail:", e));
         }
 
         return res.status(500).json({ error: "Internal Server Error" });

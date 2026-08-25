@@ -20,7 +20,7 @@ async function recordChatLog(entry) {
 
             if (sessionError || !sessionData) {
                 console.error('Session creation failed:', sessionError);
-                return null;
+                throw sessionError || new Error("Session creation failed with no data");
             }
             currentSessionId = sessionData.id;
         } else {
@@ -30,12 +30,13 @@ async function recordChatLog(entry) {
         }
 
         // Insert User message
-        await supabaseAdmin.from('chat_messages').insert({
+        const { error: userError } = await supabaseAdmin.from('chat_messages').insert({
             session_id: currentSessionId,
             role: 'user',
             content: question,
             response_json: null
         });
+        if (userError) throw userError;
 
         // Parse assistant content for context window
         let assistantContent = response.status;
@@ -46,17 +47,18 @@ async function recordChatLog(entry) {
         }
 
         // Insert Assistant message
-        await supabaseAdmin.from('chat_messages').insert({
+        const { error: asstError } = await supabaseAdmin.from('chat_messages').insert({
             session_id: currentSessionId,
             role: 'assistant',
             content: assistantContent,
             response_json: response
         });
+        if (asstError) throw asstError;
 
         return currentSessionId;
     } catch (error) {
         console.error("Failed to record chat log externally:", error);
-        return null;
+        throw error;
     }
 }
 
