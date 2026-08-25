@@ -66,46 +66,99 @@ function classifyQuestion(question) {
 
 async function callGemini(promptText) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-3.6-flash",
+        model: "gemini-3.5-flash-lite",
         generationConfig: {
             responseMimeType: "application/json",
             responseSchema: responseSchema
         }
     });
 
-    const result = await model.generateContent(promptText);
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Gemini API Request Timeout")), 12000)
+    );
+
+    // Race the API call against the timeout
+    const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
     const response = await result.response;
     return response.text();
 }
 
 async function explain(req, res) {
-    const { question, session_id, context_limit = 6 } = req.body;
+    const { performance } = require('perf_hooks');
+    const fs = require('fs');
+    const tTotal = performance.now();
+    const timings = [];
+    const recordT = (stage, start) => {
+        const dur = (performance.now() - start).toFixed(2);
+        const msg = `[EXPLAIN TIMING] stage=${stage} duration=${dur}ms`;
+        timings.push(msg);
+        fs.appendFileSync('timing.log', msg + '\n');
+    };
+
+    let tStart = performance.now();
+
+    const { question, session_id, context_limit } = req.body;
     const student_id = req.user.id;
 
-    if (!question || typeof question !== 'string') {
-        return res.status(400).json({ error: 'Please provide a valid "question" string in the JSON payload.' });
+    if (!question) {
+        recordT('Validation', tStart);
+        return res.status(400).json({ error: "Missing required field: question" });
     }
 
-    // Helper to log and respond
+    // Auth & Validation passed
+    recordT('AuthAndValidation', tStart);
+
+    // Logging context tracker variables
+    let metaPrevMessages = 0;
+    let metaRetrievedChunks = 0;
+    let metaPromptSize = 0;
+    let metaGeminiStatus = "pending";
+
     const respondAndLog = async (statusObj) => {
-        if (student_id || session_id) {
-            const sid = await recordChatLog({
-                student_id,
-                session_id: session_id || 'untracked',
-                question,
-                response: statusObj
-            });
-            if (sid) {
-                statusObj.session_id = sid;
+        if (!statusObj.error && statusObj.status !== 'error') {
+            try {
+                let pStart = performance.now();
+
+                // Optimize: If session_id is known, we don't need to await logging to respond to user!
+                const isNewSession = !session_id || session_id === 'untracked';
+
+                const logPromise = recordChatLog({
+                    student_id,
+                    session_id: session_id || 'untracked',
+                    question: question,
+                    response: statusObj
+                }).then(loggedData => {
+                    recordT('Persistence', pStart);
+                    if (isNewSession && loggedData) {
+                        statusObj.session_id = loggedData;
+                    }
+                }).catch(err => console.error("Failed to log chat interaction:", err));
+
+                if (isNewSession) {
+                    await logPromise; // Wait for the ID so we can return it
+                } else {
+                    // Fire and forget
+                    statusObj.session_id = session_id;
+                }
+            } catch (err) {
+                console.error("Failed to start chat logging:", err);
             }
         }
+
+        recordT('Total', tTotal);
+        fs.appendFileSync('timing.log', `[EXPLAIN TRACE] session=${statusObj.session_id || session_id || 'untracked'} prev_msgs=${metaPrevMessages} chunks=${metaRetrievedChunks} prompt_size=${metaPromptSize} gen_status=${metaGeminiStatus}\n`);
+        fs.appendFileSync('timing.log', `------\n`);
         return res.json(statusObj);
     };
 
     try {
         // a. Call existing retrieval logic
+        let rStart = performance.now();
         const results = retrievalService.retrieve(question);
+        metaRetrievedChunks = results ? results.length : 0;
+        recordT('Retrieval', rStart);
 
+        let hStart = performance.now();
         let transcript = "";
         if (session_id && session_id !== 'untracked' && student_id) {
             const { supabaseAdmin } = require('../lib/supabaseAdmin');
@@ -127,14 +180,19 @@ async function explain(req, res) {
 
                     if (pastMessages && pastMessages.length > 0) {
                         pastMessages.reverse();
+                        metaPrevMessages = pastMessages.length;
                         transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
                     }
                 }
             }
         }
+        recordT('ChatHistoryRetrieval', hStart);
 
         // b. Fallback if no sufficient evidence AND no transcript context
+        let eStart = performance.now();
         const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
+        recordT('EvidenceGate', eStart);
+
         if (!hasGoodEvidence && !transcript) {
             return await respondAndLog({
                 status: "insufficient_evidence",
@@ -222,39 +280,42 @@ Generate exactly 2 short practice questions based on the factual material.
             systemInstruction += `\n\nRecent conversation:\n${transcript}`;
         }
 
+        let pcStart = performance.now();
         const prompt = `${systemInstruction}\n\nSource Material:\n${contextChunks.length > 0 && hasGoodEvidence ? contextStr : "No matching source material found for this query."}\n\nQuestion: ${question}`;
+        metaPromptSize = prompt.length;
+        recordT('PromptConstruction', pcStart);
 
-        // e. Call Gemini with retry mechanism
+        // e. Call Gemini (Single Attempt, Fast Fail)
         let parsedResult = null;
-        let attempts = 0;
-        const maxAttempts = 2; // 1 initial + 1 retry
 
-        while (attempts < maxAttempts) {
-            try {
-                const rawResponse = await callGemini(prompt);
-                parsedResult = JSON.parse(rawResponse);
-                break; // Parsing successful, exit loop
-            } catch (err) {
-                console.error("Gemini call or parse failed:", err);
-                attempts++;
-                if (attempts >= maxAttempts) {
-                    const errorObj = {
-                        status: "error",
-                        message: "Could not generate a response.",
-                        results: contextChunks
-                    };
-                    if (student_id || session_id) {
-                        // Use raw return and manually record since it's a 500
-                        recordChatLog({
-                            student_id,
-                            session_id: session_id || 'untracked',
-                            question,
-                            response: errorObj
-                        }).catch(e => console.error("Error logging inner fail:", e));
-                    }
-                    return res.status(500).json(errorObj);
-                }
+        try {
+            let gStart = performance.now();
+            const rawResponse = await callGemini(prompt);
+            recordT('GeminiNetworkWait', gStart);
+
+            metaGeminiStatus = "success";
+
+            let parseStart = performance.now();
+            parsedResult = JSON.parse(rawResponse);
+            recordT('GeminiParse', parseStart);
+        } catch (err) {
+            metaGeminiStatus = "failure_aborted";
+            console.error("Gemini call or parse failed:", err);
+
+            const errStr = err.toString() + (err.message || "");
+            let safeMsg = "The AI service is temporarily unavailable.";
+            if (errStr.includes("429")) {
+                safeMsg = "The AI service is temporarily busy. Please try again in a moment.";
+            } else if (errStr.includes("Timeout") || errStr.includes("timeout") || errStr.includes("504")) {
+                safeMsg = "The AI took too long to respond. Please try again.";
             }
+
+            const errorObj = {
+                status: "error",
+                message: safeMsg,
+                results: contextChunks
+            };
+            return await respondAndLog(errorObj);
         }
 
         // f. Verify chunk IDs

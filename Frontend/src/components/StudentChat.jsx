@@ -119,6 +119,9 @@ function StudentChat({ session }) {
         setLoading(true)
 
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
             const response = await fetch('/api/explain', {
                 method: 'POST',
                 headers: {
@@ -128,8 +131,10 @@ function StudentChat({ session }) {
                 body: JSON.stringify({
                     question: userMsg.text,
                     session_id: currentSessionId || 'untracked'
-                })
-            })
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
 
             const data = await response.json()
             setMessages(prev => [...prev, { role: 'bot', ...data }])
@@ -139,7 +144,11 @@ function StudentChat({ session }) {
                 loadSessions();
             }
         } catch (err) {
-            setMessages(prev => [...prev, { role: 'bot', status: 'error', message: 'Failed to connect to backend.' }])
+            if (err.name === 'AbortError') {
+                setMessages(prev => [...prev, { role: 'bot', status: 'error', message: 'The AI Tutor took too long to respond. Please try asking your question again.' }]);
+            } else {
+                setMessages(prev => [...prev, { role: 'bot', status: 'error', message: 'Failed to connect to backend.' }]);
+            }
         } finally {
             setLoading(false)
         }
@@ -271,7 +280,13 @@ function StudentChat({ session }) {
                         } else if (msg.status === 'guided_mode') {
                             botContent = <span>{msg.message}</span>;
                         } else if (msg.status === 'insufficient_evidence') {
-                            botContent = <span style={{ color: '#d97706' }}>{msg.message}</span>;
+                            const refusalText = msg.message || "I couldn't find enough information about this in your course material, so I can't answer it based on the provided syllabus.";
+                            botContent = (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    <span style={{ fontSize: '0.8rem', color: '#d97706', fontWeight: 'bold', textTransform: 'uppercase' }}>Insufficient evidence</span>
+                                    <span style={{ color: '#d97706' }}>{refusalText}</span>
+                                </div>
+                            );
                         } else if (msg.status === 'answered') {
                             const resultsMap = {}
                             if (msg.results) {

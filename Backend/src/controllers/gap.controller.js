@@ -31,10 +31,10 @@ async function getLikelyGaps(student_id, chunk_id) {
     // Fetch from Supabase instead of sessionEvents array
     const { data: studentHistory, error } = await supabaseAdmin
         .from('session_events')
-        .select('*')
+        .select('chunk_id, correct, created_at')
         .eq('student_id', student_id)
         .in('chunk_id', prereqs)
-        .order('timestamp', { ascending: true }); // chronological order
+        .order('created_at', { ascending: true }); // chronological order
 
     if (error) {
         console.error("Failed to fetch session events:", error);
