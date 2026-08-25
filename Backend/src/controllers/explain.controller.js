@@ -13,14 +13,15 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const responseSchema = {
     type: SchemaType.OBJECT,
     properties: {
-        status: { type: SchemaType.STRING, description: "Must be 'answered'" },
+        status: { type: SchemaType.STRING, description: "Must be 'answered' or 'insufficient_evidence'" },
+        message: { type: SchemaType.STRING, description: "Only used if status is 'insufficient_evidence' or 'answered' without source chunks." },
         explanation_segments: {
             type: SchemaType.ARRAY,
             items: {
                 type: SchemaType.OBJECT,
                 properties: {
                     text: { type: SchemaType.STRING, description: "The explanation text" },
-                    source_chunk_id: { type: SchemaType.STRING, description: "The ID of the source chunk used" }
+                    source_chunk_id: { type: SchemaType.STRING, description: "The ID of the source chunk used, or 'none' if answering from conversational context." }
                 },
                 required: ["text", "source_chunk_id"]
             }
@@ -105,8 +106,36 @@ async function explain(req, res) {
         // a. Call existing retrieval logic
         const results = retrievalService.retrieve(question);
 
-        // b. Fallback if no sufficient evidence
-        if (!results || results.length === 0 || results[0].score < 0.30) {
+        let transcript = "";
+        if (session_id && session_id !== 'untracked' && student_id) {
+            const { supabaseAdmin } = require('../lib/supabaseAdmin');
+            if (supabaseAdmin) {
+                const { data: validSession } = await supabaseAdmin
+                    .from('chat_sessions')
+                    .select('id')
+                    .eq('id', session_id)
+                    .eq('student_id', student_id)
+                    .single();
+
+                if (validSession) {
+                    const { data: pastMessages } = await supabaseAdmin
+                        .from('chat_messages')
+                        .select('role, content, created_at')
+                        .eq('session_id', session_id)
+                        .order('created_at', { ascending: false })
+                        .limit(parseInt(context_limit, 10) || 6);
+
+                    if (pastMessages && pastMessages.length > 0) {
+                        pastMessages.reverse();
+                        transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
+                    }
+                }
+            }
+        }
+
+        // b. Fallback if no sufficient evidence AND no transcript context
+        const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
+        if (!hasGoodEvidence && !transcript) {
             return await respondAndLog({
                 status: "insufficient_evidence",
                 message: "I don't have approved course material covering this.",
@@ -138,7 +167,7 @@ async function explain(req, res) {
         let contextChunks = results;
         let gapData = null;
 
-        if (classificationResult.classification === "concept_question" && student_id) {
+        if (classificationResult.classification === "concept_question" && student_id && results && results.length > 0) {
             const topChunkId = results[0].id;
             const likelyGaps = await getLikelyGaps(student_id, topChunkId);
 
@@ -167,53 +196,33 @@ async function explain(req, res) {
         }
 
         // Fetch Transcript for Context Injection
-        let transcript = "";
-        if (session_id && session_id !== 'untracked' && student_id) {
-            const { supabaseAdmin } = require('../lib/supabaseAdmin');
-            if (supabaseAdmin) {
-                // Verify student owns this session
-                const { data: validSession } = await supabaseAdmin
-                    .from('chat_sessions')
-                    .select('id')
-                    .eq('id', session_id)
-                    .eq('student_id', student_id)
-                    .single();
 
-                if (validSession) {
-                    const { data: pastMessages } = await supabaseAdmin
-                        .from('chat_messages')
-                        .select('role, content, created_at')
-                        .eq('session_id', session_id)
-                        .order('created_at', { ascending: false })
-                        .limit(parseInt(context_limit, 10) || 6);
-
-                    if (pastMessages && pastMessages.length > 0) {
-                        pastMessages.reverse(); // put into chronological order
-                        transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
-                    }
-                }
-            }
-        }
 
         // d. Prepare prompt for Gemini
         const contextStr = contextChunks.map(r => `Chunk ID: ${r.id}\nSection: ${r.section_label}\nContent: ${r.text}\n`).join('\n---\n');
 
         let systemInstruction = `
 You are an AI Tutor.
-You must explain the user's question using ONLY the provided source material. 
-Never use outside knowledge.
-Break the explanation into 2-4 short segments. Each segment must be tagged with the source_chunk_id from which that information was derived.
-Generate exactly 2 short practice questions based on the same material.
+You must use ONLY the provided source material to answer factual course questions. Never use outside knowledge for factual claims.
+Distinction explicit:
+- "Source Material" is the evidence for factual claims.
+- "Recent conversation" provides conversational context.
+- Previous conversation must NOT be treated as course evidence.
+
+If the user asks a question about the conversation history (e.g. "What did I ask you previously?"), answer it using the conversational context.
+If they ask a factual question that is not covered by the Source Material, explain that you don't have approved course material covering it.
+Otherwise, break your factual explanation into 2-4 short segments. Each segment must be tagged with the source_chunk_id from which that information was derived.
+Generate exactly 2 short practice questions based on the factual material.
 `;
         if (gapData) {
             systemInstruction += `\nSince the user seems to have a gap in prerequisite knowledge, briefly note at the beginning of your explanation that this is prerequisite material relevant to what they originally asked about, before diving into the explanation.`;
         }
 
         if (transcript) {
-            systemInstruction += `\n\nRecent conversation (for context only — do not treat this as evidence of mastery):\n${transcript}`;
+            systemInstruction += `\n\nRecent conversation:\n${transcript}`;
         }
 
-        const prompt = `${systemInstruction}\n\nSource Material:\n${contextStr}\n\nQuestion: ${question}`;
+        const prompt = `${systemInstruction}\n\nSource Material:\n${contextChunks.length > 0 && hasGoodEvidence ? contextStr : "No matching source material found for this query."}\n\nQuestion: ${question}`;
 
         // e. Call Gemini with retry mechanism
         let parsedResult = null;
