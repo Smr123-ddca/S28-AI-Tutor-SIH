@@ -3,10 +3,11 @@ const retrievalService = require('../services/retrieval.service');
 const { getLikelyGaps } = require('./gap.controller');
 const { getChunks } = require('../data/store');
 const { recordChatLog } = require('./chatlog.controller');
+const { normalizeForRetrieval } = require('../utils/nlp');
+const { analyzeQuery } = require('../utils/queryAnalyzer');
+const { buildRetrievalQuery } = require('../utils/queryExpander');
 
 // Initialize Gemini
-// In a real app we'd want to handle missing env keys more robustly, 
-// but it's assumed GEMINI_API_KEY is available.
 const apiKey = process.env.GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -38,15 +39,14 @@ const responseSchema = {
 function classifyQuestion(question) {
     const qLower = question.toLowerCase();
 
-    // Patterns that strongly indicate a homework, exam, or direct-answer request
     const homeworkPatterns = [
         /solve\s+(?:this|for)/,
         /what\s+is\s+the\s+answer\s+to/,
         /for\s+my\s+(?:assignment|homework|exam|test|quiz)/,
         /calculate\s+(?:the|for)/,
         /find\s+the\s+value\s+of/,
-        /^q\d+[\.\:]\s/i, // Matches "Q3. ", "Q12: ", etc at the start
-        /^\d+[\.\)]\s/    // Matches "1. ", "3) ", etc at the start
+        /^q\d+[\.\\:]\s/i,
+        /^\d+[\.\\)]\s/
     ];
 
     for (let pattern of homeworkPatterns) {
@@ -77,7 +77,6 @@ async function callGemini(promptText) {
         setTimeout(() => reject(new Error("Gemini API Request Timeout")), 12000)
     );
 
-    // Race the API call against the timeout
     const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
     const response = await result.response;
     return response.text();
@@ -105,7 +104,6 @@ async function explain(req, res) {
         return res.status(400).json({ error: "Missing required field: question" });
     }
 
-    // Auth & Validation passed
     recordT('AuthAndValidation', tStart);
 
     // Logging context tracker variables
@@ -119,7 +117,6 @@ async function explain(req, res) {
             try {
                 let pStart = performance.now();
 
-                // Optimize: If session_id is known, we don't need to await logging to respond to user!
                 const isNewSession = !session_id || session_id === 'untracked';
 
                 const logPromise = recordChatLog({
@@ -135,9 +132,8 @@ async function explain(req, res) {
                 }).catch(err => console.error("Failed to log chat interaction:", err));
 
                 if (isNewSession) {
-                    await logPromise; // Wait for the ID so we can return it
+                    await logPromise;
                 } else {
-                    // Fire and forget
                     statusObj.session_id = session_id;
                 }
             } catch (err) {
@@ -152,14 +148,13 @@ async function explain(req, res) {
     };
 
     try {
-        // a. Call existing retrieval logic
-        let rStart = performance.now();
-        const results = retrievalService.retrieve(question);
-        metaRetrievedChunks = results ? results.length : 0;
-        recordT('Retrieval', rStart);
-
+        // ════════════════════════════════════════════════════════════════
+        // STEP 1: Fetch conversation history FIRST (needed for expansion)
+        // ════════════════════════════════════════════════════════════════
         let hStart = performance.now();
         let transcript = "";
+        let recentMessages = []; // For query expansion
+
         if (session_id && session_id !== 'untracked' && student_id) {
             const { supabaseAdmin } = require('../lib/supabaseAdmin');
             if (supabaseAdmin) {
@@ -182,13 +177,74 @@ async function explain(req, res) {
                         pastMessages.reverse();
                         metaPrevMessages = pastMessages.length;
                         transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
+
+                        // Provide messages in reverse chronological order for expansion
+                        recentMessages = [...pastMessages].reverse().map(m => ({
+                            role: m.role,
+                            content: m.content
+                        }));
                     }
                 }
             }
         }
         recordT('ChatHistoryRetrieval', hStart);
 
-        // b. Fallback if no sufficient evidence AND no transcript context
+        // ════════════════════════════════════════════════════════════════
+        // STEP 2: Query preprocessing pipeline (normalization + expansion)
+        // ════════════════════════════════════════════════════════════════
+        let ppStart = performance.now();
+
+        const queryResult = buildRetrievalQuery({
+            userMessage: question,
+            recentMessages: recentMessages,
+            currentSubject: null // Will be populated when subject tracking exists
+        });
+
+        recordT('QueryPreprocessing', ppStart);
+
+        // ── Diagnostic logging ──
+        console.log("--- Query Pipeline ---");
+        console.log("Original:", queryResult.originalQuery);
+        console.log("Normalized:", queryResult.normalizedQuery);
+        console.log("Expanded:", queryResult.expandedQuery);
+        console.log("Type:", queryResult.queryType);
+        console.log("Tokens:", queryResult.expandedTokens);
+        if (queryResult.requiresClarification) {
+            console.log("Clarification:", queryResult.clarificationMessage);
+        }
+        console.log("----------------------");
+
+        // ════════════════════════════════════════════════════════════════
+        // STEP 2.5: Handle clarification responses (skip Gemini)
+        // ════════════════════════════════════════════════════════════════
+        if (queryResult.requiresClarification) {
+            return await respondAndLog({
+                status: "clarification_needed",
+                message: queryResult.clarificationMessage,
+                explanation_segments: [{
+                    text: queryResult.clarificationMessage,
+                    source_chunk_id: "none"
+                }],
+                practice_questions: [],
+                results: [],
+                diagnostics: queryResult.diagnostics
+            });
+        }
+
+        // ════════════════════════════════════════════════════════════════
+        // STEP 3: Retrieval with expanded tokens
+        // ════════════════════════════════════════════════════════════════
+        let rStart = performance.now();
+        const results = retrievalService.retrieve(question, {
+            tokens: queryResult.expandedTokens,
+            subject: queryResult.subject
+        });
+        metaRetrievedChunks = results ? results.length : 0;
+        recordT('Retrieval', rStart);
+
+        // ════════════════════════════════════════════════════════════════
+        // STEP 4: Evidence gate (unchanged at 0.30)
+        // ════════════════════════════════════════════════════════════════
         let eStart = performance.now();
         const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
         recordT('EvidenceGate', eStart);
@@ -197,14 +253,16 @@ async function explain(req, res) {
             return await respondAndLog({
                 status: "insufficient_evidence",
                 message: "I don't have approved course material covering this.",
-                results: results
+                results: results,
+                diagnostics: queryResult.diagnostics
             });
         }
 
-        // c. Run heuristic pre-check
+        // ════════════════════════════════════════════════════════════════
+        // STEP 5: Homework heuristic pre-check
+        // ════════════════════════════════════════════════════════════════
         const classificationResult = classifyQuestion(question);
 
-        // Log classification for auditing
         console.log("--- Classification Audit ---");
         console.log("Question:", question);
         console.log("Classification:", classificationResult.classification);
@@ -221,7 +279,9 @@ async function explain(req, res) {
             });
         }
 
-        // Gap detection flow
+        // ════════════════════════════════════════════════════════════════
+        // STEP 6: Gap detection flow (unchanged)
+        // ════════════════════════════════════════════════════════════════
         let contextChunks = results;
         let gapData = null;
 
@@ -253,10 +313,9 @@ async function explain(req, res) {
             }
         }
 
-        // Fetch Transcript for Context Injection
-
-
-        // d. Prepare prompt for Gemini
+        // ════════════════════════════════════════════════════════════════
+        // STEP 7: Prepare prompt for Gemini (uses ORIGINAL question + ORIGINAL chunk text)
+        // ════════════════════════════════════════════════════════════════
         const contextStr = contextChunks.map(r => `Chunk ID: ${r.id}\nSection: ${r.section_label}\nContent: ${r.text}\n`).join('\n---\n');
 
         let systemInstruction = `
@@ -285,7 +344,9 @@ Generate exactly 2 short practice questions based on the factual material.
         metaPromptSize = prompt.length;
         recordT('PromptConstruction', pcStart);
 
-        // e. Call Gemini (Single Attempt, Fast Fail)
+        // ════════════════════════════════════════════════════════════════
+        // STEP 8: Call Gemini (Single Attempt, Fast Fail)
+        // ════════════════════════════════════════════════════════════════
         let parsedResult = null;
 
         try {
@@ -318,7 +379,9 @@ Generate exactly 2 short practice questions based on the factual material.
             return await respondAndLog(errorObj);
         }
 
-        // f. Verify chunk IDs
+        // ════════════════════════════════════════════════════════════════
+        // STEP 9: Verify chunk IDs (unchanged)
+        // ════════════════════════════════════════════════════════════════
         const validChunkIds = new Set(contextChunks.map(r => r.id));
         if (parsedResult.explanation_segments && Array.isArray(parsedResult.explanation_segments)) {
             parsedResult.explanation_segments.forEach(segment => {
@@ -339,7 +402,6 @@ Generate exactly 2 short practice questions based on the factual material.
     } catch (error) {
         console.error("Error in explain endpoint:", error);
 
-        // Log the catastropic error as well
         if (student_id || session_id) {
             recordChatLog({
                 student_id,
