@@ -131,3 +131,41 @@
 [EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=4 chunks=0 prompt_size=0 gen_status=pending
 ------
 [EXPLAIN TIMING] stage=Persistence duration=1038.76ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.08ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=732.96ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=4.66ms
+[EXPLAIN TIMING] stage=Total duration=743.72ms
+[EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=6 chunks=0 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=Persistence duration=1000.57ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.00ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=1412.41ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=2.23ms
+[EXPLAIN TIMING] stage=Retrieval duration=2.47ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.01ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=1969.44ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.06ms
+[EXPLAIN TIMING] stage=Total duration=3397.60ms
+[EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=6 chunks=5 prompt_size=3304 gen_status=success
+------
+[EXPLAIN TIMING] stage=Persistence duration=1054.63ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.06ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=804.50ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=3.36ms
+[EXPLAIN TIMING] stage=Total duration=816.19ms
+[EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=6 chunks=0 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=Persistence duration=997.66ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.00ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=582.65ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=1.13ms
+[EXPLAIN TIMING] stage=Retrieval duration=2.39ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.01ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=1841.29ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.04ms
+[EXPLAIN TIMING] stage=Total duration=2436.49ms
+[EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=6 chunks=5 prompt_size=3759 gen_status=success
+------
+[EXPLAIN TIMING] stage=Persistence duration=980.94ms

@@ -194,9 +194,18 @@ async function explain(req, res) {
         // ════════════════════════════════════════════════════════════════
         let ppStart = performance.now();
 
+        let questionToProcess = question;
+        let contextOverride = null;
+
+        if (req.body.clarification_context && req.body.clarification_context.original_question) {
+            questionToProcess = req.body.clarification_context.original_question;
+            // Provide ONLY the clarification response as context so queryExpander knows exactly which topic to merge
+            contextOverride = [{ role: 'user', content: question }];
+        }
+
         const queryResult = buildRetrievalQuery({
-            userMessage: question,
-            recentMessages: recentMessages,
+            userMessage: questionToProcess,
+            recentMessages: contextOverride || recentMessages,
             currentSubject: null // Will be populated when subject tracking exists
         });
 
@@ -211,6 +220,9 @@ async function explain(req, res) {
         console.log("Tokens:", queryResult.expandedTokens);
         if (queryResult.requiresClarification) {
             console.log("Clarification:", queryResult.clarificationMessage);
+            if (queryResult.clarificationOptions) {
+                console.log("Options:", queryResult.clarificationOptions);
+            }
         }
         console.log("----------------------");
 
@@ -219,14 +231,11 @@ async function explain(req, res) {
         // ════════════════════════════════════════════════════════════════
         if (queryResult.requiresClarification) {
             return await respondAndLog({
-                status: "clarification_needed",
+                status: "clarification",
                 message: queryResult.clarificationMessage,
-                explanation_segments: [{
-                    text: queryResult.clarificationMessage,
-                    source_chunk_id: "none"
-                }],
-                practice_questions: [],
-                results: [],
+                clarification: {
+                    options: queryResult.clarificationOptions || []
+                },
                 diagnostics: queryResult.diagnostics
             });
         }
@@ -339,8 +348,13 @@ Generate exactly 2 short practice questions based on the factual material.
             systemInstruction += `\n\nRecent conversation:\n${transcript}`;
         }
 
+        let geminiQuestion = question;
+        if (req.body.clarification_context && req.body.clarification_context.original_question) {
+            geminiQuestion = `${req.body.clarification_context.original_question} (Clarified context: ${question})`;
+        }
+
         let pcStart = performance.now();
-        const prompt = `${systemInstruction}\n\nSource Material:\n${contextChunks.length > 0 && hasGoodEvidence ? contextStr : "No matching source material found for this query."}\n\nQuestion: ${question}`;
+        const prompt = `${systemInstruction}\n\nSource Material:\n${contextChunks.length > 0 && hasGoodEvidence ? contextStr : "No matching source material found for this query."}\n\nQuestion: ${geminiQuestion}`;
         metaPromptSize = prompt.length;
         recordT('PromptConstruction', pcStart);
 

@@ -265,7 +265,7 @@ assert(hasChunk2, `Turn 2: retrieves Newton third law (chunk_2) above threshold`
 section('8. Ambiguity Detection');
 
 const ambiguousResult = buildRetrievalQuery({
-    userMessage: "What about the third one?",
+    userMessage: "What about the second one?",
     recentMessages: [
         { role: 'user', content: "What is Newton's second law?" },
         { role: 'user', content: "Tell me about vectors and scalars" }
@@ -277,6 +277,36 @@ assert(ambiguousResult.requiresClarification,
 assert(ambiguousResult.clarificationMessage !== null,
     'Clarification message is provided',
     ambiguousResult.clarificationMessage);
+assert(Array.isArray(ambiguousResult.clarificationOptions) && ambiguousResult.clarificationOptions.length === 2,
+    'Clarification options are returned for multi-topic ambiguity',
+    JSON.stringify(ambiguousResult.clarificationOptions));
+assert(ambiguousResult.clarificationOptions.includes("What is Newton's second law?") && ambiguousResult.clarificationOptions.includes("Tell me about vectors and scalars"),
+    'Options correctly map to the raw user messages that formed the topics');
+
+// ═══════════════════════════════════════════════════════════════
+//  8b. AMBIGUITY RESOLUTION TEST (Controller Simulation)
+// ═══════════════════════════════════════════════════════════════
+section('8b. Ambiguity Resolution (Controller Override)');
+
+// Stage 1: The backend controller intercepts `req.body.clarification_context`
+// which contains `original_question: "What about the second one?"`.
+// The `userMessage` fed to `buildRetrievalQuery` is this original question.
+// The `recentMessages` override focuses purely on the clarification response:
+const resolutionStage = buildRetrievalQuery({
+    userMessage: "What about the second one?", // original intent restored
+    recentMessages: [
+        { role: 'user', content: "What is Newton's second law?" } // isolated clarification topic response
+    ]
+});
+
+assert(!resolutionStage.requiresClarification,
+    'Resolution stage bypasses ambiguity because context is now exactly 1 topic');
+assert(resolutionStage.expandedTokens.includes('second') && resolutionStage.expandedTokens.includes('newton'),
+    'Resolution merges ordinal with specific clarified topic');
+
+const resolutionRetrieve = retrieve("", { tokens: resolutionStage.expandedTokens });
+const hasOverrideChunk1 = resolutionRetrieve.some(c => c.id === 'chunk_1' && c.score >= 0.30);
+assert(hasOverrideChunk1, 'Clarification effectively retrieves Newton second law securely');
 
 // ═══════════════════════════════════════════════════════════════
 //  9. VAGUE QUERY HANDLING

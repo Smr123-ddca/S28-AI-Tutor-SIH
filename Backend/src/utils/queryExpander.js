@@ -158,11 +158,8 @@ function buildRetrievalQuery({ userMessage, recentMessages = [], currentSubject 
         // Multiple distinct topics in context — ordinal is ambiguous
         if (clusters.length > 1) {
             result.requiresClarification = true;
-            const topicDescriptions = clusters
-                .slice(0, 3)
-                .map(c => c.tokens.join(' '));
-            result.clarificationMessage =
-                `I want to make sure I answer the right question. Are you referring to: ${topicDescriptions.map((t, i) => `(${i + 1}) ${t}`).join(', ')}?`;
+            result.clarificationMessage = "I want to make sure I answer the right question. Which topic are you referring to?";
+            result.clarificationOptions = clusters.slice(0, 3).map(c => c.raw);
             return result;
         }
     }
@@ -193,11 +190,8 @@ function buildRetrievalQuery({ userMessage, recentMessages = [], currentSubject 
 
     // Multiple topics, deictic reference, not obviously vague — ask for clarification
     result.requiresClarification = true;
-    const topicDescriptions = clusters
-        .slice(0, 3)
-        .map(c => c.tokens.join(' '));
-    result.clarificationMessage =
-        `Could you clarify what you're referring to? Recent topics include: ${topicDescriptions.join(', ')}.`;
+    result.clarificationMessage = "Could you clarify what you're referring to? Are you asking about one of these recent topics?";
+    result.clarificationOptions = clusters.slice(0, 3).map(c => c.raw);
     return result;
 }
 

@@ -10,8 +10,7 @@ function StudentChat({ session }) {
 
     const [expandedCitations, setExpandedCitations] = useState({})
     const [recordedPQs, setRecordedPQs] = useState({})
-
-
+    const [pendingClarification, setPendingClarification] = useState(null)
 
     useEffect(() => {
         if (session?.access_token) {
@@ -38,6 +37,7 @@ function StudentChat({ session }) {
         setMessages([]); // clear current
         setExpandedCitations({});
         setRecordedPQs({});
+        setPendingClarification(null);
         try {
             const res = await fetch(`/api/sessions/${sid}`, {
                 headers: { 'Authorization': `Bearer ${session?.access_token}` }
@@ -60,6 +60,7 @@ function StudentChat({ session }) {
         setMessages([]);
         setExpandedCitations({});
         setRecordedPQs({});
+        setPendingClarification(null);
     };
 
     const handleRenameTitle = async (sid, title) => {
@@ -110,17 +111,34 @@ function StudentChat({ session }) {
         }
     };
 
-    const handleSend = async () => {
-        if (!question.trim()) return
+    const handleSend = async (overrideQuestion = null) => {
+        const textToSend = typeof overrideQuestion === 'string' ? overrideQuestion : question;
+        if (!textToSend.trim()) return
 
-        const userMsg = { role: 'user', text: question }
+        const userMsg = { role: 'user', text: textToSend }
         setMessages(prev => [...prev, userMsg])
-        setQuestion('')
+
+        // Only clear input if we were sending from the input box
+        if (typeof overrideQuestion !== 'string') {
+            setQuestion('')
+        }
+
         setLoading(true)
 
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+            const payload = {
+                question: userMsg.text,
+                session_id: currentSessionId || 'untracked'
+            };
+
+            if (pendingClarification) {
+                payload.clarification_context = {
+                    original_question: pendingClarification.originalQuestion
+                };
+            }
 
             const response = await fetch('/api/explain', {
                 method: 'POST',
@@ -128,16 +146,23 @@ function StudentChat({ session }) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session?.access_token}`
                 },
-                body: JSON.stringify({
-                    question: userMsg.text,
-                    session_id: currentSessionId || 'untracked'
-                }),
+                body: JSON.stringify(payload),
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
 
             const data = await response.json()
             setMessages(prev => [...prev, { role: 'bot', ...data }])
+
+            // Manage pending clarification state
+            if (data.status === 'clarification') {
+                if (!pendingClarification) {
+                    setPendingClarification({ originalQuestion: userMsg.text });
+                }
+                // If it already existed, keep the original question
+            } else {
+                setPendingClarification(null);
+            }
 
             if (data.session_id && data.session_id !== currentSessionId) {
                 setCurrentSessionId(data.session_id);
@@ -285,6 +310,38 @@ function StudentChat({ session }) {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                     <span style={{ fontSize: '0.8rem', color: '#d97706', fontWeight: 'bold', textTransform: 'uppercase' }}>Insufficient evidence</span>
                                     <span style={{ color: '#d97706' }}>{refusalText}</span>
+                                </div>
+                            );
+                        } else if (msg.status === 'clarification') {
+                            const options = msg.clarification?.options || [];
+                            botContent = (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    <span>{msg.message}</span>
+                                    {options.length > 0 && (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.25rem' }}>
+                                            {options.map((opt, optIdx) => (
+                                                <button
+                                                    key={optIdx}
+                                                    onClick={() => handleSend(opt)}
+                                                    style={{
+                                                        padding: '0.5rem 1rem',
+                                                        borderRadius: '20px',
+                                                        border: '1px solid #d1d5db',
+                                                        background: '#ffffff',
+                                                        color: '#374151',
+                                                        fontSize: '0.9rem',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s ease',
+                                                        boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                                                    }}
+                                                    onMouseOver={(e) => { e.currentTarget.style.borderColor = '#9ca3af'; e.currentTarget.style.background = '#f9fafb'; }}
+                                                    onMouseOut={(e) => { e.currentTarget.style.borderColor = '#d1d5db'; e.currentTarget.style.background = '#ffffff'; }}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             );
                         } else if (msg.status === 'answered') {
