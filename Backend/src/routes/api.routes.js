@@ -3,7 +3,7 @@ const { retrieve } = require('../controllers/retrieval.controller');
 const { explain } = require('../controllers/explain.controller');
 const { recordSessionEvent, detectGap } = require('../controllers/gap.controller');
 const { getMisconceptions } = require('../controllers/misconception.controller');
-const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle } = require('../controllers/chatlog.controller');
+const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload } = require('../controllers/ingest.controller');
 
@@ -25,6 +25,7 @@ router.get('/sessions', getSessions);
 router.get('/sessions/:sessionId', getSessionMessages);
 router.post('/sessions', createSession);
 router.put('/sessions/:sessionId/title', updateSessionTitle);
+router.delete('/sessions/:sessionId', deleteSession);
 
 // Ingestion Sub-layer A (Upload)
 router.post('/ingest/upload', requireRole('teacher'), uploadMiddleware, handleUpload);

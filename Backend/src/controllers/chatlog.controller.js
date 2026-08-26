@@ -139,11 +139,47 @@ async function updateSessionTitle(req, res) {
     return res.json({ id: data.id, title: data.title });
 }
 
+async function deleteSession(req, res) {
+    const { sessionId } = req.params;
+    const student_id = req.user.id;
+
+    // 1. Verify ownership securely using server identity
+    const { data: session, error: sessionError } = await supabaseAdmin
+        .from('chat_sessions')
+        .select('id')
+        .eq('id', sessionId)
+        .eq('student_id', student_id)
+        .single();
+
+    if (sessionError || !session) {
+        return res.status(403).json({ error: "Access denied or session not found" });
+    }
+
+    // 2. Explicitly delete messages to simulate a safe cascade
+    await supabaseAdmin
+        .from('chat_messages')
+        .delete()
+        .eq('session_id', sessionId);
+
+    // 3. Delete the session
+    const { error: deleteError } = await supabaseAdmin
+        .from('chat_sessions')
+        .delete()
+        .eq('id', sessionId);
+
+    if (deleteError) {
+        return res.status(500).json({ error: deleteError.message });
+    }
+
+    return res.json({ success: true });
+}
+
 module.exports = {
     recordChatLog,
     getChatLogs,
     getSessions,
     getSessionMessages,
     createSession,
-    updateSessionTitle
+    updateSessionTitle,
+    deleteSession
 };

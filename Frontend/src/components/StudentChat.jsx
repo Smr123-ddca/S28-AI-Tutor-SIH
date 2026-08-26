@@ -11,6 +11,31 @@ function StudentChat({ session }) {
     const [expandedCitations, setExpandedCitations] = useState({})
     const [recordedPQs, setRecordedPQs] = useState({})
     const [pendingClarification, setPendingClarification] = useState(null)
+    const [editingSessionId, setEditingSessionId] = useState(null)
+    const [editTitle, setEditTitle] = useState("")
+    const [confirmDeleteId, setConfirmDeleteId] = useState(null)
+    const messagesEndRef = useRef(null)
+    const chatContainerRef = useRef(null)
+
+    const scrollToBottom = () => {
+        if (!chatContainerRef.current) return;
+        const { scrollHeight, scrollTop, clientHeight } = chatContainerRef.current;
+        const isNearBottom = scrollHeight - (scrollTop + clientHeight) < 150;
+
+        if (isNearBottom && messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'auto' });
+        }
+    }, [currentSessionId]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
     useEffect(() => {
         if (session?.access_token) {
@@ -64,8 +89,10 @@ function StudentChat({ session }) {
     };
 
     const handleRenameTitle = async (sid, title) => {
-        const newTitle = prompt("Enter new title:", title);
-        if (!newTitle) return;
+        if (!title.trim()) {
+            setEditingSessionId(null);
+            return;
+        }
         try {
             await fetch(`/api/sessions/${sid}/title`, {
                 method: 'PUT',
@@ -73,12 +100,35 @@ function StudentChat({ session }) {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session?.access_token}`
                 },
-                body: JSON.stringify({ title: newTitle })
+                body: JSON.stringify({ title })
             });
-            loadSessions(); // reload titles
-        } catch (e) {
-            console.error("Rename failed", e);
+            setSessions(prev => prev.map(s => s.id === sid ? { ...s, title } : s));
+        } catch (err) {
+            console.error("Failed to rename session", err);
         }
+        setEditingSessionId(null);
+    };
+
+    const handleDeleteSession = async (sid) => {
+        try {
+            const res = await fetch(`/api/sessions/${sid}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${session?.access_token}`
+                }
+            });
+            if (res.ok) {
+                setSessions(prev => prev.filter(s => s.id !== sid));
+                if (currentSessionId === sid) {
+                    handleNewChat();
+                }
+            } else {
+                console.error("Failed to delete session");
+            }
+        } catch (err) {
+            console.error("Failed to delete session", err);
+        }
+        setConfirmDeleteId(null);
     };
 
     const toggleCitation = (msgIndex, segIndex) => {
@@ -225,35 +275,71 @@ function StudentChat({ session }) {
                                 padding: '0.75rem',
                                 marginBottom: '0.25rem',
                                 borderRadius: '8px',
-                                cursor: 'pointer',
                                 background: currentSessionId === s.id ? '#f3f4f6' : 'transparent',
                                 display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
+                                flexDirection: 'column',
                                 transition: 'background-color 0.15s ease'
                             }}
                         >
-                            <span
-                                onClick={() => handleSelectSession(s.id)}
-                                style={{
-                                    flex: 1,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    whiteSpace: 'nowrap',
-                                    color: currentSessionId === s.id ? '#111827' : '#4b5563',
-                                    fontWeight: currentSessionId === s.id ? '500' : 'normal',
-                                    fontSize: '0.95rem'
-                                }}
-                            >
-                                {s.title || 'Untitled'}
-                            </span>
-                            <button
-                                onClick={(e) => { e.stopPropagation(); handleRenameTitle(s.id, s.title); }}
-                                style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: currentSessionId === s.id ? 1 : 0.4 }}
-                                title="Rename"
-                            >
-                                ✏️
-                            </button>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                {editingSessionId === s.id ? (
+                                    <input
+                                        autoFocus
+                                        value={editTitle}
+                                        onChange={e => setEditTitle(e.target.value)}
+                                        onBlur={() => setEditingSessionId(null)}
+                                        onKeyDown={e => {
+                                            if (e.key === 'Enter') {
+                                                handleRenameTitle(s.id, editTitle.trim() || 'Untitled');
+                                            } else if (e.key === 'Escape') {
+                                                setEditingSessionId(null);
+                                            }
+                                        }}
+                                        style={{ flex: 1, padding: '0.2rem', borderRadius: '4px', border: '1px solid #d1d5db', outline: 'none' }}
+                                    />
+                                ) : (
+                                    <span
+                                        onClick={() => handleSelectSession(s.id)}
+                                        style={{
+                                            flex: 1,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            color: currentSessionId === s.id ? '#111827' : '#4b5563',
+                                            fontWeight: currentSessionId === s.id ? '500' : 'normal',
+                                            fontSize: '0.95rem',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {s.title || 'Untitled'}
+                                    </span>
+                                )}
+                                <div style={{ display: 'flex', gap: '4px' }}>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setEditingSessionId(s.id); setEditTitle(s.title || 'Untitled'); }}
+                                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', opacity: currentSessionId === s.id ? 1 : 0.4 }}
+                                        title="Rename"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(s.id); }}
+                                        style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '0.9rem', opacity: currentSessionId === s.id ? 1 : 0.4, paddingLeft: '4px' }}
+                                        title="Delete"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                            {confirmDeleteId === s.id && (
+                                <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#dc2626', display: 'flex', flexDirection: 'column', gap: '0.25rem', background: '#fee2e2', padding: '0.5rem', borderRadius: '6px' }}>
+                                    <span>Permanently delete this chat?</span>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <button onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(null); }} style={{ flex: 1, background: '#e5e7eb', border: 'none', borderRadius: '4px', padding: '2px 0', cursor: 'pointer', color: '#374151' }}>Cancel</button>
+                                        <button onClick={(e) => { e.stopPropagation(); handleDeleteSession(s.id); }} style={{ flex: 1, background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', padding: '2px 0', cursor: 'pointer' }}>Delete</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -270,7 +356,7 @@ function StudentChat({ session }) {
                 border: '1px solid #e5e7eb',
                 position: 'relative'
             }}>
-                <div className="chat-window" style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
+                <div ref={chatContainerRef} className="chat-window" style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
                     {messages.length === 0 && !loading && (
                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: '1.2rem', textAlign: 'center' }}>
                             <div>
@@ -445,6 +531,7 @@ function StudentChat({ session }) {
                             </div>
                         </div>
                     )}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {/* Textarea Floating Container */}

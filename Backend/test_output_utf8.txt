@@ -165,14 +165,14 @@
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
   Latency results:
-    "Newton's second law" ΓåÆ 1.26ms
-    "What about the third one?" ΓåÆ 1.43ms
-    "Explain photosynthesis in detail" ΓåÆ 0.53ms
-    "Who is Charles Babbage?" ΓåÆ 0.69ms
-    "newtons laws of motion list them" ΓåÆ 0.87ms
-    "vectors?" ΓåÆ 0.66ms
-    Average: 0.91ms
-    Max: 1.43ms
+    "Newton's second law" ΓåÆ 0.95ms
+    "What about the third one?" ΓåÆ 0.95ms
+    "Explain photosynthesis in detail" ΓåÆ 0.64ms
+    "Who is Charles Babbage?" ΓåÆ 0.52ms
+    "newtons laws of motion list them" ΓåÆ 0.76ms
+    "vectors?" ΓåÆ 0.62ms
+    Average: 0.74ms
+    Max: 0.95ms
   Γ£à Average preprocessing+retrieval < 10ms
   Γ£à Max preprocessing+retrieval < 20ms
 
