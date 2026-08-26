@@ -176,6 +176,35 @@ for (const t of qaTests) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  6b. EXPLICIT CONTEXT CLASSIFICATION REGRESSIONS
+// ═══════════════════════════════════════════════════════════════
+section('6b. Explicit Context Classification Regressions');
+
+const contextRegressions = [
+    { q: "Whats the third one?", type: 'CONTEXT_DEPENDENT' },
+    { q: "What about the second one?", type: 'CONTEXT_DEPENDENT' },
+    { q: "What about the first one?", type: 'CONTEXT_DEPENDENT' },
+    { q: "What about it?", type: 'CONTEXT_DEPENDENT' },
+    { q: "What about that?", type: 'CONTEXT_DEPENDENT' },
+    { q: "That one", type: 'CONTEXT_DEPENDENT' },
+    { q: "This one", type: 'CONTEXT_DEPENDENT' },
+    { q: "The last one", type: 'CONTEXT_DEPENDENT' },
+    { q: "The previous one", type: 'CONTEXT_DEPENDENT' },
+    // Expected COMPLETE (no explicit context and sufficient tokens)
+    { q: "Newton's second law", type: 'COMPLETE' },
+    { q: "Newton laws of motion", type: 'COMPLETE' },
+    { q: "What is acceleration?", type: 'COMPLETE' },
+    { q: "Explain Newton's second law", type: 'COMPLETE' },
+];
+
+for (const t of contextRegressions) {
+    const result = analyzeQuery(t.q);
+    assert(result.type === t.type,
+        `Regression analyzeQuery("${t.q}") → ${t.type}`,
+        `got ${result.type}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  7. CONTEXTUAL EXPANSION — ORDINAL RESOLUTION
 // ═══════════════════════════════════════════════════════════════
 section('7. Contextual Expansion — Ordinal Resolution');
@@ -202,6 +231,33 @@ const expandedRetrievalResult = retrieve("", { tokens: ordinalResult.expandedTok
 assert(expandedRetrievalResult[0]?.id === 'chunk_2',
     'Expanded "third one" retrieves Newton\'s Third Law (chunk_2)',
     `got ${expandedRetrievalResult[0]?.id}`);
+
+// ═══════════════════════════════════════════════════════════════
+//  7b. CONTEXT INTEGRATION TEST (Newton -> Whats the third one?)
+// ═══════════════════════════════════════════════════════════════
+section('7b. Context Integration Test');
+
+const newtonQuery = "Newton laws of motion?";
+const newtonRetrieve = retrieve(newtonQuery);
+assert(newtonRetrieve[0]?.id === 'chunk_7' || newtonRetrieve[0]?.id === 'chunk_1',
+    'Turn 1: "Newton laws of motion?" returns Newton chunks');
+
+const turn2Result = buildRetrievalQuery({
+    userMessage: "Whats the third one?",
+    recentMessages: [
+        { role: 'user', content: newtonQuery },
+        { role: 'assistant', content: "Newton's laws of motion are..." }
+    ]
+});
+
+assert(turn2Result.queryType === 'CONTEXT_DEPENDENT',
+    'Turn 2: "Whats the third one?" → CONTEXT_DEPENDENT');
+assert(turn2Result.expandedTokens.includes('third') && turn2Result.expandedTokens.includes('law'),
+    'Turn 2: expanded tokens include "third" and "law"');
+
+const turn2Retrieve = retrieve("", { tokens: turn2Result.expandedTokens });
+const hasChunk2 = turn2Retrieve.some(c => c.id === 'chunk_2' && c.score >= 0.30);
+assert(hasChunk2, `Turn 2: retrieves Newton third law (chunk_2) above threshold`);
 
 // ═══════════════════════════════════════════════════════════════
 //  8. AMBIGUITY DETECTION

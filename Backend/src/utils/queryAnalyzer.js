@@ -23,6 +23,19 @@ const VAGUE_PATTERNS = [
     /^(yes|no|yeah|nah|yep|nope)\s*\??$/i
 ];
 
+// Explicit context references that override all content-token rules
+const EXPLICIT_CONTEXT_PATTERNS = [
+    /\b(the\s+(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\s+one)\b/i,
+    /\b((first|second|third|last|previous|next|that|this)\s+one)\b/i,
+    /\b(those|these)\b/i,
+    /\b(what\s+about\s+(it|that|this))\b/i,
+    /\b(how\s+about\s+(it|that))\b/i,
+    /\b(why\s+does\s+it)\b/i,
+    /\b(how\s+does\s+it)\b/i,
+    // Add variations for "what about the [ordinal] one" where stop words might be stripped
+    /\b(what\s+about\s+the\s+(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|previous|next)\s+one)\b/i
+];
+
 /**
  * @typedef {'COMPLETE' | 'CONTEXT_DEPENDENT' | 'EMPTY'} QueryType
  */
@@ -97,6 +110,15 @@ function analyzeQuery(query) {
 
     // Short queries with follow-up indicators
     if (hasFollowup && contentTokens.length <= 1) {
+        return { type: 'CONTEXT_DEPENDENT', signals, contentTokens, normalized };
+    }
+
+    // ── EXPLICIT CONTEXTUAL PATTERNS (Overrides token count) ──
+    const hasExplicitContext = EXPLICIT_CONTEXT_PATTERNS.some(p => p.test(rawLower)) ||
+        (hasDeictic && rawWords.length < 5 && !contentTokens.length);
+    // If the query explicitly references prior items or is just a deictic pointer
+    if (hasExplicitContext || (rawLower === 'it' || rawLower === 'that' || rawLower === 'this')) {
+        signals.push('explicit_context_reference');
         return { type: 'CONTEXT_DEPENDENT', signals, contentTokens, normalized };
     }
 

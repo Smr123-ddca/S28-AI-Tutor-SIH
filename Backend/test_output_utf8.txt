@@ -80,12 +80,37 @@
   Γ£à analyzeQuery("is the a") ΓåÆ EMPTY
 
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  6b. Explicit Context Classification Regressions
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  Γ£à Regression analyzeQuery("Whats the third one?") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("What about the second one?") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("What about the first one?") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("What about it?") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("What about that?") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("That one") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("This one") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("The last one") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("The previous one") ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Regression analyzeQuery("Newton's second law") ΓåÆ COMPLETE
+  Γ£à Regression analyzeQuery("Newton laws of motion") ΓåÆ COMPLETE
+  Γ£à Regression analyzeQuery("What is acceleration?") ΓåÆ COMPLETE
+  Γ£à Regression analyzeQuery("Explain Newton's second law") ΓåÆ COMPLETE
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
   7. Contextual Expansion ΓÇö Ordinal Resolution
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
   Γ£à Ordinal with single context ΓåÆ no clarification needed
   Γ£à Expanded tokens include "newton"
   Γ£à Expanded tokens include "third"
   Γ£à Expanded "third one" retrieves Newton's Third Law (chunk_2)
+
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  7b. Context Integration Test
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+  Γ£à Turn 1: "Newton laws of motion?" returns Newton chunks
+  Γ£à Turn 2: "Whats the third one?" ΓåÆ CONTEXT_DEPENDENT
+  Γ£à Turn 2: expanded tokens include "third" and "law"
+  Γ£à Turn 2: retrieves Newton third law (chunk_2) above threshold
 
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
   8. Ambiguity Detection
@@ -131,14 +156,14 @@
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
   Latency results:
-    "Newton's second law" ΓåÆ 0.56ms
-    "What about the third one?" ΓåÆ 0.50ms
-    "Explain photosynthesis in detail" ΓåÆ 0.47ms
-    "Who is Charles Babbage?" ΓåÆ 0.65ms
-    "newtons laws of motion list them" ΓåÆ 0.62ms
-    "vectors?" ΓåÆ 0.48ms
-    Average: 0.55ms
-    Max: 0.65ms
+    "Newton's second law" ΓåÆ 2.66ms
+    "What about the third one?" ΓåÆ 1.10ms
+    "Explain photosynthesis in detail" ΓåÆ 0.97ms
+    "Who is Charles Babbage?" ΓåÆ 0.93ms
+    "newtons laws of motion list them" ΓåÆ 1.07ms
+    "vectors?" ΓåÆ 1.63ms
+    Average: 1.39ms
+    Max: 2.66ms
   Γ£à Average preprocessing+retrieval < 10ms
   Γ£à Max preprocessing+retrieval < 20ms
 
@@ -153,5 +178,5 @@
   Γ£à "you" (stopword) is filtered out
 
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
-  RESULTS: 82 passed, 0 failed
+  RESULTS: 99 passed, 0 failed
 ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ

@@ -46,6 +46,8 @@ const STOP_WORDS = new Set([
     "summary", "complete", "overview", "detail", "details", "all", "brief",
     "detailed", "exactly", "simply", "simple", "example", "examples",
     "definition", "information", "info", "answer", "question",
+    // Ultra-common conversational references
+    "one", "ones", "whats",
     // Ultra-common verbs that rarely help retrieval
     "get", "got", "go", "going", "let", "know", "think",
     "want", "need", "like", "just", "also", "so", "very",
@@ -173,10 +175,10 @@ function tokenize(text) {
     // 4. Extract alphanumeric tokens
     const rawTokens = cleaned.match(/\b[a-z0-9]+\b/g) || [];
 
-    // 5. Filter stopwords and apply safe stemming
+    // 5. Apply safe stemming, then filter stopwords
     return rawTokens
-        .filter(t => !STOP_WORDS.has(t))
-        .map(t => safeStem(t));
+        .map(t => safeStem(t))
+        .filter(t => !STOP_WORDS.has(t));
 }
 
 // ─── Retrieval Normalization API ─────────────────────────────────────────────
