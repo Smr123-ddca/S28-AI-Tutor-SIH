@@ -169,3 +169,12 @@
 [EXPLAIN TRACE] session=5f0a04b8-3edb-4859-ac73-ef765ce759f5 prev_msgs=6 chunks=5 prompt_size=3759 gen_status=success
 ------
 [EXPLAIN TIMING] stage=Persistence duration=980.94ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.09ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.01ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=3.02ms
+[EXPLAIN TIMING] stage=Retrieval duration=3.48ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Persistence duration=964.22ms
+[EXPLAIN TIMING] stage=Total duration=978.80ms
+[EXPLAIN TRACE] session=1624dee6-599f-4446-bf25-9a9ece652b5b prev_msgs=0 chunks=5 prompt_size=0 gen_status=pending
+------
