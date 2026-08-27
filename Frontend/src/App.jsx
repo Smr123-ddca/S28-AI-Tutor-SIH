@@ -5,6 +5,8 @@ import Login from './components/Login'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import About from './components/About'
+import Practice from './components/Practice'
+import About from './components/About'
 import { supabase } from './lib/supabaseClient'
 
 function App() {
@@ -12,6 +14,7 @@ function App() {
   const [role, setRole] = useState(null)
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState('home')
+  const [practiceCount, setPracticeCount] = useState(0)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -58,6 +61,28 @@ function App() {
     }
   }
 
+  const fetchPracticeCount = async () => {
+    if (role !== 'student' || !session) return;
+    try {
+      const res = await fetch('/api/practice-questions', {
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const pendingCount = data.questions ? data.questions.filter(q => q.status === 'pending').length : 0;
+        setPracticeCount(pendingCount);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    if (role === 'student' && session) {
+      fetchPracticeCount();
+    }
+  }, [role, session])
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     setView('home')
@@ -81,6 +106,7 @@ function App() {
         handleLogout={handleLogout}
         displayName={displayName}
         role={role}
+        practiceCount={practiceCount}
       />
 
       {view === 'home' && <Home role={role} setView={setView} />}
@@ -88,9 +114,15 @@ function App() {
 
       {view === 'app' && (
         <div className="app-container" style={{ paddingTop: '2rem' }}>
-          {role === 'student' && <StudentChat session={session} />}
+          {role === 'student' && <StudentChat session={session} refreshPractice={fetchPracticeCount} />}
           {role === 'teacher' && <TeacherDashboard session={session} />}
           {!role && <div>Error: Role not found for this user.</div>}
+        </div>
+      )}
+
+      {view === 'practice' && role === 'student' && (
+        <div className="app-container" style={{ paddingTop: '2rem' }}>
+          <Practice session={session} refreshPractice={fetchPracticeCount} />
         </div>
       )}
     </div>

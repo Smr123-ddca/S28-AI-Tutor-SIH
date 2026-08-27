@@ -10,7 +10,8 @@ const {
     createQuestion,
     getQuestions,
     getQuestionById,
-    createAttempt
+    createAttempt,
+    requestHint
 } = require('../controllers/practice.controller');
 
 const router = express.Router();
@@ -37,6 +38,7 @@ router.delete('/sessions/:sessionId', deleteSession);
 router.post('/practice-questions', createQuestion);
 router.get('/practice-questions', getQuestions);
 router.get('/practice-questions/:id', getQuestionById);
+router.post('/practice-questions/:id/hint', requestHint);
 router.post('/practice-attempts', createAttempt);
 
 

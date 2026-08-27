@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function Navbar({ setView, currentView, handleLogout, displayName, role }) {
+export default function Navbar({ setView, currentView, handleLogout, displayName, role, practiceCount }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
@@ -24,6 +24,15 @@ export default function Navbar({ setView, currentView, handleLogout, displayName
                 >
                     About
                 </button>
+                {role === 'student' && practiceCount > 0 && (
+                    <button
+                        className={`nav-link-btn ${currentView === 'practice' ? 'active' : ''}`}
+                        onClick={() => setView('practice')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                    >
+                        Practice <span style={{ background: '#3b82f6', color: 'white', fontSize: '0.75rem', padding: '2px 6px', borderRadius: '12px' }}>{practiceCount}</span>
+                    </button>
+                )}
             </div>
 
             <div className="nav-right">

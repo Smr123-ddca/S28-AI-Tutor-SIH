@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './TinyShapes.css' // assuming styles are global or can keep inline
 
-function StudentChat({ session }) {
+function StudentChat({ session, refreshPractice }) {
     const [sessions, setSessions] = useState([])
     const [currentSessionId, setCurrentSessionId] = useState(null)
     const [messages, setMessages] = useState([])
@@ -218,6 +218,11 @@ function StudentChat({ session }) {
                 setCurrentSessionId(data.session_id);
                 loadSessions();
             }
+
+            if (data.practice && data.practice.available) {
+                setMessages(prev => [...prev, { role: 'bot_meta', message: `${data.practice.count} practice questions available` }]);
+                if (refreshPractice) refreshPractice();
+            }
         } catch (err) {
             if (err.name === 'AbortError') {
                 setMessages(prev => [...prev, { role: 'bot', status: 'error', message: 'The AI Tutor took too long to respond. Please try asking your question again.' }]);
@@ -385,6 +390,16 @@ function StudentChat({ session }) {
                         }
 
                         let botContent = null;
+
+                        if (msg.role === 'bot_meta') {
+                            return (
+                                <div key={idx} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                                    <div style={{ background: '#bfdbfe', color: '#1e3a8a', padding: '0.4rem 1rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '500' }}>
+                                        💡 {msg.message}
+                                    </div>
+                                </div>
+                            );
+                        }
 
                         if (msg.status === 'error') {
                             botContent = <span style={{ color: '#dc2626' }}>{msg.message || 'An error occurred.'}</span>;

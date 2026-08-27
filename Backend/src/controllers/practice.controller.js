@@ -1,5 +1,19 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
+const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
+const { getChunks } = require('../data/store');
+const retrievalService = require('../services/retrieval.service');
 
+const apiKey = process.env.GEMINI_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+
+const evaluationSchema = {
+    type: SchemaType.OBJECT,
+    properties: {
+        evaluation: { type: SchemaType.STRING, description: "Must be exactly 'correct', 'partial', or 'incorrect'" },
+        reason: { type: SchemaType.STRING, description: "Brief explanation of the evaluation" }
+    },
+    required: ["evaluation", "reason"]
+};
 async function createQuestion(req, res) {
     const student_id = req.user.id;
     const { session_id, chunk_id, subject, question, concept, hint_1, hint_2, status = 'pending' } = req.body;
@@ -67,16 +81,16 @@ async function getQuestionById(req, res) {
 
 async function createAttempt(req, res) {
     const student_id = req.user.id;
-    const { practice_question_id, answer, evaluation, attempt_number, hints_used = 0, answer_revealed = false } = req.body;
+    const { practice_question_id, answer } = req.body;
 
-    if (!practice_question_id || !answer || !evaluation || attempt_number === undefined) {
+    if (!practice_question_id || !answer) {
         return res.status(400).json({ error: "Missing required fields" });
     }
 
     // Verify ownership of the practice question first
     const { data: question, error: questionError } = await supabaseAdmin
         .from('practice_questions')
-        .select('id')
+        .select('*')
         .eq('id', practice_question_id)
         .eq('student_id', student_id)
         .single();
@@ -85,17 +99,85 @@ async function createAttempt(req, res) {
         return res.status(403).json({ error: "Access denied or practice question not found" });
     }
 
-    // Insert the attempt
+    // Derive Attempt Number
+    const { data: pastAttempts, error: attemptsError } = await supabaseAdmin
+        .from('practice_attempts')
+        .select('id')
+        .eq('practice_question_id', practice_question_id);
+
+    if (attemptsError) {
+        return res.status(500).json({ error: attemptsError.message });
+    }
+    const attempt_number = (pastAttempts ? pastAttempts.length : 0) + 1;
+
+    // Retrieve Evidence
+    let evidenceText = "No matching source material found.";
+    if (question.chunk_id) {
+        const allChunks = getChunks();
+        const chunk = allChunks.find(c => c.id === question.chunk_id);
+        if (chunk) {
+            evidenceText = chunk.text;
+        } else {
+            const results = retrievalService.retrieve(question.question, { subject: question.subject, topK: 1 });
+            if (results && results.length > 0) evidenceText = results[0].text;
+        }
+    } else {
+        const results = retrievalService.retrieve(question.question, { subject: question.subject, topK: 1 });
+        if (results && results.length > 0) evidenceText = results[0].text;
+    }
+
+    // Call Gemini
+    let evaluationResult = null;
+    try {
+        const prompt = `
+You are an AI Tutor evaluating a student's answer to a practice question.
+Evaluate the student's answer against the factual Source Material exclusively. 
+Categorize the answer as exactly 'correct', 'partial', or 'incorrect'.
+Do not penalize exact wording if the core concept is understood.
+
+Source Material:
+${evidenceText}
+
+Question:
+${question.question}
+
+Core Concept:
+${question.concept}
+
+Student's Answer:
+${answer}
+`;
+        const model = genAI.getGenerativeModel({
+            model: "gemini-3.5-flash-lite",
+            generationConfig: {
+                responseMimeType: "application/json",
+                responseSchema: evaluationSchema
+            }
+        });
+
+        const result = await model.generateContent(prompt);
+        const text = await result.response.text();
+        evaluationResult = JSON.parse(text);
+
+        if (!['correct', 'partial', 'incorrect'].includes(evaluationResult.evaluation)) {
+            evaluationResult.evaluation = 'incorrect';
+        }
+    } catch (err) {
+        console.error("Gemini evaluation error:", err);
+        return res.status(500).json({ error: "Failed to evaluate answer. Please try again." });
+    }
+
+    // Insert the attempt securely
     const { data: attempt, error: attemptError } = await supabaseAdmin
         .from('practice_attempts')
         .insert({
             practice_question_id,
             student_id,
             answer,
-            evaluation,
+            evaluation: evaluationResult.evaluation,
             attempt_number,
-            hints_used,
-            answer_revealed
+            hints_used: question.hints_requested || 0,
+            answer_revealed: false
         })
         .select()
         .single();
@@ -104,27 +186,73 @@ async function createAttempt(req, res) {
         return res.status(500).json({ error: attemptError.message });
     }
 
-    // If correct, update the practice_questions status to 'completed'
-    if (evaluation === 'correct') {
+    let completed = false;
+    // Update question status ONLY if correct
+    if (evaluationResult.evaluation === 'correct') {
+        completed = true;
         await supabaseAdmin
             .from('practice_questions')
             .update({ status: 'completed', completed_at: new Date().toISOString() })
             .eq('id', practice_question_id)
             .eq('student_id', student_id);
-    } else {
-        await supabaseAdmin
-            .from('practice_questions')
-            .update({ status: 'in_progress' })
-            .eq('id', practice_question_id)
-            .eq('student_id', student_id);
+    }
+    // Do NOT move it backwards or flag it as anything other than pending per requirement.
+
+    return res.json({
+        success: true,
+        evaluation: evaluationResult.evaluation,
+        attempt_number,
+        hints_used: question.hints_requested || 0,
+        completed
+    });
+}
+
+async function requestHint(req, res) {
+    const { id } = req.params;
+    const student_id = req.user.id;
+
+    // Verify ownership and get current hints
+    const { data: question, error } = await supabaseAdmin
+        .from('practice_questions')
+        .select('hint_1, hint_2, hints_requested')
+        .eq('id', id)
+        .eq('student_id', student_id)
+        .single();
+
+    if (error || !question) {
+        return res.status(403).json({ error: "Access denied or question not found" });
     }
 
-    return res.json({ attempt });
+    const currentRequested = question.hints_requested || 0;
+    if (currentRequested >= 2) {
+        return res.status(400).json({ error: "Maximum hints reached" });
+    }
+
+    const nextHintNumber = currentRequested + 1;
+    const hintText = nextHintNumber === 1 ? question.hint_1 : question.hint_2;
+
+    // Update hints_requested
+    const { error: updateError } = await supabaseAdmin
+        .from('practice_questions')
+        .update({ hints_requested: nextHintNumber })
+        .eq('id', id)
+        .eq('student_id', student_id);
+
+    if (updateError) {
+        return res.status(500).json({ error: updateError.message });
+    }
+
+    return res.json({
+        success: true,
+        hint: hintText,
+        hints_requested: nextHintNumber
+    });
 }
 
 module.exports = {
     createQuestion,
     getQuestions,
     getQuestionById,
-    createAttempt
+    createAttempt,
+    requestHint
 };
