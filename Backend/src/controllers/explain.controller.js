@@ -1,275 +1,921 @@
-const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
-const retrievalService = require('../services/retrieval.service');
-const { getLikelyGaps } = require('./gap.controller');
-const { getChunks } = require('../data/store');
-const { recordChatLog } = require('./chatlog.controller');
+const { execFile } = require("child_process");
+const path = require("path");
 
-// Initialize Gemini
-// In a real app we'd want to handle missing env keys more robustly, 
-// but it's assumed GEMINI_API_KEY is available.
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
+// ============================================================
+// PYTHON RETRIEVAL
+// ============================================================
 
-const responseSchema = {
-    type: SchemaType.OBJECT,
-    properties: {
-        status: { type: SchemaType.STRING, description: "Must be 'answered'" },
-        explanation_segments: {
-            type: SchemaType.ARRAY,
-            items: {
-                type: SchemaType.OBJECT,
-                properties: {
-                    text: { type: SchemaType.STRING, description: "The explanation text" },
-                    source_chunk_id: { type: SchemaType.STRING, description: "The ID of the source chunk used" }
-                },
-                required: ["text", "source_chunk_id"]
+function runPythonRetrieval(question, courseName) {
+    return new Promise((resolve, reject) => {
+        console.log("\n==========================================");
+        console.log("🚀 STARTING PYTHON RETRIEVAL");
+        console.log("==========================================");
+
+        const retrievalScript = path.join(
+            __dirname,
+            "../../python/retrieval.py"
+        );
+
+        console.log(
+            "Retrieval script:",
+            retrievalScript
+        );
+
+        console.log(
+            "Question:",
+            question
+        );
+
+        console.log(
+            "Course:",
+            courseName
+        );
+
+        execFile(
+            "python",
+            [
+                retrievalScript,
+                question,
+                courseName
+            ],
+            {
+                cwd: path.join(
+                    __dirname,
+                    "../.."
+                ),
+                encoding: "utf8",
+                maxBuffer: 20 * 1024 * 1024,
+                windowsHide: true,
+                env: {
+                    ...process.env,
+                    PYTHONIOENCODING: "utf-8"
+                }
+            },
+            (error, stdout, stderr) => {
+                console.log(
+                    "🐍 PYTHON PROCESS CALLBACK FIRED"
+                );
+
+                // ------------------------------------------------
+                // PYTHON ERROR
+                // ------------------------------------------------
+
+                if (error) {
+                    console.error(
+                        "❌ Python retrieval failed:"
+                    );
+
+                    console.error(error);
+
+                    console.error(
+                        "Python stdout:",
+                        stdout || "(empty)"
+                    );
+
+                    console.error(
+                        "Python stderr:",
+                        stderr || "(empty)"
+                    );
+
+                    return reject(
+                        new Error(
+                            stderr ||
+                            error.message
+                        )
+                    );
+                }
+
+                // ------------------------------------------------
+                // EMPTY OUTPUT
+                // ------------------------------------------------
+
+                if (
+                    !stdout ||
+                    !stdout.trim()
+                ) {
+                    console.error(
+                        "❌ Retrieval returned empty output."
+                    );
+
+                    return reject(
+                        new Error(
+                            "Python retrieval returned empty output."
+                        )
+                    );
+                }
+
+                // ------------------------------------------------
+                // PARSE JSON
+                // ------------------------------------------------
+
+                try {
+                    const cleanOutput =
+                        stdout
+                            .replace(/^\uFEFF/, "")
+                            .trim();
+
+                    const result =
+                        JSON.parse(
+                            cleanOutput
+                        );
+
+                    console.log(
+                        "✅ RETRIEVAL JSON PARSED"
+                    );
+
+                    // ------------------------------------------------
+                    // PYTHON REPORTED ERROR
+                    // ------------------------------------------------
+
+                    if (
+                        result.status === "error"
+                    ) {
+                        console.error(
+                            "❌ Retrieval returned error:"
+                        );
+
+                        console.error(
+                            result.error
+                        );
+
+                        return reject(
+                            new Error(
+                                result.error ||
+                                "Retrieval failed."
+                            )
+                        );
+                    }
+
+                    // ------------------------------------------------
+                    // OUT OF SYLLABUS
+                    // ------------------------------------------------
+
+                    if (
+                        result.status ===
+                        "course_not_approved"
+                    ) {
+                        console.log(
+                            "🚫 Question is outside approved course material."
+                        );
+
+                        return resolve(
+                            result
+                        );
+                    }
+
+                    // ------------------------------------------------
+                    // NORMAL RESULT
+                    // ------------------------------------------------
+
+                    console.log(
+                        "Retrieved chunks:",
+                        result.answer_context
+                            ? result.answer_context.map(
+                                chunk => chunk.id
+                            )
+                            : []
+                    );
+
+                    return resolve(
+                        result
+                    );
+
+                } catch (parseError) {
+                    console.error(
+                        "❌ Failed to parse retrieval JSON."
+                    );
+
+                    console.error(
+                        parseError
+                    );
+
+                    console.error(
+                        "Raw Python stdout:"
+                    );
+
+                    console.error(
+                        stdout
+                    );
+
+                    return reject(
+                        new Error(
+                            "Python retrieval returned invalid JSON."
+                        )
+                    );
+                }
             }
-        },
-        practice_questions: {
-            type: SchemaType.ARRAY,
-            items: { type: SchemaType.STRING, description: "A practice question" }
-        }
-    },
-    required: ["status", "explanation_segments", "practice_questions"]
-};
+        );
+    });
+}
 
-// Heuristic function to classify questions
+// ============================================================
+// QUESTION CLASSIFICATION
+// ============================================================
+
 function classifyQuestion(question) {
-    const qLower = question.toLowerCase();
+    const q =
+        question
+            .toLowerCase()
+            .trim();
 
-    // Patterns that strongly indicate a homework, exam, or direct-answer request
-    const homeworkPatterns = [
-        /solve\s+(?:this|for)/,
-        /what\s+is\s+the\s+answer\s+to/,
-        /for\s+my\s+(?:assignment|homework|exam|test|quiz)/,
-        /calculate\s+(?:the|for)/,
-        /find\s+the\s+value\s+of/,
-        /^q\d+[\.\:]\s/i, // Matches "Q3. ", "Q12: ", etc at the start
-        /^\d+[\.\)]\s/    // Matches "1. ", "3) ", etc at the start
+    // --------------------------------------------------------
+    // Graded / direct-answer patterns
+    // --------------------------------------------------------
+
+    const gradedPatterns = [
+        /solve\s+(this|the|question)/i,
+        /give\s+me\s+the\s+answer/i,
+        /what\s+is\s+the\s+answer/i,
+        /write\s+the\s+answer/i,
+        /complete\s+this/i,
+        /do\s+this\s+question/i,
+        /solve\s+this\s+problem/i,
+        /answer\s+this/i
     ];
 
-    for (let pattern of homeworkPatterns) {
-        if (pattern.test(qLower)) {
-            return {
-                classification: "graded_work_request",
-                reason: `Matched phrase pattern: ${pattern.toString()}`
-            };
-        }
+    const isGraded =
+        gradedPatterns.some(
+            pattern =>
+                pattern.test(q)
+        );
+
+    const classification =
+        isGraded
+            ? "graded_work"
+            : "concept_question";
+
+    console.log(
+        "--- Classification Audit ---"
+    );
+
+    console.log(
+        "Question:",
+        question
+    );
+
+    console.log(
+        "Classification:",
+        classification
+    );
+
+    console.log(
+        "Reason:",
+        isGraded
+            ? "Graded-work pattern matched."
+            : "No graded-work patterns matched."
+    );
+
+    console.log(
+        "----------------------------"
+    );
+
+    return classification;
+}
+
+// ============================================================
+// BUILD GEMINI CONTEXT
+// ============================================================
+
+function buildGeminiContext(
+    retrievalResult
+) {
+    const chunks =
+        retrievalResult.answer_context ||
+        [];
+
+    if (
+        chunks.length === 0
+    ) {
+        return "";
     }
 
-    return {
-        classification: "concept_question",
-        reason: "No graded-work patterns matched."
-    };
+    return chunks
+        .map(
+            chunk => {
+                return `
+SOURCE CHUNK ID: ${chunk.id}
+
+Topic:
+${chunk.topic || ""}
+
+Chapter:
+${chunk.chapter || ""}
+
+Section:
+${chunk.section || ""}
+
+Course Material:
+${chunk.text || ""}
+`;
+            }
+        )
+        .join(
+            "\n-------------------------\n"
+        );
 }
 
-async function callGemini(promptText) {
-    const model = genAI.getGenerativeModel({
-        model: "gemini-3.6-flash",
-        generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: responseSchema
+// ============================================================
+// GEMINI
+// ============================================================
+
+async function callGemini(
+    question,
+    courseName,
+    context,
+    classification
+) {
+    const {
+        GoogleGenerativeAI
+    } = require("@google/generative-ai");
+
+    const apiKey =
+        process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+        throw new Error(
+            "GEMINI_API_KEY is not configured."
+        );
+    }
+
+    const genAI =
+        new GoogleGenerativeAI(
+            apiKey
+        );
+
+    const model =
+        genAI.getGenerativeModel({
+            model: "gemini-3.6-flash"
+        });
+
+    const prompt = `
+You are an AI tutor.
+
+Course:
+${courseName}
+
+The student asked:
+${question}
+
+Question classification:
+${classification}
+
+IMPORTANT RULES:
+
+1. Answer ONLY using the approved course material below.
+
+2. Do NOT use outside knowledge.
+
+3. Do NOT invent facts.
+
+4. Every explanation segment MUST have a valid
+   source_chunk_id from the supplied course material.
+
+5. If the material does not contain enough information,
+   clearly say that the approved course material does not
+   contain enough information.
+
+6. Do not mention information that is not supported by
+   the supplied course material.
+
+Return ONLY valid JSON.
+
+Required format:
+
+{
+    "status": "success",
+    "explanation_segments": [
+        {
+            "text": "Explanation here",
+            "source_chunk_id": "chunk_1"
         }
-    });
-
-    const result = await model.generateContent(promptText);
-    const response = await result.response;
-    return response.text();
+    ],
+    "practice_questions": [
+        "Question 1",
+        "Question 2"
+    ]
 }
+
+Approved course material:
+
+${context}
+`;
+
+    console.log(
+        "\n🤖 Calling Gemini..."
+    );
+
+    const response =
+        await model.generateContent(
+            prompt
+        );
+
+    const raw =
+        response.response
+            .text()
+            .trim();
+
+    console.log(
+        "✅ Gemini response received"
+    );
+
+    console.log(
+        "Raw Gemini response:",
+        raw
+    );
+
+    return raw;
+}
+
+// ============================================================
+// EXPLAIN CONTROLLER
+// ============================================================
 
 async function explain(req, res) {
-    const { question, student_id, session_id, context_limit = 6 } = req.body;
+    console.log(
+        "\n🔥 EXPLAIN CONTROLLER WAS CALLED"
+    );
 
-    if (!question || typeof question !== 'string') {
-        return res.status(400).json({ error: 'Please provide a valid "question" string in the JSON payload.' });
+    // ========================================================
+    // STEP 1 — READ REQUEST
+    // ========================================================
+
+    console.log(
+        "STEP 1 — Reading request"
+    );
+
+    const question =
+        req.body.question
+            ? req.body.question.trim()
+            : "";
+
+    const studentId =
+        req.body.studentId ||
+        "unknown";
+
+    const courseName =
+        req.body.courseName
+            ? req.body.courseName.trim()
+            : "";
+
+    console.log(
+        "Question:",
+        question
+    );
+
+    console.log(
+        "Student ID:",
+        studentId
+    );
+
+    console.log(
+        "Course:",
+        courseName
+    );
+
+    // ========================================================
+    // VALIDATION
+    // ========================================================
+
+    if (!question) {
+        return res.status(400).json({
+            status: "error",
+            message:
+                "Question is required."
+        });
     }
 
-    // Helper to log and respond
-    const respondAndLog = async (statusObj) => {
-        if (student_id || session_id) {
-            const sid = await recordChatLog({
-                student_id,
-                session_id: session_id || 'untracked',
-                question,
-                response: statusObj
-            });
-            if (sid) {
-                statusObj.session_id = sid;
-            }
-        }
-        return res.json(statusObj);
-    };
+    if (!courseName) {
+        return res.status(400).json({
+            status: "error",
+            message:
+                "Course is required."
+        });
+    }
 
     try {
-        // a. Call existing retrieval logic
-        const results = retrievalService.retrieve(question);
+        // ====================================================
+        // STEP 2 — RETRIEVAL
+        // ====================================================
 
-        // b. Fallback if no sufficient evidence
-        if (!results || results.length === 0 || results[0].score < 0.30) {
-            return await respondAndLog({
-                status: "insufficient_evidence",
-                message: "I don't have approved course material covering this.",
-                results: results
-            });
-        }
+        console.log(
+            "STEP 4 — About to run Python retrieval"
+        );
 
-        // c. Run heuristic pre-check
-        const classificationResult = classifyQuestion(question);
-
-        // Log classification for auditing
-        console.log("--- Classification Audit ---");
-        console.log("Question:", question);
-        console.log("Classification:", classificationResult.classification);
-        console.log("Reason:", classificationResult.reason);
-        console.log("----------------------------");
-
-        if (classificationResult.classification === "graded_work_request") {
-            return await respondAndLog({
-                status: "guided_mode",
-                message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
-                top_topic: results[0].topic,
-                top_section: results[0].section_label,
-                results: results
-            });
-        }
-
-        // Gap detection flow
-        let contextChunks = results;
-        let gapData = null;
-
-        if (classificationResult.classification === "concept_question" && student_id) {
-            const topChunkId = results[0].id;
-            const likelyGaps = getLikelyGaps(student_id, topChunkId);
-
-            if (likelyGaps.length > 0) {
-                const firstGap = likelyGaps[0];
-                const allChunks = getChunks();
-                const gapChunk = allChunks.find(c => c.id === firstGap.chunk_id);
-
-                if (gapChunk) {
-                    contextChunks = [{
-                        id: gapChunk.id,
-                        topic: gapChunk.topic,
-                        section_label: gapChunk.section_label,
-                        text: gapChunk.text,
-                        score: 1.0
-                    }];
-
-                    gapData = {
-                        addressed_gap: true,
-                        gap_chunk_id: gapChunk.id,
-                        gap_section_label: gapChunk.section_label,
-                        original_target_chunk_id: topChunkId
-                    };
-                }
-            }
-        }
-
-        // Fetch Transcript for Context Injection
-        let transcript = "";
-        if (session_id && session_id !== 'untracked' && student_id) {
-            const { supabaseAdmin } = require('../lib/supabaseAdmin');
-            if (supabaseAdmin) {
-                const { data: pastMessages } = await supabaseAdmin
-                    .from('chat_messages')
-                    .select('role, content, created_at')
-                    .eq('session_id', session_id)
-                    .order('created_at', { ascending: false })
-                    .limit(parseInt(context_limit, 10) || 6);
-
-                if (pastMessages && pastMessages.length > 0) {
-                    pastMessages.reverse(); // put into chronological order
-                    transcript = pastMessages.map(m => `${m.role === 'user' ? 'Student' : 'Tutor'}: ${m.content}`).join('\n');
-                }
-            }
-        }
-
-        // d. Prepare prompt for Gemini
-        const contextStr = contextChunks.map(r => `Chunk ID: ${r.id}\nSection: ${r.section_label}\nContent: ${r.text}\n`).join('\n---\n');
-
-        let systemInstruction = `
-You are an AI Tutor.
-You must explain the user's question using ONLY the provided source material. 
-Never use outside knowledge.
-Break the explanation into 2-4 short segments. Each segment must be tagged with the source_chunk_id from which that information was derived.
-Generate exactly 2 short practice questions based on the same material.
-`;
-        if (gapData) {
-            systemInstruction += `\nSince the user seems to have a gap in prerequisite knowledge, briefly note at the beginning of your explanation that this is prerequisite material relevant to what they originally asked about, before diving into the explanation.`;
-        }
-
-        if (transcript) {
-            systemInstruction += `\n\nRecent conversation (for context only — do not treat this as evidence of mastery):\n${transcript}`;
-        }
-
-        const prompt = `${systemInstruction}\n\nSource Material:\n${contextStr}\n\nQuestion: ${question}`;
-
-        // e. Call Gemini with retry mechanism
-        let parsedResult = null;
-        let attempts = 0;
-        const maxAttempts = 2; // 1 initial + 1 retry
-
-        while (attempts < maxAttempts) {
-            try {
-                const rawResponse = await callGemini(prompt);
-                parsedResult = JSON.parse(rawResponse);
-                break; // Parsing successful, exit loop
-            } catch (err) {
-                console.error("Gemini call or parse failed:", err);
-                attempts++;
-                if (attempts >= maxAttempts) {
-                    const errorObj = {
-                        status: "error",
-                        message: "Could not generate a response.",
-                        results: contextChunks
-                    };
-                    if (student_id || session_id) {
-                        // Use raw return and manually record since it's a 500
-                        recordChatLog({
-                            student_id,
-                            session_id: session_id || 'untracked',
-                            question,
-                            response: errorObj
-                        });
-                    }
-                    return res.status(500).json(errorObj);
-                }
-            }
-        }
-
-        // f. Verify chunk IDs
-        const validChunkIds = new Set(contextChunks.map(r => r.id));
-        if (parsedResult.explanation_segments && Array.isArray(parsedResult.explanation_segments)) {
-            parsedResult.explanation_segments.forEach(segment => {
-                if (!validChunkIds.has(segment.source_chunk_id)) {
-                    segment.unverified = true;
-                }
-            });
-        }
-
-        // Return combined JSON
-        return await respondAndLog({
-            status: parsedResult.status || "answered",
-            ...(gapData || {}),
-            explanation_segments: parsedResult.explanation_segments || [],
-            practice_questions: parsedResult.practice_questions || [],
-            results: contextChunks
-        });
-    } catch (error) {
-        console.error("Error in explain endpoint:", error);
-
-        // Log the catastropic error as well
-        if (student_id || session_id) {
-            recordChatLog({
-                student_id,
-                session_id: session_id || 'untracked',
+        const retrievalResult =
+            await runPythonRetrieval(
                 question,
-                response: { status: "error", message: "Internal Server Error" }
+                courseName
+            );
+
+        console.log(
+            "✅ STEP 5 — Python retrieval completed"
+        );
+
+        // ====================================================
+        // OUT-OF-SYLLABUS CHECK
+        // ====================================================
+
+        if (
+            retrievalResult.status ===
+            "course_not_approved"
+        ) {
+            console.log(
+                "🚫 STOPPING REQUEST — OUTSIDE APPROVED COURSE"
+            );
+
+            return res.json({
+                status:
+                    "course_not_approved",
+
+                message:
+                    "This question is outside the approved course material.",
+
+                explanation_segments: [],
+
+                practice_questions: [],
+
+                learning_path: []
             });
         }
 
-        return res.status(500).json({ error: "Internal Server Error" });
+        // ====================================================
+        // GET CONTEXT CHUNKS
+        // ====================================================
+
+        const contextChunks =
+            retrievalResult.answer_context ||
+            [];
+
+        console.log(
+            "Context chunks:",
+            contextChunks.map(
+                chunk => chunk.id
+            )
+        );
+
+        // ====================================================
+        // SECOND SAFETY CHECK
+        // ====================================================
+
+        if (
+            contextChunks.length === 0
+        ) {
+            console.log(
+                "🚫 No approved material found."
+            );
+
+            return res.json({
+                status:
+                    "course_not_approved",
+
+                message:
+                    "This question is outside the approved course material.",
+
+                explanation_segments: [],
+
+                practice_questions: [],
+
+                learning_path: []
+            });
+        }
+
+        // ====================================================
+        // STEP 6 — CLASSIFICATION
+        // ====================================================
+
+        console.log(
+            "STEP 6 — Classifying question"
+        );
+
+        const classification =
+            classifyQuestion(
+                question
+            );
+
+        // ====================================================
+        // STEP 7 — BUILD GEMINI CONTEXT
+        // ====================================================
+
+        console.log(
+            "STEP 7 — Building Gemini context"
+        );
+
+        const context =
+            buildGeminiContext(
+                retrievalResult
+            );
+
+        console.log(
+            "Context length:",
+            context.length
+        );
+
+        // ====================================================
+        // STEP 8 — SEND TO GEMINI
+        // ====================================================
+
+        console.log(
+            "STEP 8 — Sending request to Gemini"
+        );
+
+        let geminiRaw;
+
+        let geminiSuccess =
+            false;
+
+        let lastError =
+            null;
+
+        // Retry twice
+        for (
+            let attempt = 1;
+            attempt <= 2;
+            attempt++
+        ) {
+            try {
+                console.log(
+                    `Gemini attempt ${attempt}/2`
+                );
+
+                geminiRaw =
+                    await callGemini(
+                        question,
+                        courseName,
+                        context,
+                        classification
+                    );
+
+                geminiSuccess =
+                    true;
+
+                break;
+
+            } catch (geminiError) {
+                lastError =
+                    geminiError;
+
+                console.error(
+                    `❌ Gemini attempt ${attempt} failed:`,
+                    geminiError
+                );
+
+                if (
+                    attempt < 2
+                ) {
+                    await new Promise(
+                        resolve =>
+                            setTimeout(
+                                resolve,
+                                1000
+                            )
+                    );
+                }
+            }
+        }
+
+        // ====================================================
+        // GEMINI FAILED
+        // ====================================================
+
+        if (!geminiSuccess) {
+            throw new Error(
+                lastError
+                    ? lastError.message
+                    : "Gemini request failed."
+            );
+        }
+
+        // ====================================================
+        // STEP 9 — PARSE GEMINI JSON
+        // ====================================================
+
+        let geminiResult;
+
+        try {
+            let cleanResponse =
+                geminiRaw
+                    .replace(
+                        /^\uFEFF/,
+                        ""
+                    )
+                    .trim();
+
+            // Remove ```json
+            cleanResponse =
+                cleanResponse.replace(
+                    /^```json\s*/i,
+                    ""
+                );
+
+            // Remove ```
+            cleanResponse =
+                cleanResponse.replace(
+                    /^```\s*/,
+                    ""
+                );
+
+            cleanResponse =
+                cleanResponse.replace(
+                    /\s*```$/,
+                    ""
+                );
+
+            cleanResponse =
+                cleanResponse.trim();
+
+            geminiResult =
+                JSON.parse(
+                    cleanResponse
+                );
+
+            console.log(
+                "✅ Gemini JSON parsed"
+            );
+
+        } catch (parseError) {
+            console.error(
+                "❌ Gemini JSON parse failed"
+            );
+
+            console.error(
+                parseError
+            );
+
+            console.error(
+                "Gemini raw response:",
+                geminiRaw
+            );
+
+            throw new Error(
+                "Gemini returned invalid JSON."
+            );
+        }
+
+        // ====================================================
+        // VALIDATE GEMINI RESPONSE
+        // ====================================================
+
+        if (
+            !geminiResult ||
+            typeof geminiResult !== "object"
+        ) {
+            throw new Error(
+                "Gemini returned an invalid response."
+            );
+        }
+
+        if (
+            !Array.isArray(
+                geminiResult.explanation_segments
+            )
+        ) {
+            geminiResult.explanation_segments =
+                [];
+        }
+
+        if (
+            !Array.isArray(
+                geminiResult.practice_questions
+            )
+        ) {
+            geminiResult.practice_questions =
+                [];
+        }
+
+        // ====================================================
+        // VALIDATE SOURCE CHUNK IDS
+        // ====================================================
+
+        const validChunkIds =
+            new Set(
+                contextChunks.map(
+                    chunk => chunk.id
+                )
+            );
+
+        geminiResult.explanation_segments =
+            geminiResult.explanation_segments
+                .filter(
+                    segment => {
+                        if (
+                            !segment ||
+                            typeof segment !==
+                            "object"
+                        ) {
+                            return false;
+                        }
+
+                        if (
+                            !segment.text
+                        ) {
+                            return false;
+                        }
+
+                        /*
+                         * Prevent Gemini from citing a chunk
+                         * that wasn't actually retrieved.
+                         */
+
+                        if (
+                            segment.source_chunk_id &&
+                            !validChunkIds.has(
+                                segment.source_chunk_id
+                            )
+                        ) {
+                            console.warn(
+                                "⚠️ Invalid source chunk:",
+                                segment.source_chunk_id
+                            );
+
+                            return false;
+                        }
+
+                        return true;
+                    }
+                );
+
+        // ====================================================
+        // STEP 10 — SEND RESPONSE
+        // ====================================================
+
+        console.log(
+            "STEP 9 — Sending response to frontend"
+        );
+
+        return res.json({
+            status:
+                "success",
+
+            course:
+                courseName,
+
+            question:
+                question,
+
+            classification:
+                classification,
+
+            explanation_segments:
+                geminiResult.explanation_segments,
+
+            practice_questions:
+                geminiResult.practice_questions,
+
+            learning_path:
+                retrievalResult.learning_path ||
+                [],
+
+            source_chunks:
+                contextChunks.map(
+                    chunk => ({
+                        id:
+                            chunk.id,
+
+                        topic:
+                            chunk.topic,
+
+                        section:
+                            chunk.section,
+
+                        page_start:
+                            chunk.page_start,
+
+                        page_end:
+                            chunk.page_end
+                    })
+                )
+        });
+
+    } catch (error) {
+        // ====================================================
+        // GLOBAL ERROR HANDLER
+        // ====================================================
+
+        console.error(
+            "\n❌ ERROR IN EXPLAIN CONTROLLER"
+        );
+
+        console.error(
+            error
+        );
+
+        return res.status(
+            500
+        ).json({
+            status:
+                "error",
+
+            message:
+                error.message ||
+                "Internal server error."
+        });
     }
 }
 
-module.exports = { explain };
+// ============================================================
+// EXPORT
+// ============================================================
+
+module.exports = {
+    explain
+};

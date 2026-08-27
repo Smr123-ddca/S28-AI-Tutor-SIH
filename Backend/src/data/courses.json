@@ -1,0 +1,26 @@
+[
+  {
+    "name": "IM CH 1",
+    "pdf": "IM CH 1.pdf",
+    "chunks": "IM CH 1_chunks.json",
+    "prerequisites": "IM CH 1_prerequisites.json"
+  },
+  {
+    "name": "Merchant of Venice",
+    "pdf": "Merchant of Venice.pdf",
+    "chunks": "Merchant of Venice_chunks.json",
+    "prerequisites": "Merchant of Venice_prerequisites.json"
+  },
+  {
+    "name": "Merchant_of_Venice",
+    "pdf": "Merchant_of_Venice.pdf",
+    "chunks": "Merchant_of_Venice_chunks.json",
+    "prerequisites": "Merchant_of_Venice_prerequisites.json"
+  },
+  {
+    "name": "Sequencial_Circuits",
+    "pdf": "Sequencial_Circuits.pdf",
+    "chunks": "Sequencial_Circuits_chunks.json",
+    "prerequisites": "Sequencial_Circuits_prerequisites.json"
+  }
+]

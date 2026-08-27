@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './TinyShapes.css' // assuming styles are global or can keep inline
 
+
 function StudentChat({ session }) {
     const [sessions, setSessions] = useState([])
     const [currentSessionId, setCurrentSessionId] = useState(null)
@@ -8,6 +9,9 @@ function StudentChat({ session }) {
     const [question, setQuestion] = useState('')
     const [studentId, setStudentId] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const [courses, setCourses] = useState([])
+    const [courseName, setCourseName] = useState('')
 
     const [expandedCitations, setExpandedCitations] = useState({})
     const [recordedPQs, setRecordedPQs] = useState({})
@@ -25,7 +29,36 @@ function StudentChat({ session }) {
         }
         setStudentId(storedId);
     }, []);
+    useEffect(() => {
+    const loadCourses = async () => {
+        try {
+            const res = await fetch('/api/courses', {
+                headers: {
+                    'Authorization': `Bearer ${session?.access_token}`
+                }
+            })
 
+            if (!res.ok) {
+                throw new Error(`Failed to load courses: ${res.status}`)
+            }
+
+            const data = await res.json()
+
+            setCourses(data.courses || [])
+
+            if (data.courses?.length > 0 && !courseName) {
+                setCourseName(data.courses[0].name)
+            }
+
+        } catch (error) {
+            console.error('Failed to load courses:', error)
+        }
+    }
+
+    if (session?.access_token) {
+        loadCourses()
+    }
+    }, [session?.access_token])
     useEffect(() => {
         if (studentId && session?.access_token) {
             loadSessions();
@@ -59,7 +92,7 @@ function StudentChat({ session }) {
                 const data = await res.json();
                 const history = data.messages.map(m => {
                     if (m.role === 'user') return { role: 'user', text: m.content };
-                    return { role: 'bot', ...(m.response_json || { status: 'answered', message: m.content }) };
+                    return { role: 'bot', ...(m.response_json || { status: 'success', message: m.content }) };
                 });
                 setMessages(history);
             }
@@ -140,10 +173,11 @@ function StudentChat({ session }) {
                     'Authorization': `Bearer ${session?.access_token}`
                 },
                 body: JSON.stringify({
-                    question: userMsg.text,
-                    student_id: studentId || undefined,
-                    session_id: currentSessionId || 'untracked'
-                })
+                question: userMsg.text,
+                studentId: studentId || undefined,
+                session_id: currentSessionId || 'untracked',
+                courseName: courseName
+            })
             })
 
             const data = await response.json()
@@ -251,6 +285,54 @@ function StudentChat({ session }) {
                 border: '1px solid #e5e7eb',
                 position: 'relative'
             }}>
+                <div style={{
+    padding: '1rem 2rem',
+    borderBottom: '1px solid #e5e7eb',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem'
+}}>
+    <label style={{
+        fontWeight: '600',
+        color: '#374151'
+    }}>
+        Course:
+    </label>
+
+    <select
+        value={courseName}
+        onChange={(e) => {
+            setCourseName(e.target.value)
+
+            // Start a fresh chat when switching courses
+            setCurrentSessionId(null)
+            setMessages([])
+            setExpandedCitations({})
+            setRecordedPQs({})
+        }}
+        style={{
+            padding: '0.5rem 0.75rem',
+            border: '1px solid #d1d5db',
+            borderRadius: '8px',
+            background: '#ffffff',
+            fontSize: '0.95rem',
+            cursor: 'pointer'
+        }}
+    >
+        <option value="">
+            Select a course
+        </option>
+
+        {courses.map(course => (
+            <option
+                key={course.name}
+                value={course.name}
+            >
+                {course.name}
+            </option>
+        ))}
+    </select>
+</div>
                 <div className="chat-window" style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
                     {messages.length === 0 && !loading && (
                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: '1.2rem', textAlign: 'center' }}>
@@ -287,7 +369,7 @@ function StudentChat({ session }) {
                             botContent = <span>{msg.message}</span>;
                         } else if (msg.status === 'insufficient_evidence') {
                             botContent = <span style={{ color: '#d97706' }}>{msg.message}</span>;
-                        } else if (msg.status === 'answered') {
+                        } else if (msg.status === 'success') {
                             const resultsMap = {}
                             if (msg.results) {
                                 msg.results.forEach(r => { resultsMap[r.id] = r.text })

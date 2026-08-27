@@ -6,11 +6,23 @@ let courseContentChunks = [];
 function loadData() {
     try {
         const filePath = path.join(__dirname, '..', '..', 'data.json');
-        const fileData = fs.readFileSync(filePath, 'utf-8');
+
+        const fileData = fs.readFileSync(
+            filePath,
+            'utf-8'
+        );
+
         courseContentChunks = JSON.parse(fileData);
-        console.log(`Successfully loaded ${courseContentChunks.length} CourseContent chunks into memory.`);
+
+        console.log(
+            `Successfully loaded ${courseContentChunks.length} CourseContent chunks into memory.`
+        );
+
     } catch (error) {
-        console.error('Error loading data.json:', error);
+        console.error(
+            'Error loading data.json:',
+            error
+        );
     }
 }
 
