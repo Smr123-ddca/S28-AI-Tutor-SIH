@@ -1,0 +1,18 @@
+◇ injected env (3) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\@supabase\supabase-js\dist\index.cjs:624
+		if (!supabaseKey) throw new Error("supabaseKey is required.");
+		                  ^
+
+Error: supabaseKey is required.
+    at new SupabaseClient (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\@supabase\supabase-js\dist\index.cjs:624:27)
+    at createClient (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\@supabase\supabase-js\dist\index.cjs:863:9)
+    at Object.<anonymous> (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\verify_rag_e2e.js:10:18)
+    at Module._compile (node:internal/modules/cjs/loader:1761:14)
+    at Object..js (node:internal/modules/cjs/loader:1893:10)
+    at Module.load (node:internal/modules/cjs/loader:1481:32)
+    at Module._load (node:internal/modules/cjs/loader:1300:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:245:24)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+
+Node.js v24.13.0

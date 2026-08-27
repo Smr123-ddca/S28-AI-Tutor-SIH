@@ -1,0 +1,39 @@
+◇ injected env (3) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+🐍 Python executable: python
+🐍 Python exists: true
+AI Tutor Backend running on http://localhost:3002
+Successfully loaded 14 chunks from 6 published courses into memory.
+
+📚 Processing course: DSA_LinkedLists
+
+==========================================
+🐍 STARTING PYTHON CHUNKING
+==========================================
+PDF: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\7123f2cd-4819-49d6-ab9a-350ebdb3260f\DSA_LinkedLists.pdf
+Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\chunking.py
+Python: python
+Python chunking log: Extracted 1 pages, 21 lines.
+Created 3 chunks.
+
+✅ Chunking created 3 chunks
+✅ Chunks saved: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\data\DSA_LinkedLists_chunks.json
+✅ courses.json updated
+
+==========================================
+🤖 GENERATE PREREQUISITES REQUEST
+==========================================
+Course: DSA_LinkedLists
+📦 Found 3 chunks
+
+==========================================
+🤖 STARTING PREREQUISITE GENERATION
+==========================================
+Course: DSA_LinkedLists
+Python: python
+Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\prerequisites.py
+Prerequisite log: Traceback (most recent call last):
+  File "C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\prerequisites.py", line 7, in <module>
+    from google import genai
+ImportError: cannot import name 'genai' from 'google' (unknown location)
+

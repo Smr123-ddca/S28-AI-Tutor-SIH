@@ -40,5 +40,12 @@
     "chunks": "DBMS_chunks.json",
     "prerequisites": "DBMS_prerequisites.json",
     "status": "published"
+  },
+  {
+    "name": "DSA_LinkedLists",
+    "pdf": "DSA_LinkedLists.pdf",
+    "chunks": "DSA_LinkedLists_chunks.json",
+    "prerequisites": "DSA_LinkedLists_prerequisites.json",
+    "status": "published"
   }
 ]

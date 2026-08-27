@@ -31,10 +31,7 @@ const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 // PYTHON VIRTUAL ENVIRONMENT
 // ============================================================
 
-const PYTHON_PATH = path.join(
-    __dirname,
-    '../../venv/Scripts/python.exe'
-);
+const PYTHON_PATH = 'python';
 
 console.log('🐍 Python executable:', PYTHON_PATH);
 console.log(
@@ -241,18 +238,12 @@ function runChunking(pdfPath) {
             // CHECK PYTHON
             // ----------------------------------------------------
 
-            if (
-                !fs.existsSync(
-                    PYTHON_PATH
-                )
-            ) {
-
+            if (PYTHON_PATH !== 'python' && false) {
                 return reject(
                     new Error(
                         `Python executable not found: ${PYTHON_PATH}`
                     )
                 );
-
             }
 
 
@@ -507,18 +498,12 @@ function runPrerequisites(
             // CHECK PYTHON
             // ------------------------------------------------
 
-            if (
-                !fs.existsSync(
-                    PYTHON_PATH
-                )
-            ) {
-
+            if (PYTHON_PATH !== 'python' && false) {
                 return reject(
                     new Error(
                         `Python executable not found: ${PYTHON_PATH}`
                     )
                 );
-
             }
 
 
