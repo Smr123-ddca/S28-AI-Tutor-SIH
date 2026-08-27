@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Home from './components/Home'
 import About from './components/About'
 import Practice from './components/Practice'
+import CourseManager from './components/CourseManager'
 import { supabase } from './lib/supabaseClient'
 
 function App() {
@@ -122,6 +123,12 @@ function App() {
       {view === 'practice' && role === 'student' && (
         <div className="app-container" style={{ paddingTop: '2rem' }}>
           <Practice session={session} refreshPractice={fetchPracticeCount} />
+        </div>
+      )}
+
+      {view === 'courses' && role === 'teacher' && (
+        <div className="app-container" style={{ paddingTop: '2rem' }}>
+          <CourseManager session={session} />
         </div>
       )}
     </div>

@@ -33,6 +33,14 @@ export default function Navbar({ setView, currentView, handleLogout, displayName
                         Practice <span style={{ background: '#3b82f6', color: 'white', fontSize: '0.75rem', padding: '2px 6px', borderRadius: '12px' }}>{practiceCount}</span>
                     </button>
                 )}
+                {role === 'teacher' && (
+                    <button
+                        className={`nav-link-btn ${currentView === 'courses' ? 'active' : ''}`}
+                        onClick={() => setView('courses')}
+                    >
+                        Manage Courses
+                    </button>
+                )}
             </div>
 
             <div className="nav-right">

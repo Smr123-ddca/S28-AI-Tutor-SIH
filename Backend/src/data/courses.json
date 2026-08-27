@@ -29,10 +29,10 @@
   },
   {
     "name": "DSA",
-    "pdf": "DSA_draft.pdf",
+    "pdf": "DSA.pdf",
     "chunks": "DSA_chunks.json",
     "prerequisites": "DSA_prerequisites.json",
-    "status": "published"
+    "status": "pending_review"
   },
   {
     "name": "DBMS",

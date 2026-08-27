@@ -62,5 +62,7 @@ router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
 // Courses
 router.get('/courses', getCourses);
 router.put('/courses/:courseName/status', requireRole('teacher'), updateCourseStatus);
+router.get('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').getPrerequisites);
+router.put('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').updatePrerequisites);
 
 module.exports = router;

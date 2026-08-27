@@ -52,7 +52,43 @@ function updateCourseStatus(req, res) {
     }
 }
 
+function getPrerequisites(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const prereqPath = path.join(__dirname, '../data', `${courseName}_prerequisites.json`);
+
+        if (!fs.existsSync(prereqPath)) {
+            return res.json({ prerequisites: {} });
+        }
+
+        const prereqs = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
+        res.json({ prerequisites: prereqs });
+    } catch (error) {
+        console.error('Failed to get prerequisites:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+}
+
+function updatePrerequisites(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const { prerequisites } = req.body;
+
+        if (!prerequisites) return res.status(400).json({ error: 'Missing prerequisites objects' });
+
+        const prereqPath = path.join(__dirname, '../data', `${courseName}_prerequisites.json`);
+        fs.writeFileSync(prereqPath, JSON.stringify(prerequisites, null, 2), 'utf8');
+
+        res.json({ status: 'success', prerequisites });
+    } catch (error) {
+        console.error('Failed to update prerequisites:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+}
+
 module.exports = {
     getCourses,
-    updateCourseStatus
+    updateCourseStatus,
+    getPrerequisites,
+    updatePrerequisites
 };
