@@ -29,7 +29,16 @@ const responseSchema = {
         },
         practice_questions: {
             type: SchemaType.ARRAY,
-            items: { type: SchemaType.STRING, description: "A practice question" }
+            items: {
+                type: SchemaType.OBJECT,
+                properties: {
+                    question: { type: SchemaType.STRING, description: "The practice question text" },
+                    concept: { type: SchemaType.STRING, description: "The core concept being tested" },
+                    hint_1: { type: SchemaType.STRING, description: "A simple hint to guide the student" },
+                    hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" }
+                },
+                required: ["question", "concept", "hint_1", "hint_2"]
+            }
         }
     },
     required: ["status", "explanation_segments", "practice_questions"]
@@ -405,12 +414,45 @@ Generate exactly 2 short practice questions based on the factual material.
             });
         }
 
+        // ════════════════════════════════════════════════════════════════
+        // STEP 10: Asynchronously Store Practice Questions
+        // ════════════════════════════════════════════════════════════════
+        let practiceMeta = { available: false, count: 0 };
+
+        if (parsedResult.status === 'answered' && classificationResult.classification === 'concept_question' && parsedResult.practice_questions && parsedResult.practice_questions.length > 0) {
+            practiceMeta.available = true;
+            practiceMeta.count = parsedResult.practice_questions.length;
+
+            const { supabaseAdmin } = require('../lib/supabaseAdmin');
+            const chunkId = contextChunks && contextChunks.length > 0 ? contextChunks[0].id : null;
+            const targetSession = session_id && session_id !== 'untracked' ? session_id : null;
+
+            // Fire and forget so we don't break the main chat response on failure
+            if (supabaseAdmin) {
+                Promise.all(parsedResult.practice_questions.map(pq => {
+                    return supabaseAdmin.from('practice_questions').insert({
+                        student_id,
+                        session_id: targetSession,
+                        chunk_id: chunkId,
+                        subject: 'temporary-subject', // per requirements
+                        question: pq.question,
+                        concept: pq.concept,
+                        hint_1: pq.hint_1,
+                        hint_2: pq.hint_2,
+                        status: 'pending'
+                    });
+                })).catch(e => {
+                    console.error("Failed to asynchronously store practice questions:", e);
+                });
+            }
+        }
+
         // Return combined JSON
         return await respondAndLog({
             status: parsedResult.status || "answered",
             ...(gapData || {}),
             explanation_segments: parsedResult.explanation_segments || [],
-            practice_questions: parsedResult.practice_questions || [],
+            practice: practiceMeta,
             results: contextChunks
         });
     } catch (error) {

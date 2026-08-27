@@ -178,3 +178,67 @@
 [EXPLAIN TIMING] stage=Total duration=978.80ms
 [EXPLAIN TRACE] session=1624dee6-599f-4446-bf25-9a9ece652b5b prev_msgs=0 chunks=5 prompt_size=0 gen_status=pending
 ------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.03ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.51ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.10ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.08ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.00ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.01ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=0.36ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.03ms
+[EXPLAIN TIMING] stage=Total duration=49.89ms
+[EXPLAIN TRACE] session=sess-123 prev_msgs=0 chunks=1 prompt_size=1010 gen_status=success
+------
+[EXPLAIN TIMING] stage=Persistence duration=3.31ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.00ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.05ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.12ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=100.35ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=1 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.01ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.02ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.22ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.04ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.00ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=0.18ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.03ms
+[EXPLAIN TIMING] stage=Total duration=53.65ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=1 prompt_size=1002 gen_status=success
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.05ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.83ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.14ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.06ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.00ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.01ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=0.80ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.06ms
+[EXPLAIN TIMING] stage=Total duration=55.15ms
+[EXPLAIN TRACE] session=sess-123 prev_msgs=0 chunks=1 prompt_size=1010 gen_status=success
+------
+[EXPLAIN TIMING] stage=Persistence duration=6.71ms
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.00ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.06ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.05ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Persistence duration=0.28ms
+[EXPLAIN TIMING] stage=Total duration=52.53ms
+[EXPLAIN TRACE] session=test-sess-123 prev_msgs=0 chunks=1 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.00ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=0.06ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.04ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=PromptConstruction duration=0.00ms
+[EXPLAIN TIMING] stage=GeminiNetworkWait duration=0.24ms
+[EXPLAIN TIMING] stage=GeminiParse duration=0.02ms
+[EXPLAIN TIMING] stage=Persistence duration=0.03ms
+[EXPLAIN TIMING] stage=Total duration=67.17ms
+[EXPLAIN TRACE] session=test-sess-123 prev_msgs=0 chunks=1 prompt_size=1002 gen_status=success
+------

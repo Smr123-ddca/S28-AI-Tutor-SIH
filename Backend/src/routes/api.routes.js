@@ -6,6 +6,12 @@ const { getMisconceptions } = require('../controllers/misconception.controller')
 const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload } = require('../controllers/ingest.controller');
+const {
+    createQuestion,
+    getQuestions,
+    getQuestionById,
+    createAttempt
+} = require('../controllers/practice.controller');
 
 const router = express.Router();
 
@@ -26,6 +32,13 @@ router.get('/sessions/:sessionId', getSessionMessages);
 router.post('/sessions', createSession);
 router.put('/sessions/:sessionId/title', updateSessionTitle);
 router.delete('/sessions/:sessionId', deleteSession);
+
+// Practice endpoints
+router.post('/practice-questions', createQuestion);
+router.get('/practice-questions', getQuestions);
+router.get('/practice-questions/:id', getQuestionById);
+router.post('/practice-attempts', createAttempt);
+
 
 // Ingestion Sub-layer A (Upload)
 router.post('/ingest/upload', requireRole('teacher'), uploadMiddleware, handleUpload);
