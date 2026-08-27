@@ -5,7 +5,7 @@ CREATE TABLE public.practice_questions (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     student_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
     session_id UUID REFERENCES public.chat_sessions(id) ON DELETE SET NULL,
-    chunk_id UUID,
+    chunk_id TEXT,
     subject VARCHAR(255),
     question TEXT NOT NULL,
     concept TEXT,

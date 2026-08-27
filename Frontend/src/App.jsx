@@ -68,7 +68,7 @@ function App() {
       });
       if (res.ok) {
         const data = await res.json();
-        const pendingCount = data.questions ? data.questions.filter(q => q.status === 'pending').length : 0;
+        const pendingCount = data.questions ? data.questions.filter(q => q.status === 'pending' && !q.answer_revealed).length : 0;
         setPracticeCount(pendingCount);
       }
     } catch (e) {
@@ -121,7 +121,7 @@ function App() {
 
       {view === 'practice' && role === 'student' && (
         <div className="app-container" style={{ paddingTop: '2rem' }}>
-          <Practice session={session} refreshPractice={fetchPracticeCount} />
+          <Practice session={session} refreshPractice={fetchPracticeCount} setView={setView} />
         </div>
       )}
     </div>

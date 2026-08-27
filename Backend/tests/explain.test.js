@@ -123,18 +123,73 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         // Assert they were NOT returned raw
         expect(response.body.practice_questions).toBeUndefined();
 
-        // Check Persistence Call
-        expect(supabaseAdmin.insert).toHaveBeenCalledTimes(2);
+        // Check Persistence Call - bulk array
+        expect(supabaseAdmin.insert).toHaveBeenCalledTimes(1);
 
         // Validate Insertion object
         const insertArg1 = supabaseAdmin.insert.mock.calls[0][0];
-        expect(insertArg1).toEqual(expect.objectContaining({
+        expect(Array.isArray(insertArg1)).toBe(true);
+        expect(insertArg1.length).toBe(2);
+
+        expect(insertArg1[0]).toEqual(expect.objectContaining({
             student_id: 'student-test',
             session_id: 'sess-123',
             chunk_id: 'chunk-123',
             status: 'pending',
             question: 'Q1'
         }));
+    });
+
+    it('should reject practice array if length is NOT exactly 2 (e.g. 1 item)', async () => {
+        const mockGeminiResponse = {
+            status: 'answered',
+            explanation_segments: [{ text: "explanation", source_chunk_id: "chunk-123" }],
+            practice_questions: [
+                { question: "Q1", concept: "C1", hint_1: "H1", hint_2: "H2" }
+            ]
+        };
+
+        mockGeminiModel.generateContent.mockResolvedValueOnce({
+            response: Promise.resolve({ text: () => JSON.stringify(mockGeminiResponse) })
+        });
+
+        const response = await request(app)
+            .post('/api/explain')
+            .set('x-mock-user-id', 'student-test')
+            .send({ question: "Explain Newton's second law again" });
+
+        expect(response.status).toBe(200);
+        // Valid normal response
+        expect(response.body.status).toBe('answered');
+        expect(response.body.practice.available).toBe(false);
+
+        // Ensures it never persisted
+        expect(supabaseAdmin.insert).toHaveBeenCalledTimes(0);
+    });
+
+    it('should reject practice array if length is NOT exactly 2 (e.g. 3 items)', async () => {
+        const mockGeminiResponse = {
+            status: 'answered',
+            explanation_segments: [{ text: "explanation", source_chunk_id: "chunk-123" }],
+            practice_questions: [
+                { question: "Q1", concept: "C1", hint_1: "H1", hint_2: "H2" },
+                { question: "Q2", concept: "C2", hint_1: "H3", hint_2: "H4" },
+                { question: "Q3", concept: "C3", hint_1: "H5", hint_2: "H6" }
+            ]
+        };
+
+        mockGeminiModel.generateContent.mockResolvedValueOnce({
+            response: Promise.resolve({ text: () => JSON.stringify(mockGeminiResponse) })
+        });
+
+        const response = await request(app)
+            .post('/api/explain')
+            .set('x-mock-user-id', 'student-test')
+            .send({ question: "Explain Newton's second law" });
+
+        expect(response.status).toBe(200);
+        expect(response.body.practice.available).toBe(false);
+        expect(supabaseAdmin.insert).toHaveBeenCalledTimes(0);
     });
 
     it('7, 8, 9: Non-practice-worthy models correctly skip generation', async () => {
@@ -156,7 +211,8 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
             status: 'answered',
             explanation_segments: [{ text: "explanation", source_chunk_id: "chunk-123" }],
             practice_questions: [
-                { question: "Q1", concept: "C1", hint_1: "H1", hint_2: "H2" }
+                { question: "Q1", concept: "C1", hint_1: "H1", hint_2: "H2" },
+                { question: "Q2", concept: "C2", hint_1: "H3", hint_2: "H4" }
             ]
         };
 

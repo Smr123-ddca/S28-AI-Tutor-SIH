@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function Practice({ session, refreshPractice }) {
+export default function Practice({ session, refreshPractice, setView }) {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -14,6 +14,7 @@ export default function Practice({ session, refreshPractice }) {
     const [socraticChat, setSocraticChat] = useState([]);
     const [showAnswerMode, setShowAnswerMode] = useState(false);
     const [answerRevealedText, setAnswerRevealedText] = useState("");
+    const [hasCompletedAny, setHasCompletedAny] = useState(false);
 
     useEffect(() => {
         if (session?.access_token) {
@@ -99,6 +100,7 @@ export default function Practice({ session, refreshPractice }) {
                     setSocraticChat(prev => [...prev, { role: 'tutor', content: data.message }]);
                     if (data.completed) {
                         setEvalState({ type: 'correct', message: 'You reached the correct answer via tutoring!' });
+                        setHasCompletedAny(true);
                         fetchPracticeQuestions();
                     } else {
                         // Clear the input field for next message
@@ -107,6 +109,7 @@ export default function Practice({ session, refreshPractice }) {
                 } else {
                     setEvalState({ type: data.evaluation, message: `Attempt ${data.attempt_number}` });
                     if (data.completed) {
+                        setHasCompletedAny(true);
                         fetchPracticeQuestions();
                     }
                 }
@@ -155,6 +158,7 @@ export default function Practice({ session, refreshPractice }) {
                 setShowAnswerMode(true);
                 setAnswerRevealedText(data.answer);
                 setEvalState({ type: 'incorrect', message: 'Answer revealed.' });
+                setHasCompletedAny(true);
                 fetchPracticeQuestions();
             }
         } catch (e) {
@@ -197,7 +201,33 @@ export default function Practice({ session, refreshPractice }) {
                     {/* Left pane: Question List */}
                     <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '1rem', overflowY: 'auto' }}>
                         {questions.length === 0 ? (
-                            <div style={{ color: '#6b7280', textAlign: 'center', marginTop: '2rem' }}>No pending practice questions.</div>
+                            hasCompletedAny ? (
+                                <div style={{ color: '#6b7280', textAlign: 'center', marginTop: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+                                    <div style={{ fontSize: '1.25rem', color: '#111827', fontWeight: '600' }}>🎉 Practice complete!</div>
+                                    <div style={{ fontSize: '1rem', color: '#374151' }}>You've completed all available practice questions.</div>
+                                    <button
+                                        onClick={() => setView('app')}
+                                        style={{ padding: '0.6rem 1.5rem', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '500', transition: 'background-color 0.2s', marginTop: '0.5rem' }}
+                                        onMouseOver={e => e.currentTarget.style.backgroundColor = '#2563eb'}
+                                        onMouseOut={e => e.currentTarget.style.backgroundColor = '#3b82f6'}
+                                    >
+                                        Back to Chat
+                                    </button>
+                                </div>
+                            ) : (
+                                <div style={{ color: '#6b7280', textAlign: 'center', marginTop: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+                                    <div style={{ fontSize: '1.15rem', color: '#374151', fontWeight: '500' }}>No practice questions available yet.</div>
+                                    <div style={{ fontSize: '0.95rem' }}>Ask a conceptual question in Chat to build your practice set.</div>
+                                    <button
+                                        onClick={() => setView('app')}
+                                        style={{ padding: '0.6rem 1.5rem', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: '500', transition: 'background-color 0.2s', marginTop: '0.5rem' }}
+                                        onMouseOver={e => e.currentTarget.style.backgroundColor = '#2563eb'}
+                                        onMouseOut={e => e.currentTarget.style.backgroundColor = '#3b82f6'}
+                                    >
+                                        Go to Chat
+                                    </button>
+                                </div>
+                            )
                         ) : (
                             questions.map(q => (
                                 <div
@@ -379,23 +409,42 @@ export default function Practice({ session, refreshPractice }) {
                                             )}
                                         </div>
 
-                                        {!showAnswerMode && (
+                                        {evalState?.type === 'correct' || showAnswerMode ? (
                                             <button
-                                                onClick={handleSubmitAnswer}
-                                                disabled={submitting || !answer.trim() || evalState?.type === 'correct'}
+                                                onClick={() => setSelectedQuestion(null)}
                                                 style={{
                                                     padding: '0.6rem 1.5rem',
-                                                    background: (submitting || !answer.trim() || evalState?.type === 'correct') ? '#9ca3af' : '#111827',
+                                                    background: '#10b981',
                                                     color: '#ffffff',
                                                     border: 'none',
                                                     borderRadius: '8px',
                                                     fontSize: '0.95rem',
                                                     fontWeight: '500',
-                                                    cursor: (submitting || !answer.trim() || evalState?.type === 'correct') ? 'not-allowed' : 'pointer',
+                                                    cursor: 'pointer',
+                                                    transition: 'background-color 0.2s'
+                                                }}
+                                                onMouseOver={e => e.currentTarget.style.backgroundColor = '#059669'}
+                                                onMouseOut={e => e.currentTarget.style.backgroundColor = '#10b981'}
+                                            >
+                                                Next Question
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={handleSubmitAnswer}
+                                                disabled={submitting || !answer.trim()}
+                                                style={{
+                                                    padding: '0.6rem 1.5rem',
+                                                    background: (submitting || !answer.trim()) ? '#9ca3af' : '#111827',
+                                                    color: '#ffffff',
+                                                    border: 'none',
+                                                    borderRadius: '8px',
+                                                    fontSize: '0.95rem',
+                                                    fontWeight: '500',
+                                                    cursor: (submitting || !answer.trim()) ? 'not-allowed' : 'pointer',
                                                     transition: 'background-color 0.2s'
                                                 }}
                                             >
-                                                {submitting ? "Evaluating..." : evalState?.type === 'correct' ? 'Completed' : (socraticMode ? 'Send' : 'Submit Answer')}
+                                                {submitting ? "Evaluating..." : (socraticMode ? 'Send' : 'Submit Answer')}
                                             </button>
                                         )}
                                     </div>
