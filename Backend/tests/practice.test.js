@@ -287,4 +287,40 @@ describe('Practice Endpoints', () => {
             expect(supabaseAdmin.insert).not.toHaveBeenCalled();
         });
     });
+
+    describe('POST /api/practice-questions/:id/socratic', () => {
+        it('should block if hints < 2', async () => {
+            supabaseAdmin.single.mockImplementationOnce(() => Promise.resolve({
+                data: { id: 'pq-1', hints_requested: 1 },
+                error: null
+            }));
+
+            const response = await request(app)
+                .post('/api/practice-questions/pq-1/socratic')
+                .set('x-mock-user-id', 'student-A')
+                .send({ message: 'Help' });
+
+            expect(response.status).toBe(400);
+        });
+    });
+
+    describe('POST /api/practice-questions/:id/reveal', () => {
+        it('should update answer_revealed and log attempt', async () => {
+            supabaseAdmin.single.mockImplementationOnce(() => Promise.resolve({
+                data: { id: 'pq-1', status: 'pending', answer_revealed: false },
+                error: null
+            }));
+            _mockGenerateContent.mockResolvedValueOnce({
+                response: { text: jest.fn().mockReturnValue('Revealed') }
+            });
+
+            const response = await request(app)
+                .post('/api/practice-questions/pq-1/reveal')
+                .set('x-mock-user-id', 'student-A');
+
+            expect(response.status).toBe(200);
+            expect(supabaseAdmin.update).toHaveBeenCalledWith(expect.objectContaining({ answer_revealed: true }));
+            expect(supabaseAdmin.insert).toHaveBeenCalledWith(expect.objectContaining({ answer_revealed: true }));
+        });
+    });
 });

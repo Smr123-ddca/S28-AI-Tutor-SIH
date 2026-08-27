@@ -14,6 +14,15 @@ const evaluationSchema = {
     },
     required: ["evaluation", "reason"]
 };
+
+const socraticSchema = {
+    type: SchemaType.OBJECT,
+    properties: {
+        evaluation: { type: SchemaType.STRING, description: "Must be exactly 'correct', 'partial', or 'incorrect'" },
+        message: { type: SchemaType.STRING, description: "The guiding question, or a confirmation of success. Do not state the final answer unless they just got it correct." }
+    },
+    required: ["evaluation", "message"]
+};
 async function createQuestion(req, res) {
     const student_id = req.user.id;
     const { session_id, chunk_id, subject, question, concept, hint_1, hint_2, status = 'pending' } = req.body;
@@ -249,10 +258,152 @@ async function requestHint(req, res) {
     });
 }
 
+async function socraticAttempt(req, res) {
+    const { id } = req.params;
+    const student_id = req.user.id;
+    const { message } = req.body;
+
+    if (!message) return res.status(400).json({ error: "Missing message" });
+
+    const { data: question, error: questionError } = await supabaseAdmin
+        .from('practice_questions')
+        .select('*')
+        .eq('id', id)
+        .eq('student_id', student_id)
+        .single();
+
+    if (questionError || !question) return res.status(403).json({ error: "Access denied" });
+    if (question.hints_requested < 2) return res.status(400).json({ error: "Must use standard hints first" });
+    if (question.status === 'completed' || question.answer_revealed) return res.status(400).json({ error: "Question already resolved" });
+
+    const { data: pastAttempts } = await supabaseAdmin
+        .from('practice_attempts')
+        .select('answer, tutor_response, created_at')
+        .eq('practice_question_id', id)
+        .order('created_at', { ascending: true });
+
+    let evidenceText = "No matching source material found.";
+    if (question.chunk_id) {
+        const chunk = getChunks().find(c => c.id === question.chunk_id);
+        if (chunk) evidenceText = chunk.text;
+    }
+
+    let historyStr = (pastAttempts || []).map(a => {
+        let str = `Student: ${a.answer}`;
+        if (a.tutor_response) str += `\nTutor (You): ${a.tutor_response}`;
+        return str;
+    }).join("\n\n");
+
+    const prompt = `
+You are an AI Tutor guiding a student strictly via the Socratic method.
+Use the factual Source Material exclusively. Do NOT give away the final answer.
+Identify missing concepts, ask a focused guiding question.
+
+Source Material:
+${evidenceText}
+
+Target Question:
+${question.question}
+Concept: ${question.concept || 'N/A'}
+
+Conversation History:
+${historyStr}
+
+New Student Message:
+${message}
+`;
+
+    let evaluationResult = null;
+    try {
+        const model = genAI.getGenerativeModel({
+            model: "gemini-3.5-flash-lite",
+            generationConfig: { responseMimeType: "application/json", responseSchema: socraticSchema }
+        });
+        const result = await model.generateContent(prompt);
+        evaluationResult = JSON.parse(await result.response.text());
+        if (!['correct', 'partial', 'incorrect'].includes(evaluationResult.evaluation)) evaluationResult.evaluation = 'incorrect';
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to evaluate" });
+    }
+
+    const attempt_number = (pastAttempts ? pastAttempts.length : 0) + 1;
+    await supabaseAdmin
+        .from('practice_attempts')
+        .insert({
+            practice_question_id: id,
+            student_id,
+            answer: message,
+            evaluation: evaluationResult.evaluation,
+            attempt_number,
+            hints_used: question.hints_requested,
+            tutor_response: evaluationResult.message,
+            answer_revealed: false
+        });
+
+    let completed = false;
+    if (evaluationResult.evaluation === 'correct') {
+        completed = true;
+        await supabaseAdmin.from('practice_questions').update({ status: 'completed', completed_at: new Date().toISOString() }).eq('id', id);
+    }
+
+    return res.json({ success: true, evaluation: evaluationResult.evaluation, message: evaluationResult.message, completed });
+}
+
+async function revealAnswer(req, res) {
+    const { id } = req.params;
+    const student_id = req.user.id;
+
+    const { data: question, error: questionError } = await supabaseAdmin
+        .from('practice_questions')
+        .select('*')
+        .eq('id', id)
+        .eq('student_id', student_id)
+        .single();
+
+    if (questionError || !question) return res.status(403).json({ error: "Access denied" });
+    if (question.status === 'completed' || question.answer_revealed) return res.status(400).json({ error: "Question already resolved" });
+
+    let evidenceText = "No matching source material found.";
+    if (question.chunk_id) {
+        const chunk = getChunks().find(c => c.id === question.chunk_id);
+        if (chunk) evidenceText = chunk.text;
+    }
+
+    let answerText = "";
+    try {
+        const prompt = `Provide a concise, direct answer and brief explanation to the following question, relying ONLY on the Source Material provided.\n\nSource: ${evidenceText}\n\nQuestion: ${question.question}`;
+        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+        const result = await model.generateContent(prompt);
+        answerText = await result.response.text();
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to generate answer" });
+    }
+
+    await supabaseAdmin.from('practice_questions').update({ answer_revealed: true }).eq('id', id);
+
+    // Log explicit escape hatch usage without completing the problem
+    const { data: pastAttempts } = await supabaseAdmin.from('practice_attempts').select('id').eq('practice_question_id', id);
+    const attempt_number = (pastAttempts ? pastAttempts.length : 0) + 1;
+    await supabaseAdmin.from('practice_attempts').insert({
+        practice_question_id: id,
+        student_id,
+        answer: "[REQUESTED SHOW ANSWER]",
+        evaluation: 'incorrect',
+        attempt_number,
+        hints_used: question.hints_requested,
+        tutor_response: answerText,
+        answer_revealed: true
+    });
+
+    return res.json({ success: true, answer: answerText });
+}
+
 module.exports = {
     createQuestion,
     getQuestions,
     getQuestionById,
     createAttempt,
-    requestHint
+    requestHint,
+    socraticAttempt,
+    revealAnswer
 };

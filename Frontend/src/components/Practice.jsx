@@ -10,6 +10,11 @@ export default function Practice({ session, refreshPractice }) {
     const [hintText, setHintText] = useState("");
     const [hintsRequested, setHintsRequested] = useState(0);
 
+    const [socraticMode, setSocraticMode] = useState(false);
+    const [socraticChat, setSocraticChat] = useState([]);
+    const [showAnswerMode, setShowAnswerMode] = useState(false);
+    const [answerRevealedText, setAnswerRevealedText] = useState("");
+
     useEffect(() => {
         if (session?.access_token) {
             fetchPracticeQuestions();
@@ -24,7 +29,7 @@ export default function Practice({ session, refreshPractice }) {
             });
             if (res.ok) {
                 const data = await res.json();
-                const pending = data.questions ? data.questions.filter(q => q.status === 'pending') : [];
+                const pending = data.questions ? data.questions.filter(q => q.status === 'pending' && !q.answer_revealed) : [];
                 setQuestions(pending);
                 if (refreshPractice) refreshPractice();
             }
@@ -40,6 +45,10 @@ export default function Practice({ session, refreshPractice }) {
         setAnswer("");
         setEvalState(null);
         setHintsRequested(q.hints_requested || 0);
+        setSocraticMode(false);
+        setSocraticChat([]);
+        setShowAnswerMode(false);
+        setAnswerRevealedText("");
 
         let preloadedHints = "";
         if (q.hints_requested >= 1 && q.hint_1) preloadedHints += q.hint_1;
@@ -69,31 +78,87 @@ export default function Practice({ session, refreshPractice }) {
         setSubmitting(true);
         setEvalState(null);
         try {
-            const res = await fetch('/api/practice-attempts', {
+            const endpoint = socraticMode ? `/api/practice-questions/${selectedQuestion.id}/socratic` : '/api/practice-attempts';
+            const payload = socraticMode ? { message: answer } : { practice_question_id: selectedQuestion.id, answer: answer };
+
+            if (socraticMode) setSocraticChat(prev => [...prev, { role: 'user', content: answer }]);
+
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`
                 },
-                body: JSON.stringify({
-                    practice_question_id: selectedQuestion.id,
-                    answer: answer
-                })
+                body: JSON.stringify(payload)
             });
             const data = await res.json();
             if (!res.ok) {
                 setEvalState({ type: 'error', message: data.error || 'Failed to evaluate answer.' });
             } else {
-                setEvalState({ type: data.evaluation, message: `Attempt ${data.attempt_number}` });
-                if (data.completed) {
-                    // Magically drop it from pending questions list after brief delay? Or instantly
-                    // We can just rely on the API state by refetching
-                    fetchPracticeQuestions();
+                if (socraticMode) {
+                    setSocraticChat(prev => [...prev, { role: 'tutor', content: data.message }]);
+                    if (data.completed) {
+                        setEvalState({ type: 'correct', message: 'You reached the correct answer via tutoring!' });
+                        fetchPracticeQuestions();
+                    } else {
+                        // Clear the input field for next message
+                        setAnswer("");
+                    }
+                } else {
+                    setEvalState({ type: data.evaluation, message: `Attempt ${data.attempt_number}` });
+                    if (data.completed) {
+                        fetchPracticeQuestions();
+                    }
                 }
+            }
+            if (!socraticMode) {
+                // Do not clear standard answer field automatically mimicking traditional setups
             }
         } catch (e) {
             console.error(e);
             setEvalState({ type: 'error', message: 'Network error. Please try again.' });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleContinueTutor = async () => {
+        setSocraticMode(true);
+        setSubmitting(true);
+        try {
+            const res = await fetch(`/api/practice-questions/${selectedQuestion.id}/socratic`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+                body: JSON.stringify({ message: "I need help. Please guide me." })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSocraticChat([{ role: 'tutor', content: data.message }]);
+                setAnswer("");
+            }
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleShowAnswer = async () => {
+        setSubmitting(true);
+        try {
+            const res = await fetch(`/api/practice-questions/${selectedQuestion.id}/reveal`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${session.access_token}` }
+            });
+            const data = await res.json();
+            if (data.success) {
+                setShowAnswerMode(true);
+                setAnswerRevealedText(data.answer);
+                setEvalState({ type: 'incorrect', message: 'Answer revealed.' });
+                fetchPracticeQuestions();
+            }
+        } catch (e) {
+            console.error(e);
         } finally {
             setSubmitting(false);
         }
@@ -206,27 +271,57 @@ export default function Practice({ session, refreshPractice }) {
                                 <hr style={{ border: 'none', borderTop: '1px solid #d1d5db', margin: '1rem 0' }} />
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                    <textarea
-                                        value={answer}
-                                        onChange={e => setAnswer(e.target.value)}
-                                        disabled={submitting || evalState?.type === 'correct'}
-                                        placeholder="Type your answer here..."
-                                        style={{
-                                            width: '100%',
-                                            minHeight: '120px',
-                                            padding: '1rem',
-                                            borderRadius: '8px',
-                                            border: '1px solid #d1d5db',
-                                            fontFamily: 'inherit',
-                                            fontSize: '1rem',
-                                            resize: 'vertical',
-                                            boxSizing: 'border-box'
-                                        }}
-                                    />
 
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    {showAnswerMode ? (
+                                        <div style={{ padding: '1.25rem', background: '#ffe4e6', borderRadius: '8px', border: '1px solid #fecdd3' }}>
+                                            <h3 style={{ margin: '0 0 0.5rem 0', color: '#be123c', fontSize: '1rem', textTransform: 'uppercase' }}>Revealed Answer</h3>
+                                            <div style={{ color: '#881337', fontSize: '1.05rem', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                                                {answerRevealedText}
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {socraticMode && (
+                                                <div style={{ background: '#f3f4f6', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '300px', overflowY: 'auto' }}>
+                                                    {socraticChat.map((msg, idx) => (
+                                                        <div key={idx} style={{
+                                                            alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                                                            background: msg.role === 'user' ? '#3b82f6' : '#e5e7eb',
+                                                            color: msg.role === 'user' ? '#ffffff' : '#1f2937',
+                                                            padding: '0.6rem 0.9rem',
+                                                            borderRadius: '8px',
+                                                            maxWidth: '80%'
+                                                        }}>
+                                                            <div style={{ fontSize: '0.8rem', opacity: 0.8, marginBottom: '0.2rem' }}>{msg.role === 'user' ? 'You' : 'Socratic Tutor'}</div>
+                                                            {msg.content}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            <textarea
+                                                value={answer}
+                                                onChange={e => setAnswer(e.target.value)}
+                                                disabled={submitting || evalState?.type === 'correct'}
+                                                placeholder={socraticMode ? "Reply to tutor..." : "Type your answer here..."}
+                                                style={{
+                                                    width: '100%',
+                                                    minHeight: '120px',
+                                                    padding: '1rem',
+                                                    borderRadius: '8px',
+                                                    border: '1px solid #d1d5db',
+                                                    fontFamily: 'inherit',
+                                                    fontSize: '1rem',
+                                                    resize: 'vertical',
+                                                    boxSizing: 'border-box'
+                                                }}
+                                            />
+                                        </>
+                                    )}
+
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <div>
-                                            {evalState && (
+                                            {evalState && !showAnswerMode && (
                                                 <div style={{
                                                     padding: '0.5rem 1rem',
                                                     borderRadius: '8px',
@@ -243,44 +338,66 @@ export default function Practice({ session, refreshPractice }) {
                                                 </div>
                                             )}
 
-                                            {evalState && (evalState.type === 'incorrect' || evalState.type === 'partial') && (
+                                            {evalState && (evalState.type === 'incorrect' || evalState.type === 'partial') && !showAnswerMode && (
                                                 <div style={{ marginTop: '0.75rem' }}>
-                                                    {hintsRequested === 0 && (
+                                                    {!socraticMode && hintsRequested === 0 && (
                                                         <button
                                                             onClick={handleRequestHint}
                                                             style={{ padding: '0.4rem 1rem', background: '#f59e0b', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
                                                         >Get Hint 1</button>
                                                     )}
-                                                    {hintsRequested === 1 && (
+                                                    {!socraticMode && hintsRequested === 1 && (
                                                         <button
                                                             onClick={handleRequestHint}
                                                             style={{ padding: '0.4rem 1rem', background: '#f59e0b', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
                                                         >Get Hint 2</button>
                                                     )}
-                                                    {hintsRequested >= 2 && (
-                                                        <div style={{ color: '#6b7280', fontSize: '0.9rem', fontStyle: 'italic' }}>Both hints used.</div>
+                                                    {hintsRequested >= 2 && !socraticMode && (
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                            <div style={{ color: '#6b7280', fontSize: '0.9rem', fontStyle: 'italic' }}>Both hints used.</div>
+                                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                                <button
+                                                                    onClick={handleContinueTutor}
+                                                                    style={{ padding: '0.4rem 1rem', background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
+                                                                >Continue with Tutor</button>
+                                                                <button
+                                                                    onClick={handleShowAnswer}
+                                                                    style={{ padding: '0.4rem 1rem', background: '#e11d48', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
+                                                                >Show Answer</button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {socraticMode && (
+                                                        <div style={{ marginTop: '0.5rem' }}>
+                                                            <button
+                                                                onClick={handleShowAnswer}
+                                                                style={{ padding: '0.4rem 1rem', background: '#e11d48', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500' }}
+                                                            >Show Answer</button>
+                                                        </div>
                                                     )}
                                                 </div>
                                             )}
                                         </div>
 
-                                        <button
-                                            onClick={handleSubmitAnswer}
-                                            disabled={submitting || !answer.trim() || evalState?.type === 'correct'}
-                                            style={{
-                                                padding: '0.6rem 1.5rem',
-                                                background: (submitting || !answer.trim() || evalState?.type === 'correct') ? '#9ca3af' : '#111827',
-                                                color: '#ffffff',
-                                                border: 'none',
-                                                borderRadius: '8px',
-                                                fontSize: '0.95rem',
-                                                fontWeight: '500',
-                                                cursor: (submitting || !answer.trim() || evalState?.type === 'correct') ? 'not-allowed' : 'pointer',
-                                                transition: 'background-color 0.2s'
-                                            }}
-                                        >
-                                            {submitting ? "Evaluating..." : evalState?.type === 'correct' ? 'Completed' : 'Submit Answer'}
-                                        </button>
+                                        {!showAnswerMode && (
+                                            <button
+                                                onClick={handleSubmitAnswer}
+                                                disabled={submitting || !answer.trim() || evalState?.type === 'correct'}
+                                                style={{
+                                                    padding: '0.6rem 1.5rem',
+                                                    background: (submitting || !answer.trim() || evalState?.type === 'correct') ? '#9ca3af' : '#111827',
+                                                    color: '#ffffff',
+                                                    border: 'none',
+                                                    borderRadius: '8px',
+                                                    fontSize: '0.95rem',
+                                                    fontWeight: '500',
+                                                    cursor: (submitting || !answer.trim() || evalState?.type === 'correct') ? 'not-allowed' : 'pointer',
+                                                    transition: 'background-color 0.2s'
+                                                }}
+                                            >
+                                                {submitting ? "Evaluating..." : evalState?.type === 'correct' ? 'Completed' : (socraticMode ? 'Send' : 'Submit Answer')}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
