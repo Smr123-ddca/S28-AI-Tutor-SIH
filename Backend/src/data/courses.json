@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Legacy_Physics",
+    "pdf": "Legacy_Physics_draft.pdf",
+    "chunks": "Legacy_Physics_chunks.json",
+    "prerequisites": "Legacy_Physics_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "Java",
+    "pdf": "Java_draft.pdf",
+    "chunks": "Java_chunks.json",
+    "prerequisites": "Java_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "Python",
+    "pdf": "Python_draft.pdf",
+    "chunks": "Python_chunks.json",
+    "prerequisites": "Python_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "JavaScript",
+    "pdf": "JavaScript_draft.pdf",
+    "chunks": "JavaScript_chunks.json",
+    "prerequisites": "JavaScript_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "DSA",
+    "pdf": "DSA_draft.pdf",
+    "chunks": "DSA_chunks.json",
+    "prerequisites": "DSA_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "DBMS",
+    "pdf": "DBMS_draft.pdf",
+    "chunks": "DBMS_chunks.json",
+    "prerequisites": "DBMS_prerequisites.json",
+    "status": "published"
+  }
+]

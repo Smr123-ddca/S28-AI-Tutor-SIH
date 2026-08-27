@@ -428,7 +428,7 @@ function runChunking(pdfPath) {
                         );
 
                     } catch (
-                        parseError
+                    parseError
                     ) {
 
                         console.error(
@@ -677,7 +677,7 @@ function runPrerequisites(
                         );
 
                     } catch (
-                        parseError
+                    parseError
                     ) {
 
                         console.error(
@@ -746,7 +746,7 @@ function updateCoursesRegistry(
                 );
 
         } catch (
-            error
+        error
         ) {
 
             console.error(
@@ -777,21 +777,12 @@ function updateCoursesRegistry(
     // ------------------------------------------------
 
     const courseEntry = {
-
-        name:
-            courseName,
-
-        pdf:
-            pdfFilename,
-
-        chunks:
-            `${courseName}_chunks.json`,
-
-        prerequisites:
-            `${courseName}_prerequisites.json`
-
+        name: courseName,
+        pdf: pdfFilename,
+        chunks: `${courseName}_chunks.json`,
+        prerequisites: `${courseName}_prerequisites.json`,
+        status: 'pending_review'
     };
-
 
     // ------------------------------------------------
     // UPDATE OR ADD
@@ -897,8 +888,8 @@ const handleUpload = async (
                     );
 
                 } catch (
-                    e
-                ) {}
+                e
+                ) { }
 
             } else {
 
@@ -1195,7 +1186,7 @@ const handleUpload = async (
 
 
     } catch (
-        error
+    error
     ) {
 
         console.error(
@@ -1226,7 +1217,7 @@ const handleUpload = async (
                 );
 
             } catch (
-                cleanupError
+            cleanupError
             ) {
 
                 console.error(
@@ -1353,7 +1344,7 @@ const generatePrerequisites = async (
                 );
 
         } catch (
-            error
+        error
         ) {
 
             return res.status(500).json({
@@ -1426,7 +1417,7 @@ const generatePrerequisites = async (
 
 
     } catch (
-        error
+    error
     ) {
 
         console.error(

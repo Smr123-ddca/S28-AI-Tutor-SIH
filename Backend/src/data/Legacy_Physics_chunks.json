@@ -1,0 +1,56 @@
+[
+  {
+    "id": "chunk_1",
+    "topic": "Physics",
+    "section_label": "Chapter 2, Section 3: Newton's Second Law",
+    "text": "Newton's second law of motion states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The equation is commonly written as F = ma, where F is the net force, m is the mass, and a is the acceleration. This law explains how the velocity of an object changes when it is subjected to an external force."
+  },
+  {
+    "id": "chunk_2",
+    "topic": "Physics",
+    "section_label": "Chapter 2, Section 4: Newton's Third Law",
+    "text": "Newton's third law of motion states that for every action, there is an equal and opposite reaction. This means that if object A exerts a force on object B, then object B exerts a force of equal magnitude and opposite direction back on object A. These forces constantly happen in pairs called action-reaction pairs."
+  },
+  {
+    "id": "chunk_3",
+    "topic": "History",
+    "section_label": "Unit 4: The American Revolution",
+    "text": "The American Revolution, also called the U.S. War of Independence, was an ideological and political revolution that occurred in British America between 1765 and 1791. The Americans in the Thirteen Colonies formed independent states that defeated the British in the American Revolutionary War (1775–1783), gaining independence from the British Crown, establishing the constitution that created the United States of America."
+  },
+  {
+    "id": "chunk_4",
+    "topic": "Biology",
+    "section_label": "Chapter 1: Photosynthesis",
+    "text": "Photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy that, through cellular respiration, can later be released to fuel the organism's activities. This chemical energy is stored in carbohydrate molecules, such as sugars and starches, which are synthesized from carbon dioxide and water – hence the name photosynthesis."
+  },
+  {
+    "id": "chunk_5",
+    "topic": "Computer Science",
+    "section_label": "Section 1: What is an Algorithm?",
+    "text": "In mathematics and computer science, an algorithm is a finite sequence of rigorous instructions, typically used to solve a class of specific problems or to perform a computation. Algorithms are used as specifications for performing calculations and data processing. More advanced algorithms can perform automated deductions and use mathematical and logical tests to redirect the code execution through various routes."
+  },
+  {
+    "id": "chunk_6",
+    "topic": "Astronomy",
+    "section_label": "Chapter 5: The Solar System",
+    "text": "The Solar System is the gravitationally bound system of the Sun and the objects that orbit it. It formed 4.6 billion years ago from the gravitational collapse of a giant interstellar molecular cloud. The vast majority of the system's mass is in the Sun, with most of the remaining mass contained in Jupiter. The four inner system planets—Mercury, Venus, Earth and Mars—are terrestrial planets, being composed primarily of rock and metal."
+  },
+  {
+    "id": "chunk_7",
+    "topic": "Physics",
+    "section_label": "Chapter 2, Section 1: Newton's First Law",
+    "text": "Newton's first law of motion, sometimes called the law of inertia, states that if a body is at rest or moving at a constant speed in a straight line, it will remain at rest or keep moving in a straight line at constant speed unless it is acted upon by a force."
+  },
+  {
+    "id": "chunk_8",
+    "topic": "Physics",
+    "section_label": "Chapter 1, Section 2: Vectors vs Scalars",
+    "text": "A scalar is a quantity that is fully described by a magnitude alone (like mass or temperature). A vector is a quantity that has both a magnitude and a direction (like velocity, acceleration, or force). Understanding vectors is crucial when studying motion in multiple dimensions."
+  },
+  {
+    "id": "chunk_9",
+    "topic": "Physics",
+    "section_label": "Chapter 3, Section 1: Momentum",
+    "text": "In Newtonian mechanics, momentum is the product of the mass and velocity of an object. It is a vector quantity, possessing a magnitude and a direction. If an object is moving, it has momentum. The greater an object's mass or the greater its velocity, the greater its momentum."
+  }
+]

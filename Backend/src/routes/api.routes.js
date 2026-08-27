@@ -5,7 +5,8 @@ const { recordSessionEvent, detectGap } = require('../controllers/gap.controller
 const { getMisconceptions } = require('../controllers/misconception.controller');
 const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
-const { uploadMiddleware, handleUpload } = require('../controllers/ingest.controller');
+const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch } = require('../controllers/ingest.controller');
+const { getCourses, updateCourseStatus } = require('../controllers/course.controller');
 const {
     createQuestion,
     getQuestions,
@@ -48,13 +49,18 @@ router.post('/practice-attempts', createAttempt);
 
 // Ingestion Sub-layer A (Upload)
 router.post('/ingest/upload', requireRole('teacher'), uploadMiddleware, handleUpload);
+router.post('/ingest/generate-prerequisites', requireRole('teacher'), generatePrerequisites);
 
 // Debug route for Accessing Batch
-const { getBatch } = require('../controllers/ingest.controller');
 router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
     const batch = getBatch(req.params.batchId);
     if (!batch) return res.status(404).json({ error: 'Batch not found' });
     res.json(batch);
 });
+
+// Courses
+// Courses
+router.get('/courses', getCourses);
+router.put('/courses/:courseName/status', requireRole('teacher'), updateCourseStatus);
 
 module.exports = router;
