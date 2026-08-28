@@ -117,6 +117,18 @@ async function explain(req, res) {
         return res.status(400).json({ error: "Missing required field: course. A valid published course selection is mandatory." });
     }
 
+    const path = require('path');
+    const coursesPath = process.env.NODE_ENV === 'test' ? path.join(__dirname, '../../data/courses.json') : path.join(__dirname, '../data/courses.json');
+    let coursesList = [];
+    if (fs.existsSync(coursesPath)) {
+        coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+    }
+    const targetCourse = coursesList.find(c => c.name === course && c.status === 'published');
+
+    if (!targetCourse) {
+        return res.status(403).json({ error: "Cannot query an unpublished or non-existent course." });
+    }
+
     recordT('AuthAndValidation', tStart);
 
     // Logging context tracker variables
@@ -180,9 +192,18 @@ async function explain(req, res) {
                     .single();
 
                 if (validSession) {
-                    if (validSession.course && validSession.course !== 'Unknown' && validSession.course !== course) {
-                        return res.status(403).json({ error: "Session course mismatch. This session belongs to another course." });
+                    if (validSession.course) {
+                        if (validSession.course !== course) {
+                            return res.status(403).json({ error: "Session course mismatch. This session belongs to another course." });
+                        }
+                    } else {
+                        // Legacy session where course IS NULL. Establish course association safely.
+                        await supabaseAdmin
+                            .from('chat_sessions')
+                            .update({ course: course })
+                            .eq('id', session_id);
                     }
+
                     const { data: pastMessages } = await supabaseAdmin
                         .from('chat_messages')
                         .select('role, content, created_at')

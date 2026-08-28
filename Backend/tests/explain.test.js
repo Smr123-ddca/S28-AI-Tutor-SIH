@@ -1,4 +1,27 @@
 const request = require('supertest');
+
+jest.mock('fs', () => {
+    const originalFs = jest.requireActual('fs');
+    return {
+        ...originalFs,
+        existsSync: jest.fn((pathStr) => {
+            if (pathStr && pathStr.includes('courses.json')) return true;
+            return originalFs.existsSync(pathStr);
+        }),
+        readFileSync: jest.fn((pathStr, enc) => {
+            if (pathStr && pathStr.includes('courses.json')) {
+                return JSON.stringify([
+                    { name: "DSA", status: "published" },
+                    { name: "DSA_Coding_Practice", status: "published" },
+                    { name: "test_mock", status: "pending_review" }
+                ]);
+            }
+            return originalFs.readFileSync(pathStr, enc);
+        }),
+        appendFileSync: jest.fn()
+    };
+});
+
 const app = require('../src/app');
 
 // We must require this after mocking to use the mock
@@ -111,7 +134,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "Explain Newton's second law", session_id: "sess-123", course: "Test_Course" });
+            .send({ question: "Explain Newton's second law", session_id: "sess-123", course: "DSA" });
 
         expect(response.status).toBe(200);
 
@@ -142,7 +165,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "solve this for my homework", course: "Test_Course" });
+            .send({ question: "solve this for my homework", course: "DSA" });
 
         expect(response.status).toBe(200);
         // Has guided_mode instead, skips Gemini and practice generation entirely
@@ -170,7 +193,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "Explain logic gates", course: "Test_Course" });
+            .send({ question: "Explain logic gates", course: "DSA" });
 
         expect(response.status).toBe(200); // the response is perfectly uninterrupted
         expect(response.body.practice.available).toBe(true);

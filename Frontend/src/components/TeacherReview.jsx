@@ -42,8 +42,10 @@ export default function TeacherReview({ course, setView }) {
     const toggleExpand = (id) => setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
 
     useEffect(() => {
-        fetchArtifacts();
-    }, [courseName]);
+        if (course?.name) {
+            fetchArtifacts();
+        }
+    }, [course?.name]);
 
     const fetchArtifacts = async () => {
         setStatus('loading');

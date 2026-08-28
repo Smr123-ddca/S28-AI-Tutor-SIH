@@ -18,6 +18,11 @@ export default function CourseManager({ session }) {
     const [prerequisites, setPrerequisites] = useState({});
     const [reviewLoading, setReviewLoading] = useState(false);
 
+    // Delete State
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deletingCourseName, setDeletingCourseName] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     useEffect(() => {
         if (view === 'list') fetchCourses();
     }, [view]);
@@ -147,6 +152,31 @@ export default function CourseManager({ session }) {
         }
     };
 
+    const handleDeleteCourse = async () => {
+        if (!deletingCourseName) return;
+        setIsDeleting(true);
+        try {
+            const res = await fetch(`/api/courses/${deletingCourseName}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${session.access_token}` }
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || err.message || 'Failed to delete course');
+            }
+
+            alert('Course successfully deleted.');
+            setShowDeleteModal(false);
+            setDeletingCourseName(null);
+            fetchCourses(); // refresh the list
+        } catch (err) {
+            alert('Failed to delete course: ' + err.message);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     const handleRemovePrereq = (source, target) => {
         setPrerequisites(prev => {
             const next = { ...prev };
@@ -178,6 +208,44 @@ export default function CourseManager({ session }) {
     if (view === 'list') {
         return (
             <div>
+                {/* Delete Confirmation Modal */}
+                {showDeleteModal && (
+                    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+                        <div style={{ background: 'var(--bg-primary)', padding: '2rem', borderRadius: '8px', maxWidth: '450px', border: '1px solid var(--border)' }}>
+                            <h2 style={{ color: 'var(--red)', marginTop: 0 }}>Delete Course?</h2>
+                            <p style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                                This will permanently remove:
+                            </p>
+                            <ul style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', paddingLeft: '1.5rem' }}>
+                                <li>Course content</li>
+                                <li>Uploaded source document</li>
+                                <li>Generated chunks</li>
+                                <li>Prerequisite data</li>
+                                <li>Course availability to students</li>
+                            </ul>
+                            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontStyle: 'italic' }}>
+                                Existing chat history will be preserved. This action cannot be undone.
+                            </p>
+                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                                <button
+                                    onClick={() => { setShowDeleteModal(false); setDeletingCourseName(null); }}
+                                    disabled={isDeleting}
+                                    style={{ padding: '0.75rem 1.5rem', background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)', borderRadius: '4px', cursor: isDeleting ? 'not-allowed' : 'pointer' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleDeleteCourse}
+                                    disabled={isDeleting}
+                                    style={{ padding: '0.75rem 1.5rem', background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: isDeleting ? 'not-allowed' : 'pointer' }}
+                                >
+                                    {isDeleting ? 'Deleting...' : 'Delete Course'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h2 style={{ color: 'var(--text-primary)', marginTop: 0 }}>My Courses</h2>
                     <button
@@ -214,12 +282,20 @@ export default function CourseManager({ session }) {
                                         Status: {c.status === 'pending_review' ? 'Pending Review' : c.status === 'published' ? 'Published' : c.status}
                                     </div>
                                 </div>
-                                {c.status === 'pending_review' && (
-                                    <button onClick={() => openReview(c.name)} style={{ padding: '0.5rem 1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Review</button>
-                                )}
-                                {c.status === 'published' && (
-                                    <button disabled style={{ padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)', borderRadius: '4px', cursor: 'not-allowed' }}>View</button>
-                                )}
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                    {c.status === 'pending_review' && (
+                                        <button onClick={() => openReview(c.name)} style={{ padding: '0.5rem 1rem', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Review</button>
+                                    )}
+                                    {c.status === 'published' && (
+                                        <button disabled style={{ padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border)', borderRadius: '4px', cursor: 'not-allowed' }}>View</button>
+                                    )}
+                                    <button
+                                        onClick={() => { setDeletingCourseName(c.name); setShowDeleteModal(true); }}
+                                        style={{ padding: '0.5rem 1rem', background: 'transparent', color: 'var(--red)', border: '1px solid var(--red)', borderRadius: '4px', cursor: 'pointer' }}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -331,7 +407,7 @@ export default function CourseManager({ session }) {
             }
         };
 
-        return <TeacherReview courseName={selectedCourse} setView={setView} onPublish={handlePublish} />;
+        return <TeacherReview course={courses.find(c => c.name === selectedCourse) || { name: selectedCourse, status: 'pending_review' }} setView={setView} onPublish={handlePublish} />;
     }
 
     return null;

@@ -177,6 +177,73 @@ function getArtifacts(req, res) {
     }
 }
 
+function deleteCourse(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        // Strictly prevent path traversal by only allowing a specific courseName parameter natively 
+        // Although the registry prevents manual injection typically, sanitization avoids filesystem escapes.
+        if (typeof courseName !== 'string' || courseName.includes('/') || courseName.includes('\\') || courseName.includes('..')) {
+            return res.status(403).json({ error: 'Invalid course name format' });
+        }
+
+        const coursesPath = path.join(__dirname, '../data/courses.json');
+        if (!fs.existsSync(coursesPath)) return res.status(404).json({ error: 'Courses registry not found' });
+
+        const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+        const courseIndex = courses.findIndex(c => c.name === courseName);
+        if (courseIndex === -1) return res.status(404).json({ error: 'Course not found' });
+
+        const course = courses[courseIndex];
+
+        // Allowed to delete even if published. We just wipe from memory and file-system natively.
+        // 1. Delete associated physical files securely matching the exact artifact names dictated by the engine
+        const artifactsToDelete = [
+            course.pdf,
+            course.chunks,
+            course.prerequisites, // usually named `courseName_prerequisites.json` explicitly by the ingestion router
+            `${course.name}_chunks.json`,
+            `${course.name}_prerequisites.json`,
+            `${course.name}.pdf`
+        ];
+
+        // Deduplicate and process removals
+        const deletedFiles = [];
+        const uniqueArtifacts = [...new Set(artifactsToDelete.filter(Boolean))];
+
+        uniqueArtifacts.forEach(artifact => {
+            // Path traversal prevention: Use strictly the basename on dynamically declared artifacts.
+            const safeBase = path.basename(artifact);
+            const artifactPath = path.join(__dirname, '../data', safeBase);
+            if (fs.existsSync(artifactPath)) {
+                try {
+                    fs.unlinkSync(artifactPath);
+                    deletedFiles.push(safeBase);
+                } catch (unlinkErr) {
+                    console.warn(`Failed to unlink artifact ${safeBase}:`, unlinkErr);
+                }
+            }
+        });
+
+        // 2. Splice from registry
+        courses.splice(courseIndex, 1);
+        fs.writeFileSync(coursesPath, JSON.stringify(courses, null, 2), 'utf8');
+
+        // 3. Clear memory via store loadData
+        const store = require('../data/store');
+        store.loadData();
+
+        res.json({
+            status: 'success',
+            message: 'Course deleted permanently',
+            deletedFiles
+        });
+
+    } catch (error) {
+        console.error('Failed to delete course:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error resolving strict deletion' });
+    }
+}
+
 module.exports = {
     getCourses,
     approveCourse,
@@ -184,5 +251,6 @@ module.exports = {
     publishCourse,
     getPrerequisites,
     updatePrerequisites,
-    getArtifacts
+    getArtifacts,
+    deleteCourse
 };

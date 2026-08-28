@@ -12,9 +12,13 @@ async function recordChatLog(entry) {
     try {
         if (!currentSessionId || currentSessionId === 'untracked') {
             const title = question.substring(0, 50) + (question.length > 50 ? '...' : '');
+
+            const insertData = { student_id, title };
+            if (course) insertData.course = course;
+
             const { data: sessionData, error: sessionError } = await supabaseAdmin
                 .from('chat_sessions')
-                .insert({ student_id, title, course: course || 'Unknown' })
+                .insert(insertData)
                 .select()
                 .single();
 
