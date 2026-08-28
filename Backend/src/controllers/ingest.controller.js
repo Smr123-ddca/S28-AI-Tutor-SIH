@@ -407,12 +407,41 @@ function runChunking(pdfPath) {
 
                             return reject(
                                 new Error(
-                                    'Chunking completed but created 0 chunks. Check the PDF extraction/chunking logic.'
+                                    'Chunking completed but created 0 chunks. Document might be empty.'
                                 )
                             );
 
                         }
 
+                        // ------------------------------------------------
+                        // VALIDATE CHUNK SCHEMA
+                        // ------------------------------------------------
+                        const idSet = new Set();
+                        for (const chunk of chunks) {
+                            if (!chunk.id || typeof chunk.id !== 'string' || chunk.id.trim() === '') {
+                                throw new Error('Schema validation failed: Found chunk with missing or empty ID.');
+                            }
+
+                            if (idSet.has(chunk.id)) {
+                                throw new Error(`Schema validation failed: Duplicate chunk ID detected (${chunk.id}).`);
+                            }
+                            idSet.add(chunk.id);
+
+                            if (!chunk.text || typeof chunk.text !== 'string' || chunk.text.trim() === '') {
+                                throw new Error(`Schema validation failed: Chunk ${chunk.id} has empty textbook text.`);
+                            }
+
+                            if (typeof chunk.chunk_index !== 'number' || isNaN(chunk.chunk_index)) {
+                                throw new Error(`Schema validation failed: Chunk ${chunk.id} is missing a native chunk_index.`);
+                            }
+
+                            // Check for invalid undefined or object mapping leaking from python output natively
+                            for (const key of Object.keys(chunk)) {
+                                if (chunk[key] === undefined || (typeof chunk[key] === 'string' && chunk[key].includes('NaN'))) {
+                                    throw new Error(`Schema validation failed: Chunk ${chunk.id} contains invalid JSON parameters.`);
+                                }
+                            }
+                        }
 
                         resolve(
                             chunks
@@ -423,16 +452,16 @@ function runChunking(pdfPath) {
                     ) {
 
                         console.error(
-                            '❌ Failed to parse chunking output'
+                            '❌ Failed to parse or validate chunking output'
                         );
 
                         console.error(
-                            stdout
+                            parseError.message
                         );
 
                         reject(
                             new Error(
-                                'Chunking returned invalid JSON.'
+                                parseError.message || 'Chunking returned invalid JSON.'
                             )
                         );
 

@@ -1,0 +1,7 @@
+{
+    "ignore": [
+        "src/data/*",
+        "data/ingest-uploads/*",
+        "test.pdf"
+    ]
+}
