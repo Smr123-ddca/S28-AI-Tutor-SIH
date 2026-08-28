@@ -6,7 +6,7 @@ const { getMisconceptions } = require('../controllers/misconception.controller')
 const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch } = require('../controllers/ingest.controller');
-const { getCourses, updateCourseStatus } = require('../controllers/course.controller');
+const { getCourses, updateCourseStatus, getArtifacts } = require('../controllers/course.controller');
 const {
     createQuestion,
     getQuestions,
@@ -64,5 +64,6 @@ router.get('/courses', getCourses);
 router.put('/courses/:courseName/status', requireRole('teacher'), updateCourseStatus);
 router.get('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').getPrerequisites);
 router.put('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').updatePrerequisites);
+router.get('/courses/:courseName/artifacts', requireRole('teacher'), getArtifacts);
 
 module.exports = router;

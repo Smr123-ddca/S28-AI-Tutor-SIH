@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "name": "test_mock",
+    "pdf": "test_mock.pdf",
+    "chunks": "test_mock_chunks.json",
+    "prerequisites": "test_mock_prerequisites.json",
+    "status": "pending_review"
+  },
+  {
+    "name": "DSA",
+    "pdf": "DSA.pdf",
+    "chunks": "DSA_chunks.json",
+    "prerequisites": "DSA_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "DSA_Coding_Practice",
+    "pdf": "DSA_Coding_Practice.pdf",
+    "chunks": "DSA_Coding_Practice_chunks.json",
+    "prerequisites": "DSA_Coding_Practice_prerequisites.json",
+    "status": "published"
+  },
+  {
+    "name": "UOSD",
+    "pdf": "UOSD.pdf",
+    "chunks": "UOSD_chunks.json",
+    "prerequisites": "UOSD_prerequisites.json",
+    "status": "pending_review"
+  }
+]

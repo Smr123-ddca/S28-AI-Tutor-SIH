@@ -1173,13 +1173,17 @@ const handleUpload = async (
                             file.size,
 
                         status:
-                            file.status
+                            'processed'
 
                     })
                 ),
 
             courses:
-                processedCourses
+                processedCourses.map(course => ({
+                    name: course.name,
+                    total_chunks: course.total_chunks,
+                    status: course.status
+                }))
 
         };
 
@@ -1192,6 +1196,7 @@ const handleUpload = async (
                 rejectedFiles;
 
         }
+
 
 
         return res.status(200).json(
@@ -1211,6 +1216,17 @@ const handleUpload = async (
             error
         );
 
+        return res.status(500).json({
+
+            error:
+                'Internal server error during document processing',
+
+            details:
+                error.message || 'Processing failed'
+
+        });
+
+    } finally {
 
         // ====================================================
         // CLEAN BATCH
@@ -1229,6 +1245,7 @@ const handleUpload = async (
                         force: true
                     }
                 );
+                console.log(`🧹 Cleaned temporary artifacts for batch ${batchDir}`);
 
             } catch (
             cleanupError
@@ -1242,18 +1259,6 @@ const handleUpload = async (
             }
 
         }
-
-
-        return res.status(500).json({
-
-            error:
-                'Internal server error during upload',
-
-            details:
-                error.message
-
-        });
-
     }
 
 };

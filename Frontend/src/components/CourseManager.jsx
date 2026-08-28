@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import TeacherReview from './TeacherReview';
 
 export default function CourseManager({ session }) {
     const [courses, setCourses] = useState([]);
@@ -307,95 +308,30 @@ export default function CourseManager({ session }) {
     }
 
     if (view === 'review') {
-        const prereqEntries = Object.entries(prerequisites);
-        const hasPrereqs = prereqEntries.length > 0 && prereqEntries.some(([_, targets]) => targets.length > 0);
+        const handlePublish = async () => {
+            const confirmed = window.confirm('Publish this course?\n\nOnce published, students will be able to use this material in Learnify\'s RAG system.');
+            if (!confirmed) return;
 
-        return (
-            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                <button onClick={() => setView('list')} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', marginBottom: '1rem' }}>← Back to Courses</button>
+            try {
+                const res = await fetch(`/api/courses/${selectedCourse}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${session.access_token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'published' })
+                });
 
-                <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem', borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
-                        <div>
-                            <h2 style={{ marginTop: 0, marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Review Prerequisites</h2>
-                            <div style={{ color: 'var(--text-secondary)' }}>Course: <strong>{selectedCourse}</strong></div>
-                        </div>
-                        <div style={{
-                            background: 'rgba(234, 179, 8, 0.2)',
-                            color: '#facc15',
-                            padding: '4px 12px',
-                            borderRadius: '12px',
-                            fontSize: '0.875rem',
-                            fontWeight: 600
-                        }}>
-                            PENDING REVIEW
-                        </div>
-                    </div>
+                if (!res.ok) throw new Error('The course could not be published. Please try again.');
 
-                    {reviewLoading ? (
-                        <div style={{ color: 'var(--text-secondary)', textAlign: 'center', padding: '2rem' }}>Loading prerequisite structure...</div>
-                    ) : (
-                        <>
-                            <div style={{ marginBottom: '2rem' }}>
-                                <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                                    Generated prerequisite relationships. (What students should know before learning a topic):
-                                </p>
+                alert('Course Published ✓\n\nStudents can now access this course material.');
+                setView('list');
+            } catch (err) {
+                alert(err.message);
+            }
+        };
 
-                                {!hasPrereqs ? (
-                                    <div style={{ padding: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', textAlign: 'center', color: 'var(--text-secondary)', border: '1px dashed var(--border)' }}>
-                                        No structural prerequisites were detected in this document.
-                                    </div>
-                                ) : (
-                                    <div style={{ display: 'grid', gap: '1rem' }}>
-                                        {prereqEntries.map(([source, targets]) => {
-                                            if (!targets || targets.length === 0) return null;
-                                            return (
-                                                <div key={source} style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                                                    <h4 style={{ margin: '0 0 1rem 0', color: 'var(--text-primary)', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>Topic: {source.replace(/_/g, ' ')}</h4>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                                        {targets.map(target => (
-                                                            <div key={target} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', background: 'var(--bg-primary)', borderRadius: '4px' }}>
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-secondary)' }}>
-                                                                    <span>{target.replace(/_/g, ' ')}</span>
-                                                                    <span style={{ color: '#60a5fa' }}>→</span>
-                                                                    <span style={{ color: 'var(--text-primary)' }}>{source.replace(/_/g, ' ')}</span>
-                                                                </div>
-                                                                <button
-                                                                    onClick={() => handleRemovePrereq(source, target)}
-                                                                    style={{ background: 'transparent', border: 'none', color: 'var(--red)', cursor: 'pointer', fontSize: '0.875rem' }}
-                                                                    title="Remove Incorrect Prerequisite"
-                                                                >
-                                                                    Remove
-                                                                </button>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
-                                <button
-                                    onClick={() => setView('list')}
-                                    style={{ padding: '0.75rem 1.5rem', background: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--border)', borderRadius: '4px', cursor: 'pointer' }}
-                                >
-                                    Save Draft
-                                </button>
-                                <button
-                                    onClick={saveAndPublish}
-                                    style={{ padding: '0.75rem 2rem', background: '#4ade80', color: 'black', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer' }}
-                                >
-                                    Approve & Publish Course
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
-        );
+        return <TeacherReview courseName={selectedCourse} setView={setView} onPublish={handlePublish} />;
     }
 
     return null;

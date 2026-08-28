@@ -86,9 +86,39 @@ function updatePrerequisites(req, res) {
     }
 }
 
+function getArtifacts(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const chunksPath = path.join(__dirname, '../data', `${courseName}_chunks.json`);
+        const prereqPath = path.join(__dirname, '../data', `${courseName}_prerequisites.json`);
+
+        let chunks = [];
+        let prerequisites = { course: courseName, relationships: [] };
+
+        if (fs.existsSync(chunksPath)) {
+            chunks = JSON.parse(fs.readFileSync(chunksPath, 'utf8'));
+        }
+
+        if (fs.existsSync(prereqPath)) {
+            prerequisites = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
+        }
+
+        res.json({
+            status: 'success',
+            course: courseName,
+            chunks,
+            prerequisites
+        });
+    } catch (error) {
+        console.error('Failed to get artifacts:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error resolving artifacts.' });
+    }
+}
+
 module.exports = {
     getCourses,
     updateCourseStatus,
     getPrerequisites,
-    updatePrerequisites
+    updatePrerequisites,
+    getArtifacts
 };

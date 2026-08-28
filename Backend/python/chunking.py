@@ -51,9 +51,9 @@ def extract_pdf_structure(pdf_path):
                 text = "".join(
                     span.get("text", "")
                     for span in spans
-                ).strip()
+                )
 
-                if not text:
+                if not text.strip():
                     continue
 
                 font_sizes = [
@@ -244,7 +244,7 @@ def build_sections(pages):
         if not current_text:
             return
 
-        text = " ".join(
+        text = "\n".join(
             current_text
         ).strip()
 
