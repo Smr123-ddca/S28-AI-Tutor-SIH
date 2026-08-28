@@ -14,41 +14,97 @@ function getCourses(req, res) {
     }
 }
 
-function updateCourseStatus(req, res) {
+function approveCourse(req, res) {
     try {
         const courseName = req.params.courseName;
-        const { status } = req.body;
-
-        const validStatuses = ['pending_review', 'approved', 'published'];
-        if (!validStatuses.includes(status)) {
-            return res.status(400).json({ error: 'Invalid status' });
-        }
-
         const coursesPath = path.join(__dirname, '../data/courses.json');
-        if (!fs.existsSync(coursesPath)) {
-            return res.status(404).json({ error: 'Courses registry not found' });
-        }
+        if (!fs.existsSync(coursesPath)) return res.status(404).json({ error: 'Courses registry not found' });
 
         const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
         const courseIndex = courses.findIndex(c => c.name === courseName);
+        if (courseIndex === -1) return res.status(404).json({ error: 'Course not found' });
 
-        if (courseIndex === -1) {
-            return res.status(404).json({ error: 'Course not found' });
+        const course = courses[courseIndex];
+        if (course.status !== 'pending_review' && course.status !== 'needs_revision') {
+            return res.status(400).json({ error: `Cannot approve course from state: ${course.status}` });
         }
 
-        courses[courseIndex].status = status;
+        course.status = 'approved';
+        if (!course.audit) course.audit = {};
+        course.audit.approvedAt = new Date().toISOString();
+        course.audit.approvedBy = req.user.id;
+
+        fs.writeFileSync(coursesPath, JSON.stringify(courses, null, 2), 'utf8');
+        res.json({ status: 'success', course });
+    } catch (error) {
+        console.error('Failed to approve course:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while approving course.' });
+    }
+}
+
+function reviseCourse(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const { reason } = req.body;
+
+        const coursesPath = path.join(__dirname, '../data/courses.json');
+        if (!fs.existsSync(coursesPath)) return res.status(404).json({ error: 'Courses registry not found' });
+
+        const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+        const courseIndex = courses.findIndex(c => c.name === courseName);
+        if (courseIndex === -1) return res.status(404).json({ error: 'Course not found' });
+
+        const course = courses[courseIndex];
+        if (course.status !== 'pending_review' && course.status !== 'approved') {
+            return res.status(400).json({ error: `Cannot mark revision for course from state: ${course.status}` });
+        }
+
+        course.status = 'needs_revision';
+        if (!course.audit) course.audit = {};
+        course.audit.revisionReason = reason || 'No reason provided';
+        course.audit.revisedAt = new Date().toISOString();
+        course.audit.revisedBy = req.user.id;
+
+        fs.writeFileSync(coursesPath, JSON.stringify(courses, null, 2), 'utf8');
+        res.json({ status: 'success', course });
+    } catch (error) {
+        console.error('Failed to mark course for revision:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while marking course for revision.' });
+    }
+}
+
+function publishCourse(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const coursesPath = path.join(__dirname, '../data/courses.json');
+        if (!fs.existsSync(coursesPath)) return res.status(404).json({ error: 'Courses registry not found' });
+
+        const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+        const courseIndex = courses.findIndex(c => c.name === courseName);
+        if (courseIndex === -1) return res.status(404).json({ error: 'Course not found' });
+
+        const course = courses[courseIndex];
+
+        // Strict state enforcement: Can only publish if APPROVED.
+        if (course.status !== 'approved') {
+            return res.status(403).json({ error: `Not Authorized: Course must be strictly 'approved' before publication.` });
+        }
+
+        course.status = 'published';
+        if (!course.audit) course.audit = {};
+        course.audit.publishedAt = new Date().toISOString();
+        course.audit.publishedBy = req.user.id;
+
         fs.writeFileSync(coursesPath, JSON.stringify(courses, null, 2), 'utf8');
 
-        // Dynamically re-index global Memory if published
-        if (status === 'published') {
-            const store = require('../data/store');
-            store.loadData();
-        }
+        // Re-index memory
+        const store = require('../data/store');
+        store.loadData();
 
-        res.json({ status: 'success', course: courses[courseIndex] });
+        res.json({ status: 'success', course });
     } catch (error) {
-        console.error('Failed to update course status:', error);
-        res.status(500).json({ status: 'error', message: 'Internal server error while updating course.' });
+        console.error('Failed to publish course:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while publishing course.' });
     }
 }
 
@@ -117,7 +173,9 @@ function getArtifacts(req, res) {
 
 module.exports = {
     getCourses,
-    updateCourseStatus,
+    approveCourse,
+    reviseCourse,
+    publishCourse,
     getPrerequisites,
     updatePrerequisites,
     getArtifacts

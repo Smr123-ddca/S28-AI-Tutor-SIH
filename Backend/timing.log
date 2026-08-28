@@ -31,3 +31,12 @@
 [EXPLAIN TIMING] stage=Total duration=58.65ms
 [EXPLAIN TRACE] session=test-sess-123 prev_msgs=0 chunks=1 prompt_size=1002 gen_status=success
 ------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.14ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.01ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=3.55ms
+[EXPLAIN TIMING] stage=Retrieval duration=20.22ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.00ms
+[EXPLAIN TIMING] stage=Persistence duration=9278.53ms
+[EXPLAIN TIMING] stage=Total duration=9310.36ms
+[EXPLAIN TRACE] session=8a3d5ecd-52b0-4719-b0e6-b811080c88a4 prev_msgs=0 chunks=5 prompt_size=0 gen_status=pending
+------

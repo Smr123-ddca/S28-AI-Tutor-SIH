@@ -3,13 +3,20 @@ import { supabase } from '../lib/supabaseClient';
 import { Download, CheckCircle, AlertTriangle, AlertCircle, ArrowLeft, RefreshCw, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
 import './TeacherReview.css';
 
-export default function TeacherReview({ courseName, setView, onPublish }) {
+export default function TeacherReview({ course, setView }) {
 
     const [status, setStatus] = useState('loading'); // loading, success, error
     const [artifacts, setArtifacts] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
     const [expanded, setExpanded] = useState({});
     const [selectedNodeId, setSelectedNodeId] = useState(null);
+
+    // APPROVAL/REVISION MODAL STATE
+    const [showApproveModal, setShowApproveModal] = useState(false);
+    const [showRevisionModal, setShowRevisionModal] = useState(false);
+    const [showPublishModal, setShowPublishModal] = useState(false);
+    const [revisionReason, setRevisionReason] = useState('');
+    const [localCourseStatus, setLocalCourseStatus] = useState(course?.status || 'pending_review');
 
     // Hierarchy computation
     const computeHierarchy = (chunks) => {
@@ -44,7 +51,7 @@ export default function TeacherReview({ courseName, setView, onPublish }) {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) throw new Error('Not authenticated');
 
-            const res = await fetch(`/api/courses/${courseName}/artifacts`, {
+            const res = await fetch(`/api/courses/${course.name}/artifacts`, {
                 headers: { 'Authorization': `Bearer ${session.access_token}` }
             });
             const data = await res.json();
@@ -59,6 +66,32 @@ export default function TeacherReview({ courseName, setView, onPublish }) {
         } catch (e) {
             setErrorMsg(e.message);
             setStatus('error');
+        }
+    };
+
+    const handleAction = async (endpoint, payload = {}) => {
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const res = await fetch(`/api/courses/${course.name}/${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${session.access_token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setLocalCourseStatus(data.course.status);
+                setShowApproveModal(false);
+                setShowRevisionModal(false);
+                setShowPublishModal(false);
+                setRevisionReason('');
+            } else {
+                alert(data.error || 'Action failed.');
+            }
+        } catch (e) {
+            alert('An error occurred.');
         }
     };
 
@@ -139,17 +172,93 @@ export default function TeacherReview({ courseName, setView, onPublish }) {
 
     return (
         <div className="review-container">
+            {/* MODALS */}
+            {showApproveModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Approve Course?</h2>
+                        <p>You are approving the generated:</p>
+                        <ul style={{ paddingLeft: '20px', marginBottom: '1rem', marginTop: '0.5rem', opacity: 0.8 }}>
+                            <li>Course structure</li>
+                            <li>Content chunks</li>
+                            <li>Prerequisite relationships</li>
+                        </ul>
+                        <p>Once published, these artifacts may become available to the student learning system.</p>
+                        <div className="modal-actions">
+                            <button onClick={() => setShowApproveModal(false)} className="btn-secondary">Cancel</button>
+                            <button onClick={() => handleAction('approve')} className="btn-primary">Approve</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showRevisionModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Mark for Revision</h2>
+                        <p style={{ marginBottom: '0.5rem' }}>Reason for revision:</p>
+                        <textarea
+                            value={revisionReason}
+                            onChange={(e) => setRevisionReason(e.target.value)}
+                            placeholder="e.g. Incorrect topic division"
+                            className="revision-textarea"
+                            rows={4}
+                        />
+                        <div className="modal-actions">
+                            <button onClick={() => setShowRevisionModal(false)} className="btn-secondary">Cancel</button>
+                            <button onClick={() => handleAction('revision', { reason: revisionReason })} className="btn-danger">Submit Revision Request</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showPublishModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Publish Course</h2>
+                        <ul className="publish-summary-list">
+                            <li><strong>Course:</strong> {course.name}</li>
+                            <li><strong>Approved Chunks:</strong> {totalChunks}</li>
+                            <li><strong>Approved Topics:</strong> {uniqueTopics}</li>
+                            <li><strong>Approved Prerequisites:</strong> {rels.length}</li>
+                            <li><strong>Validation:</strong> PASSED ✓</li>
+                            <li><strong>Status:</strong> APPROVED</li>
+                        </ul>
+                        <div className="modal-actions">
+                            <button onClick={() => setShowPublishModal(false)} className="btn-secondary">Cancel</button>
+                            <button onClick={() => handleAction('publish')} className="btn-publish">Publish Course</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <header className="review-header">
                 <button className="back-btn" onClick={() => setView('courses')}><ArrowLeft size={16} /> Back to Dashboard</button>
                 <div className="title-row">
                     <div>
-                        <h1>Review Course: {courseName}</h1>
-                        <span className="badge ready">READY FOR REVIEW</span>
+                        <h1>Review Course: {course?.name}</h1>
+                        <span className={`badge ${localCourseStatus}`}>
+                            {localCourseStatus === 'pending_review' && '● READY FOR REVIEW'}
+                            {localCourseStatus === 'needs_revision' && '⚠ NEEDS REVISION'}
+                            {localCourseStatus === 'approved' && '✓ APPROVED'}
+                            {localCourseStatus === 'published' && '✓ PUBLISHED'}
+                        </span>
+                        {localCourseStatus === 'published' && <span style={{ marginLeft: '1rem', color: '#718096', fontSize: '0.9rem', fontWeight: 500 }}>PUBLISHED VERSION</span>}
                         <p className="subtitle">Visual inspection workspace for generated structural mappings.</p>
                     </div>
                     <div className="actions-row">
                         <button className="download-btn"><Download size={16} /> Download Artifacts</button>
-                        <button className="publish-btn" onClick={onPublish}>Publish Course</button>
+
+                        {localCourseStatus === 'pending_review' && (
+                            <>
+                                <button className="btn-danger" onClick={() => setShowRevisionModal(true)}>Mark for Revision</button>
+                                <button className="btn-primary" onClick={() => setShowApproveModal(true)}>Approve Course</button>
+                            </>
+                        )}
+
+                        {localCourseStatus === 'approved' && (
+                            <button className="btn-publish" onClick={() => setShowPublishModal(true)}>Publish Course</button>
+                        )}
                     </div>
                 </div>
             </header>
