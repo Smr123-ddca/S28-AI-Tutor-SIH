@@ -136,6 +136,7 @@ async function explain(req, res) {
                     student_id,
                     session_id: session_id || 'untracked',
                     question: question,
+                    course: course,
                     response: statusObj
                 }).then(loggedData => {
                     recordT('Persistence', pStart);
@@ -173,12 +174,15 @@ async function explain(req, res) {
             if (supabaseAdmin) {
                 const { data: validSession } = await supabaseAdmin
                     .from('chat_sessions')
-                    .select('id')
+                    .select('id, course')
                     .eq('id', session_id)
                     .eq('student_id', student_id)
                     .single();
 
                 if (validSession) {
+                    if (validSession.course && validSession.course !== 'Unknown' && validSession.course !== course) {
+                        return res.status(403).json({ error: "Session course mismatch. This session belongs to another course." });
+                    }
                     const { data: pastMessages } = await supabaseAdmin
                         .from('chat_messages')
                         .select('role, content, created_at')

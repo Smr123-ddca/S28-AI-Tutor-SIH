@@ -1,7 +1,7 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 async function recordChatLog(entry) {
-    const { student_id, session_id, question, response } = entry;
+    const { student_id, session_id, question, response, course } = entry;
     if (!supabaseAdmin) {
         console.warn("Skipping external chat log record: Supabase not configured.");
         return null;
@@ -14,7 +14,7 @@ async function recordChatLog(entry) {
             const title = question.substring(0, 50) + (question.length > 50 ? '...' : '');
             const { data: sessionData, error: sessionError } = await supabaseAdmin
                 .from('chat_sessions')
-                .insert({ student_id, title })
+                .insert({ student_id, title, course: course || 'Unknown' })
                 .select()
                 .single();
 
@@ -72,12 +72,21 @@ async function getChatLogs(req, res) {
 // Session Endpoints
 async function getSessions(req, res) {
     const student_id = req.user.id;
-    const { data: sessions, error } = await supabaseAdmin
+    const { course } = req.query;
+
+    let query = supabaseAdmin
         .from('chat_sessions')
-        .select('id, title, last_message_at')
+        .select('id, title, last_message_at, course')
         .eq('student_id', student_id)
-        .order('last_message_at', { ascending: false })
-        .limit(5);
+        .order('last_message_at', { ascending: false });
+
+    if (course) {
+        query = query.eq('course', course);
+    } else {
+        query = query.limit(5); // legacy behavior
+    }
+
+    const { data: sessions, error } = await query;
 
     if (error) return res.status(500).json({ error: error.message });
     return res.json({ sessions });
@@ -112,14 +121,34 @@ async function getSessionMessages(req, res) {
 
 async function createSession(req, res) {
     const student_id = req.user.id;
+    const { course } = req.body;
+
+    if (!course) {
+        return res.status(400).json({ error: "course is required to create a session" });
+    }
+
+    // Verify the course exists and is published 
+    const fs = require('fs');
+    const path = require('path');
+    const coursesPath = process.env.NODE_ENV === 'test' ? path.join(__dirname, '../../data/courses.json') : path.join(__dirname, '../data/courses.json');
+    let coursesList = [];
+    if (fs.existsSync(coursesPath)) {
+        coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+    }
+    const targetCourse = coursesList.find(c => c.name === course && c.status === 'published');
+
+    if (!targetCourse) {
+        return res.status(403).json({ error: "Cannot create session for an unpublished or non-existent course." });
+    }
+
     const { data, error } = await supabaseAdmin
         .from('chat_sessions')
-        .insert({ student_id, title: 'New Chat' })
+        .insert({ student_id, title: 'New Chat', course })
         .select()
         .single();
 
     if (error) return res.status(500).json({ error: error.message });
-    return res.json({ id: data.id, title: data.title });
+    return res.json({ id: data.id, title: data.title, course: data.course });
 }
 
 async function updateSessionTitle(req, res) {

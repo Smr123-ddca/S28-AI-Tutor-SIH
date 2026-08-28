@@ -63,9 +63,12 @@ function StudentChat({ session, refreshPractice }) {
         }
     };
 
-    const loadSessions = async () => {
+    const loadSessions = async (courseOverride) => {
+        const courseToLoad = courseOverride || selectedCourse;
+        if (!courseToLoad) return;
+
         try {
-            const res = await fetch('/api/sessions', {
+            const res = await fetch(`/api/sessions?course=${encodeURIComponent(courseToLoad)}`, {
                 headers: { 'Authorization': `Bearer ${session?.access_token}` }
             });
             if (res.ok) {
@@ -76,6 +79,14 @@ function StudentChat({ session, refreshPractice }) {
             console.error("Failed to load sessions:", e);
         }
     };
+
+    // Reload sessions whenever the selected course changes explicitly
+    useEffect(() => {
+        if (session?.access_token && selectedCourse) {
+            handleNewChat(); // Teardown active context explicitly!
+            loadSessions(selectedCourse);
+        }
+    }, [selectedCourse]);
 
     const handleSelectSession = async (sid) => {
         setCurrentSessionId(sid);
@@ -237,7 +248,7 @@ function StudentChat({ session, refreshPractice }) {
 
             if (data.session_id && data.session_id !== currentSessionId) {
                 setCurrentSessionId(data.session_id);
-                loadSessions();
+                loadSessions(selectedCourse);
             }
 
             if (data.practice && data.practice.available) {
@@ -405,6 +416,23 @@ function StudentChat({ session, refreshPractice }) {
                 border: '1px solid #e5e7eb',
                 position: 'relative'
             }}>
+                {/* Active Context Indicator */}
+                <div style={{
+                    padding: '1rem 2rem',
+                    background: '#f0fdf4',
+                    borderBottom: '1px solid #bbf7d0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    color: '#166534'
+                }}>
+                    <span style={{ fontSize: '1.25rem' }}>📚</span>
+                    <div>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current learning context</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: '500' }}>{selectedCourse || 'None selected'}</div>
+                    </div>
+                </div>
+
                 <div ref={chatContainerRef} className="chat-window" style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
                     {messages.length === 0 && !loading && (
                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontSize: '1.2rem', textAlign: 'center' }}>

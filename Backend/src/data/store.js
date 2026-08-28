@@ -23,16 +23,18 @@ function loadData() {
         let loadedCount = 0;
 
         for (const course of publishedCourses) {
-            const chunkFile = path.join(__dirname, '..', 'data', course.chunks);
-            if (fs.existsSync(chunkFile)) {
-                const chunks = JSON.parse(fs.readFileSync(chunkFile, 'utf-8'));
-                // Append course name metadata implicitly to chunks to preserve isolation natively
-                const annotatedChunks = chunks.map(c => ({
-                    ...c,
-                    source_course: course.name
-                }));
-                courseContentChunks.push(...annotatedChunks);
-                loadedCount++;
+            if (course.chunks) {
+                const chunkFile = path.join(__dirname, '..', 'data', course.chunks);
+                if (fs.existsSync(chunkFile)) {
+                    const chunks = JSON.parse(fs.readFileSync(chunkFile, 'utf-8'));
+                    // Append course name metadata implicitly to chunks to preserve isolation natively
+                    const annotatedChunks = chunks.map(c => ({
+                        ...c,
+                        source_course: course.name
+                    }));
+                    courseContentChunks.push(...annotatedChunks);
+                    loadedCount++;
+                }
             }
         }
 

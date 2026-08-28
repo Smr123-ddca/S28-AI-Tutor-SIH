@@ -26,5 +26,12 @@
     "chunks": "UOSD_chunks.json",
     "prerequisites": "UOSD_prerequisites.json",
     "status": "pending_review"
+  },
+  {
+    "name": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12__",
+    "pdf": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12__.pdf",
+    "chunks": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12___chunks.json",
+    "prerequisites": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12___prerequisites.json",
+    "status": "pending_review"
   }
 ]
