@@ -8,13 +8,19 @@ const { getChunks } = require('../data/store');
  * @param {{ tokens?: string[], subject?: string, topK?: number }} [options]
  *   - tokens: pre-computed retrieval tokens (skip internal tokenization)
  *   - subject: filter chunks by topic before scoring
+ *   - course: filter chunks by isolated published course namespace
  *   - topK: number of results to return (default 5)
  * @returns {Array<{ id: string, topic: string, section_label: string, text: string, score: number }>}
  */
 function retrieve(question, options = {}) {
-    const { tokens: precomputedTokens, subject, topK = 5 } = options;
+    const { tokens: precomputedTokens, subject, course, topK = 5 } = options;
 
     let courseContentChunks = getChunks();
+
+    // ── Course isolation filtering ──
+    if (course) {
+        courseContentChunks = courseContentChunks.filter(c => c.source_course === course);
+    }
 
     // ── Subject filtering ──
     if (subject) {

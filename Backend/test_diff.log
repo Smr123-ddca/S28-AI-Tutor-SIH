@@ -1,0 +1,473 @@
+  console.log
+    ◇ injected env (3) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    ◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    🐍 Python executable: python
+
+      at Object.log (src/controllers/ingest.controller.js:36:9)
+
+  console.log
+    🐍 Python exists: true
+
+      at Object.log (src/controllers/ingest.controller.js:37:9)
+
+  console.log
+    
+    📚 Processing course: test_mock
+
+      at log (src/controllers/ingest.controller.js:1055:21)
+
+  console.log
+    
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:209:21)
+
+  console.log
+    🐍 STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.controller.js:213:21)
+
+  console.log
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:217:21)
+
+  console.log
+    PDF: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\2558b619-5256-4cc9-98ec-fd0a346d8a80\test_mock.pdf
+
+      at log (src/controllers/ingest.controller.js:221:21)
+
+  console.log
+    Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\chunking.py
+
+      at log (src/controllers/ingest.controller.js:226:21)
+
+  console.log
+    Python: python
+
+      at log (src/controllers/ingest.controller.js:231:21)
+
+  console.log
+    ✅ Chunking created 1 chunks
+
+      at log (src/controllers/ingest.controller.js:395:33)
+
+  console.log
+    ✅ Chunks saved: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\data\test_mock_chunks.json
+
+      at log (src/controllers/ingest.controller.js:1097:21)
+
+  console.log
+    ✅ courses.json updated
+
+      at log (src/controllers/ingest.controller.js:841:13)
+
+  console.log
+    🧹 Cleaned temporary artifacts for batch C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\2558b619-5256-4cc9-98ec-fd0a346d8a80
+
+      at log (src/controllers/ingest.controller.js:1248:25)
+
+  console.log
+    
+    📚 Processing course: test_mock
+
+      at log (src/controllers/ingest.controller.js:1055:21)
+
+  console.log
+    
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:209:21)
+
+  console.log
+    🐍 STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.controller.js:213:21)
+
+  console.log
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:217:21)
+
+  console.log
+    PDF: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\0ac0eb01-82c1-4031-a645-71ec3d9a9c81\test_mock.pdf
+
+      at log (src/controllers/ingest.controller.js:221:21)
+
+  console.log
+    Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\chunking.py
+
+      at log (src/controllers/ingest.controller.js:226:21)
+
+  console.log
+    Python: python
+
+      at log (src/controllers/ingest.controller.js:231:21)
+
+  console.error
+    ❌ Failed to parse or validate chunking output
+
+    [0m [90m 452 |[39m                     ) {
+     [90m 453 |[39m
+    [31m[1m>[22m[39m[90m 454 |[39m                         console[33m.[39merror(
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 455 |[39m                             [32m'❌ Failed to parse or validate chunking output'[39m
+     [90m 456 |[39m                         )[33m;[39m
+     [90m 457 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:454:33)
+      at cb (tests/upload.test.js:14:24)
+      at execFile (src/controllers/ingest.controller.js:273:13)
+      at runChunking (src/controllers/ingest.controller.js:199:12)
+      at runChunking (src/controllers/ingest.controller.js:1066:23)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at done (node_modules/multer/lib/make-middleware.js:70:7)
+      at indicateDone (node_modules/multer/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-middleware.js:247:11
+      at WriteStream.<anonymous> (node_modules/multer/storage/disk.js:47:9)
+
+  console.error
+    Unexpected token 'i', "invalid js"... is not valid JSON
+
+    [0m [90m 456 |[39m                         )[33m;[39m
+     [90m 457 |[39m
+    [31m[1m>[22m[39m[90m 458 |[39m                         console[33m.[39merror(
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 459 |[39m                             parseError[33m.[39mmessage
+     [90m 460 |[39m                         )[33m;[39m
+     [90m 461 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:458:33)
+      at cb (tests/upload.test.js:14:24)
+      at execFile (src/controllers/ingest.controller.js:273:13)
+      at runChunking (src/controllers/ingest.controller.js:199:12)
+      at runChunking (src/controllers/ingest.controller.js:1066:23)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at done (node_modules/multer/lib/make-middleware.js:70:7)
+      at indicateDone (node_modules/multer/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-middleware.js:247:11
+      at WriteStream.<anonymous> (node_modules/multer/storage/disk.js:47:9)
+
+  console.error
+    
+    ❌ INGESTION UPLOAD ERROR
+
+    [0m [90m 1209 |[39m     ) {
+     [90m 1210 |[39m
+    [31m[1m>[22m[39m[90m 1211 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1212 |[39m             [32m'\n❌ INGESTION UPLOAD ERROR'[39m
+     [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1211:17)
+
+  console.error
+    Error: Unexpected token 'i', "invalid js"... is not valid JSON
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:463:29
+        at cb (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\upload.test.js:14:24)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:305:39
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:312:13
+        at mockConstructor (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:72:19)
+        at execFile (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:273:13)
+        at new Promise (<anonymous>)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:199:12)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:1066:23)
+        at Layer.handleRequest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\layer.js:152:17)
+        at next (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\route.js:157:13)
+        at done (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:70:7)
+        at indicateDone (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:74:68)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:247:11
+        at WriteStream.<anonymous> (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\storage\disk.js:47:9)
+        at WriteStream.emit (node:events:520:35)
+        at finish (node:internal/streams/writable:953:10)
+        at node:internal/streams/writable:934:13
+        at processTicksAndRejections (node:internal/process/task_queues:89:21)
+
+    [0m [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m
+    [31m[1m>[22m[39m[90m 1215 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1216 |[39m             error
+     [90m 1217 |[39m         )[33m;[39m
+     [90m 1218 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1215:17)
+
+  console.log
+    🧹 Cleaned temporary artifacts for batch C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\0ac0eb01-82c1-4031-a645-71ec3d9a9c81
+
+      at log (src/controllers/ingest.controller.js:1248:25)
+
+  console.log
+    
+    📚 Processing course: test_mock
+
+      at log (src/controllers/ingest.controller.js:1055:21)
+
+  console.log
+    
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:209:21)
+
+  console.log
+    🐍 STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.controller.js:213:21)
+
+  console.log
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:217:21)
+
+  console.log
+    PDF: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\bc570f1f-350d-4bab-9ba8-079ac8e44f34\test_mock.pdf
+
+      at log (src/controllers/ingest.controller.js:221:21)
+
+  console.log
+    Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\chunking.py
+
+      at log (src/controllers/ingest.controller.js:226:21)
+
+  console.log
+    Python: python
+
+      at log (src/controllers/ingest.controller.js:231:21)
+
+  console.log
+    ✅ Chunking created 0 chunks
+
+      at log (src/controllers/ingest.controller.js:395:33)
+
+  console.error
+    
+    ❌ INGESTION UPLOAD ERROR
+
+    [0m [90m 1209 |[39m     ) {
+     [90m 1210 |[39m
+    [31m[1m>[22m[39m[90m 1211 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1212 |[39m             [32m'\n❌ INGESTION UPLOAD ERROR'[39m
+     [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1211:17)
+
+  console.error
+    Error: Chunking completed but created 0 chunks. Document might be empty.
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:409:33
+        at cb (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\upload.test.js:17:24)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:305:39
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:312:13
+        at mockConstructor (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:72:19)
+        at execFile (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:273:13)
+        at new Promise (<anonymous>)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:199:12)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:1066:23)
+        at Layer.handleRequest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\layer.js:152:17)
+        at next (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\route.js:157:13)
+        at done (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:70:7)
+        at indicateDone (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:74:68)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:247:11
+        at WriteStream.<anonymous> (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\storage\disk.js:47:9)
+        at WriteStream.emit (node:events:520:35)
+        at finish (node:internal/streams/writable:953:10)
+        at node:internal/streams/writable:934:13
+        at processTicksAndRejections (node:internal/process/task_queues:89:21)
+
+    [0m [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m
+    [31m[1m>[22m[39m[90m 1215 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1216 |[39m             error
+     [90m 1217 |[39m         )[33m;[39m
+     [90m 1218 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1215:17)
+
+  console.log
+    🧹 Cleaned temporary artifacts for batch C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\bc570f1f-350d-4bab-9ba8-079ac8e44f34
+
+      at log (src/controllers/ingest.controller.js:1248:25)
+
+  console.log
+    
+    📚 Processing course: test_mock
+
+      at log (src/controllers/ingest.controller.js:1055:21)
+
+  console.log
+    
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:209:21)
+
+  console.log
+    🐍 STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.controller.js:213:21)
+
+  console.log
+    ==========================================
+
+      at log (src/controllers/ingest.controller.js:217:21)
+
+  console.log
+    PDF: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\9705ecc3-6840-412b-9b22-5d66ef031ed2\test_mock.pdf
+
+      at log (src/controllers/ingest.controller.js:221:21)
+
+  console.log
+    Script: C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\chunking.py
+
+      at log (src/controllers/ingest.controller.js:226:21)
+
+  console.log
+    Python: python
+
+      at log (src/controllers/ingest.controller.js:231:21)
+
+  console.log
+    ✅ Chunking created 2 chunks
+
+      at log (src/controllers/ingest.controller.js:395:33)
+
+  console.error
+    ❌ Failed to parse or validate chunking output
+
+    [0m [90m 452 |[39m                     ) {
+     [90m 453 |[39m
+    [31m[1m>[22m[39m[90m 454 |[39m                         console[33m.[39merror(
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 455 |[39m                             [32m'❌ Failed to parse or validate chunking output'[39m
+     [90m 456 |[39m                         )[33m;[39m
+     [90m 457 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:454:33)
+      at cb (tests/upload.test.js:20:24)
+      at execFile (src/controllers/ingest.controller.js:273:13)
+      at runChunking (src/controllers/ingest.controller.js:199:12)
+      at runChunking (src/controllers/ingest.controller.js:1066:23)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at done (node_modules/multer/lib/make-middleware.js:70:7)
+      at indicateDone (node_modules/multer/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-middleware.js:247:11
+      at WriteStream.<anonymous> (node_modules/multer/storage/disk.js:47:9)
+
+  console.error
+    Schema validation failed: Duplicate chunk ID detected (chunk1).
+
+    [0m [90m 456 |[39m                         )[33m;[39m
+     [90m 457 |[39m
+    [31m[1m>[22m[39m[90m 458 |[39m                         console[33m.[39merror(
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 459 |[39m                             parseError[33m.[39mmessage
+     [90m 460 |[39m                         )[33m;[39m
+     [90m 461 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:458:33)
+      at cb (tests/upload.test.js:20:24)
+      at execFile (src/controllers/ingest.controller.js:273:13)
+      at runChunking (src/controllers/ingest.controller.js:199:12)
+      at runChunking (src/controllers/ingest.controller.js:1066:23)
+      at Layer.handleRequest (node_modules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib/route.js:157:13)
+      at done (node_modules/multer/lib/make-middleware.js:70:7)
+      at indicateDone (node_modules/multer/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-middleware.js:247:11
+      at WriteStream.<anonymous> (node_modules/multer/storage/disk.js:47:9)
+
+  console.error
+    
+    ❌ INGESTION UPLOAD ERROR
+
+    [0m [90m 1209 |[39m     ) {
+     [90m 1210 |[39m
+    [31m[1m>[22m[39m[90m 1211 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1212 |[39m             [32m'\n❌ INGESTION UPLOAD ERROR'[39m
+     [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1211:17)
+
+  console.error
+    Error: Schema validation failed: Duplicate chunk ID detected (chunk1).
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:463:29
+        at cb (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\upload.test.js:20:24)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:305:39
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:312:13
+        at mockConstructor (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-mock\build\index.js:72:19)
+        at execFile (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:273:13)
+        at new Promise (<anonymous>)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:199:12)
+        at runChunking (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\src\controllers\ingest.controller.js:1066:23)
+        at Layer.handleRequest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\layer.js:152:17)
+        at next (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\router\lib\route.js:157:13)
+        at done (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:70:7)
+        at indicateDone (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:74:68)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\lib\make-middleware.js:247:11
+        at WriteStream.<anonymous> (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\multer\storage\disk.js:47:9)
+        at WriteStream.emit (node:events:520:35)
+        at finish (node:internal/streams/writable:953:10)
+        at node:internal/streams/writable:934:13
+        at processTicksAndRejections (node:internal/process/task_queues:89:21)
+
+    [0m [90m 1213 |[39m         )[33m;[39m
+     [90m 1214 |[39m
+    [31m[1m>[22m[39m[90m 1215 |[39m         console[33m.[39merror(
+     [90m      |[39m                 [31m[1m^[22m[39m
+     [90m 1216 |[39m             error
+     [90m 1217 |[39m         )[33m;[39m
+     [90m 1218 |[39m[0m
+
+      at error (src/controllers/ingest.controller.js:1215:17)
+
+  console.log
+    🧹 Cleaned temporary artifacts for batch C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\data\ingest-uploads\9705ecc3-6840-412b-9b22-5d66ef031ed2
+
+      at log (src/controllers/ingest.controller.js:1248:25)
+
+FAIL tests/upload.test.js (6.414 s)
+  Layer 1 Upload & Chunking Validation
+    √ should successfully upload and register chunks when python succeeds natively correctly (Test A, F) (845 ms)
+    √ should cleanly reject unsupported formats natively safely (Test B) (799 ms)
+    × should enforce JSON structure preventing corruption natively intelligently stably (Test C) (827 ms)
+    √ should prevent empty arrays smoothly safely (Test D) (851 ms)
+    √ should prevent duplicate chunk IDs correctly securely reliably expertly explicitly cleanly stably (Test E) (767 ms)
+
+  ● Layer 1 Upload & Chunking Validation › should enforce JSON structure preventing corruption natively intelligently stably (Test C)
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "invalid JSON"
+    Received string:    "Unexpected token 'i', \"invalid js\"... is not valid JSON"
+
+    [0m [90m 110 |[39m
+     [90m 111 |[39m         expect(res[33m.[39mstatus)[33m.[39mtoBe([35m500[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 112 |[39m         expect(res[33m.[39mbody[33m.[39mdetails)[33m.[39mtoContain([32m'invalid JSON'[39m)[33m;[39m
+     [90m     |[39m                                  [31m[1m^[22m[39m
+     [90m 113 |[39m     })[33m;[39m
+     [90m 114 |[39m
+     [90m 115 |[39m     [90m// Test D - Empty array[39m[0m
+
+      at Object.toContain (tests/upload.test.js:112:34)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        6.504 s, estimated 9 s
+Ran all test suites matching tests/upload.test.js.

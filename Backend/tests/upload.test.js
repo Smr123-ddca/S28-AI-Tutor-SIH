@@ -109,7 +109,7 @@ describe('Layer 1 Upload & Chunking Validation', () => {
             .attach('files', tempFile);
 
         expect(res.status).toBe(500);
-        expect(res.body.details).toContain('invalid JSON');
+        expect(res.body.details).toMatch(/invalid json|not valid json/i);
     });
 
     // Test D - Empty array

@@ -111,7 +111,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "Explain Newton's second law", session_id: "sess-123" });
+            .send({ question: "Explain Newton's second law", session_id: "sess-123", course: "Test_Course" });
 
         expect(response.status).toBe(200);
 
@@ -142,7 +142,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "solve this for my homework" });
+            .send({ question: "solve this for my homework", course: "Test_Course" });
 
         expect(response.status).toBe(200);
         // Has guided_mode instead, skips Gemini and practice generation entirely
@@ -170,7 +170,7 @@ describe('Explain Controller - Practice Generation Phase 2', () => {
         const response = await request(app)
             .post('/api/explain')
             .set('x-mock-user-id', 'student-test')
-            .send({ question: "Explain logic gates" });
+            .send({ question: "Explain logic gates", course: "Test_Course" });
 
         expect(response.status).toBe(200); // the response is perfectly uninterrupted
         expect(response.body.practice.available).toBe(true);

@@ -1,0 +1,232 @@
+  console.log
+    🐍 Python executable: python
+
+      at Object.log (src/controllers/ingest.controller.js:36:9)
+
+  console.log
+    🐍 Python exists: true
+
+      at Object.log (src/controllers/ingest.controller.js:37:9)
+
+  console.log
+    --- Query Pipeline ---
+
+      at log (src/controllers/explain.controller.js:228:17)
+
+  console.log
+    Original: Explain Newton's second law
+
+      at log (src/controllers/explain.controller.js:229:17)
+
+  console.log
+    Normalized: Explain Newton's second law
+
+      at log (src/controllers/explain.controller.js:230:17)
+
+  console.log
+    Expanded: Explain Newton's second law
+
+      at log (src/controllers/explain.controller.js:231:17)
+
+  console.log
+    Type: COMPLETE
+
+      at log (src/controllers/explain.controller.js:232:17)
+
+  console.log
+    Tokens: [ 'test' ]
+
+      at log (src/controllers/explain.controller.js:233:17)
+
+  console.log
+    ----------------------
+
+      at log (src/controllers/explain.controller.js:240:17)
+
+  console.log
+    --- Classification Audit ---
+
+      at log (src/controllers/explain.controller.js:289:17)
+
+  console.log
+    Question: Explain Newton's second law
+
+      at log (src/controllers/explain.controller.js:290:17)
+
+  console.log
+    Classification: concept_question
+
+      at log (src/controllers/explain.controller.js:291:17)
+
+  console.log
+    Reason: No graded-work patterns matched.
+
+      at log (src/controllers/explain.controller.js:292:17)
+
+  console.log
+    ----------------------------
+
+      at log (src/controllers/explain.controller.js:293:17)
+
+  console.log
+    --- Query Pipeline ---
+
+      at log (src/controllers/explain.controller.js:228:17)
+
+  console.log
+    Original: solve this for my homework
+
+      at log (src/controllers/explain.controller.js:229:17)
+
+  console.log
+    Normalized: solve this for my homework
+
+      at log (src/controllers/explain.controller.js:230:17)
+
+  console.log
+    Expanded: solve this for my homework
+
+      at log (src/controllers/explain.controller.js:231:17)
+
+  console.log
+    Type: COMPLETE
+
+      at log (src/controllers/explain.controller.js:232:17)
+
+  console.log
+    Tokens: [ 'test' ]
+
+      at log (src/controllers/explain.controller.js:233:17)
+
+  console.log
+    ----------------------
+
+      at log (src/controllers/explain.controller.js:240:17)
+
+  console.log
+    --- Classification Audit ---
+
+      at log (src/controllers/explain.controller.js:289:17)
+
+  console.log
+    Question: solve this for my homework
+
+      at log (src/controllers/explain.controller.js:290:17)
+
+  console.log
+    Classification: graded_work_request
+
+      at log (src/controllers/explain.controller.js:291:17)
+
+  console.log
+    Reason: Matched phrase pattern: /solve\s+(?:this|for)/
+
+      at log (src/controllers/explain.controller.js:292:17)
+
+  console.log
+    ----------------------------
+
+      at log (src/controllers/explain.controller.js:293:17)
+
+  console.log
+    --- Query Pipeline ---
+
+      at log (src/controllers/explain.controller.js:228:17)
+
+  console.log
+    Original: Explain logic gates
+
+      at log (src/controllers/explain.controller.js:229:17)
+
+  console.log
+    Normalized: Explain logic gates
+
+      at log (src/controllers/explain.controller.js:230:17)
+
+  console.log
+    Expanded: Explain logic gates
+
+      at log (src/controllers/explain.controller.js:231:17)
+
+  console.log
+    Type: COMPLETE
+
+      at log (src/controllers/explain.controller.js:232:17)
+
+  console.log
+    Tokens: [ 'test' ]
+
+      at log (src/controllers/explain.controller.js:233:17)
+
+  console.log
+    ----------------------
+
+      at log (src/controllers/explain.controller.js:240:17)
+
+  console.log
+    --- Classification Audit ---
+
+      at log (src/controllers/explain.controller.js:289:17)
+
+  console.log
+    Question: Explain logic gates
+
+      at log (src/controllers/explain.controller.js:290:17)
+
+  console.log
+    Classification: concept_question
+
+      at log (src/controllers/explain.controller.js:291:17)
+
+  console.log
+    Reason: No graded-work patterns matched.
+
+      at log (src/controllers/explain.controller.js:292:17)
+
+  console.log
+    ----------------------------
+
+      at log (src/controllers/explain.controller.js:293:17)
+
+  console.error
+    Failed to asynchronously store practice questions: Error: Supabase internal fault
+        at Object.<anonymous> (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\explain.test.js:168:52)
+        at Promise.finally.completed (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1561:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1501:10)
+        at _callCircusTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1011:40)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5)
+        at _runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:951:3)
+        at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:853:7
+        at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:866:11)
+        at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:861:11)
+        at run (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:765:3)
+        at runAndTransformResultsToJestFormat (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1993:21)
+        at jestAdapter (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\runner.js:111:19)
+        at runTestInternal (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:276:16)
+        at runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:344:7)
+
+    [0m [90m 448 |[39m                     })[33m;[39m
+     [90m 449 |[39m                 }))[33m.[39m[36mcatch[39m(e [33m=>[39m {
+    [31m[1m>[22m[39m[90m 450 |[39m                     console[33m.[39merror([32m"Failed to asynchronously store practice questions:"[39m[33m,[39m e)[33m;[39m
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 451 |[39m                 })[33m;[39m
+     [90m 452 |[39m             }
+     [90m 453 |[39m         }[0m
+
+      at error (src/controllers/explain.controller.js:450:29)
+
+PASS tests/explain.test.js
+  Explain Controller - Practice Generation Phase 2
+    √ 1, 2, 3, 4, 5, 6: Eligible conceptual question generates 2 practice questions and persists them successfully (56 ms)
+    √ 7, 8, 9: Non-practice-worthy models correctly skip generation (30 ms)
+    √ 10: Practice generation database failure does NOT break chat response (57 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.75 s, estimated 3 s
+Ran all test suites matching tests/explain.test.js.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.

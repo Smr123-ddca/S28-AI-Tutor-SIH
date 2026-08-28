@@ -7,6 +7,8 @@ function StudentChat({ session, refreshPractice }) {
     const [messages, setMessages] = useState([])
     const [question, setQuestion] = useState('')
     const [loading, setLoading] = useState(false)
+    const [availableCourses, setAvailableCourses] = useState([])
+    const [selectedCourse, setSelectedCourse] = useState("")
 
     const [expandedCitations, setExpandedCitations] = useState({})
     const [recordedPQs, setRecordedPQs] = useState({})
@@ -40,8 +42,26 @@ function StudentChat({ session, refreshPractice }) {
     useEffect(() => {
         if (session?.access_token) {
             loadSessions();
+            loadAvailableCourses();
         }
     }, [session?.access_token]);
+
+    const loadAvailableCourses = async () => {
+        try {
+            const res = await fetch('/api/courses', {
+                headers: { 'Authorization': `Bearer ${session?.access_token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setAvailableCourses(data.courses || []);
+                if (data.courses && data.courses.length > 0) {
+                    setSelectedCourse(data.courses[0].name);
+                }
+            }
+        } catch (e) {
+            console.error("Failed to load courses:", e);
+        }
+    };
 
     const loadSessions = async () => {
         try {
@@ -181,7 +201,8 @@ function StudentChat({ session, refreshPractice }) {
 
             const payload = {
                 question: userMsg.text,
-                session_id: currentSessionId || 'untracked'
+                session_id: currentSessionId || 'untracked',
+                course: selectedCourse
             };
 
             if (pendingClarification) {
@@ -271,6 +292,29 @@ function StudentChat({ session, refreshPractice }) {
                     }}>
                         + New Chat
                     </button>
+                </div>
+                {/* Course Selection Dropdown */}
+                <div style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb', backgroundColor: '#f9fafb' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Current Course Context</div>
+                    <select
+                        value={selectedCourse}
+                        onChange={(e) => setSelectedCourse(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            borderRadius: '6px',
+                            border: '1px solid #d1d5db',
+                            background: '#ffffff',
+                            color: '#374151',
+                            fontSize: '0.9rem',
+                            outline: 'none',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        {availableCourses.map(c => (
+                            <option key={c.name} value={c.name}>{c.name}</option>
+                        ))}
+                    </select>
                 </div>
                 <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem' }}>
                     <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.5rem', paddingLeft: '0.5rem' }}>Recent history</div>

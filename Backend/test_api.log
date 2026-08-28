@@ -1,0 +1,48 @@
+  console.log
+    ◇ injected env (3) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    🐍 Python executable: python
+
+      at Object.log (src/controllers/ingest.controller.js:36:9)
+
+  console.log
+    🐍 Python exists: true
+
+      at Object.log (src/controllers/ingest.controller.js:37:9)
+
+  console.log
+    Successfully loaded 80 chunks from 2 published courses into memory.
+
+      at log (src/data/store.js:39:17)
+
+FAIL tests/api.test.js
+  API Routes
+    POST /api/retrieve
+      × should return a 200 response with retrieved chunks when valid question is provided (550 ms)
+      √ should handle errors gracefully (406 ms)
+
+  ● API Routes › POST /api/retrieve › should return a 200 response with retrieved chunks when valid question is provided
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+    [0m [90m 21 |[39m                 [33m.[39msend({ question[33m:[39m [32m'What is this course about?'[39m[33m,[39m course[33m:[39m [32m'Computer Science 101'[39m })[33m;[39m
+     [90m 22 |[39m
+    [31m[1m>[22m[39m[90m 23 |[39m             expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)[33m;[39m
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 24 |[39m             expect(response[33m.[39mbody)[33m.[39mtoHaveProperty([32m'results'[39m)[33m;[39m
+     [90m 25 |[39m             expect([33mArray[39m[33m.[39misArray(response[33m.[39mbody[33m.[39mresults))[33m.[39mtoBe([36mtrue[39m)[33m;[39m
+     [90m 26 |[39m         })[33m;[39m[0m
+
+      at Object.toBe (tests/api.test.js:23:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 passed, 2 total
+Snapshots:   0 total
+Time:        1.731 s, estimated 4 s
+Ran all test suites matching tests/api.test.js.

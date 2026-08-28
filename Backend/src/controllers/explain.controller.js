@@ -105,12 +105,16 @@ async function explain(req, res) {
 
     let tStart = performance.now();
 
-    const { question, session_id, context_limit } = req.body;
+    const { question, session_id, context_limit, course } = req.body;
     const student_id = req.user.id;
 
     if (!question) {
         recordT('Validation', tStart);
         return res.status(400).json({ error: "Missing required field: question" });
+    }
+
+    if (!course) {
+        return res.status(400).json({ error: "Missing required field: course. A valid published course selection is mandatory." });
     }
 
     recordT('AuthAndValidation', tStart);
@@ -255,7 +259,8 @@ async function explain(req, res) {
         let rStart = performance.now();
         const results = retrievalService.retrieve(question, {
             tokens: queryResult.expandedTokens,
-            subject: queryResult.subject
+            subject: queryResult.subject,
+            course: course
         });
         metaRetrievedChunks = results ? results.length : 0;
         recordT('Retrieval', rStart);

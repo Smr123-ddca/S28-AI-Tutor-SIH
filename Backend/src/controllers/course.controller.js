@@ -6,7 +6,13 @@ function getCourses(req, res) {
         const coursesPath = path.join(__dirname, '../data/courses.json');
         if (!fs.existsSync(coursesPath)) return res.json({ courses: [] });
 
-        const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+        let courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+
+        // Ensure non-teachers only see published courses to protect unpublished assets natively
+        if (!req.user || req.user.role !== 'teacher') {
+            courses = courses.filter(c => c.status === 'published');
+        }
+
         res.json({ courses });
     } catch (error) {
         console.error('Failed to load courses:', error);
