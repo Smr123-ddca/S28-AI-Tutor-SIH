@@ -1,8 +1,13 @@
-const { getSessionEvents, getLikelyGaps } = require('./gap.controller');
+const { getAllSessionEvents, getLikelyGaps } = require('./gap.controller');
 const { getChunks } = require('../data/store');
 
-function getMisconceptions(req, res) {
-    const events = getSessionEvents();
+async function getMisconceptions(req, res) {
+    const { data: events, error } = await getAllSessionEvents();
+    if (error) {
+        console.error("Failed to fetch all session events:", error);
+        return res.status(500).json({ error: "Failed to fetch session events", details: error });
+    }
+
     const chunks = getChunks();
     const chunkStats = {};
 
@@ -35,9 +40,14 @@ function getMisconceptions(req, res) {
         // If high incorrect rate, detect gaps for failing students
         if (incorrect_rate > 0.4 && stat.failed_students.size > 0) {
             const gapCounts = {};
-            for (const student_id of stat.failed_students) {
-                const likelyGaps = getLikelyGaps(student_id, chunk_id);
-                // Tally up the gaps
+            const studentIds = Array.from(stat.failed_students);
+
+            const likelyGapsArrays = await Promise.all(
+                studentIds.map(student_id => getLikelyGaps(student_id, chunk_id))
+            );
+
+            // Tally up the gaps
+            for (const likelyGaps of likelyGapsArrays) {
                 likelyGaps.forEach(gap => {
                     if (!gapCounts[gap.chunk_id]) {
                         gapCounts[gap.chunk_id] = 0;

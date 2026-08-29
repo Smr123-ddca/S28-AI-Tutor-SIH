@@ -157,7 +157,7 @@ Student's Answer:
 ${answer}
 `;
         const model = genAI.getGenerativeModel({
-            model: "gemini-3.5-flash-lite",
+            model: "gemini-2.0-flash",
             generationConfig: {
                 responseMimeType: "application/json",
                 responseSchema: evaluationSchema
@@ -316,7 +316,7 @@ ${message}
     let evaluationResult = null;
     try {
         const model = genAI.getGenerativeModel({
-            model: "gemini-3.5-flash-lite",
+            model: "gemini-2.0-flash",
             generationConfig: { responseMimeType: "application/json", responseSchema: socraticSchema }
         });
         const result = await model.generateContent(prompt);
@@ -372,7 +372,7 @@ async function revealAnswer(req, res) {
     let answerText = "";
     try {
         const prompt = `Provide a concise, direct answer and brief explanation to the following question, relying ONLY on the Source Material provided.\n\nSource: ${evidenceText}\n\nQuestion: ${question.question}`;
-        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
         const result = await model.generateContent(prompt);
         answerText = await result.response.text();
     } catch (err) {

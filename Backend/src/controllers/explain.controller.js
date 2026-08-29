@@ -75,7 +75,7 @@ function classifyQuestion(question) {
 
 async function callGemini(promptText) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-3.5-flash-lite",
+        model: "gemini-2.0-flash",
         generationConfig: {
             responseMimeType: "application/json",
             responseSchema: responseSchema
@@ -100,7 +100,7 @@ async function explain(req, res) {
         const dur = (performance.now() - start).toFixed(2);
         const msg = `[EXPLAIN TIMING] stage=${stage} duration=${dur}ms`;
         timings.push(msg);
-        fs.appendFileSync('timing.log', msg + '\n');
+        if (process.env.DEBUG_TIMING === 'true') fs.appendFileSync('timing.log', msg + '\n');
     };
 
     let tStart = performance.now();
@@ -109,7 +109,7 @@ async function explain(req, res) {
     const student_id = req.user.id;
 
     if (!question) {
-        recordT('Validation', tStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('Validation', tStart);
         return res.status(400).json({ error: "Missing required field: question" });
     }
 
@@ -129,7 +129,7 @@ async function explain(req, res) {
         return res.status(403).json({ error: "Cannot query an unpublished or non-existent course." });
     }
 
-    recordT('AuthAndValidation', tStart);
+    if (process.env.DEBUG_TIMING === 'true') recordT('AuthAndValidation', tStart);
 
     // Logging context tracker variables
     let metaPrevMessages = 0;
@@ -151,7 +151,7 @@ async function explain(req, res) {
                     course: course,
                     response: statusObj
                 }).then(loggedData => {
-                    recordT('Persistence', pStart);
+                    if (process.env.DEBUG_TIMING === 'true') recordT('Persistence', pStart);
                     if (isNewSession && loggedData) {
                         statusObj.session_id = loggedData;
                     }
@@ -167,9 +167,9 @@ async function explain(req, res) {
             }
         }
 
-        recordT('Total', tTotal);
-        fs.appendFileSync('timing.log', `[EXPLAIN TRACE] session=${statusObj.session_id || session_id || 'untracked'} prev_msgs=${metaPrevMessages} chunks=${metaRetrievedChunks} prompt_size=${metaPromptSize} gen_status=${metaGeminiStatus}\n`);
-        fs.appendFileSync('timing.log', `------\n`);
+        if (process.env.DEBUG_TIMING === 'true') recordT('Total', tTotal);
+        if (process.env.DEBUG_TIMING === 'true') fs.appendFileSync('timing.log', `[EXPLAIN TRACE] session=${statusObj.session_id || session_id || 'untracked'} prev_msgs=${metaPrevMessages} chunks=${metaRetrievedChunks} prompt_size=${metaPromptSize} gen_status=${metaGeminiStatus}\n`);
+        if (process.env.DEBUG_TIMING === 'true') fs.appendFileSync('timing.log', `------\n`);
         return res.json(statusObj);
     };
 
@@ -225,7 +225,7 @@ async function explain(req, res) {
                 }
             }
         }
-        recordT('ChatHistoryRetrieval', hStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('ChatHistoryRetrieval', hStart);
 
         // ════════════════════════════════════════════════════════════════
         // STEP 2: Query preprocessing pipeline (normalization + expansion)
@@ -247,7 +247,7 @@ async function explain(req, res) {
             currentSubject: null // Will be populated when subject tracking exists
         });
 
-        recordT('QueryPreprocessing', ppStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('QueryPreprocessing', ppStart);
 
         // ── Diagnostic logging ──
         console.log("--- Query Pipeline ---");
@@ -288,14 +288,14 @@ async function explain(req, res) {
             course: course
         });
         metaRetrievedChunks = results ? results.length : 0;
-        recordT('Retrieval', rStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('Retrieval', rStart);
 
         // ════════════════════════════════════════════════════════════════
         // STEP 4: Evidence gate (unchanged at 0.30)
         // ════════════════════════════════════════════════════════════════
         let eStart = performance.now();
         const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
-        recordT('EvidenceGate', eStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('EvidenceGate', eStart);
 
         if (!hasGoodEvidence && !transcript) {
             return await respondAndLog({
@@ -395,7 +395,7 @@ Generate exactly 2 short practice questions based on the factual material.
         let pcStart = performance.now();
         const prompt = `${systemInstruction}\n\nSource Material:\n${contextChunks.length > 0 && hasGoodEvidence ? contextStr : "No matching source material found for this query."}\n\nQuestion: ${geminiQuestion}`;
         metaPromptSize = prompt.length;
-        recordT('PromptConstruction', pcStart);
+        if (process.env.DEBUG_TIMING === 'true') recordT('PromptConstruction', pcStart);
 
         // ════════════════════════════════════════════════════════════════
         // STEP 8: Call Gemini (Single Attempt, Fast Fail)
@@ -405,13 +405,13 @@ Generate exactly 2 short practice questions based on the factual material.
         try {
             let gStart = performance.now();
             const rawResponse = await callGemini(prompt);
-            recordT('GeminiNetworkWait', gStart);
+            if (process.env.DEBUG_TIMING === 'true') recordT('GeminiNetworkWait', gStart);
 
             metaGeminiStatus = "success";
 
             let parseStart = performance.now();
             parsedResult = JSON.parse(rawResponse);
-            recordT('GeminiParse', parseStart);
+            if (process.env.DEBUG_TIMING === 'true') recordT('GeminiParse', parseStart);
         } catch (err) {
             metaGeminiStatus = "failure_aborted";
             console.error("Gemini call or parse failed:", err);

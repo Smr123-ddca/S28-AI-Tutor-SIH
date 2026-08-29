@@ -197,29 +197,41 @@ function deleteCourse(req, res) {
 
         // Allowed to delete even if published. We just wipe from memory and file-system natively.
         // 1. Delete associated physical files securely matching the exact artifact names dictated by the engine
-        const artifactsToDelete = [
+        const deletedFiles = [];
+        const dataDir = path.join(__dirname, '../data');
+
+        if (fs.existsSync(dataDir)) {
+            const allFiles = fs.readdirSync(dataDir);
+            allFiles.forEach(file => {
+                // Delete any file that matches the course name directly or as a prefix for C1-C6 pipelines (e.g. courseName_chunks.json, courseName_quality.json, courseName.pdf, data.json variants)
+                if (file.startsWith(`${course.name}_`) || file === `${course.name}.pdf` || file === `${course.name}.json` || file.startsWith(`${course.name}-`)) {
+                    const artifactPath = path.join(dataDir, file);
+                    try {
+                        fs.unlinkSync(artifactPath);
+                        deletedFiles.push(file);
+                    } catch (unlinkErr) {
+                        console.warn(`Failed to unlink artifact ${file}:`, unlinkErr);
+                    }
+                }
+            });
+        }
+
+        // Also ensure explicitly defined legacy artifacts (if they live outside strictly named patterns) get captured if valid
+        const legacyArtifacts = [
             course.pdf,
             course.chunks,
-            course.prerequisites, // usually named `courseName_prerequisites.json` explicitly by the ingestion router
-            `${course.name}_chunks.json`,
-            `${course.name}_prerequisites.json`,
-            `${course.name}.pdf`
+            course.prerequisites
         ];
 
-        // Deduplicate and process removals
-        const deletedFiles = [];
-        const uniqueArtifacts = [...new Set(artifactsToDelete.filter(Boolean))];
-
-        uniqueArtifacts.forEach(artifact => {
-            // Path traversal prevention: Use strictly the basename on dynamically declared artifacts.
+        legacyArtifacts.filter(Boolean).forEach(artifact => {
             const safeBase = path.basename(artifact);
-            const artifactPath = path.join(__dirname, '../data', safeBase);
-            if (fs.existsSync(artifactPath)) {
-                try {
-                    fs.unlinkSync(artifactPath);
-                    deletedFiles.push(safeBase);
-                } catch (unlinkErr) {
-                    console.warn(`Failed to unlink artifact ${safeBase}:`, unlinkErr);
+            if (!deletedFiles.includes(safeBase)) {
+                const artifactPath = path.join(dataDir, safeBase);
+                if (fs.existsSync(artifactPath)) {
+                    try {
+                        fs.unlinkSync(artifactPath);
+                        deletedFiles.push(safeBase);
+                    } catch (e) { }
                 }
             }
         });

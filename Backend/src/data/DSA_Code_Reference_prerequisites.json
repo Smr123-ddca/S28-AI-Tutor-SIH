@@ -1,0 +1,250 @@
+{
+  "course": "DSA_Code_Reference",
+  "relationships": [
+    {
+      "concept_id": "chunk_9",
+      "prerequisite_id": "chunk_8",
+      "relationship": "requires",
+      "reason": "Reversing a singly linked list in-place requires understanding the underlying Node class and basic pointer mechanics introduced in the singly linked list traversal.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_10",
+      "prerequisite_id": "chunk_8",
+      "relationship": "requires",
+      "reason": "Floyd's Tortoise and Hare cycle detection runs on a singly linked list, which fundamentally requires understanding the Node class structure and reference traversing defined in Chunk 8.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_11",
+      "prerequisite_id": "chunk_8",
+      "relationship": "requires",
+      "reason": "Merging two sorted linked lists manipulates Node links and constructs a new list structure, making standard singly linked list representation a strict prerequisite.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_14",
+      "prerequisite_id": "chunk_13",
+      "relationship": "requires",
+      "reason": "The balanced parentheses checker is a classic application of a Stack; students must understand basic LIFO stack operations (push, pop, peek) before applying them here.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_15",
+      "prerequisite_id": "chunk_13",
+      "relationship": "requires",
+      "reason": "Evaluating postfix expressions relies heavily on push and pop operations of a Stack to handle operators and operands.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_18",
+      "prerequisite_id": "chunk_13",
+      "relationship": "requires",
+      "reason": "A Min Stack is an advanced wrapper around a standard Stack that manages min tracking. Understanding the basic Stack structure is required first.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_20",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "The naive recursive Fibonacci sequence is built on multi-branch recursion, which requires a prior understanding of simple linear recursion as demonstrated in the Factorial code.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_25",
+      "prerequisite_id": "chunk_24",
+      "relationship": "requires",
+      "reason": "Recursive binary search divides the search space using the same logical boundaries as iterative binary search; understanding the iterative version first is crucial.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_25",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "Implementing binary search recursively requires a baseline understanding of recursive calls and base cases.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_26",
+      "prerequisite_id": "chunk_24",
+      "relationship": "requires",
+      "reason": "Finding the first and last occurrence modifies the standard iterative binary search algorithm to look for bounds. Standard binary search is a direct prerequisite.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_30",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "Merge Sort is a divide-and-conquer algorithm that relies recursively on splitting lists and merging them back, requiring a baseline grasp of recursion.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_31",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "Quick Sort relies on recursive partitioning of arrays, making basic recursive function flow a prerequisite.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_39",
+      "prerequisite_id": "chunk_38",
+      "relationship": "requires",
+      "reason": "Tree traversals require manipulating TreeNode objects (left, right, and value) which are defined in the BST insert and search module.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_40",
+      "prerequisite_id": "chunk_38",
+      "relationship": "requires",
+      "reason": "Level-order traversal operates on TreeNode instances, which are introduced and structured in Chunk 38.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_40",
+      "prerequisite_id": "chunk_16",
+      "relationship": "requires",
+      "reason": "Breadth-first level-order tree traversal requires using a queue (deque) to track nodes across levels in FIFO order.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_41",
+      "prerequisite_id": "chunk_38",
+      "relationship": "requires",
+      "reason": "Computing tree height requires traversing the tree nodes (TreeNode) defined in the basic tree chunk.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_41",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "The height of a binary tree is calculated using a post-order recursive process, requiring foundational knowledge of recursion.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_42",
+      "prerequisite_id": "chunk_38",
+      "relationship": "requires",
+      "reason": "Validating a Binary Search Tree relies directly on checking the BST invariant (left < root < right) introduced in the BST insert/search chunk.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_43",
+      "prerequisite_id": "chunk_38",
+      "relationship": "requires",
+      "reason": "Finding the Lowest Common Ancestor (LCA) in a BST leverages BST node ordering properties, which are defined and explored in Chunk 38.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_45",
+      "prerequisite_id": "chunk_44",
+      "relationship": "requires",
+      "reason": "The Kth largest element algorithm relies directly on the operations and properties of a min-heap (via heapq) introduced in Chunk 44.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_46",
+      "prerequisite_id": "chunk_44",
+      "relationship": "requires",
+      "reason": "Merging k sorted lists utilizes a min-heap structure to efficiently fetch the next smallest element, requiring the heapq API and heap concepts from Chunk 44.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_48",
+      "prerequisite_id": "chunk_47",
+      "relationship": "requires",
+      "reason": "Breadth-First Search traverses a graph represented as an adjacency list, which is introduced in Chunk 47.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_48",
+      "prerequisite_id": "chunk_16",
+      "relationship": "requires",
+      "reason": "BFS relies on a FIFO queue to explore nodes level-by-level, making the queue data structure a prerequisite.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_49",
+      "prerequisite_id": "chunk_47",
+      "relationship": "requires",
+      "reason": "Recursive DFS operates directly on the graph adjacency list structure introduced in Chunk 47.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_49",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "DFS is implemented via recursive calls to backtrack along path branches, which requires basic recursive programming skills.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_50",
+      "prerequisite_id": "chunk_49",
+      "relationship": "requires",
+      "reason": "Cycle detection in directed graphs is an advanced DFS application that tracks back-edges using a recursion stack, requiring understanding of DFS traversal first.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_51",
+      "prerequisite_id": "chunk_47",
+      "relationship": "requires",
+      "reason": "Topological sorting processes graph vertices and edges, which relies on the adjacency list representation defined in Chunk 47.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_52",
+      "prerequisite_id": "chunk_47",
+      "relationship": "requires",
+      "reason": "Dijkstra's shortest path algorithm traverses graphs represented via adjacency lists with weighted edges.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_52",
+      "prerequisite_id": "chunk_44",
+      "relationship": "requires",
+      "reason": "Dijkstra's algorithm relies on a min-priority queue (min-heap) to select the next closest vertex with minimum distance.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_53",
+      "prerequisite_id": "chunk_49",
+      "relationship": "requires",
+      "reason": "Counting connected components requires looping through all nodes and running a complete recursive DFS for each unvisited component.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_54",
+      "prerequisite_id": "chunk_20",
+      "relationship": "requires",
+      "reason": "Memoized Fibonacci is introduced to address the exponential runtime and redundant subproblems of naive recursive Fibonacci, making Chunk 20 a prerequisite.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_62",
+      "prerequisite_id": "chunk_19",
+      "relationship": "requires",
+      "reason": "Permutation generation uses backtracking, which is a state-restoring form of recursion. Basic recursion is a mandatory prerequisite.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_63",
+      "prerequisite_id": "chunk_62",
+      "relationship": "requires",
+      "reason": "N-Queens is a complex constraint-satisfaction backtracking puzzle that requires understanding basic backtracking search state logic first.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_64",
+      "prerequisite_id": "chunk_62",
+      "relationship": "requires",
+      "reason": "Generating power sets utilizes standard state backtracking (choosing, recursing, and popping/undoing), which is introduced step-by-step in standard backtracking examples like permutations.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_67",
+      "prerequisite_id": "chunk_66",
+      "relationship": "requires",
+      "reason": "Kruskal's MST algorithm relies directly on the Union-Find data structure to prevent cycles when adding edges to the forest.",
+      "confidence": 0.95
+    }
+  ]
+}

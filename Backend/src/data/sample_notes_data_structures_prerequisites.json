@@ -1,0 +1,68 @@
+{
+  "course": "sample_notes_data_structures",
+  "relationships": [
+    {
+      "concept_id": "chunk_2",
+      "prerequisite_id": "chunk_1",
+      "relationship": "requires",
+      "reason": "The two-pointer technique is an algorithmic pattern that operates directly on arrays by manipulating index variables to traverse the elements.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_3",
+      "prerequisite_id": "chunk_1",
+      "relationship": "requires",
+      "reason": "The sliding window technique is an array-based approach that expands and contracts a contiguous subrange of an array using indexing.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_4",
+      "prerequisite_id": "chunk_1",
+      "relationship": "requires",
+      "reason": "Understanding how arrays are indexed is explicitly noted as a prerequisite to understanding how a hash table's internal buckets function.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_7",
+      "prerequisite_id": "chunk_5",
+      "relationship": "requires",
+      "reason": "Trees generalize the node-and-pointer architecture of linked lists (branching to multiple children instead of pointing to one 'next' node), making linked lists a conceptual stepping stone.",
+      "confidence": 0.9
+    },
+    {
+      "concept_id": "chunk_8",
+      "prerequisite_id": "chunk_7",
+      "relationship": "requires",
+      "reason": "A Binary Search Tree (BST) is a specialized type of tree; understanding tree terminology (nodes, root, children, height) is strictly necessary to comprehend BST properties.",
+      "confidence": 0.98
+    },
+    {
+      "concept_id": "chunk_9",
+      "prerequisite_id": "chunk_1",
+      "relationship": "requires",
+      "reason": "Binary search is an algorithm specifically designed to find elements within a sorted array, requiring direct familiarity with array structures and index lookups.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_10",
+      "prerequisite_id": "chunk_7",
+      "relationship": "requires",
+      "reason": "Tree traversal algorithms (BFS and DFS) cannot be understood without a foundational understanding of tree structures and hierarchical node structures.",
+      "confidence": 0.98
+    },
+    {
+      "concept_id": "chunk_10",
+      "prerequisite_id": "chunk_6",
+      "relationship": "requires",
+      "reason": "The text explicitly states that understanding queues and stacks is a prerequisite because BFS is implemented using a queue and DFS is implemented using a stack.",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_11",
+      "prerequisite_id": "chunk_7",
+      "relationship": "requires",
+      "reason": "A heap is a specialized tree-based structure, and the text notes that understanding basic tree structure and terminology is necessary before heaps make sense.",
+      "confidence": 0.95
+    }
+  ]
+}

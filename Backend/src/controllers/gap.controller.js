@@ -1,5 +1,10 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
-const prerequisites = require('../data/prerequisites.json');
+let prerequisites = {};
+try {
+    prerequisites = require('../data/prerequisites.json');
+} catch (error) {
+    console.warn("Legacy prerequisites.json not found, falling back to empty prerequisites mapping.");
+}
 const { getChunks } = require('../data/store');
 
 async function recordSessionEvent(req, res) {
@@ -100,9 +105,17 @@ async function debugGetEvents(req, res) {
     res.json({ events: events || [] });
 }
 
+async function getAllSessionEvents() {
+    const { data: events, error } = await supabaseAdmin
+        .from('session_events')
+        .select('*');
+    return { data: events || [], error };
+}
+
 module.exports = {
     recordSessionEvent,
     detectGap,
     debugGetEvents,
-    getLikelyGaps
+    getLikelyGaps,
+    getAllSessionEvents
 };

@@ -1,0 +1,43 @@
+[
+  {
+    "msg": "The Problem Solving Approach (PSA) emphasizes breaking down complex tasks into atomic units.",
+    "tokens": [
+      "problem",
+      "solving",
+      "approach",
+      "psa",
+      "emphasiz",
+      "breaking",
+      "down",
+      "complex",
+      "task",
+      "atomic",
+      "unit"
+    ],
+    "sExp": 0.9341987329938275,
+    "sNat": 0.9341987329938275
+  },
+  {
+    "msg": "What does the Problem Solving Approach break tasks down into?",
+    "tokens": [
+      "doe",
+      "problem",
+      "solving",
+      "approach",
+      "break",
+      "task",
+      "down"
+    ],
+    "sExp": 0.48795003647426655,
+    "sNat": 0.48795003647426655
+  },
+  {
+    "msg": "What is iterative refinement?",
+    "tokens": [
+      "iterative",
+      "refinement"
+    ],
+    "sExp": 0,
+    "sNat": 0
+  }
+]

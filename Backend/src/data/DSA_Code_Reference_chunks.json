@@ -1,7 +1,7 @@
 [
   {
     "id": "chunk_1",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "A Practical Code Reference",
     "section_label": "A Practical Code Reference",
@@ -12,7 +12,7 @@
   },
   {
     "id": "chunk_2",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 1: Array Rotation (Left Rotate by k)",
     "section_label": "Example 1: Array Rotation (Left Rotate by k)",
@@ -23,7 +23,7 @@
   },
   {
     "id": "chunk_3",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 2: In-Place Array Reversal",
     "section_label": "Example 2: In-Place Array Reversal",
@@ -34,7 +34,7 @@
   },
   {
     "id": "chunk_4",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 3: Kadane's Algorithm (Maximum Subarray Sum)",
     "section_label": "Example 3: Kadane's Algorithm (Maximum Subarray Sum)",
@@ -45,7 +45,7 @@
   },
   {
     "id": "chunk_5",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 4: Two-Pointer: Pair with Target Sum (Sorted Array)",
     "section_label": "Example 4: Two-Pointer: Pair with Target Sum (Sorted Array)",
@@ -56,7 +56,7 @@
   },
   {
     "id": "chunk_6",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 5: Sliding Window: Longest Substring Without Repeats",
     "section_label": "Example 5: Sliding Window: Longest Substring Without Repeats",
@@ -67,7 +67,7 @@
   },
   {
     "id": "chunk_7",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 6: Palindrome Check",
     "section_label": "Example 6: Palindrome Check",
@@ -78,7 +78,7 @@
   },
   {
     "id": "chunk_8",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 7: Singly Linked List — Insert & Traverse",
     "section_label": "Example 7: Singly Linked List — Insert & Traverse",
@@ -89,7 +89,7 @@
   },
   {
     "id": "chunk_9",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 8: Reverse a Singly Linked List",
     "section_label": "Example 8: Reverse a Singly Linked List",
@@ -100,7 +100,7 @@
   },
   {
     "id": "chunk_10",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 9: Detect a Cycle (Floyd's Tortoise and Hare)",
     "section_label": "Example 9: Detect a Cycle (Floyd's Tortoise and Hare)",
@@ -111,7 +111,7 @@
   },
   {
     "id": "chunk_11",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 10: Merge Two Sorted Linked Lists",
     "section_label": "Example 10: Merge Two Sorted Linked Lists",
@@ -122,7 +122,7 @@
   },
   {
     "id": "chunk_12",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 11: Doubly Linked List — Insert at Tail",
     "section_label": "Example 11: Doubly Linked List — Insert at Tail",
@@ -133,7 +133,7 @@
   },
   {
     "id": "chunk_13",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 12: Stack via Python List",
     "section_label": "Example 12: Stack via Python List",
@@ -144,7 +144,7 @@
   },
   {
     "id": "chunk_14",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 13: Balanced Parentheses Checker",
     "section_label": "Example 13: Balanced Parentheses Checker",
@@ -155,7 +155,7 @@
   },
   {
     "id": "chunk_15",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 14: Evaluate Postfix Expression",
     "section_label": "Example 14: Evaluate Postfix Expression",
@@ -166,7 +166,7 @@
   },
   {
     "id": "chunk_16",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 15: Queue via collections.deque",
     "section_label": "Example 15: Queue via collections.deque",
@@ -177,7 +177,7 @@
   },
   {
     "id": "chunk_17",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 16: Circular Queue (Fixed Capacity)",
     "section_label": "Example 16: Circular Queue (Fixed Capacity)",
@@ -188,7 +188,7 @@
   },
   {
     "id": "chunk_18",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 17: Min Stack (O(1) getMin)",
     "section_label": "Example 17: Min Stack (O(1) getMin)",
@@ -199,7 +199,7 @@
   },
   {
     "id": "chunk_19",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 18: Factorial (Recursive)",
     "section_label": "Example 18: Factorial (Recursive)",
@@ -210,7 +210,7 @@
   },
   {
     "id": "chunk_20",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 19: Fibonacci (Naive Recursive)",
     "section_label": "Example 19: Fibonacci (Naive Recursive)",
@@ -221,7 +221,7 @@
   },
   {
     "id": "chunk_21",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 20: Fast Power (Exponentiation by Squaring)",
     "section_label": "Example 20: Fast Power (Exponentiation by Squaring)",
@@ -232,7 +232,7 @@
   },
   {
     "id": "chunk_22",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 21: Tower of Hanoi",
     "section_label": "Example 21: Tower of Hanoi",
@@ -243,7 +243,7 @@
   },
   {
     "id": "chunk_23",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 22: Linear Search",
     "section_label": "Example 22: Linear Search",
@@ -254,7 +254,7 @@
   },
   {
     "id": "chunk_24",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 23: Binary Search (Iterative)",
     "section_label": "Example 23: Binary Search (Iterative)",
@@ -265,7 +265,7 @@
   },
   {
     "id": "chunk_25",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 24: Binary Search (Recursive)",
     "section_label": "Example 24: Binary Search (Recursive)",
@@ -276,7 +276,7 @@
   },
   {
     "id": "chunk_26",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 25: Find First and Last Occurrence (Sorted Array)",
     "section_label": "Example 25: Find First and Last Occurrence (Sorted Array)",
@@ -287,7 +287,7 @@
   },
   {
     "id": "chunk_27",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 26: Bubble Sort",
     "section_label": "Example 26: Bubble Sort",
@@ -298,7 +298,7 @@
   },
   {
     "id": "chunk_28",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 27: Selection Sort",
     "section_label": "Example 27: Selection Sort",
@@ -309,7 +309,7 @@
   },
   {
     "id": "chunk_29",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 28: Insertion Sort",
     "section_label": "Example 28: Insertion Sort",
@@ -320,7 +320,7 @@
   },
   {
     "id": "chunk_30",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 29: Merge Sort",
     "section_label": "Example 29: Merge Sort",
@@ -331,7 +331,7 @@
   },
   {
     "id": "chunk_31",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 30: Quick Sort (Lomuto Partition)",
     "section_label": "Example 30: Quick Sort (Lomuto Partition)",
@@ -342,7 +342,7 @@
   },
   {
     "id": "chunk_32",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 31: Heap Sort",
     "section_label": "Example 31: Heap Sort",
@@ -353,7 +353,7 @@
   },
   {
     "id": "chunk_33",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 32: Counting Sort",
     "section_label": "Example 32: Counting Sort",
@@ -364,7 +364,7 @@
   },
   {
     "id": "chunk_34",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 33: Hash Table with Separate Chaining",
     "section_label": "Example 33: Hash Table with Separate Chaining",
@@ -375,7 +375,7 @@
   },
   {
     "id": "chunk_35",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 34: Two Sum via Hash Map",
     "section_label": "Example 34: Two Sum via Hash Map",
@@ -386,7 +386,7 @@
   },
   {
     "id": "chunk_36",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 35: Group Anagrams",
     "section_label": "Example 35: Group Anagrams",
@@ -397,7 +397,7 @@
   },
   {
     "id": "chunk_37",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 36: First Non-Repeating Character",
     "section_label": "Example 36: First Non-Repeating Character",
@@ -408,7 +408,7 @@
   },
   {
     "id": "chunk_38",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 37: Binary Search Tree — Insert & Search",
     "section_label": "Example 37: Binary Search Tree — Insert & Search",
@@ -419,7 +419,7 @@
   },
   {
     "id": "chunk_39",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 38: Tree Traversals — Inorder, Preorder, Postorder",
     "section_label": "Example 38: Tree Traversals — Inorder, Preorder, Postorder",
@@ -430,7 +430,7 @@
   },
   {
     "id": "chunk_40",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 39: Level Order Traversal (BFS)",
     "section_label": "Example 39: Level Order Traversal (BFS)",
@@ -441,7 +441,7 @@
   },
   {
     "id": "chunk_41",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 40: Height of a Binary Tree",
     "section_label": "Example 40: Height of a Binary Tree",
@@ -452,7 +452,7 @@
   },
   {
     "id": "chunk_42",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 41: Validate a Binary Search Tree",
     "section_label": "Example 41: Validate a Binary Search Tree",
@@ -463,7 +463,7 @@
   },
   {
     "id": "chunk_43",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 42: Lowest Common Ancestor (BST)",
     "section_label": "Example 42: Lowest Common Ancestor (BST)",
@@ -474,7 +474,7 @@
   },
   {
     "id": "chunk_44",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 43: Min-Heap with heapq",
     "section_label": "Example 43: Min-Heap with heapq",
@@ -485,7 +485,7 @@
   },
   {
     "id": "chunk_45",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 44: Kth Largest Element via Heap",
     "section_label": "Example 44: Kth Largest Element via Heap",
@@ -496,7 +496,7 @@
   },
   {
     "id": "chunk_46",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 45: Merge k Sorted Lists via Heap",
     "section_label": "Example 45: Merge k Sorted Lists via Heap",
@@ -507,7 +507,7 @@
   },
   {
     "id": "chunk_47",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 46: Graph Representation — Adjacency List",
     "section_label": "Example 46: Graph Representation — Adjacency List",
@@ -518,7 +518,7 @@
   },
   {
     "id": "chunk_48",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 47: Breadth-First Search (BFS)",
     "section_label": "Example 47: Breadth-First Search (BFS)",
@@ -529,7 +529,7 @@
   },
   {
     "id": "chunk_49",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 48: Depth-First Search (DFS) — Recursive",
     "section_label": "Example 48: Depth-First Search (DFS) — Recursive",
@@ -540,7 +540,7 @@
   },
   {
     "id": "chunk_50",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 49: Detect a Cycle in a Directed Graph",
     "section_label": "Example 49: Detect a Cycle in a Directed Graph",
@@ -551,7 +551,7 @@
   },
   {
     "id": "chunk_51",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 50: Topological Sort (Kahn's Algorithm)",
     "section_label": "Example 50: Topological Sort (Kahn's Algorithm)",
@@ -562,7 +562,7 @@
   },
   {
     "id": "chunk_52",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 51: Dijkstra's Shortest Path",
     "section_label": "Example 51: Dijkstra's Shortest Path",
@@ -573,7 +573,7 @@
   },
   {
     "id": "chunk_53",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 52: Number of Connected Components",
     "section_label": "Example 52: Number of Connected Components",
@@ -584,7 +584,7 @@
   },
   {
     "id": "chunk_54",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 53: Fibonacci with Memoization",
     "section_label": "Example 53: Fibonacci with Memoization",
@@ -595,7 +595,7 @@
   },
   {
     "id": "chunk_55",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 54: Fibonacci — Bottom-Up (Tabulation)",
     "section_label": "Example 54: Fibonacci — Bottom-Up (Tabulation)",
@@ -606,7 +606,7 @@
   },
   {
     "id": "chunk_56",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 55: 0/1 Knapsack",
     "section_label": "Example 55: 0/1 Knapsack",
@@ -617,7 +617,7 @@
   },
   {
     "id": "chunk_57",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 56: Longest Common Subsequence (LCS)",
     "section_label": "Example 56: Longest Common Subsequence (LCS)",
@@ -628,7 +628,7 @@
   },
   {
     "id": "chunk_58",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 57: Longest Increasing Subsequence (LIS)",
     "section_label": "Example 57: Longest Increasing Subsequence (LIS)",
@@ -639,7 +639,7 @@
   },
   {
     "id": "chunk_59",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 58: Coin Change (Minimum Coins)",
     "section_label": "Example 58: Coin Change (Minimum Coins)",
@@ -650,7 +650,7 @@
   },
   {
     "id": "chunk_60",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 59: Edit Distance (Levenshtein)",
     "section_label": "Example 59: Edit Distance (Levenshtein)",
@@ -661,7 +661,7 @@
   },
   {
     "id": "chunk_61",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 60: Activity Selection (Greedy)",
     "section_label": "Example 60: Activity Selection (Greedy)",
@@ -672,7 +672,7 @@
   },
   {
     "id": "chunk_62",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 61: Permutations (Backtracking)",
     "section_label": "Example 61: Permutations (Backtracking)",
@@ -683,7 +683,7 @@
   },
   {
     "id": "chunk_63",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 62: N-Queens",
     "section_label": "Example 62: N-Queens",
@@ -694,7 +694,7 @@
   },
   {
     "id": "chunk_64",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 63: Subsets (Power Set)",
     "section_label": "Example 63: Subsets (Power Set)",
@@ -705,7 +705,7 @@
   },
   {
     "id": "chunk_65",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 64: Trie (Prefix Tree) — Insert & Search",
     "section_label": "Example 64: Trie (Prefix Tree) — Insert & Search",
@@ -716,7 +716,7 @@
   },
   {
     "id": "chunk_66",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 65: Union-Find (Disjoint Set) with Path Compression",
     "section_label": "Example 65: Union-Find (Disjoint Set) with Path Compression",
@@ -727,7 +727,7 @@
   },
   {
     "id": "chunk_67",
-    "topic": "DSA_Coding_Practice",
+    "topic": "DSA_Code_Reference",
     "chapter": "General",
     "section": "Example 66: Kruskal's Minimum Spanning Tree",
     "section_label": "Example 66: Kruskal's Minimum Spanning Tree",

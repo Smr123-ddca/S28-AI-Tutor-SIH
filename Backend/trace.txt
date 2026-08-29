@@ -1,0 +1,36 @@
+  console.log
+    ◇ injected env (3) from .env // tip: ⌘ override existing { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+FAIL tests/trace.test.js
+  ● Test suite failed to run
+
+    Cannot find module '../data/prerequisites.json' from 'src/controllers/gap.controller.js'
+
+    Require stack:
+      src/controllers/gap.controller.js
+      src/controllers/explain.controller.js
+      src/routes/api.routes.js
+      src/app.js
+      tests/trace.test.js
+
+    [0m [90m 1 |[39m [36mconst[39m { supabaseAdmin } [33m=[39m require([32m'../lib/supabaseAdmin'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 2 |[39m [36mconst[39m prerequisites [33m=[39m require([32m'../data/prerequisites.json'[39m)[33m;[39m
+     [90m   |[39m                       [31m[1m^[22m[39m
+     [90m 3 |[39m [36mconst[39m { getChunks } [33m=[39m require([32m'../data/store'[39m)[33m;[39m
+     [90m 4 |[39m
+     [90m 5 |[39m [36masync[39m [36mfunction[39m recordSessionEvent(req[33m,[39m res) {[0m
+
+      at Resolver._throwModNotFoundError (node_modules/jest-resolve/build/index.js:895:11)
+      at Object.require (src/controllers/gap.controller.js:2:23)
+      at Object.require (src/controllers/explain.controller.js:3:27)
+      at Object.require (src/routes/api.routes.js:3:21)
+      at Object.require (src/app.js:3:19)
+      at Object.require (tests/trace.test.js:2:13)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.08 s
+Ran all test suites matching tests/trace.test.js.
