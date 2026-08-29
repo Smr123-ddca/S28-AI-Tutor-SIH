@@ -32,7 +32,8 @@ jest.mock('fs', () => {
         existsSync: jest.fn(),
         readFileSync: jest.fn(),
         writeFileSync: jest.fn(),
-        unlinkSync: jest.fn()
+        unlinkSync: jest.fn(),
+        readdirSync: jest.fn()
     };
 });
 
@@ -67,8 +68,12 @@ describe('Layer 7: Secure Course Deletion API (Teacher Feature)', () => {
         ];
 
         fs.existsSync.mockImplementation((filePath) => {
-            if (typeof filePath === 'string' && (filePath.endsWith('.pdf') || filePath.endsWith('.json'))) return true;
+            if (typeof filePath === 'string' && (filePath.endsWith('.pdf') || filePath.endsWith('.json') || filePath.endsWith('data'))) return true;
             return false;
+        });
+
+        fs.readdirSync.mockImplementation(() => {
+            return ['PublishedDSA.pdf', 'PendingAuth.pdf', 'PendingAuth_chunks.json', 'PendingAuth_prerequisites.json'];
         });
 
         fs.readFileSync.mockImplementation((filePath, encoding) => {

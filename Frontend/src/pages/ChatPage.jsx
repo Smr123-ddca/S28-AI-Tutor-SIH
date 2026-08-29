@@ -1,0 +1,591 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import {
+  Send,
+  Plus,
+  Edit2,
+  Sparkles
+} from 'lucide-react';
+import { AvatarTutor } from '../components/tutor/AvatarTutor';
+import { MessageBubble } from '../components/tutor/MessageBubble';
+import { ModeSelector } from '../components/tutor/ModeSelector';
+import { HintSystem } from '../components/tutor/HintSystem';
+import { Button } from '../components/common/Button';
+import { Pill } from '../components/common/Pill';
+import {
+  explainQuestion,
+  fetchSessions,
+  fetchSessionMessages,
+  updateSessionTitle
+} from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import { useSoundManager } from '../services/soundManager';
+
+export function ChatPage() {
+  const [searchParams] = useSearchParams();
+  const { session } = useAuth();
+  const { playSound } = useSoundManager();
+
+  // State Management
+  const [sessions, setSessions] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [inputQuery, setInputQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [activeMode, setActiveMode] = useState('ask_doubt'); // 'ask_doubt' | 'practice_test' | 'study_plan'
+  const [tutorState, setTutorState] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [studentId, setStudentId] = useState('');
+  const [currentTopic, setCurrentTopic] = useState('Welcome to your AI Tutor');
+  const [currentCourse, setCurrentCourse] = useState(searchParams.get('course') || null);
+
+  const messagesEndRef = useRef(null);
+
+  // Initialize unique student ID
+  useEffect(() => {
+    let sid = localStorage.getItem('ai_tutor_student_id');
+    if (!sid) {
+      sid = crypto.randomUUID();
+      localStorage.setItem('ai_tutor_student_id', sid);
+    }
+    setStudentId(sid);
+  }, []);
+
+  // Fetch Session History on Mount
+  useEffect(() => {
+    async function loadSessions() {
+      try {
+        const data = await fetchSessions(session?.access_token);
+        setSessions(data.sessions || []);
+      } catch (err) {
+        console.error('Error fetching sessions:', err);
+      }
+    }
+    loadSessions();
+  }, [session?.access_token]);
+
+  // Handle URL deep links (?session_id=... or ?q=...)
+  useEffect(() => {
+    const sessionIdParam = searchParams.get('session_id');
+    const queryParam = searchParams.get('q');
+
+    if (sessionIdParam) {
+      handleSelectSession(sessionIdParam);
+    } else if (queryParam) {
+      setInputQuery(queryParam);
+    }
+  }, [searchParams]);
+
+  // Scroll to bottom on new messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, loading]);
+
+  const handleSelectSession = async (sid) => {
+    playSound('click');
+    setCurrentSessionId(sid);
+    setLoading(true);
+    setTutorState('thinking');
+    try {
+      const data = await fetchSessionMessages(sid, session?.access_token);
+      const formatted = (data.messages || []).map((m) => {
+        if (m.role === 'user') return { role: 'user', text: m.content };
+        return { role: 'bot', ...(m.response_json || { status: 'answered', message: m.content }) };
+      });
+      setMessages(formatted);
+      setTutorState('idle');
+    } catch (e) {
+      console.error('Error fetching session messages:', e);
+      setTutorState('idle');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNewChat = () => {
+    playSound('click');
+    setCurrentSessionId(null);
+    setMessages([]);
+    setTutorState('idle');
+    setIsSpeaking(false);
+  };
+
+  const handleRenameTitle = async (sid, oldTitle) => {
+    const newTitle = prompt('Enter new session title:', oldTitle);
+    if (!newTitle || newTitle === oldTitle) return;
+    await updateSessionTitle(sid, newTitle, session?.access_token);
+    const data = await fetchSessions(session?.access_token);
+    setSessions(data.sessions || []);
+  };
+
+  const handleSend = async (customText) => {
+    const textToSend = customText || inputQuery;
+    if (!textToSend.trim() || loading) return;
+
+    playSound('messageSent');
+    const userMsg = { role: 'user', text: textToSend };
+    setMessages((prev) => [...prev, userMsg]);
+    setInputQuery('');
+    setLoading(true);
+    setTutorState('thinking');
+
+    try {
+      const data = await explainQuestion({
+        question: textToSend,
+        student_id: studentId,
+        session_id: currentSessionId,
+        token: session?.access_token,
+        course_name: currentCourse
+      });
+
+      // Response arrived: switch to speaking state with speech simulation
+      playSound('responseReady');
+      setTutorState('speaking');
+      setIsSpeaking(true);
+
+      if (data.results && data.results.length > 0 && data.results[0].topic) {
+        setCurrentTopic(data.results[0].topic);
+      }
+
+      setMessages((prev) => [...prev, { role: 'bot', ...data }]);
+
+      if (data.session_id && data.session_id !== currentSessionId) {
+        setCurrentSessionId(data.session_id);
+        const refetched = await fetchSessions(session?.access_token);
+        setSessions(refetched.sessions || []);
+      }
+
+      // Simulate tutor vocalization / presence window
+      setTimeout(() => {
+        setIsSpeaking(false);
+        setTutorState('idle');
+      }, 4000);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'bot',
+          status: 'error',
+          message: err.message || 'Could not connect to AI Tutor backend. Please check connection.'
+        }
+      ]);
+      setTutorState('idle');
+      setIsSpeaking(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="smooth-scroll"
+      style={{
+        display: 'flex',
+        flex: 1,
+        height: '100%',
+        minHeight: 0,
+        backgroundColor: 'var(--color-offwhite)',
+        overflow: 'hidden'
+      }}
+    >
+      {/* =====================================================================
+          LEFT COLUMN: HISTORY SIDEBAR (Collapsible on Mobile)
+          ===================================================================== */}
+      <aside
+        style={{
+          width: '280px',
+          height: '100%',
+          backgroundColor: 'var(--color-white)',
+          borderRight: '1px solid var(--color-border)',
+          display: 'flex',
+          flexDirection: 'column',
+          flexShrink: 0
+        }}
+      >
+        {/* New Chat Button */}
+        <div style={{ padding: '1.25rem', borderBottom: '1px solid var(--color-border)' }}>
+          <Button
+            variant="orange"
+            size="md"
+            onClick={handleNewChat}
+            icon={Plus}
+            style={{ width: '100%' }}
+          >
+            New Tutor Session
+          </Button>
+        </div>
+
+        {/* Sessions List */}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '0.85rem' }}>
+          <div
+            style={{
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: 'var(--color-text-muted)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '0.65rem',
+              paddingLeft: '0.5rem'
+            }}
+          >
+            Recent History
+          </div>
+
+          {sessions.map((s) => {
+            const isCurrent = currentSessionId === s.id;
+            return (
+              <div
+                key={s.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.65rem 0.75rem',
+                  borderRadius: 'var(--radius-md)',
+                  marginBottom: '0.25rem',
+                  cursor: 'pointer',
+                  backgroundColor: isCurrent ? 'var(--color-orange-subtle)' : 'transparent',
+                  border: isCurrent ? '1px solid #fed7aa' : '1px solid transparent',
+                  transition: 'background var(--transition-fast)'
+                }}
+              >
+                <div
+                  onClick={() => handleSelectSession(s.id)}
+                  style={{
+                    flex: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    fontSize: '0.85rem',
+                    fontWeight: isCurrent ? 700 : 500,
+                    color: isCurrent ? 'var(--color-orange)' : 'var(--color-ink)'
+                  }}
+                >
+                  {s.title || 'Untitled Session'}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRenameTitle(s.id, s.title);
+                  }}
+                  style={{
+                    opacity: isCurrent ? 1 : 0.3,
+                    color: 'var(--color-text-muted)',
+                    padding: '0.2rem'
+                  }}
+                  title="Rename"
+                >
+                  <Edit2 size={13} />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </aside>
+
+      {/* =====================================================================
+          MAIN TWO-PANE TUTOR WORKSPACE (Expanded Video-Call Presence Layout)
+          ===================================================================== */}
+      <div
+        style={{
+          flex: 1,
+          display: 'grid',
+          gridTemplateColumns: 'minmax(420px, 490px) 1fr',
+          height: '100%',
+          minHeight: 0,
+          overflow: 'hidden'
+        }}
+      >
+        {/* PANE 1: PERSISTENT AVATAR TUTOR PRESENCE PANEL */}
+        <div
+          className="smooth-scroll"
+          style={{
+            padding: '1.5rem',
+            borderRight: '1px solid var(--color-border)',
+            backgroundColor: 'var(--color-offwhite)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: '100%',
+            minHeight: 0,
+            overflowY: 'auto',
+            scrollBehavior: 'smooth'
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <AvatarTutor
+              state={tutorState}
+              isSpeaking={isSpeaking}
+              isThinking={loading}
+              topic={currentTopic}
+            />
+
+            {/* Quick Socratic Prompts */}
+            <div className="card-white" style={{ padding: '1.25rem' }}>
+              <div
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  color: 'var(--color-orange)',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.65rem'
+                }}
+              >
+                Suggested Doubts
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {[
+                  'Why does BST search degrade to O(n) in worst case?',
+                  'Walk me through AVL Tree single and double rotations.',
+                  'Explain Call Stack memory during recursive unwinding.'
+                ].map((doubt, dIdx) => (
+                  <button
+                    key={dIdx}
+                    type="button"
+                    onClick={() => handleSend(doubt)}
+                    style={{
+                      textAlign: 'left',
+                      fontSize: '0.82rem',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: 'var(--radius-sm)',
+                      backgroundColor: 'var(--color-offwhite)',
+                      border: '1px solid var(--color-border)',
+                      color: 'var(--color-ink)',
+                      fontWeight: 500,
+                      lineHeight: 1.35,
+                      cursor: 'pointer',
+                      transition: 'border-color var(--transition-fast)'
+                    }}
+                  >
+                    💡 {doubt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '1rem' }}>
+            Protected by Verified Retrieval • Zero Hallucinations
+          </div>
+        </div>
+
+        {/* PANE 2: INTERACTION PANE (3 MODES + MESSAGES + INPUT) */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            minHeight: 0,
+            backgroundColor: 'var(--color-white)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Top Mode Selector Bar */}
+          <div style={{ padding: '1.25rem 2rem 0.75rem', borderBottom: '1px solid var(--color-border)' }}>
+            <ModeSelector
+              activeMode={activeMode}
+              onSelectMode={(mode) => {
+                playSound('click');
+                setActiveMode(mode);
+              }}
+            />
+          </div>
+
+          {/* Mode Viewport */}
+          <div
+            className="smooth-scroll"
+            style={{
+              flex: 1,
+              minHeight: 0,
+              overflowY: 'auto',
+              padding: '1.5rem 2rem',
+              scrollBehavior: 'smooth'
+            }}
+          >
+            {/* MODE 2: PRACTICE TEST (Socratic Progressive Hints) */}
+            {activeMode === 'practice_test' && (
+              <HintSystem onComplete={() => setActiveMode('ask_doubt')} />
+            )}
+
+            {/* MODE 3: STUDY PLAN / MOCK TEST */}
+            {activeMode === 'study_plan' && (
+              <div className="card-white" style={{ padding: '2rem' }}>
+                <Pill color="yellow" size="sm" style={{ marginBottom: '0.75rem' }}>
+                  Custom Syllabus Diagnostic
+                </Pill>
+                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                  Diagnostic Study Plan: Algorithms & Trees
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
+                  AI Tutor generated a 3-step mastery checkpoint based on your recent practice self-reports:
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-orange)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 1: Prerequisite Re-alignment</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Review Call Stack Frame allocation in recursion (15 mins).</div>
+                  </div>
+                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-purple)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 2: Interactive Tree Rotations</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Practice 4 AVL rebalancing questions with escalating hints (20 mins).</div>
+                  </div>
+                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-yellow)' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 3: Timed Mock Assessment</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>5-question syllabus check with instant teacher analytics sync (10 mins).</div>
+                  </div>
+                </div>
+
+                <Button variant="orange" size="md" onClick={() => setActiveMode('practice_test')}>
+                  Begin Diagnostic Practice →
+                </Button>
+              </div>
+            )}
+
+            {/* MODE 1: ASK A DOUBT (Main Chat & Q&A) */}
+            {activeMode === 'ask_doubt' && (
+              <>
+                {messages.length === 0 && !loading && (
+                  <div
+                    style={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      textAlign: 'center',
+                      color: 'var(--color-text-muted)',
+                      padding: '2rem'
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '64px',
+                        height: '64px',
+                        borderRadius: '20px',
+                        backgroundColor: 'var(--color-orange-subtle)',
+                        color: 'var(--color-orange)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '1rem'
+                      }}
+                    >
+                      <Sparkles size={32} />
+                    </div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
+                      What do you want to learn today?
+                    </h3>
+                    <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
+                      Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
+                    </p>
+                  </div>
+                )}
+
+                {messages.map((msg, idx) => (
+                  <MessageBubble
+                    key={idx}
+                    message={msg}
+                    msgIndex={idx}
+                    studentId={studentId}
+                    onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
+                  />
+                ))}
+
+                {loading && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
+                    <div
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        backgroundColor: 'var(--color-purple-light)',
+                        color: 'var(--color-purple)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <Sparkles size={16} className="animate-float" />
+                    </div>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                      Tutor is retrieving syllabus material and grounding explanation...
+                    </span>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </>
+            )}
+          </div>
+
+          {/* Bottom Chat Input Bar */}
+          {activeMode === 'ask_doubt' && (
+            <div
+              style={{
+                padding: '1.25rem 2rem',
+                borderTop: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-white)'
+              }}
+            >
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  position: 'relative'
+                }}
+              >
+                <input
+                  type="text"
+                  value={inputQuery}
+                  onChange={(e) => {
+                    setInputQuery(e.target.value);
+                    if (tutorState === 'idle') setTutorState('listening');
+                  }}
+                  onBlur={() => {
+                    if (tutorState === 'listening') setTutorState('idle');
+                  }}
+                  placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
+                  disabled={loading}
+                  style={{
+                    flex: 1,
+                    padding: '0.9rem 3.5rem 0.9rem 1.4rem',
+                    borderRadius: 'var(--radius-full)',
+                    border: '1.5px solid var(--color-border)',
+                    outline: 'none',
+                    fontSize: '0.95rem',
+                    backgroundColor: 'var(--color-offwhite)',
+                    transition: 'border-color var(--transition-fast)'
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !inputQuery.trim()}
+                  className="btn-orange btn-icon"
+                  style={{
+                    position: 'absolute',
+                    right: '6px',
+                    width: '40px',
+                    height: '40px',
+                    opacity: loading || !inputQuery.trim() ? 0.4 : 1,
+                    cursor: loading || !inputQuery.trim() ? 'not-allowed' : 'pointer'
+                  }}
+                  aria-label="Send Doubt"
+                >
+                  <Send size={18} />
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

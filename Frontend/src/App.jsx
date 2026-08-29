@@ -1,138 +1,74 @@
-import { useState, useEffect } from 'react'
-import StudentChat from './components/StudentChat'
-import TeacherDashboard from './components/TeacherDashboard'
-import Login from './components/Login'
-import Navbar from './components/Navbar'
-import Home from './components/Home'
-import About from './components/About'
-import Practice from './components/Practice'
-import CourseManager from './components/CourseManager'
-import { supabase } from './lib/supabaseClient'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import { AppShell } from './components/layout/AppShell';
+import { RequireRole } from './components/auth/RequireRole';
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { StudentDashboard } from './pages/StudentDashboard';
+import { ChatPage } from './pages/ChatPage';
+import { LibraryPage } from './pages/LibraryPage';
+import { TeacherDashboard } from './pages/TeacherDashboard';
 
-function App() {
-  const [session, setSession] = useState(null)
-  const [role, setRole] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [view, setView] = useState('home')
-  const [practiceCount, setPracticeCount] = useState(0)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session) {
-        fetchUserRole(session.user.id)
-      } else {
-        setLoading(false)
-      }
-    })
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      if (session) {
-        fetchUserRole(session.user.id)
-      } else {
-        setRole(null)
-        setLoading(false)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const fetchUserRole = async (userId) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', userId)
-        .single()
-
-      if (error) {
-        console.error('Error fetching role:', error)
-      } else {
-        setRole(data?.role)
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchPracticeCount = async () => {
-    if (role !== 'student' || !session) return;
-    try {
-      const res = await fetch('/api/practice-questions', {
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const pendingCount = data.questions ? data.questions.filter(q => q.status === 'pending').length : 0;
-        setPracticeCount(pendingCount);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  useEffect(() => {
-    if (role === 'student' && session) {
-      fetchPracticeCount();
-    }
-  }, [role, session])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setView('home')
-  }
+// Shell layout wrapper with session check
+function ProtectedLayout() {
+  const { session, loading, isMockAuth } = useAuth();
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '20vh' }}>Loading...</div>
+    return (
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'var(--color-offwhite)',
+          color: 'var(--color-text-secondary)'
+        }}
+      >
+        <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
+        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading Study-app BODH...</div>
+      </div>
+    );
   }
 
-  if (!session) {
-    return <Login />
+  // If not logged in and not in mock mode, redirect to /login
+  if (!session && !isMockAuth) {
+    return <Navigate to="/login" replace />;
   }
 
-  const displayName = session.user?.user_metadata?.display_name || session.user?.email || 'User';
-
-  return (
-    <div className="app-wrapper">
-      <Navbar
-        setView={setView}
-        currentView={view}
-        handleLogout={handleLogout}
-        displayName={displayName}
-        role={role}
-        practiceCount={practiceCount}
-      />
-
-      {view === 'home' && <Home role={role} setView={setView} />}
-      {view === 'about' && <About />}
-
-      {view === 'app' && (
-        <div className="app-container" style={{ paddingTop: '2rem' }}>
-          {role === 'student' && <StudentChat session={session} refreshPractice={fetchPracticeCount} />}
-          {role === 'teacher' && <TeacherDashboard session={session} />}
-          {!role && <div>Error: Role not found for this user.</div>}
-        </div>
-      )}
-
-      {view === 'practice' && role === 'student' && (
-        <div className="app-container" style={{ paddingTop: '2rem' }}>
-          <Practice session={session} refreshPractice={fetchPracticeCount} />
-        </div>
-      )}
-
-      {view === 'courses' && role === 'teacher' && (
-        <div className="app-container" style={{ paddingTop: '2rem' }}>
-          <CourseManager session={session} />
-        </div>
-      )}
-    </div>
-  )
+  return <AppShell />;
 }
 
-export default App
+export function App() {
+  return (
+    <Routes>
+      {/* Standalone Login Route */}
+      <Route path="/login" element={<Login />} />
+
+      {/* Authenticated App Routes with Shell & Strict Role Guards */}
+      <Route element={<ProtectedLayout />}>
+        {/* Home/Catalog is accessible by both authenticated roles */}
+        <Route path="/" element={<Home />} />
+
+        {/* Student-Only Routes (Task 3: Redirects Teacher to /teacher) */}
+        <Route element={<RequireRole role="student" />}>
+          <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/library" element={<LibraryPage />} />
+        </Route>
+
+        {/* Teacher-Only Routes (Task 3: Redirects Student to /dashboard) */}
+        <Route element={<RequireRole role="teacher" />}>
+          <Route path="/teacher" element={<TeacherDashboard />} />
+        </Route>
+      </Route>
+
+      {/* Catch-all redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default App;

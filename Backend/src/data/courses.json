@@ -24,5 +24,12 @@
       "publishedAt": "2026-08-29T12:58:26.291Z",
       "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
     }
+  },
+  {
+    "name": "test_mock",
+    "pdf": "test_mock.pdf",
+    "chunks": "test_mock_chunks.json",
+    "prerequisites": "test_mock_prerequisites.json",
+    "status": "pending_review"
   }
 ]
