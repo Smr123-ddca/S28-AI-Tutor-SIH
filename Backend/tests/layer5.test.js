@@ -127,9 +127,9 @@ describe('Layer 5: Published Knowledge Integration API Tests', () => {
                 course: 'CourseC'
             });
 
-        // Because Course C chunks are never loaded, it should hit insufficient evidence fallback
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.status).toBe('insufficient_evidence');
+        // Because Course C is unpublished, the controller strictly blocks it with 403
+        expect(res.statusCode).toEqual(403);
+        expect(res.body.error).toContain('Cannot query an unpublished or non-existent course');
     });
 
     test('Cross-contamination: Course A queries must NOT retrieve Course B facts', async () => {

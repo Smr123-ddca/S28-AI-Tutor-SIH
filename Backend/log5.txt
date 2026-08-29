@@ -1,0 +1,140 @@
+  console.log
+    ◇ injected env (3) from .env // tip: ⌘ suppress logs { quiet: true }
+
+      at _log (node_modules/dotenv/lib/main.js:131:11)
+
+  console.log
+    Successfully loaded 3 chunks from 2 published courses into memory.
+
+      at Object.log [as loadData] (src/data/store.js:41:17)
+
+  console.log
+    --- Query Pipeline ---
+
+      at log (src/controllers/explain.controller.js:253:17)
+
+  console.log
+    Original: Tell me about living cells.
+
+      at log (src/controllers/explain.controller.js:254:17)
+
+  console.log
+    Normalized: living cell
+
+      at log (src/controllers/explain.controller.js:255:17)
+
+  console.log
+    Expanded: living cell
+
+      at log (src/controllers/explain.controller.js:256:17)
+
+  console.log
+    Type: COMPLETE
+
+      at log (src/controllers/explain.controller.js:257:17)
+
+  console.log
+    Tokens: [ 'living', 'cell' ]
+
+      at log (src/controllers/explain.controller.js:258:17)
+
+  console.log
+    ----------------------
+
+      at log (src/controllers/explain.controller.js:265:17)
+
+  console.error
+    Session creation failed: {
+      code: 'PGRST204',
+      details: null,
+      hint: null,
+      message: "Could not find the 'course' column of 'chat_sessions' in the schema cache"
+    }
+
+    [0m [90m 24 |[39m
+     [90m 25 |[39m             [36mif[39m (sessionError [33m||[39m [33m![39msessionData) {
+    [31m[1m>[22m[39m[90m 26 |[39m                 console[33m.[39merror([32m'Session creation failed:'[39m[33m,[39m sessionError)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 27 |[39m                 [36mthrow[39m sessionError [33m||[39m [36mnew[39m [33mError[39m([32m"Session creation failed with no data"[39m)[33m;[39m
+     [90m 28 |[39m             }
+     [90m 29 |[39m             currentSessionId [33m=[39m sessionData[33m.[39mid[33m;[39m[0m
+
+      at error (src/controllers/chatlog.controller.js:26:25)
+      at respondAndLog (src/controllers/explain.controller.js:161:21)
+      at explain (src/controllers/explain.controller.js:301:20)
+
+  console.error
+    Failed to record chat log externally: {
+      code: 'PGRST204',
+      details: null,
+      hint: null,
+      message: "Could not find the 'course' column of 'chat_sessions' in the schema cache"
+    }
+
+    [0m [90m 62 |[39m         [36mreturn[39m currentSessionId[33m;[39m
+     [90m 63 |[39m     } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 64 |[39m         console[33m.[39merror([32m"Failed to record chat log externally:"[39m[33m,[39m error)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 65 |[39m         [36mthrow[39m error[33m;[39m
+     [90m 66 |[39m     }
+     [90m 67 |[39m }[0m
+
+      at error (src/controllers/chatlog.controller.js:64:17)
+      at respondAndLog (src/controllers/explain.controller.js:161:21)
+      at explain (src/controllers/explain.controller.js:301:20)
+
+  console.error
+    Failed to log chat interaction: {
+      code: 'PGRST204',
+      details: null,
+      hint: null,
+      message: "Could not find the 'course' column of 'chat_sessions' in the schema cache"
+    }
+
+    [0m [90m 156 |[39m                         statusObj[33m.[39msession_id [33m=[39m loggedData[33m;[39m
+     [90m 157 |[39m                     }
+    [31m[1m>[22m[39m[90m 158 |[39m                 })[33m.[39m[36mcatch[39m(err [33m=>[39m console[33m.[39merror([32m"Failed to log chat interaction:"[39m[33m,[39m err))[33m;[39m
+     [90m     |[39m                                         [31m[1m^[22m[39m
+     [90m 159 |[39m
+     [90m 160 |[39m                 [36mif[39m (isNewSession) {
+     [90m 161 |[39m                     [36mawait[39m logPromise[33m;[39m[0m
+
+      at error (src/controllers/explain.controller.js:158:41)
+      at respondAndLog (src/controllers/explain.controller.js:161:21)
+      at explain (src/controllers/explain.controller.js:301:20)
+
+  console.log
+    Successfully loaded 0 chunks from 0 published courses into memory.
+
+      at Object.log [as loadData] (src/data/store.js:41:17)
+
+FAIL tests/layer5.test.js
+  Layer 5: Published Knowledge Integration API Tests
+    √ Students should only be able to view Published courses in Course list (80 ms)
+    √ Teachers should see ALL courses in Course list (14 ms)
+    × Retrieval should return empty set for queries on an Unpublished course (CourseC) (46 ms)
+    √ Cross-contamination: Course A queries must NOT retrieve Course B facts (2233 ms)
+    √ Publish visibility: Missing course argument blocks explain controller (10 ms)
+
+  ● Layer 5: Published Knowledge Integration API Tests › Retrieval should return empty set for queries on an Unpublished course (CourseC)
+
+    expect(received).toEqual(expected) // deep equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 129 |[39m
+     [90m 130 |[39m         [90m// Because Course C chunks are never loaded, it should hit insufficient evidence fallback[39m
+    [31m[1m>[22m[39m[90m 131 |[39m         expect(res[33m.[39mstatusCode)[33m.[39mtoEqual([35m200[39m)[33m;[39m
+     [90m     |[39m                                [31m[1m^[22m[39m
+     [90m 132 |[39m         expect(res[33m.[39mbody[33m.[39mstatus)[33m.[39mtoBe([32m'insufficient_evidence'[39m)[33m;[39m
+     [90m 133 |[39m     })[33m;[39m
+     [90m 134 |[39m[0m
+
+      at Object.toEqual (tests/layer5.test.js:131:32)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 4 passed, 5 total
+Snapshots:   0 total
+Time:        3.729 s, estimated 4 s
+Ran all test suites matching tests/layer5.test.js.

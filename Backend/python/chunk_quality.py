@@ -25,7 +25,7 @@ if not mock_val:
             print("GEMINI_API_KEY is not configured.", file=sys.stderr)
             sys.exit(1)
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-3.5-flash')
     except ImportError:
         print(json.dumps({"error": "Failed to import required libraries."}))
         sys.exit(1)
@@ -254,25 +254,26 @@ status = "healthy"
 if len(results) == 0:
     status = "warning"
     warnings.append({"code": "NO_CHUNKS", "message": "No chunks found or processed."})
-elif included_chunks == 0:
-    status = "warning"
-    warnings.append({"code": "NO_EDUCATIONAL_CHUNKS", "message": "No educationally meaningful chunks included."})
 else:
+    if included_chunks == 0:
+        status = "warning"
+        warnings.append({"code": "NO_EDUCATIONAL_CHUNKS", "message": "No educationally meaningful chunks included."})
+
     # Check distribution
-    max_class_count = max(classification_dist.values())
+    max_class_count = max(classification_dist.values()) if classification_dist else 0
     if max_class_count > len(results) * 0.9 and len(results) > 10:
         status = "warning"
         warnings.append({"code": "CLASSIFICATION_COLLAPSE", "message": f"{max_class_count/len(results)*100:.1f}% of chunks received the same classification."})
     
-    if classification_dist["NOISE"] > len(results) * 0.5 and len(results) > 10:
+    if classification_dist.get("NOISE", 0) > len(results) * 0.5 and len(results) > 10:
         status = "warning"
         warnings.append({"code": "EXCESSIVE_NOISE", "message": "More than 50% of chunks are classified as NOISE."})
         
-    if classification_dist["METADATA"] > len(results) * 0.3 and len(results) > 10:
+    if classification_dist.get("METADATA", 0) > len(results) * 0.3 and len(results) > 10:
         status = "warning"
         warnings.append({"code": "EXCESSIVE_METADATA", "message": "More than 30% of chunks are classified as METADATA."})
         
-    core_count = classification_dist["CORE_CONCEPT"] + classification_dist["DEFINITION"] + classification_dist["EXPLANATION"]
+    core_count = classification_dist.get("CORE_CONCEPT", 0) + classification_dist.get("DEFINITION", 0) + classification_dist.get("EXPLANATION", 0)
     if core_count < len(results) * 0.05 and len(results) > 20:
         status = "warning"
         warnings.append({"code": "LOW_CONCEPTUAL_COVERAGE", "message": "Very few chunks were classified as concepts or explanations."})

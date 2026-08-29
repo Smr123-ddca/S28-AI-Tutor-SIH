@@ -1,0 +1,16 @@
+{
+  "course": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12__",
+  "total": 1738,
+  "included": 1732,
+  "distribution": {
+    "METADATA": 5,
+    "CORE_CONCEPT": 1488,
+    "EXAMPLE": 243,
+    "NAVIGATION": 1,
+    "PROCEDURE": 1
+  },
+  "status": {
+    "status": "healthy",
+    "warnings": []
+  }
+}

@@ -425,3 +425,51 @@
 [EXPLAIN TIMING] stage=Total duration=452.06ms
 [EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
 ------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=1.37ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=4.50ms
+[EXPLAIN TIMING] stage=Retrieval duration=1.18ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=2028.33ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.85ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=3.66ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.91ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.02ms
+[EXPLAIN TIMING] stage=Total duration=2215.88ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.48ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.02ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=5.57ms
+[EXPLAIN TIMING] stage=Retrieval duration=1.08ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=1500.45ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=0.45ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.01ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=4.85ms
+[EXPLAIN TIMING] stage=Retrieval duration=0.90ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=820.57ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=89.62ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.01ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=4.56ms
+[EXPLAIN TIMING] stage=Retrieval duration=1.86ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=2022.10ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------
+[EXPLAIN TIMING] stage=AuthAndValidation duration=49.25ms
+[EXPLAIN TIMING] stage=ChatHistoryRetrieval duration=0.00ms
+[EXPLAIN TIMING] stage=QueryPreprocessing duration=4.75ms
+[EXPLAIN TIMING] stage=Retrieval duration=52.21ms
+[EXPLAIN TIMING] stage=EvidenceGate duration=0.01ms
+[EXPLAIN TIMING] stage=Total duration=1996.71ms
+[EXPLAIN TRACE] session=untracked prev_msgs=0 chunks=2 prompt_size=0 gen_status=pending
+------

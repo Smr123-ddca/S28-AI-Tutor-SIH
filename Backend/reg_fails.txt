@@ -1,0 +1,22 @@
+C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer5.test.js > Layer 5: Published Knowledge Integration API Tests > Retrieval should return empty set for queries on an Unpublished course (CourseC)
+Error: expect(received).toEqual(expected) // deep equality
+
+Expected: 200
+Received: 403
+    at Object.toEqual (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer5.test.js:131:32)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer5.test.js > Layer 5: Published Knowledge Integration API Tests > Cross-contamination: Course A queries must NOT retrieve Course B facts
+Error: expect(received).toEqual(expected) // deep equality
+
+Expected: 200
+Received: 403
+    at Object.toEqual (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer5.test.js:145:32)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer4.test.js > Layer 4: Teacher Approval & Publishing APIs > Approved batch can be published
+Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 403
+    at Object.toBe (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\layer4.test.js:99:28)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)

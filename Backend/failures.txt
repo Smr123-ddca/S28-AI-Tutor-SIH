@@ -1,0 +1,39 @@
+Test N — Classification collapse
+Error: expect(received).toBeDefined()
+
+Received: undefined
+    at Object.toBeDefined (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\chunk_quality.test.js:143:33)
+    at Promise.finally.completed (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1561:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1501:10)
+    at _callCircusTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1011:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:951:3)
+    at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:853:7
+    at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:866:11)
+    at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:861:11)
+    at run (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:765:3)
+    at runAndTransformResultsToJestFormat (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1993:21)
+    at jestAdapter (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\runner.js:111:19)
+    at runTestInternal (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:276:16)
+    at runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:344:7)
+
+Test O — Large dataset
+Error: expect(received).toBeDefined()
+
+Received: undefined
+    at Object.toBeDefined (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\chunk_quality.test.js:153:84)
+    at Promise.finally.completed (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1561:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1501:10)
+    at _callCircusTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1011:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:951:3)
+    at C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:853:7
+    at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:866:11)
+    at _runTestsForDescribeBlock (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:861:11)
+    at run (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:765:3)
+    at runAndTransformResultsToJestFormat (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\jestAdapterInit.js:1993:21)
+    at jestAdapter (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-circus\build\runner.js:111:19)
+    at runTestInternal (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:276:16)
+    at runTest (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\node_modules\jest-runner\build\index.js:344:7)

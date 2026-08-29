@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "name": "CourseA",
+    "status": "published",
+    "chunks": "CourseA_chunks.json"
+  },
+  {
+    "name": "CourseB",
+    "status": "published",
+    "chunks": "CourseB_chunks.json"
+  },
+  {
+    "name": "CourseC",
+    "status": "approved",
+    "chunks": "CourseC_chunks.json"
+  },
+  {
+    "name": "test_mock",
+    "pdf": "test_mock.pdf",
+    "chunks": "test_mock_chunks.json",
+    "prerequisites": "test_mock_prerequisites.json",
+    "status": "pending_review"
+  }
+]

@@ -1,0 +1,19 @@
+  console.log
+    Successfully loaded 0 chunks from 0 published courses into memory.
+
+      at Object.log [as loadData] (src/data/store.js:41:17)
+
+PASS tests/layer4.test.js
+  Layer 4: Teacher Approval & Publishing APIs
+    √ Student cannot approve (receives 403) (69 ms)
+    √ Unauthenticated request cannot approve (receives 401) (12 ms)
+    √ Teacher can mark a batch for revision (48 ms)
+    √ Teacher can approve a READY_FOR_REVIEW batch (15 ms)
+    √ Unapproved batch cannot be published (12 ms)
+    √ Approved batch can be published (105 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        1.405 s, estimated 3 s
+Ran all test suites matching tests/layer4.test.js.

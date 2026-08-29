@@ -24,7 +24,7 @@ if not mock_val:
             print("GEMINI_API_KEY is not configured.", file=sys.stderr)
             sys.exit(1)
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-3.5-flash')
     except ImportError:
         print(json.dumps({"error": "Failed to import required libraries. Ensure google-generativeai and python-dotenv are installed."}))
         sys.exit(1)

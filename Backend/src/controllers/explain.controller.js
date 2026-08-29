@@ -118,7 +118,7 @@ async function explain(req, res) {
     }
 
     const path = require('path');
-    const coursesPath = process.env.NODE_ENV === 'test' ? path.join(__dirname, '../../data/courses.json') : path.join(__dirname, '../data/courses.json');
+    const coursesPath = path.join(__dirname, '../data/courses.json');
     let coursesList = [];
     if (fs.existsSync(coursesPath)) {
         coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
