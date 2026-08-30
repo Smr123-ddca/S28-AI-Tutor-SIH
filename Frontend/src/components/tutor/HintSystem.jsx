@@ -165,7 +165,7 @@ export function HintSystem({ onComplete, className = '' }) {
               padding: '1rem 1.25rem',
               borderRadius: 'var(--radius-md)',
               backgroundColor: 'var(--color-orange-subtle)',
-              border: '1.5px solid #fed7aa',
+              border: '1.5px solid var(--color-border)',
               borderLeft: '5px solid var(--color-orange)',
               display: 'flex',
               alignItems: 'flex-start',
@@ -279,15 +279,15 @@ export function HintSystem({ onComplete, className = '' }) {
             padding: '1.5rem',
             backgroundColor: 'var(--color-green-light)',
             borderRadius: 'var(--radius-lg)',
-            border: '1.5px solid #86efac',
+            border: '1.5px solid var(--color-green)',
             marginBottom: '1rem',
             animation: 'float-subtle 0.3s ease'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#15803d', fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.4rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-green)', fontWeight: 700, fontSize: '1.05rem', marginBottom: '0.4rem' }}>
             <CheckCircle2 size={22} /> Excellent Reasoning!
           </div>
-          <p style={{ fontSize: '0.92rem', color: '#166534', lineHeight: 1.55 }}>
+          <p style={{ fontSize: '0.92rem', color: 'var(--color-text-primary)', lineHeight: 1.55 }}>
             {currentQ.conceptRecap}
           </p>
           <div style={{ marginTop: '1.25rem' }}>

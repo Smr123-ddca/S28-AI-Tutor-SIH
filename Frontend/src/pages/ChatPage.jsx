@@ -247,7 +247,7 @@ export function ChatPage() {
             </div>
           ) : sessionsError ? (
             <div style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '0.8rem', color: '#b91c1c', marginBottom: '0.5rem' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-red)', marginBottom: '0.5rem' }}>
                 {sessionsError}
               </div>
               <button
@@ -278,7 +278,7 @@ export function ChatPage() {
                     marginBottom: '0.35rem',
                     cursor: 'pointer',
                     backgroundColor: isCurrent ? 'var(--color-orange-subtle)' : 'transparent',
-                    border: isCurrent ? '1.5px solid #fed7aa' : '1.5px solid transparent',
+                    border: isCurrent ? '1.5px solid var(--color-orange)' : '1.5px solid transparent',
                     transition: 'all var(--transition-fast)'
                   }}
                 >
@@ -533,7 +533,7 @@ export function ChatPage() {
                 >
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#b45309', textTransform: 'uppercase' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-yellow)', textTransform: 'uppercase' }}>
                         Step 3
                       </span>
                       <Pill color="yellow" size="sm">Assessment Check</Pill>

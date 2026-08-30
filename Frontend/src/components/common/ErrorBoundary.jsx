@@ -54,7 +54,7 @@ export class ErrorBoundary extends React.Component {
               borderRadius: 'var(--radius-xl)',
               textAlign: 'center',
               boxShadow: 'var(--shadow-md)',
-              border: '1.5px solid #fecaca'
+              border: '1.5px solid var(--color-red)'
             }}
           >
             <div
@@ -132,7 +132,7 @@ export class ErrorBoundary extends React.Component {
                     padding: '0.85rem',
                     borderRadius: 'var(--radius-sm)',
                     fontSize: '0.72rem',
-                    color: '#991b1b',
+                    color: 'var(--color-red)',
                     overflowX: 'auto',
                     marginTop: '0.5rem',
                     maxHeight: '160px'

@@ -4,6 +4,7 @@ import { Bell, Search, ChevronDown, CheckCircle2, Volume2, VolumeX } from 'lucid
 import { useAuth } from '../../context/AuthContext';
 import { useSoundManager } from '../../services/soundManager';
 import { Pill } from '../common/Pill';
+import { ThemeToggle } from '../common/ThemeToggle';
 
 export function TopNav() {
   const navigate = useNavigate();
@@ -77,6 +78,9 @@ export function TopNav() {
             </button>
           </div>
         </form>
+
+        {/* Theme Toggle (Dark/Light) */}
+        <ThemeToggle />
 
         {/* UI Sound Mute/Unmute Control */}
         <button

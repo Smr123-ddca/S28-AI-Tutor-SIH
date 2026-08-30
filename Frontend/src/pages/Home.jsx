@@ -274,7 +274,7 @@ export function Home() {
                   height: '44px',
                   borderRadius: '12px',
                   backgroundColor: 'var(--color-yellow-light)',
-                  color: '#b45309',
+                  color: 'var(--color-yellow)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -283,14 +283,11 @@ export function Home() {
               >
                 <FileCheck size={22} />
               </div>
-              <Pill color="yellow" size="sm" style={{ marginBottom: '0.75rem' }}>
-                Mode 3: Diagnostic Roadmap
-              </Pill>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                Automated Prerequisite Detection
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+                Automated Learning Gap Analytics
               </h3>
-              <p className="text-body" style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
-                When you struggle on advanced concepts, LearnifyTutor identifies the root prerequisite gap and generates a custom 3-step mastery roadmap.
+              <p className="text-body-sm">
+                Educators gain live visibility into recurring misconceptions, cohort-wide knowledge deficits, and topic mastery distributions.
               </p>
             </div>
             <Button
@@ -328,7 +325,7 @@ export function Home() {
           <h2 style={{ fontSize: '2rem', color: '#ffffff', marginBottom: '1rem', lineHeight: 1.2 }}>
             Master difficult concepts with verified syllabus grounding.
           </h2>
-          <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
+          <p style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
             Experience instant concept breakdowns with step-by-step reasoning, textbook citations, and automatic prerequisite detection.
           </p>
           <Button
@@ -343,10 +340,10 @@ export function Home() {
 
         <div
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            backgroundColor: 'rgba(255, 255, 255, 0.06)',
             borderRadius: 'var(--radius-lg)',
             padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem'

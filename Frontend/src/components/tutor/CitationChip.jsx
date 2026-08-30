@@ -32,19 +32,7 @@ export function CitationChip({
         onClick={() => setIsOpen(!isOpen)}
         className={`citation-chip ${className}`}
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.4rem',
-          padding: '0.2rem 0.65rem',
           margin: '0 0.3rem',
-          backgroundColor: 'var(--color-offwhite)',
-          border: '1px solid var(--color-border)',
-          borderRadius: 'var(--radius-full)',
-          fontSize: '0.75rem',
-          fontWeight: 600,
-          color: 'var(--color-ink)',
-          transition: 'all var(--transition-fast)',
-          cursor: 'pointer',
           verticalAlign: 'middle'
         }}
         title={`Source: ${meta.document_title} - ${meta.section_label}`}

@@ -38,7 +38,7 @@ export function NoResultsState({
           height: '56px',
           borderRadius: '18px',
           backgroundColor: 'var(--color-yellow-light)',
-          color: '#d97706',
+          color: 'var(--color-yellow)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

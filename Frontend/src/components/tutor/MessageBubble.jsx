@@ -41,8 +41,9 @@ export function MessageBubble({
         <div
           style={{
             maxWidth: '75%',
-            backgroundColor: 'var(--color-ink)',
-            color: '#ffffff',
+            backgroundColor: 'var(--color-user-bubble)',
+            color: 'var(--color-user-bubble-text)',
+            border: '1px solid var(--color-border)',
             padding: '1rem 1.4rem',
             borderRadius: '20px 20px 4px 20px',
             boxShadow: 'var(--shadow-sm)',

@@ -27,7 +27,7 @@ export function ErrorState({
         padding: '2.5rem 2rem',
         borderRadius: 'var(--radius-xl)',
         backgroundColor: 'var(--color-white)',
-        border: '1.5px solid #fecaca',
+        border: '1.5px solid var(--color-red)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -113,7 +113,7 @@ export function ErrorState({
                 padding: '0.85rem 1rem',
                 borderRadius: 'var(--radius-md)',
                 fontSize: '0.75rem',
-                color: '#991b1b',
+                color: 'var(--color-red)',
                 overflowX: 'auto',
                 border: '1px solid var(--color-border)',
                 maxHeight: '140px'

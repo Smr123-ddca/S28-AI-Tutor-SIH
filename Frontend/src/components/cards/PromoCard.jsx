@@ -36,9 +36,11 @@ export function PromoCard({
         <div
           style={{
             fontSize: '0.75rem',
-            color: 'rgba(255, 255, 255, 0.65)',
+            color: 'rgba(255, 255, 255, 0.75)',
             marginBottom: '0.75rem',
-            fontWeight: 500
+            fontWeight: 600,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase'
           }}
         >
           {eyebrow}
@@ -69,7 +71,7 @@ export function PromoCard({
           <div
             style={{
               fontSize: '0.75rem',
-              color: 'rgba(255, 255, 255, 0.6)',
+              color: 'rgba(255, 255, 255, 0.7)',
               marginBottom: '0.5rem'
             }}
           >

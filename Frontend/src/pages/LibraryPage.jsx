@@ -195,7 +195,7 @@ export function LibraryPage() {
                     height: '40px',
                     borderRadius: '12px',
                     backgroundColor: doc.fileType === 'pdf' ? 'var(--color-red-light)' : 'var(--color-orange-subtle)',
-                    color: doc.fileType === 'pdf' ? '#dc2626' : 'var(--color-orange)',
+                    color: doc.fileType === 'pdf' ? 'var(--color-red)' : 'var(--color-orange)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -269,7 +269,7 @@ export function LibraryPage() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(21, 19, 19, 0.6)',
+            backgroundColor: 'var(--color-modal-overlay)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

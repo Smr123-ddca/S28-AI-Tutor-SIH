@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
+import { ThemeToggle } from '../components/common/ThemeToggle';
 import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap, Clock } from 'lucide-react';
 
 /**
@@ -22,7 +23,7 @@ import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap, Clock } f
  * The check below against VITE_TEACHER_INVITE_CODE is a placeholder UI gate.
  * =====================================================================
  */
-const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-BODH-2026';
+const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-LEARNIFY-2026';
 
 export function Login() {
   const navigate = useNavigate();
@@ -119,9 +120,14 @@ export function Login() {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'var(--color-offwhite)',
-        padding: '2rem'
+        padding: '2rem',
+        position: 'relative'
       }}
     >
+      <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }}>
+        <ThemeToggle />
+      </div>
+
       <div
         className="card-white"
         style={{
@@ -166,19 +172,19 @@ export function Login() {
             role="alert"
             style={{
               backgroundColor: 'var(--color-yellow-light)',
-              color: '#854d0e',
+              color: 'var(--color-yellow)',
               padding: '0.75rem 1rem',
               borderRadius: 'var(--radius-md)',
               fontSize: '0.85rem',
               marginBottom: '1.25rem',
-              border: '1.5px solid #fde047',
+              border: '1.5px solid var(--color-yellow)',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem'
             }}
           >
-            <Clock size={18} style={{ flexShrink: 0, color: '#ca8a04' }} />
-            <span>Your previous session has expired. Please log in again to continue your study session.</span>
+            <Clock size={18} style={{ flexShrink: 0, color: 'var(--color-yellow)' }} />
+            <span style={{ color: 'var(--color-ink)' }}>Your previous session has expired. Please log in again to continue your study session.</span>
           </div>
         )}
 
@@ -187,12 +193,12 @@ export function Login() {
             role="alert"
             style={{
               backgroundColor: 'var(--color-red-light)',
-              color: '#b91c1c',
+              color: 'var(--color-red)',
               padding: '0.75rem 1rem',
               borderRadius: 'var(--radius-md)',
               fontSize: '0.85rem',
               marginBottom: '1.25rem',
-              border: '1px solid #fca5a5'
+              border: '1px solid var(--color-red)'
             }}
           >
             {error}
@@ -204,12 +210,12 @@ export function Login() {
             role="status"
             style={{
               backgroundColor: 'var(--color-green-light)',
-              color: '#15803d',
+              color: 'var(--color-green)',
               padding: '0.75rem 1rem',
               borderRadius: 'var(--radius-md)',
               fontSize: '0.85rem',
               marginBottom: '1.25rem',
-              border: '1px solid #86efac'
+              border: '1px solid var(--color-green)'
             }}
           >
             {successMsg}
@@ -355,13 +361,13 @@ export function Login() {
                       </Button>
                     </div>
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#15803d', fontSize: '0.82rem', fontWeight: 600 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-green)', fontSize: '0.82rem', fontWeight: 600 }}>
                       <CheckCircle2 size={16} /> Teacher Access Authorized ({EXPECTED_TEACHER_CODE})
                     </div>
                   )}
 
                   {codeError && (
-                    <div style={{ fontSize: '0.75rem', color: '#dc2626', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--color-red)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       <AlertCircle size={14} /> {codeError}
                     </div>
                   )}

@@ -96,10 +96,10 @@ export function LoadingState({
                 animation: 'pulse-subtle 1.5s ease-in-out infinite'
               }}
             >
-              <div style={{ width: '30%', height: '14px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
-              <div style={{ width: '20%', height: '14px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
-              <div style={{ width: '20%', height: '14px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
-              <div style={{ width: '25%', height: '14px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
+              <div style={{ width: '30%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
+              <div style={{ width: '20%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
+              <div style={{ width: '20%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
+              <div style={{ width: '25%', height: '14px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
             </div>
           ))}
         </div>
@@ -138,20 +138,20 @@ export function LoadingState({
           >
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <div style={{ width: '80px', height: '22px', borderRadius: 'var(--radius-full)', backgroundColor: '#e5e5e0' }} />
-                <div style={{ width: '45px', height: '16px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
+                <div style={{ width: '80px', height: '22px', borderRadius: 'var(--radius-full)', backgroundColor: 'var(--color-skeleton)' }} />
+                <div style={{ width: '45px', height: '16px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
               </div>
               <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: '#e5e5e0', flexShrink: 0 }} />
+                <div style={{ width: '40px', height: '40px', borderRadius: '12px', backgroundColor: 'var(--color-skeleton)', flexShrink: 0 }} />
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ width: '90%', height: '16px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
-                  <div style={{ width: '60%', height: '12px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
+                  <div style={{ width: '90%', height: '16px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
+                  <div style={{ width: '60%', height: '12px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
                 </div>
               </div>
             </div>
             <div style={{ paddingTop: '1rem', borderTop: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ width: '90px', height: '14px', borderRadius: '4px', backgroundColor: '#e5e5e0' }} />
-              <div style={{ width: '70px', height: '28px', borderRadius: 'var(--radius-md)', backgroundColor: '#e5e5e0' }} />
+              <div style={{ width: '90px', height: '14px', borderRadius: '4px', backgroundColor: 'var(--color-skeleton)' }} />
+              <div style={{ width: '70px', height: '28px', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-skeleton)' }} />
             </div>
           </div>
         ))}

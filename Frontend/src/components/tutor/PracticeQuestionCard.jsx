@@ -82,7 +82,7 @@ export function PracticeQuestionCard({
               gap: '0.4rem',
               fontSize: '0.85rem',
               fontWeight: 600,
-              color: recordedStatus === 'correct' ? '#16a34a' : '#dc2626',
+              color: recordedStatus === 'correct' ? 'var(--color-green)' : 'var(--color-red)',
               padding: '0.35rem 0.85rem',
               borderRadius: 'var(--radius-full)',
               backgroundColor: recordedStatus === 'correct' ? 'var(--color-green-light)' : 'var(--color-red-light)'

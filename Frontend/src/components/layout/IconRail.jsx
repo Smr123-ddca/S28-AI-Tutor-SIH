@@ -74,7 +74,8 @@ export function IconRail() {
       style={{
         width: '74px',
         height: '100%',
-        backgroundColor: 'var(--color-ink)',
+        backgroundColor: 'var(--color-rail-bg)',
+        borderRight: '1px solid var(--color-border)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

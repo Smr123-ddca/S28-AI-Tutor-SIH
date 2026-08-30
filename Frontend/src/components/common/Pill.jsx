@@ -39,15 +39,12 @@ export function Pill({
     }
   };
 
-  const isDarkTag = resolvedColor === 'ink' || resolvedColor === 'orange' || resolvedColor === 'red';
-
   return (
     <span
       className={`pill-badge ${getColorClass()} ${className}`}
       style={{
         padding: size === 'sm' ? '0.25rem 0.65rem' : '0.35rem 0.85rem',
         fontSize: size === 'sm' ? '0.7rem' : '0.78rem',
-        color: isDarkTag ? '#ffffff' : '#151313',
         ...style
       }}
     >

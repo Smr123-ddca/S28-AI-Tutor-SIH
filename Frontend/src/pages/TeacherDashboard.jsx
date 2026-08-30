@@ -140,8 +140,9 @@ export function TeacherDashboard() {
             position: 'fixed',
             top: '20px',
             right: '20px',
-            backgroundColor: 'var(--color-ink)',
+            backgroundColor: 'var(--color-surface-dark)',
             color: '#ffffff',
+            border: '1px solid var(--color-border)',
             padding: '1rem 1.5rem',
             borderRadius: 'var(--radius-md)',
             boxShadow: 'var(--shadow-lg)',
@@ -243,10 +244,10 @@ export function TeacherDashboard() {
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
               Critical Gaps
             </span>
-            <AlertTriangle size={18} style={{ color: '#ef4444' }} />
+            <AlertTriangle size={18} style={{ color: 'var(--color-red)' }} />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#dc2626' }}>2 Topics</div>
-          <div style={{ fontSize: '0.78rem', color: '#b91c1c', marginTop: '0.25rem' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-red)' }}>2 Topics</div>
+          <div style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             &gt; 40% student failure rate
           </div>
         </div>
@@ -256,9 +257,9 @@ export function TeacherDashboard() {
             <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>
               Avg Comprehension
             </span>
-            <TrendingUp size={18} style={{ color: '#22c55e' }} />
+            <TrendingUp size={18} style={{ color: 'var(--color-green)' }} />
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#16a34a' }}>88.4%</div>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-green)' }}>88.4%</div>
           <div style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             +8.2% after AI gap refreshers
           </div>
@@ -310,10 +311,10 @@ export function TeacherDashboard() {
                     padding: '1.25rem',
                     borderLeft: `4px solid ${
                       item.status === 'critical'
-                        ? '#ef4444'
+                        ? 'var(--color-red)'
                         : item.status === 'warning'
-                        ? '#f59e0b'
-                        : '#22c55e'
+                        ? 'var(--color-yellow)'
+                        : 'var(--color-green)'
                     }`
                   }}
                 >
@@ -327,10 +328,10 @@ export function TeacherDashboard() {
                         fontWeight: 700,
                         color:
                           item.status === 'critical'
-                            ? '#dc2626'
+                            ? 'var(--color-red)'
                             : item.status === 'warning'
-                            ? '#d97706'
-                            : '#16a34a'
+                            ? 'var(--color-yellow)'
+                            : 'var(--color-green)'
                       }}
                     >
                       {item.masteryPct}%
@@ -399,7 +400,7 @@ export function TeacherDashboard() {
                     }}
                   >
                     <thead>
-                      <tr style={{ backgroundColor: 'var(--color-offwhite)', borderBottom: '1px solid var(--color-border)' }}>
+                      <tr style={{ backgroundColor: 'var(--color-surface-subtle)', borderBottom: '1px solid var(--color-border)' }}>
                         <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Syllabus Topic</th>
                         <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Incorrect Rate</th>
                         <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Total Attempts</th>
@@ -421,7 +422,7 @@ export function TeacherDashboard() {
                           >
                             <td style={{ padding: '1.1rem 1.5rem', fontWeight: 600, color: 'var(--color-ink)' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                {isHighAlert && <AlertTriangle size={16} style={{ color: '#dc2626', flexShrink: 0 }} />}
+                                {isHighAlert && <AlertTriangle size={16} style={{ color: 'var(--color-red)', flexShrink: 0 }} />}
                                 <span>{item.section_label}</span>
                               </div>
                             </td>
@@ -430,10 +431,10 @@ export function TeacherDashboard() {
                               <span
                                 style={{
                                   fontWeight: 700,
-                                  color: isHighAlert ? '#dc2626' : 'var(--color-ink)',
+                                  color: isHighAlert ? 'var(--color-red)' : 'var(--color-ink)',
                                   padding: '0.25rem 0.6rem',
                                   borderRadius: 'var(--radius-sm)',
-                                  backgroundColor: isHighAlert ? 'rgba(239, 68, 68, 0.15)' : 'var(--color-offwhite)'
+                                  backgroundColor: isHighAlert ? 'var(--color-red-light)' : 'var(--color-surface-subtle)'
                                 }}
                               >
                                 {(item.incorrect_rate * 100).toFixed(1)}%
@@ -695,7 +696,7 @@ export function TeacherDashboard() {
                     padding: '1rem',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--color-border)',
-                    backgroundColor: 'var(--color-offwhite)',
+                    backgroundColor: 'var(--color-surface-subtle)',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
@@ -805,7 +806,7 @@ export function TeacherDashboard() {
                   padding: '1.25rem',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--color-border)',
-                  backgroundColor: st.riskLevel === 'High' ? 'var(--color-red-light)' : 'var(--color-offwhite)',
+                  backgroundColor: st.riskLevel === 'High' ? 'var(--color-red-light)' : 'var(--color-surface-subtle)',
                   display: 'flex',
                   flexWrap: 'wrap',
                   justifyContent: 'space-between',
@@ -870,7 +871,7 @@ export function TeacherDashboard() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(21, 19, 19, 0.6)',
+            backgroundColor: 'var(--color-modal-overlay)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -929,9 +930,9 @@ export function TeacherDashboard() {
                   Recent Tutor Practice Checks:
                 </div>
                 <ul style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', paddingLeft: '1.25rem', lineHeight: 1.6 }}>
-                  <li>Q: "Binary Search Tree worst-case height" — <strong style={{ color: '#dc2626' }}>Marked Incorrect</strong></li>
-                  <li>Q: "Recursive Stack Frame allocation" — <strong style={{ color: '#dc2626' }}>Marked Incorrect</strong></li>
-                  <li>Q: "Asymptotic Big-O comparisons" — <strong style={{ color: '#16a34a' }}>Marked Correct (+10 XP)</strong></li>
+                  <li>Q: "Binary Search Tree worst-case height" — <strong style={{ color: 'var(--color-red)' }}>Marked Incorrect</strong></li>
+                  <li>Q: "Recursive Stack Frame allocation" — <strong style={{ color: 'var(--color-red)' }}>Marked Incorrect</strong></li>
+                  <li>Q: "Asymptotic Big-O comparisons" — <strong style={{ color: 'var(--color-green)' }}>Marked Correct (+10 XP)</strong></li>
                 </ul>
               </div>
             </div>
@@ -964,7 +965,7 @@ export function TeacherDashboard() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(21, 19, 19, 0.6)',
+            backgroundColor: 'var(--color-modal-overlay)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
