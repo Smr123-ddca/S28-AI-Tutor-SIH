@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bookmark, ArrowRight, Play } from 'lucide-react';
 import { Pill, getCategoryColor } from '../common/Pill';
-import { AvatarStack, ProgressBar } from '../common/AvatarStack';
+import { AvatarStack } from '../common/AvatarStack';
 import { Button } from '../common/Button';
 
 export function CourseCard({
@@ -9,7 +9,7 @@ export function CourseCard({
   title = 'Data Structures & Algorithms',
   progressCurrent = 12,
   progressTotal = 20,
-  unit = 'lessons',
+  unit = 'chapters',
   participantAvatars = [],
   participantExtraCount = 120,
   onContinue,
@@ -118,15 +118,6 @@ export function CourseCard({
             {progressCurrent}/{progressTotal} {unit}
           </span>
         </div>
-
-        {/* Progress Bar */}
-        <ProgressBar
-          current={progressCurrent}
-          total={progressTotal}
-          color={categoryColor === 'yellow' ? 'ink' : 'orange'}
-          height={6}
-          style={{ marginBottom: '1.25rem' }}
-        />
 
         {/* Bottom Avatar Stack & Continue Button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

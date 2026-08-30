@@ -1,68 +1,127 @@
-import React, { useState } from 'react';
-import { Lightbulb, CheckCircle2 } from 'lucide-react';
-import { MOCK_PRACTICE_QUESTIONS_FLOW } from '../../services/mockData';
+import React, { useState, useEffect } from 'react';
+import { Lightbulb, CheckCircle2, Loader } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Pill } from '../common/Pill';
 import { useSoundManager } from '../../services/soundManager';
+import { useAuth } from '../../context/AuthContext';
+import { getPracticeQuestions, submitSocraticAttempt, requestPracticeHint, submitPracticeAttempt } from '../../services/api';
 
-/**
- * =====================================================================
- * [BACKEND-DEPENDENT FEATURE FLAG]: PRACTICE TEST ESCALATING HINTS
- * =====================================================================
- * The current Express backend only returns plain string arrays for
- * `practice_questions` without hint escalation ladders or answer validation.
- *
- * This UI component demonstrates the complete pedagogical interaction:
- *  - Step 1: Student attempts their own response.
- *  - Step 2: On incorrect/partial attempt, the tutor provides Level 1 Hint (Conceptual framing).
- *  - Step 3: On continued struggle, provides Level 2 Hint (Targeted clue).
- *  - Step 4: Step-by-step guidance without giving the direct answer away.
- *
- * PRODUCTION REQUIREMENT:
- * A new backend endpoint (e.g. POST /api/practice-hint) or structured Gemini prompt
- * is required to evaluate student input and dynamically generate progressive clues.
- * =====================================================================
- */
-export function HintSystem({ onComplete, className = '' }) {
+export function HintSystem({ onComplete, className = '', sessionId }) {
+  const { session } = useAuth();
   const { playSound } = useSoundManager();
+
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [currentIdx, setCurrentIdx] = useState(0);
   const [studentAnswer, setStudentAnswer] = useState('');
-  const [revealedHints, setRevealedHints] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackState, setFeedbackState] = useState('attempting'); // 'attempting' | 'hint_escalated' | 'correct'
+  const [tutorMessage, setTutorMessage] = useState('');
 
-  const currentQ = MOCK_PRACTICE_QUESTIONS_FLOW[currentIdx] || MOCK_PRACTICE_QUESTIONS_FLOW[0];
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await getPracticeQuestions(sessionId, session?.access_token);
+        const pending = (data.questions || []).filter(q => q.status === 'pending');
+        setQuestions(pending);
+      } catch (err) {
+        console.error('Failed to fetch practice questions', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [sessionId, session?.access_token]);
 
-  const handleCheckAnswer = (e) => {
+  const currentQ = questions[currentIdx];
+  const totalHints = currentQ ? [currentQ.hint_1, currentQ.hint_2].filter(Boolean) : [];
+  const revealedHintsCount = currentQ ? Math.min(currentQ.hints_requested || 0, totalHints.length) : 0;
+
+  const handleCheckAnswer = async (e) => {
     e.preventDefault();
-    if (!studentAnswer.trim()) return;
+    if (!studentAnswer.trim() || isSubmitting) return;
 
-    const isCorrect = studentAnswer
-      .toLowerCase()
-      .includes(currentQ.correctAnswerKeyword.toLowerCase());
+    setIsSubmitting(true);
+    setTutorMessage('');
 
-    if (isCorrect) {
-      playSound('correct');
-      setFeedbackState('correct');
-    } else {
-      playSound('incorrect');
-      // Escalate hints
-      const nextHintCount = Math.min(revealedHints + 1, currentQ.hints.length);
-      setRevealedHints(nextHintCount);
+    try {
+      if (currentQ.hints_requested >= 2 && feedbackState === 'hint_escalated') {
+        // Use Socratic Attempt if standard hints are exhausted
+        const res = await submitSocraticAttempt(currentQ.id, studentAnswer, session?.access_token);
+        if (res.evaluation === 'correct') {
+          playSound('correct');
+          setFeedbackState('correct');
+          setTutorMessage(res.message || 'Excellent reasoning!');
+        } else {
+          playSound('incorrect');
+          setFeedbackState('hint_escalated');
+          setTutorMessage(res.message);
+          setStudentAnswer('');
+        }
+      } else {
+        // Standard check answer
+        const res = await submitPracticeAttempt(currentQ.id, studentAnswer, session?.access_token);
+
+        if (res.evaluation === 'correct') {
+          playSound('correct');
+          setFeedbackState('correct');
+          setTutorMessage(res.message || 'Excellent reasoning! You got it right.');
+        } else {
+          playSound('incorrect');
+          setFeedbackState('hint_escalated');
+          setTutorMessage('Your answer was ' + res.evaluation + '. Try again or ask for a clue!');
+          setStudentAnswer('');
+        }
+      }
+    } catch (e) {
+      console.error('Failed to submit answer:', e);
+      setTutorMessage(e.message || 'Error evaluating answer. Please try again.');
       setFeedbackState('hint_escalated');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRequestHint = async () => {
+    try {
+      const res = await requestPracticeHint(currentQ.id, session?.access_token);
+      const updatedQ = { ...currentQ, hints_requested: res.hints_requested };
+      setQuestions(prev => prev.map((q, i) => i === currentIdx ? updatedQ : q));
+    } catch (err) {
+      console.error('Failed to request hint', err);
     }
   };
 
   const handleNextQuestion = () => {
     playSound('click');
-    if (currentIdx < MOCK_PRACTICE_QUESTIONS_FLOW.length - 1) {
+    if (currentIdx < questions.length - 1) {
       setCurrentIdx((prev) => prev + 1);
       setStudentAnswer('');
-      setRevealedHints(0);
       setFeedbackState('attempting');
+      setTutorMessage('');
     } else {
       if (onComplete) onComplete();
     }
   };
+
+  if (loading) {
+    return (
+      <div className={`card-white ${className}`} style={{ padding: '1.75rem', borderRadius: 'var(--radius-xl)', border: '1.5px solid var(--color-border)', backgroundColor: 'var(--color-white)', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+        <Loader className="animate-spin" size={24} style={{ margin: '0 auto 1rem' }} />
+        <p>Loading practice questions...</p>
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className={`card-white ${className}`} style={{ padding: '1.75rem', borderRadius: 'var(--radius-xl)', border: '1.5px solid var(--color-border)', backgroundColor: 'var(--color-white)', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+        <p style={{ marginBottom: '1rem' }}>No pending practice questions found for this session.</p>
+        <Button variant="orange" size="md" onClick={() => onComplete && onComplete()}>Return to Chat</Button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -98,10 +157,10 @@ export function HintSystem({ onComplete, className = '' }) {
       {/* Progress & Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <Pill color="purple" size="sm">
-          Question {currentIdx + 1} of {MOCK_PRACTICE_QUESTIONS_FLOW.length}
+          Question {currentIdx + 1} of {questions.length}
         </Pill>
         <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-          Hints available: {currentQ.hints.length - revealedHints}/{currentQ.hints.length}
+          Hints available: {totalHints.length - revealedHintsCount}/{totalHints.length}
         </span>
       </div>
 
@@ -118,10 +177,17 @@ export function HintSystem({ onComplete, className = '' }) {
         {currentQ.question}
       </h3>
 
+      {/* Concept Badge */}
+      {currentQ.concept && (
+        <div style={{ marginBottom: '1.5rem', marginTop: '-0.75rem' }}>
+          <Pill color="sky" size="xs">Concept: {currentQ.concept}</Pill>
+        </div>
+      )}
+
       {/* Progressive Hints Ladder */}
-      {revealedHints > 0 && (
+      {revealedHintsCount > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.5rem' }}>
-          {currentQ.hints.slice(0, revealedHints).map((hint, hIdx) => (
+          {totalHints.slice(0, revealedHintsCount).map((hint, hIdx) => (
             <div
               key={hIdx}
               style={{
@@ -154,6 +220,26 @@ export function HintSystem({ onComplete, className = '' }) {
         </div>
       )}
 
+      {/* Tutor Socratic Guidance Node */}
+      {feedbackState === 'hint_escalated' && tutorMessage && (
+        <div style={{
+          marginBottom: '1.5rem',
+          padding: '1rem',
+          backgroundColor: 'var(--color-purple-light)',
+          borderRadius: 'var(--radius-md)',
+          border: '1px solid #e9d5ff',
+          display: 'flex',
+          gap: '0.75rem'
+        }}>
+          <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.85rem', flexShrink: 0 }}>
+            Tutor says:
+          </div>
+          <div style={{ fontSize: '0.9rem', color: 'var(--color-ink)', lineHeight: 1.5 }}>
+            {tutorMessage}
+          </div>
+        </div>
+      )}
+
       {/* Feedback State & Input */}
       {feedbackState === 'correct' ? (
         <div
@@ -169,11 +255,11 @@ export function HintSystem({ onComplete, className = '' }) {
             <CheckCircle2 size={20} /> Excellent Reasoning!
           </div>
           <p style={{ fontSize: '0.9rem', color: '#166534', lineHeight: 1.5 }}>
-            {currentQ.conceptRecap}
+            {tutorMessage || 'You correctly answered the question using the course materials.'}
           </p>
           <div style={{ marginTop: '1rem' }}>
             <Button variant="orange" size="md" onClick={handleNextQuestion}>
-              {currentIdx < MOCK_PRACTICE_QUESTIONS_FLOW.length - 1 ? 'Next Question' : 'Complete Practice Flow'}
+              {currentIdx < questions.length - 1 ? 'Next Question' : 'Complete Practice Flow'}
             </Button>
           </div>
         </div>
@@ -184,7 +270,8 @@ export function HintSystem({ onComplete, className = '' }) {
               type="text"
               value={studentAnswer}
               onChange={(e) => setStudentAnswer(e.target.value)}
-              placeholder="Type your hypothesis or answer..."
+              placeholder={feedbackState === 'hint_escalated' ? "Try again based on the feedback..." : "Type your hypothesis or answer..."}
+              disabled={isSubmitting}
               style={{
                 flex: 1,
                 padding: '0.75rem 1.25rem',
@@ -195,21 +282,23 @@ export function HintSystem({ onComplete, className = '' }) {
                 backgroundColor: 'var(--color-offwhite)'
               }}
             />
-            <Button type="submit" variant="orange" size="md">
-              Check Answer
+            <Button type="submit" variant="orange" size="md" disabled={isSubmitting || !studentAnswer.trim()}>
+              {isSubmitting ? 'Evaluating...' : 'Check Answer'}
             </Button>
           </div>
-          {revealedHints < currentQ.hints.length && (
+          {revealedHintsCount < totalHints.length && (
             <div style={{ marginTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <button
                 type="button"
-                onClick={() => setRevealedHints((prev) => Math.min(prev + 1, currentQ.hints.length))}
+                onClick={handleRequestHint}
+                disabled={isSubmitting}
                 style={{
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   color: 'var(--color-orange)',
                   textDecoration: 'underline',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  opacity: isSubmitting ? 0.5 : 1
                 }}
               >
                 💡 Need a clue without submitting?

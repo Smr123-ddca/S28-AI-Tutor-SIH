@@ -5,14 +5,14 @@
 
 export const isUsingMocks = () => false;
 
-export async function explainQuestion({ question, student_id, session_id, token, course_name }) {
+export async function explainQuestion({ question, student_id, session_id, token, subject }) {
   const response = await fetch('/api/explain', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     },
-    body: JSON.stringify({ question, student_id, session_id, course: course_name })
+    body: JSON.stringify({ question, student_id, session_id, subject })
   });
   if (!response.ok) {
     const errData = await response.json().catch(() => ({}));
@@ -95,7 +95,7 @@ export async function fetchLibraryDocuments(token) {
     documents: coursesList.map(c => ({
       id: c.name,
       filename: c.pdf || `${c.name}.pdf`,
-      subject: c.metadata?.domain || 'Computer Science',
+      subject: c.metadata?.domain || c.name,
       chapter: c.metadata?.topics?.[0] || 'Learning Module',
       fileType: 'pdf',
       fileSize: 'Uploaded',
@@ -164,4 +164,51 @@ export function getCitationMeta(chunkId, fallbackChunk = {}) {
     section_label: fallbackChunk.section_label || 'Approved Reference Chunk',
     page: 1
   };
+}
+
+export async function getPracticeQuestions(sessionId, token) {
+  const url = sessionId ? `/api/practice-questions?session_id=${sessionId}` : '/api/practice-questions';
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch practice questions');
+  return await res.json();
+}
+
+export async function submitPracticeAttempt(practice_question_id, answer, token) {
+  const res = await fetch(`/api/practice-attempts`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ practice_question_id, answer })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to submit attempt');
+  }
+  return await res.json();
+}
+
+export async function submitSocraticAttempt(id, message, token) {
+  const res = await fetch(`/api/practice-questions/${id}/socratic`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ message })
+  });
+  if (!res.ok) throw new Error('Failed to submit attempt');
+  return await res.json();
+}
+
+export async function requestPracticeHint(id, token) {
+  const res = await fetch(`/api/practice-questions/${id}/hint`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to request hint');
+  return await res.json();
 }

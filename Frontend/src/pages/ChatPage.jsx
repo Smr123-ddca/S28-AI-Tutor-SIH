@@ -16,7 +16,8 @@ import {
   explainQuestion,
   fetchSessions,
   fetchSessionMessages,
-  updateSessionTitle
+  updateSessionTitle,
+  fetchLibraryDocuments
 } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSoundManager } from '../services/soundManager';
@@ -37,7 +38,25 @@ export function ChatPage() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [studentId, setStudentId] = useState('');
   const [currentTopic, setCurrentTopic] = useState('Welcome to Learnify');
-  const [currentCourse, setCurrentCourse] = useState(searchParams.get('course') || null);
+  const [currentSubject, setCurrentSubject] = useState(searchParams.get('subject') || null);
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    async function loadSubjects() {
+      try {
+        const docsData = await fetchLibraryDocuments(session?.access_token);
+        const availableSubjects = (docsData.documents || []).map(d => d.subject);
+        const uniqueSubjects = [...new Set(availableSubjects)].filter(Boolean);
+        setSubjects(uniqueSubjects);
+        if (!currentSubject && uniqueSubjects.length > 0) {
+          setCurrentSubject(uniqueSubjects[0]);
+        }
+      } catch (err) {
+        console.error('Error fetching subjects:', err);
+      }
+    }
+    loadSubjects();
+  }, [session?.access_token]);
 
   const messagesEndRef = useRef(null);
 
@@ -68,6 +87,11 @@ export function ChatPage() {
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id');
     const queryParam = searchParams.get('q');
+    const subjectParam = searchParams.get('subject') || searchParams.get('course'); // maintain legacy link compatibility
+
+    if (subjectParam && !currentSubject) {
+      setCurrentSubject(subjectParam);
+    }
 
     if (sessionIdParam) {
       handleSelectSession(sessionIdParam);
@@ -84,6 +108,13 @@ export function ChatPage() {
   const handleSelectSession = async (sid) => {
     playSound('click');
     setCurrentSessionId(sid);
+
+    // Update currentSubject based on the selected session
+    const selected = sessions.find(s => s.id === sid);
+    if (selected && selected.course) {
+      setCurrentSubject(selected.course);
+    }
+
     setLoading(true);
     setTutorState('thinking');
     try {
@@ -135,7 +166,7 @@ export function ChatPage() {
         student_id: studentId,
         session_id: currentSessionId,
         token: session?.access_token,
-        course_name: currentCourse
+        subject: currentSubject
       });
 
       // Response arrived: switch to speaking state with speech simulation
@@ -286,90 +317,18 @@ export function ChatPage() {
       </aside>
 
       {/* =====================================================================
-          MAIN TWO-PANE TUTOR WORKSPACE (Expanded Video-Call Presence Layout)
+          MAIN TUTOR WORKSPACE (Chat Content)
           ===================================================================== */}
       <div
         style={{
           flex: 1,
-          display: 'grid',
-          gridTemplateColumns: 'minmax(420px, 490px) 1fr',
+          display: 'flex',
+          flexDirection: 'column',
           height: '100%',
           minHeight: 0,
           overflow: 'hidden'
         }}
       >
-        {/* PANE 1: PERSISTENT AVATAR TUTOR PRESENCE PANEL */}
-        <div
-          className="smooth-scroll"
-          style={{
-            padding: '1.5rem',
-            borderRight: '1px solid var(--color-border)',
-            backgroundColor: 'var(--color-offwhite)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
-            minHeight: 0,
-            overflowY: 'auto',
-            scrollBehavior: 'smooth'
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <AvatarTutor
-              state={tutorState}
-              isSpeaking={isSpeaking}
-              isThinking={loading}
-              topic={currentTopic}
-            />
-
-            {/* Quick Socratic Prompts */}
-            <div className="card-white" style={{ padding: '1.25rem' }}>
-              <div
-                style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 700,
-                  color: 'var(--color-orange)',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.65rem'
-                }}
-              >
-                Suggested Doubts
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {[
-                  'Why does BST search degrade to O(n) in worst case?',
-                  'Walk me through AVL Tree single and double rotations.',
-                  'Explain Call Stack memory during recursive unwinding.'
-                ].map((doubt, dIdx) => (
-                  <button
-                    key={dIdx}
-                    type="button"
-                    onClick={() => handleSend(doubt)}
-                    style={{
-                      textAlign: 'left',
-                      fontSize: '0.82rem',
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      backgroundColor: 'var(--color-offwhite)',
-                      border: '1px solid var(--color-border)',
-                      color: 'var(--color-ink)',
-                      fontWeight: 500,
-                      lineHeight: 1.35,
-                      cursor: 'pointer',
-                      transition: 'border-color var(--transition-fast)'
-                    }}
-                  >
-                    💡 {doubt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)', textAlign: 'center', marginTop: '1rem' }}>
-            Protected by Verified Retrieval • Zero Hallucinations
-          </div>
-        </div>
 
         {/* PANE 2: INTERACTION PANE (3 MODES + MESSAGES + INPUT) */}
         <div
@@ -408,7 +367,7 @@ export function ChatPage() {
           >
             {/* MODE 2: PRACTICE TEST (Socratic Progressive Hints) */}
             {activeMode === 'practice_test' && (
-              <HintSystem onComplete={() => setActiveMode('ask_doubt')} />
+              <HintSystem onComplete={() => setActiveMode('ask_doubt')} sessionId={currentSessionId} />
             )}
 
 
@@ -449,6 +408,30 @@ export function ChatPage() {
                     <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
                       Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
                     </p>
+
+                    <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-ink)' }}>Query Subject Context:</label>
+                      <select
+                        value={currentSubject || ''}
+                        onChange={(e) => setCurrentSubject(e.target.value)}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          borderRadius: 'var(--radius-sm)',
+                          border: '1.5px solid var(--color-border)',
+                          backgroundColor: 'var(--color-white)',
+                          outline: 'none',
+                          fontSize: '0.9rem',
+                          fontWeight: 500,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {subjects.length === 0 && <option value="">Loading subjects...</option>}
+                        {subjects.map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+
                   </div>
                 )}
 
@@ -535,16 +518,17 @@ export function ChatPage() {
                 />
                 <button
                   type="submit"
-                  disabled={loading || !inputQuery.trim()}
+                  disabled={loading || !inputQuery.trim() || !currentSubject}
                   className="btn-orange btn-icon"
                   style={{
                     position: 'absolute',
                     right: '6px',
                     width: '40px',
                     height: '40px',
-                    opacity: loading || !inputQuery.trim() ? 0.4 : 1,
-                    cursor: loading || !inputQuery.trim() ? 'not-allowed' : 'pointer'
+                    opacity: loading || !inputQuery.trim() || !currentSubject ? 0.4 : 1,
+                    cursor: loading || !inputQuery.trim() || !currentSubject ? 'not-allowed' : 'pointer'
                   }}
+                  title={!currentSubject ? "Please select a subject context in the new session screen." : "Send Doubt"}
                   aria-label="Send Doubt"
                 >
                   <Send size={18} />

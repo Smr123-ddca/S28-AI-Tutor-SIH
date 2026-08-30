@@ -58,6 +58,20 @@ function classifyQuestion(question) {
         /^\d+[\.\\)]\s/
     ];
 
+    const greetingPatterns = [
+        /^(hi|hello|hey|heyyyy|heyyyyy|heyy|what's\s+up|greetings|good\s+morning|good\s+evening|good\s+afternoon|sup|howdy)[\s\p{P}]*$/iu,
+        /^(how\s+are\s+you|what's\s+up|how\s+is\s+it\s+going)/iu
+    ];
+
+    for (let pattern of greetingPatterns) {
+        if (pattern.test(qLower.trim())) {
+            return {
+                classification: "greeting",
+                reason: `Matched phrase pattern: ${pattern.toString()}`
+            };
+        }
+    }
+
     for (let pattern of homeworkPatterns) {
         if (pattern.test(qLower)) {
             return {
@@ -75,7 +89,7 @@ function classifyQuestion(question) {
 
 async function callGemini(promptText) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.6-flash",
         generationConfig: {
             responseMimeType: "application/json",
             responseSchema: responseSchema
@@ -83,7 +97,7 @@ async function callGemini(promptText) {
     });
 
     const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Gemini API Request Timeout")), 12000)
+        setTimeout(() => reject(new Error("Gemini API Request Timeout")), 45000)
     );
 
     const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
@@ -105,7 +119,7 @@ async function explain(req, res) {
 
     let tStart = performance.now();
 
-    const { question, session_id, context_limit, course } = req.body;
+    const { question, session_id, context_limit, subject } = req.body;
     const student_id = req.user.id;
 
     if (!question) {
@@ -113,8 +127,8 @@ async function explain(req, res) {
         return res.status(400).json({ error: "Missing required field: question" });
     }
 
-    if (!course) {
-        return res.status(400).json({ error: "Missing required field: course. A valid published course selection is mandatory." });
+    if (!subject) {
+        return res.status(400).json({ error: "Missing required field: subject. A valid published subject selection is mandatory." });
     }
 
     const path = require('path');
@@ -123,10 +137,10 @@ async function explain(req, res) {
     if (fs.existsSync(coursesPath)) {
         coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
     }
-    const targetCourse = coursesList.find(c => c.name === course && c.status === 'published');
+    const targetCourse = coursesList.find(c => (c.metadata?.domain === subject || c.name === subject) && c.status === 'published');
 
     if (!targetCourse) {
-        return res.status(403).json({ error: "Cannot query an unpublished or non-existent course." });
+        return res.status(403).json({ error: "Cannot query an unpublished or non-existent subject." });
     }
 
     if (process.env.DEBUG_TIMING === 'true') recordT('AuthAndValidation', tStart);
@@ -148,7 +162,7 @@ async function explain(req, res) {
                     student_id,
                     session_id: session_id || 'untracked',
                     question: question,
-                    course: course,
+                    course: subject, // still logging to 'course' field in DB for now
                     response: statusObj
                 }).then(loggedData => {
                     if (process.env.DEBUG_TIMING === 'true') recordT('Persistence', pStart);
@@ -193,14 +207,14 @@ async function explain(req, res) {
 
                 if (validSession) {
                     if (validSession.course) {
-                        if (validSession.course !== course) {
-                            return res.status(403).json({ error: "Session course mismatch. This session belongs to another course." });
+                        if (validSession.course !== subject) {
+                            return res.status(403).json({ error: "Session subject mismatch. This session belongs to another subject." });
                         }
                     } else {
                         // Legacy session where course IS NULL. Establish course association safely.
                         await supabaseAdmin
                             .from('chat_sessions')
-                            .update({ course: course })
+                            .update({ course: subject })
                             .eq('id', session_id);
                     }
 
@@ -284,14 +298,33 @@ async function explain(req, res) {
         let rStart = performance.now();
         const results = retrievalService.retrieve(question, {
             tokens: queryResult.expandedTokens,
-            subject: queryResult.subject,
-            course: course
+            subject: subject
         });
         metaRetrievedChunks = results ? results.length : 0;
         if (process.env.DEBUG_TIMING === 'true') recordT('Retrieval', rStart);
 
         // ════════════════════════════════════════════════════════════════
-        // STEP 4: Evidence gate (unchanged at 0.30)
+        // STEP 4: Heuristic Classification & Greeting Gate
+        // ════════════════════════════════════════════════════════════════
+        const classificationResult = classifyQuestion(question);
+
+        console.log("--- Classification Audit ---");
+        console.log("Question:", question);
+        console.log("Classification:", classificationResult.classification);
+        console.log("Reason:", classificationResult.reason);
+        console.log("----------------------------");
+
+        if (classificationResult.classification === "greeting") {
+            return await respondAndLog({
+                status: "answered",
+                message: "Hello! I am your Learnify syllabus AI. How can I help you with your studies today?",
+                explanation_segments: [],
+                practice_questions: []
+            });
+        }
+
+        // ════════════════════════════════════════════════════════════════
+        // STEP 5: Evidence gate (unchanged at 0.30)
         // ════════════════════════════════════════════════════════════════
         let eStart = performance.now();
         const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
@@ -306,23 +339,12 @@ async function explain(req, res) {
             });
         }
 
-        // ════════════════════════════════════════════════════════════════
-        // STEP 5: Homework heuristic pre-check
-        // ════════════════════════════════════════════════════════════════
-        const classificationResult = classifyQuestion(question);
-
-        console.log("--- Classification Audit ---");
-        console.log("Question:", question);
-        console.log("Classification:", classificationResult.classification);
-        console.log("Reason:", classificationResult.reason);
-        console.log("----------------------------");
-
         if (classificationResult.classification === "graded_work_request") {
             return await respondAndLog({
                 status: "guided_mode",
                 message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
-                top_topic: results[0].topic,
-                top_section: results[0].section_label,
+                top_topic: results[0]?.topic,
+                top_section: results[0]?.section_label,
                 results: results
             });
         }

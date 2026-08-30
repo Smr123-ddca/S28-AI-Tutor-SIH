@@ -10,10 +10,10 @@ export function StudentDashboard() {
   const { session, displayName } = useAuth();
 
   const [sessions, setSessions] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('');
   const [questionText, setQuestionText] = useState('');
 
   useEffect(() => {
@@ -25,11 +25,11 @@ export function StudentDashboard() {
         ]);
         setSessions(sessionData.sessions || []);
 
-        const availableCourses = (docsData.documents || []).map(d => d.subject);
-        // unique course names
-        const uniqueCourses = [...new Set(availableCourses)];
-        setCourses(uniqueCourses.filter(Boolean));
-        if (uniqueCourses.length > 0) setSelectedCourse(uniqueCourses[0]);
+        const availableSubjects = (docsData.documents || []).map(d => d.subject);
+        // unique subjects
+        const uniqueSubjects = [...new Set(availableSubjects)];
+        setSubjects(uniqueSubjects.filter(Boolean));
+        if (uniqueSubjects.length > 0) setSelectedSubject(uniqueSubjects[0]);
       } catch (err) {
         console.error('Error loading student dashboard data:', err);
       } finally {
@@ -41,10 +41,10 @@ export function StudentDashboard() {
 
   const handleAskDoubt = (e) => {
     e.preventDefault();
-    if (!questionText.trim() || !selectedCourse) return;
+    if (!questionText.trim() || !selectedSubject) return;
 
-    // Redirect to RAG chat with the query and course parameters securely attached
-    navigate(`/chat?course=${encodeURIComponent(selectedCourse)}&q=${encodeURIComponent(questionText)}`);
+    // Redirect to RAG chat with the query and subject parameters securely attached
+    navigate(`/chat?subject=${encodeURIComponent(selectedSubject)}&q=${encodeURIComponent(questionText)}`);
   };
 
   const totalQuestionsOffered = sessions.length; // Basic estimation from session length
@@ -60,8 +60,8 @@ export function StudentDashboard() {
         marginBottom: '2.5rem'
       }}>
         <div className="card-white" style={{ padding: '1.5rem', borderLeft: '4px solid var(--color-orange)' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Active Courses</div>
-          <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--color-ink)', marginTop: '0.2rem' }}>{loading ? '--' : courses.length}</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Active Subjects</div>
+          <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--color-ink)', marginTop: '0.2rem' }}>{loading ? '--' : subjects.length}</div>
         </div>
         <div className="card-white" style={{ padding: '1.5rem', borderLeft: '4px solid var(--color-purple)' }}>
           <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>RAG Chat Sessions</div>
@@ -115,7 +115,7 @@ export function StudentDashboard() {
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                     <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-orange)' }}>
-                      {s.course || 'General'}
+                      {s.subject || s.course || 'General'}
                     </span>
                     <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
                       {new Date(s.last_message_at || Date.now()).toLocaleDateString()}
@@ -145,16 +145,16 @@ export function StudentDashboard() {
           <form onSubmit={handleAskDoubt} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Subject Selector */}
             <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Course / Subject</label>
+              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Subject Area</label>
               <select
-                value={selectedCourse}
-                onChange={(e) => setSelectedCourse(e.target.value)}
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
                 style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', outline: 'none' }}
                 required
               >
-                {courses.length === 0 ? <option value="">No published courses available</option> : null}
-                {courses.map(course => (
-                  <option key={course} value={course}>{course}</option>
+                {subjects.length === 0 ? <option value="">No published subjects available</option> : null}
+                {subjects.map(subject => (
+                  <option key={subject} value={subject}>{subject}</option>
                 ))}
               </select>
             </div>
@@ -177,7 +177,7 @@ export function StudentDashboard() {
               variant="orange"
               size="lg"
               style={{ width: '100%', marginTop: '0.5rem' }}
-              disabled={loading || courses.length === 0}
+              disabled={loading || subjects.length === 0}
             >
               Consult Learnify Engine
             </Button>
@@ -190,11 +190,11 @@ export function StudentDashboard() {
       <section style={{ marginTop: '3.5rem' }}>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem' }}>Explore Authorized Modules</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-          {loading ? <div style={{ fontSize: '0.85rem' }}>Loading Modules...</div> : courses.length === 0 ? <p style={{ fontSize: '0.85rem' }}>No modules available.</p> : null}
-          {courses.map(c => (
+          {loading ? <div style={{ fontSize: '0.85rem' }}>Loading Modules...</div> : subjects.length === 0 ? <p style={{ fontSize: '0.85rem' }}>No modules available.</p> : null}
+          {subjects.map(c => (
             <div
               key={c}
-              onClick={() => navigate(`/library?course=${encodeURIComponent(c)}`)}
+              onClick={() => navigate(`/library`)}
               style={{ padding: '1.5rem', background: 'var(--color-white)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', minWidth: '220px', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '0.5rem', transition: 'transform 0.2s' }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
               onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}

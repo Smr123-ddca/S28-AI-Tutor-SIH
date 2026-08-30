@@ -97,7 +97,7 @@ export const MOCK_COURSES = [
     title: 'Data Structures & Algorithmic Analysis',
     progressCurrent: 14,
     progressTotal: 20,
-    unit: 'lessons',
+    unit: 'chapters',
     participantAvatars: [
       'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80',
@@ -114,7 +114,7 @@ export const MOCK_COURSES = [
     title: 'Linear Algebra & Matrix Transformations',
     progressCurrent: 8,
     progressTotal: 15,
-    unit: 'lessons',
+    unit: 'chapters',
     participantAvatars: [
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80',
@@ -130,7 +130,7 @@ export const MOCK_COURSES = [
     title: 'Electromagnetism & Wave Mechanics',
     progressCurrent: 12,
     progressTotal: 18,
-    unit: 'lessons',
+    unit: 'chapters',
     participantAvatars: [
       'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80'

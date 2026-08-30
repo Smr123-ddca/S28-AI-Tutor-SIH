@@ -7,17 +7,15 @@ import { Button } from '../components/common/Button';
 export function TeacherUpload() {
     const { session } = useAuth();
 
-    const [uploadFileName, setUploadFileName] = useState('');
-    const [uploadSubject, setUploadSubject] = useState('Computer Science');
-    const [uploadChapter, setUploadChapter] = useState('');
+
     const [uploadFile, setUploadFile] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
 
     const handleUploadSubmit = async (e) => {
         e.preventDefault();
-        if (!uploadFileName.trim() || !uploadFile) {
-            alert('Please provide a document name and file.');
+        if (!uploadFile) {
+            alert('Please select a file to upload.');
             return;
         }
 
@@ -25,15 +23,10 @@ export function TeacherUpload() {
         try {
             const formData = new FormData();
             formData.append('files', uploadFile);
-            formData.append('courseName', uploadFileName);
-            formData.append('subject', uploadSubject);
-            formData.append('chapter', uploadChapter);
 
             await uploadCourseDoc(formData, session?.access_token);
 
             setUploadSuccess(true);
-            setUploadFileName('');
-            setUploadChapter('');
             setUploadFile(null);
             setTimeout(() => setUploadSuccess(false), 5000);
         } catch (err) {
@@ -63,42 +56,7 @@ export function TeacherUpload() {
                     </div>
                 ) : (
                     <form onSubmit={handleUploadSubmit} style={{ display: 'grid', gap: '1.5rem', maxWidth: '600px' }}>
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Unique Tracking Name</label>
-                            <input
-                                type="text"
-                                value={uploadFileName}
-                                onChange={(e) => setUploadFileName(e.target.value)}
-                                placeholder="e.g. CS101_Fall24"
-                                style={{ width: '100%', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)' }}
-                                required
-                            />
-                        </div>
 
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Subject Pipeline</label>
-                            <select
-                                value={uploadSubject}
-                                onChange={(e) => setUploadSubject(e.target.value)}
-                                style={{ width: '100%', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', backgroundColor: '#fff' }}
-                            >
-                                <option>Computer Science</option>
-                                <option>Mathematics</option>
-                                <option>Physics</option>
-                                <option>Engineering</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Chapter (Optional)</label>
-                            <input
-                                type="text"
-                                value={uploadChapter}
-                                onChange={(e) => setUploadChapter(e.target.value)}
-                                placeholder="e.g. Chapter 4: Data Structures"
-                                style={{ width: '100%', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)' }}
-                            />
-                        </div>
 
                         <div>
                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem' }}>Select PDF Document</label>

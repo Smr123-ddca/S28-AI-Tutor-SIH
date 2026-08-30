@@ -56,11 +56,29 @@ async function createQuestion(req, res) {
 
 async function getQuestions(req, res) {
     const student_id = req.user.id;
+    const session_id = req.query.session_id;
+
+    if (!session_id) {
+        return res.status(400).json({ error: "Missing required session_id parameter for course isolation." });
+    }
+
+    // Verify session ownership
+    const { data: sessionData, error: sessionErr } = await supabaseAdmin
+        .from('chat_sessions')
+        .select('*')
+        .eq('id', session_id)
+        .eq('student_id', student_id)
+        .single();
+
+    if (sessionErr || !sessionData) {
+        return res.status(403).json({ error: "Access denied or session not found" });
+    }
 
     const { data: questions, error } = await supabaseAdmin
         .from('practice_questions')
         .select('*')
         .eq('student_id', student_id)
+        .eq('session_id', session_id)
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -157,7 +175,7 @@ Student's Answer:
 ${answer}
 `;
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.6-flash",
             generationConfig: {
                 responseMimeType: "application/json",
                 responseSchema: evaluationSchema
@@ -316,7 +334,7 @@ ${message}
     let evaluationResult = null;
     try {
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.5-flash",
+            model: "gemini-3.6-flash",
             generationConfig: { responseMimeType: "application/json", responseSchema: socraticSchema }
         });
         const result = await model.generateContent(prompt);
@@ -372,7 +390,7 @@ async function revealAnswer(req, res) {
     let answerText = "";
     try {
         const prompt = `Provide a concise, direct answer and brief explanation to the following question, relying ONLY on the Source Material provided.\n\nSource: ${evidenceText}\n\nQuestion: ${question.question}`;
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
         const result = await model.generateContent(prompt);
         answerText = await result.response.text();
     } catch (err) {

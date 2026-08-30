@@ -28,7 +28,7 @@ export function Home() {
     loadCourses();
   }, [session?.access_token]);
 
-  const categories = ['All', 'Computer Science', 'Mathematics', 'Physics'];
+  const categories = ['All', ...new Set(realCourses.map(c => c.subject).filter(Boolean))];
 
   const filteredCourses = selectedCategory === 'All'
     ? realCourses
@@ -74,11 +74,11 @@ export function Home() {
             <Button
               variant="orange"
               size="lg"
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/chat')}
               icon={ArrowRight}
               iconPosition="right"
             >
-              Open Student Dashboard
+              Open Learnify Chat
             </Button>
           </div>
         </div>
@@ -156,7 +156,7 @@ export function Home() {
               progressTotal={course.totalChunks || course.chapters || 10}
               participantAvatars={[]}
               participantExtraCount={0}
-              onContinue={() => navigate(`/chat?course=${encodeURIComponent(course.id)}`)}
+              onContinue={() => navigate(`/chat?subject=${encodeURIComponent(course.id)}`)}
               onBookmark={() => navigate('/library')}
             />
           ))}

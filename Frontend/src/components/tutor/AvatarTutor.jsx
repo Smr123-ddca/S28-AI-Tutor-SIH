@@ -39,6 +39,7 @@ export function AvatarTutor({
 
   // Equalizer waveform bars
   const [waveformBars, setWaveformBars] = useState([8, 14, 22, 16, 26, 12, 18, 10, 20, 15, 12, 8]);
+  const [preloadedImages, setPreloadedImages] = useState({});
 
   const blinkTimerRef = useRef(null);
   const videoRef = useRef(null);
@@ -209,10 +210,10 @@ export function AvatarTutor({
         position: 'relative',
         overflow: 'hidden',
         border: `2px solid ${isSpeakingActive
-            ? 'var(--color-orange)'
-            : isThinkingActive
-              ? 'var(--color-purple)'
-              : 'rgba(255, 255, 255, 0.12)'
+          ? 'var(--color-orange)'
+          : isThinkingActive
+            ? 'var(--color-purple)'
+            : 'rgba(255, 255, 255, 0.12)'
           }`,
         boxShadow:
           isSpeakingActive
@@ -235,10 +236,10 @@ export function AvatarTutor({
           overflow: 'hidden',
           backgroundColor: '#efe8df',
           border: `2px solid ${isSpeakingActive
-              ? 'var(--color-orange)'
-              : isThinkingActive
-                ? 'var(--color-purple)'
-                : 'rgba(255, 255, 255, 0.15)'
+            ? 'var(--color-orange)'
+            : isThinkingActive
+              ? 'var(--color-purple)'
+              : 'rgba(255, 255, 255, 0.15)'
             }`,
           boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
           transition: 'border-color var(--transition-normal)'

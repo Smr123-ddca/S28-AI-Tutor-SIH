@@ -99,7 +99,7 @@ export function Login() {
           .single();
 
         const userRole = profile?.role || 'student';
-        navigate(userRole === 'teacher' ? '/teacher' : '/dashboard');
+        navigate(userRole === 'teacher' ? '/teacher' : '/');
       }
     } catch (err) {
       setError(err.message || 'Authentication failed.');
@@ -110,7 +110,7 @@ export function Login() {
 
   const handleDevBypass = (chosenRole) => {
     switchRole(chosenRole);
-    navigate(chosenRole === 'teacher' ? '/teacher' : '/dashboard');
+    navigate(chosenRole === 'teacher' ? '/teacher' : '/');
   };
 
   return (
