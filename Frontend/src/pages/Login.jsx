@@ -22,7 +22,7 @@ import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap, Clock } f
  * The check below against VITE_TEACHER_INVITE_CODE is a placeholder UI gate.
  * =====================================================================
  */
-const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-BODH-2026';
+const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-LEARNIFY-2026';
 
 export function Login() {
   const navigate = useNavigate();
@@ -334,7 +334,7 @@ export function Login() {
                         type="text"
                         value={inviteCodeInput}
                         onChange={(e) => setInviteCodeInput(e.target.value)}
-                        placeholder="Invite Code (e.g. TEACH-BODH-2026)"
+                        placeholder="Invite Code (e.g. TEACH-LEARNIFY-2026)"
                         style={{
                           flex: 1,
                           padding: '0.5rem 0.75rem',

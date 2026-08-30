@@ -1,4 +1,4 @@
-# 🎓 BODH — AI Socratic Tutor (SIH)
+# 🎓 Learnify — AI Socratic Tutor (SIH)
 
 <div align="center">
 
@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
 **An intelligent, adaptive Socratic learning platform built for the Smart India Hackathon (SIH).**  
-BODH empowers students with guided, step-by-step conceptual discovery while equipping educators with actionable learning gap and misconception analytics.
+Learnify empowers students with guided, step-by-step conceptual discovery while equipping educators with actionable learning gap and misconception analytics.
 
 </div>
 

@@ -413,7 +413,7 @@ export function AvatarTutor({
               }}
             />
             <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#ffffff', letterSpacing: '0.02em' }}>
-              BODH Live Presence
+              Learnify Live Presence
             </span>
           </div>
 

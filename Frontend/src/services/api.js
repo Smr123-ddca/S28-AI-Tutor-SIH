@@ -1,5 +1,5 @@
 /**
- * API Service for BODH (AI Tutor)
+ * API Service for Learnify (AI Tutor)
  * Preserves all backend contracts exactly.
  * Gated behind import.meta.env.VITE_USE_MOCKS === 'true'
  */
