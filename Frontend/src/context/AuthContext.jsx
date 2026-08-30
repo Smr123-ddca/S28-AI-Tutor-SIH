@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
   const [role, setRole] = useState('student');
   const [loading, setLoading] = useState(true);
   const [isMockAuth, setIsMockAuth] = useState(MOCK_AUTH_ENV);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   // Initialize Auth
   useEffect(() => {
@@ -38,10 +39,14 @@ export function AuthProvider({ children }) {
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        fetchUserRole(session.user.id);
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      if (!newSession && session && event === 'SIGNED_OUT') {
+        setSessionExpired(true);
+      }
+      setSession(newSession);
+      if (newSession) {
+        setSessionExpired(false);
+        fetchUserRole(newSession.user.id);
       } else {
         setUser(null);
         setRole(null);
@@ -125,6 +130,8 @@ export function AuthProvider({ children }) {
     role,
     loading,
     isMockAuth,
+    sessionExpired,
+    setSessionExpired,
     switchRole,
     toggleMockBypass,
     logout,

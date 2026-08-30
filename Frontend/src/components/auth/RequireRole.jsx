@@ -1,56 +1,41 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { LoadingState } from '../common/LoadingState';
+import { Forbidden } from '../../pages/Forbidden';
 
 /**
  * =====================================================================
- * TASK 3: Strict Role-Based Access Control Guard (RequireRole)
+ * Strict Role-Based Access Control Guard (RequireRole)
  * =====================================================================
- * Centralized route guard for student and teacher areas.
- *
  * Rules:
  *  1. Unauthenticated users -> Redirect to /login
- *  2. Student accessing Teacher area (/teacher) -> Redirect to /dashboard
- *  3. Teacher accessing Student area (/dashboard, /chat, /library) -> Redirect to /teacher
- *  4. Authorized role -> Render children or <Outlet />
+ *  2. Role mismatch (e.g. student hitting /teacher) -> Render 403 Forbidden
+ *  3. Authorized role -> Render children or <Outlet />
  * =====================================================================
  */
 export function RequireRole({ role: requiredRole, children }) {
   const { session, role: currentRole, loading, isMockAuth } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'var(--color-offwhite)',
-          color: 'var(--color-text-secondary)'
-        }}
-      >
-        <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
-        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Verifying Academic Credentials...</div>
-      </div>
+      <LoadingState
+        variant="fullscreen"
+        message="Verifying Academic Credentials..."
+        description="Authenticating role permissions and curriculum access..."
+      />
     );
   }
 
   // 1. Unauthenticated check
   if (!session && !isMockAuth) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 2. Role mismatch redirects
+  // 2. Role mismatch -> Render 403 Forbidden state
   if (requiredRole && currentRole !== requiredRole) {
-    if (currentRole === 'student') {
-      // Students redirected to their tutor chat
-      return <Navigate to="/chat" replace />;
-    } else if (currentRole === 'teacher') {
-      // Teachers redirected to teacher dashboard
-      return <Navigate to="/teacher" replace />;
-    }
+    return <Forbidden />;
   }
 
   return children || <Outlet />;

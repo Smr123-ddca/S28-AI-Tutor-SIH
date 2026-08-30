@@ -2,7 +2,7 @@ import React from 'react';
 import { CitationChip } from './CitationChip';
 import { PracticeQuestionCard } from './PracticeQuestionCard';
 import { Pill } from '../common/Pill';
-import { AlertCircle, Sparkles, ShieldCheck } from 'lucide-react';
+import { AlertCircle, Sparkles, ShieldCheck, RotateCw } from 'lucide-react';
 
 /**
  * =====================================================================
@@ -23,6 +23,7 @@ export function MessageBubble({
   msgIndex,
   studentId,
   onAcceptWalkthrough,
+  onRetryQuestion,
   className = ''
 }) {
   // User message
@@ -77,7 +78,7 @@ export function MessageBubble({
           maxWidth: '850px',
           padding: '1.5rem',
           borderRadius: '22px',
-          border: '1px solid var(--color-border)',
+          border: status === 'error' ? '1.5px solid #fecaca' : '1px solid var(--color-border)',
           backgroundColor: 'var(--color-white)',
           boxShadow: 'var(--shadow-sm)'
         }}
@@ -98,49 +99,51 @@ export function MessageBubble({
           >
             <Sparkles size={18} style={{ color: 'var(--color-orange)', flexShrink: 0, marginTop: '2px' }} />
             <div>
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-ink)', textTransform: 'uppercase' }}>
-                Prerequisite Foundation Detected
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--color-ink)' }}>
+                Targeted Prerequisite Refresher Activated
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#713f12', lineHeight: 1.4, marginTop: '0.15rem' }}>
-                Quickly covering <strong>{gap_section_label}</strong> first, since it is essential to understand this topic.
+              <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)', marginTop: '0.15rem' }}>
+                Grounding in: <strong>{gap_section_label || 'Foundational Invariant'}</strong>
               </div>
             </div>
           </div>
         )}
 
-        {/* State 2: Insufficient Evidence State (Distinct honest message) */}
+        {/* State 2: Insufficient Evidence */}
         {status === 'insufficient_evidence' && (
           <div
             style={{
-              padding: '1rem',
-              backgroundColor: 'var(--color-yellow-light)',
+              padding: '1.25rem',
+              backgroundColor: 'var(--color-offwhite)',
               borderRadius: 'var(--radius-md)',
-              borderLeft: '4px solid var(--color-yellow)',
+              border: '1.5px solid var(--color-border)',
               display: 'flex',
-              alignItems: 'flex-start',
-              gap: '0.75rem'
+              flexDirection: 'column',
+              gap: '0.85rem'
             }}
           >
-            <AlertCircle size={20} style={{ color: '#b45309', flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>
-                Not Covered in Approved Course Syllabus
-              </div>
-              <div style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                {botMessage || "I don't have approved course material covering this. To ensure academic rigor and avoid hallucinations, I can only explain concepts within your official curriculum."}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+              <AlertCircle size={22} style={{ color: 'var(--color-orange)', flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>
+                  Outside Approved Syllabus Material
+                </div>
+                <div style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                  {botMessage || "I don't have approved course material covering this topic in the syllabus."}
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* State 3: Guided Mode State (Homework / Exam direct-answer safeguard) */}
+        {/* State 3: Guided Learning Mode */}
         {status === 'guided_mode' && (
           <div
             style={{
-              padding: '1.15rem',
-              backgroundColor: 'var(--color-purple-light)',
+              padding: '1.25rem',
+              backgroundColor: 'var(--color-yellow-light)',
               borderRadius: 'var(--radius-md)',
-              borderLeft: '4px solid var(--color-purple)',
+              border: '1.5px solid #fde047',
               display: 'flex',
               flexDirection: 'column',
               gap: '0.85rem'
@@ -171,18 +174,50 @@ export function MessageBubble({
           </div>
         )}
 
-        {/* State 4: Error State */}
+        {/* State 4: Error State with Retry Action */}
         {status === 'error' && (
           <div
+            role="alert"
             style={{
-              padding: '0.85rem 1rem',
+              padding: '1.25rem',
               backgroundColor: 'var(--color-red-light)',
               borderRadius: 'var(--radius-md)',
-              color: '#b91c1c',
-              fontSize: '0.9rem'
+              border: '1px solid #fca5a5',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem'
             }}
           >
-            {botMessage || 'Unable to generate response. Please verify backend connection.'}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
+              <AlertCircle size={20} style={{ color: '#dc2626', flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#991b1b' }}>
+                  Response Generation Failed
+                </div>
+                <div style={{ fontSize: '0.85rem', color: '#b91c1c', marginTop: '0.2rem', lineHeight: 1.5 }}>
+                  {botMessage || 'Could not connect to AI Tutor backend service. Please check connection and try again.'}
+                </div>
+              </div>
+            </div>
+            {onRetryQuestion && (
+              <div style={{ alignSelf: 'flex-start' }}>
+                <button
+                  type="button"
+                  onClick={onRetryQuestion}
+                  className="btn btn-outline btn-sm"
+                  style={{
+                    borderColor: '#fca5a5',
+                    color: '#991b1b',
+                    backgroundColor: 'var(--color-white)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem'
+                  }}
+                >
+                  <RotateCw size={14} /> Retry Question
+                </button>
+              </div>
+            )}
           </div>
         )}
 

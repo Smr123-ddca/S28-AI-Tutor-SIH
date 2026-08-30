@@ -10,23 +10,39 @@ import {
 import { Button } from '../components/common/Button';
 import { Pill } from '../components/common/Pill';
 import { SegmentedControl } from '../components/common/SegmentedControl';
+import { LoadingState } from '../components/common/LoadingState';
+import { EmptyState } from '../components/common/EmptyState';
+import { NoResultsState } from '../components/common/NoResultsState';
+import { ErrorState } from '../components/common/ErrorState';
 import { fetchLibraryDocuments } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export function LibraryPage() {
   const { session } = useAuth();
   const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [previewDoc, setPreviewDoc] = useState(null);
 
   const subjects = ['All', 'Computer Science', 'Mathematics', 'Physics'];
 
-  useEffect(() => {
-    async function loadDocs() {
+  const loadDocs = async () => {
+    setLoading(true);
+    setError(null);
+    try {
       const data = await fetchLibraryDocuments(session?.access_token);
       setDocuments(data.documents || []);
+    } catch (err) {
+      console.error('Failed to load library documents:', err);
+      setError(err.message || 'Unable to retrieve course syllabus documents.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadDocs();
   }, [session?.access_token]);
 
@@ -39,6 +55,11 @@ export function LibraryPage() {
       doc.chapter.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSubject && matchesSearch;
   });
+
+  const handleResetFilters = () => {
+    setSelectedSubject('All');
+    setSearchQuery('');
+  };
 
   return (
     <div className="page-container" style={{ paddingBottom: '3.5rem' }}>
@@ -85,23 +106,65 @@ export function LibraryPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search filename or chapter..."
               className="search-pill-input"
+              aria-label="Search syllabus documents"
             />
-            <button type="button" className="search-pill-btn" aria-label="Search">
-              <Search size={16} />
-            </button>
+            {searchQuery ? (
+              <button
+                type="button"
+                className="search-pill-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+                title="Clear"
+              >
+                <X size={16} />
+              </button>
+            ) : (
+              <button type="button" className="search-pill-btn" aria-label="Search">
+                <Search size={16} />
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Documents Grid / Table */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: '1.5rem'
-        }}
-      >
-        {filteredDocs.map((doc) => (
+      {/* State Renderers: Loading / Error / Empty / No Results / Grid */}
+      {loading ? (
+        <LoadingState
+          variant="skeleton-cards"
+          cards={6}
+          message="Loading curriculum syllabus documents..."
+        />
+      ) : error ? (
+        <ErrorState
+          title="Document Retrieval Error"
+          message={error}
+          onRetry={loadDocs}
+          retryLabel="Retry Loading Documents"
+        />
+      ) : documents.length === 0 ? (
+        <EmptyState
+          icon={BookOpen}
+          badge="No Course Documents"
+          badgeColor="purple"
+          title="No syllabus documents available yet"
+          description="Your professors have not ingested any reference textbooks or notes into the syllabus repository yet. Once uploaded, verified chunks will appear here."
+        />
+      ) : filteredDocs.length === 0 ? (
+        <NoResultsState
+          query={searchQuery}
+          filter={selectedSubject}
+          onReset={handleResetFilters}
+          resetLabel="Clear Search & Show All Documents"
+        />
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: '1.5rem'
+          }}
+        >
+          {filteredDocs.map((doc) => (
           <div
             key={doc.id}
             className="card-white"
@@ -198,6 +261,7 @@ export function LibraryPage() {
           </div>
         ))}
       </div>
+      )}
 
       {/* Preview Modal */}
       {previewDoc && (

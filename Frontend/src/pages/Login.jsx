@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
-import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap } from 'lucide-react';
+import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap, Clock } from 'lucide-react';
 
 /**
  * =====================================================================
@@ -26,7 +26,8 @@ const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH
 
 export function Login() {
   const navigate = useNavigate();
-  const { switchRole } = useAuth();
+  const [searchParams] = useSearchParams();
+  const { switchRole, setRole, sessionExpired, setSessionExpired } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,16 +42,18 @@ export function Login() {
   const [codeVerified, setCodeVerified] = useState(false);
   const [codeError, setCodeError] = useState('');
 
+  const isExpired = sessionExpired || searchParams.get('session_expired') === 'true';
+
   const handleVerifyInviteCode = (e) => {
     e.preventDefault();
     setCodeError('');
     if (inviteCodeInput.trim().toUpperCase() === EXPECTED_TEACHER_CODE.toUpperCase()) {
       setCodeVerified(true);
-      setRole('teacher');
+      if (typeof setRole === 'function') setRole('teacher');
     } else {
       setCodeError('Invalid teacher invitation code. Contact your academic administrator.');
       setCodeVerified(false);
-      setRole('student');
+      if (typeof setRole === 'function') setRole('student');
     }
   };
 
@@ -158,8 +161,30 @@ export function Login() {
         </div>
 
         {/* Alerts */}
+        {isExpired && (
+          <div
+            role="alert"
+            style={{
+              backgroundColor: 'var(--color-yellow-light)',
+              color: '#854d0e',
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '0.85rem',
+              marginBottom: '1.25rem',
+              border: '1.5px solid #fde047',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            <Clock size={18} style={{ flexShrink: 0, color: '#ca8a04' }} />
+            <span>Your previous session has expired. Please log in again to continue your study session.</span>
+          </div>
+        )}
+
         {error && (
           <div
+            role="alert"
             style={{
               backgroundColor: 'var(--color-red-light)',
               color: '#b91c1c',
@@ -176,6 +201,7 @@ export function Login() {
 
         {successMsg && (
           <div
+            role="status"
             style={{
               backgroundColor: 'var(--color-green-light)',
               color: '#15803d',
@@ -345,7 +371,7 @@ export function Login() {
                     onClick={() => {
                       setIsTeacherSignup(false);
                       setCodeVerified(false);
-                      setRole('student');
+                      if (typeof setRole === 'function') setRole('student');
                     }}
                     style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textAlign: 'left', marginTop: '0.2rem' }}
                   >

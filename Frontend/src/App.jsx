@@ -3,11 +3,14 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { AppShell } from './components/layout/AppShell';
 import { RequireRole } from './components/auth/RequireRole';
+import { LoadingState } from './components/common/LoadingState';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { TeacherDashboard } from './pages/TeacherDashboard';
+import { NotFound } from './pages/NotFound';
+import { Forbidden } from './pages/Forbidden';
 
 // Shell layout wrapper with session check
 function ProtectedLayout() {
@@ -15,20 +18,11 @@ function ProtectedLayout() {
 
   if (loading) {
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'var(--color-offwhite)',
-          color: 'var(--color-text-secondary)'
-        }}
-      >
-        <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
-        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading LearnifyTutor...</div>
-      </div>
+      <LoadingState
+        variant="fullscreen"
+        message="Loading LearnifyTutor..."
+        description="Initializing your curriculum grounding session..."
+      />
     );
   }
 
@@ -51,7 +45,7 @@ export function App() {
         {/* Home is accessible by both authenticated roles */}
         <Route path="/" element={<Home />} />
 
-        {/* Student-Only Routes (Redirects Teacher to /teacher) */}
+        {/* Student-Only Routes (Protected by RequireRole) */}
         <Route element={<RequireRole role="student" />}>
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/library" element={<LibraryPage />} />
@@ -59,14 +53,18 @@ export function App() {
           <Route path="/dashboard" element={<Navigate to="/chat" replace />} />
         </Route>
 
-        {/* Teacher-Only Routes (Redirects Student to /chat) */}
+        {/* Teacher-Only Routes (Protected by RequireRole) */}
         <Route element={<RequireRole role="teacher" />}>
           <Route path="/teacher" element={<TeacherDashboard />} />
         </Route>
-      </Route>
 
-      {/* Catch-all redirect */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Dedicated 403 Forbidden State View */}
+        <Route path="/forbidden" element={<Forbidden />} />
+
+        {/* 404 Route within authenticated shell */}
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
     </Routes>
   );
 }

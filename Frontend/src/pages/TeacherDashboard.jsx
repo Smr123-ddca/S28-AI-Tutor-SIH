@@ -17,6 +17,10 @@ import { Pill } from '../components/common/Pill';
 import { ProgressBar } from '../components/common/AvatarStack';
 import { Button } from '../components/common/Button';
 import { SegmentedControl } from '../components/common/SegmentedControl';
+import { LoadingState } from '../components/common/LoadingState';
+import { EmptyState } from '../components/common/EmptyState';
+import { NoResultsState } from '../components/common/NoResultsState';
+import { ErrorState } from '../components/common/ErrorState';
 import {
   MOCK_CONCEPT_MASTERY,
   MOCK_STUDENT_GAPS,
@@ -33,6 +37,7 @@ export function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState('analytics'); // 'analytics' | 'ingestion' | 'cohort'
   const [misconceptions, setMisconceptions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Ingestion upload state
   const [documents, setDocuments] = useState(MOCK_DOCUMENTS);
@@ -53,17 +58,21 @@ export function TeacherDashboard() {
   const [assignmentNote, setAssignmentNote] = useState('');
   const [toastMessage, setToastMessage] = useState('');
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await fetchMisconceptions(session?.access_token);
-        setMisconceptions(data.misconceptions || []);
-      } catch (err) {
-        console.error('Error loading teacher misconceptions:', err);
-      } finally {
-        setLoading(false);
-      }
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchMisconceptions(session?.access_token);
+      setMisconceptions(data.misconceptions || []);
+    } catch (err) {
+      console.error('Error loading teacher misconceptions:', err);
+      setError(err.message || 'Failed to retrieve real-time student misconceptions data.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadData();
   }, [session?.access_token]);
 
@@ -353,80 +362,107 @@ export function TeacherDashboard() {
               </p>
             </div>
 
-            <div className="card-white" style={{ padding: '0', overflow: 'hidden' }}>
-              <div style={{ overflowX: 'auto' }}>
-                <table
-                  style={{
-                    width: '100%',
-                    borderCollapse: 'collapse',
-                    textAlign: 'left',
-                    fontSize: '0.88rem'
-                  }}
-                >
-                  <thead>
-                    <tr style={{ backgroundColor: 'var(--color-offwhite)', borderBottom: '1px solid var(--color-border)' }}>
-                      <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Syllabus Topic</th>
-                      <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Incorrect Rate</th>
-                      <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Total Attempts</th>
-                      <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Most Common Prerequisite Gap</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedMisconceptions.map((item) => {
-                      const isHighAlert = item.incorrect_rate > 0.4;
-
-                      return (
-                        <tr
-                          key={item.chunk_id}
-                          style={{
-                            borderBottom: '1px solid var(--color-border)',
-                            backgroundColor: isHighAlert ? 'var(--color-red-light)' : 'transparent',
-                            transition: 'background var(--transition-fast)'
-                          }}
-                        >
-                          <td style={{ padding: '1.1rem 1.5rem', fontWeight: 600, color: 'var(--color-ink)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              {isHighAlert && <AlertTriangle size={16} style={{ color: '#dc2626', flexShrink: 0 }} />}
-                              <span>{item.section_label}</span>
-                            </div>
-                          </td>
-
-                          <td style={{ padding: '1.1rem 1.5rem' }}>
-                            <span
-                              style={{
-                                fontWeight: 700,
-                                color: isHighAlert ? '#dc2626' : 'var(--color-ink)',
-                                padding: '0.25rem 0.6rem',
-                                borderRadius: 'var(--radius-sm)',
-                                backgroundColor: isHighAlert ? 'rgba(239, 68, 68, 0.15)' : 'var(--color-offwhite)'
-                              }}
-                            >
-                              {(item.incorrect_rate * 100).toFixed(1)}%
-                            </span>
-                          </td>
-
-                          <td style={{ padding: '1.1rem 1.5rem', color: 'var(--color-text-secondary)' }}>
-                            {item.total_attempts} student checks
-                          </td>
-
-                          <td style={{ padding: '1.1rem 1.5rem' }}>
-                            {item.most_common_gap ? (
-                              <Pill color="orange" size="sm">
-                                {item.most_common_gap.section_label}
-                              </Pill>
-                            ) : (
-                              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                                No prerequisite gap detected
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+            {loading ? (
+              <div className="card-white" style={{ padding: '1rem' }}>
+                <LoadingState
+                  variant="skeleton-table"
+                  rows={4}
+                  message="Analyzing student attempt logs and detecting prerequisite misconceptions..."
+                />
               </div>
-            </div>
+            ) : error ? (
+              <ErrorState
+                title="Diagnostics Retrieval Error"
+                message={error}
+                onRetry={loadData}
+                retryLabel="Retry Loading Diagnostics"
+              />
+            ) : sortedMisconceptions.length === 0 ? (
+              <EmptyState
+                icon={GraduationCap}
+                badge="High Mastery"
+                badgeColor="green"
+                title="No Class Misconceptions Detected"
+                description="All syllabus modules currently maintain healthy student mastery scores, or no student practice sessions have been logged yet."
+                actionText="Ingest Course Document"
+                onAction={() => setActiveTab('ingestion')}
+              />
+            ) : (
+              <div className="card-white" style={{ padding: '0', overflow: 'hidden' }}>
+                <div style={{ overflowX: 'auto' }}>
+                  <table
+                    style={{
+                      width: '100%',
+                      borderCollapse: 'collapse',
+                      textAlign: 'left',
+                      fontSize: '0.88rem'
+                    }}
+                  >
+                    <thead>
+                      <tr style={{ backgroundColor: 'var(--color-offwhite)', borderBottom: '1px solid var(--color-border)' }}>
+                        <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Syllabus Topic</th>
+                        <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Incorrect Rate</th>
+                        <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Total Attempts</th>
+                        <th style={{ padding: '1rem 1.5rem', fontWeight: 700, color: 'var(--color-ink)' }}>Most Common Prerequisite Gap</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sortedMisconceptions.map((item) => {
+                        const isHighAlert = item.incorrect_rate > 0.4;
+
+                        return (
+                          <tr
+                            key={item.chunk_id}
+                            style={{
+                              borderBottom: '1px solid var(--color-border)',
+                              backgroundColor: isHighAlert ? 'var(--color-red-light)' : 'transparent',
+                              transition: 'background var(--transition-fast)'
+                            }}
+                          >
+                            <td style={{ padding: '1.1rem 1.5rem', fontWeight: 600, color: 'var(--color-ink)' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                {isHighAlert && <AlertTriangle size={16} style={{ color: '#dc2626', flexShrink: 0 }} />}
+                                <span>{item.section_label}</span>
+                              </div>
+                            </td>
+
+                            <td style={{ padding: '1.1rem 1.5rem' }}>
+                              <span
+                                style={{
+                                  fontWeight: 700,
+                                  color: isHighAlert ? '#dc2626' : 'var(--color-ink)',
+                                  padding: '0.25rem 0.6rem',
+                                  borderRadius: 'var(--radius-sm)',
+                                  backgroundColor: isHighAlert ? 'rgba(239, 68, 68, 0.15)' : 'var(--color-offwhite)'
+                                }}
+                              >
+                                {(item.incorrect_rate * 100).toFixed(1)}%
+                              </span>
+                            </td>
+
+                            <td style={{ padding: '1.1rem 1.5rem', color: 'var(--color-text-secondary)' }}>
+                              {item.total_attempts} student checks
+                            </td>
+
+                            <td style={{ padding: '1.1rem 1.5rem' }}>
+                              {item.most_common_gap ? (
+                                <Pill color="orange" size="sm">
+                                  {item.most_common_gap.section_label}
+                                </Pill>
+                              ) : (
+                                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                                  No prerequisite gap detected
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </section>
 
           {/* AI Recommended Interventions */}
@@ -643,7 +679,16 @@ export function TeacherDashboard() {
               Active Grounded Documents ({documents.length})
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              {documents.map((doc) => (
+              {documents.length === 0 ? (
+                <EmptyState
+                  icon={UploadCloud}
+                  badge="Empty Knowledge Store"
+                  badgeColor="yellow"
+                  title="No Ingested Documents Yet"
+                  description="Use the upload form above to ingest and vectorize your first course syllabus material."
+                />
+              ) : (
+                documents.map((doc) => (
                 <div
                   key={doc.id}
                   style={{
@@ -685,7 +730,7 @@ export function TeacherDashboard() {
                     Verified
                   </Pill>
                 </div>
-              ))}
+              )))}
             </div>
           </div>
         </div>
@@ -742,7 +787,18 @@ export function TeacherDashboard() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {filteredStudents.map((st, sIdx) => (
+            {filteredStudents.length === 0 ? (
+              <NoResultsState
+                query={studentSearch}
+                filter={cohortFilter}
+                onReset={() => {
+                  setCohortFilter('All');
+                  setStudentSearch('');
+                }}
+                resetLabel="Reset Cohort Filters"
+              />
+            ) : (
+              filteredStudents.map((st, sIdx) => (
               <div
                 key={sIdx}
                 style={{
@@ -801,7 +857,7 @@ export function TeacherDashboard() {
                   </Button>
                 </div>
               </div>
-            ))}
+            )))}
           </div>
         </div>
       )}

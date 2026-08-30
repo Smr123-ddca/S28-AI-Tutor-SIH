@@ -32,9 +32,12 @@ export function ChatPage() {
 
   // State Management
   const [sessions, setSessions] = useState([]);
+  const [loadingSessions, setLoadingSessions] = useState(true);
+  const [sessionsError, setSessionsError] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
+  const [lastQuestion, setLastQuestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeMode, setActiveMode] = useState('ask_doubt'); // 'ask_doubt' | 'practice_test' | 'study_plan'
   const [studentId, setStudentId] = useState('');
@@ -52,16 +55,22 @@ export function ChatPage() {
     setStudentId(sid);
   }, []);
 
+  const loadSessions = async () => {
+    setLoadingSessions(true);
+    setSessionsError(null);
+    try {
+      const data = await fetchSessions(session?.access_token);
+      setSessions(data.sessions || []);
+    } catch (err) {
+      console.error('Error fetching sessions:', err);
+      setSessionsError('Could not load session history.');
+    } finally {
+      setLoadingSessions(false);
+    }
+  };
+
   // Fetch Session History on Mount
   useEffect(() => {
-    async function loadSessions() {
-      try {
-        const data = await fetchSessions(session?.access_token);
-        setSessions(data.sessions || []);
-      } catch (err) {
-        console.error('Error fetching sessions:', err);
-      }
-    }
     loadSessions();
   }, [session?.access_token]);
 
@@ -119,6 +128,7 @@ export function ChatPage() {
     const textToSend = customText || inputQuery;
     if (!textToSend.trim() || loading) return;
 
+    setLastQuestion(textToSend);
     playSound('messageSent');
     const userMsg = { role: 'user', text: textToSend };
     setMessages((prev) => [...prev, userMsg]);
@@ -152,7 +162,7 @@ export function ChatPage() {
         {
           role: 'bot',
           status: 'error',
-          message: 'Could not connect to AI Tutor backend. Please check connection.'
+          message: 'Could not connect to AI Tutor backend. Please check connection and try again.'
         }
       ]);
     } finally {
@@ -221,9 +231,37 @@ export function ChatPage() {
             Recent Sessions
           </div>
 
-          {sessions.length === 0 ? (
-            <div style={{ padding: '1rem 0.5rem', fontSize: '0.82rem', color: 'var(--color-text-muted)', textAlign: 'center' }}>
-              No past sessions yet. Start asking a doubt!
+          {loadingSessions ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '0.25rem' }}>
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    height: '42px',
+                    borderRadius: 'var(--radius-md)',
+                    backgroundColor: 'var(--color-offwhite)',
+                    animation: 'pulse-subtle 1.5s ease-in-out infinite'
+                  }}
+                />
+              ))}
+            </div>
+          ) : sessionsError ? (
+            <div style={{ padding: '1rem 0.5rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '0.8rem', color: '#b91c1c', marginBottom: '0.5rem' }}>
+                {sessionsError}
+              </div>
+              <button
+                type="button"
+                onClick={loadSessions}
+                className="btn btn-outline btn-sm"
+                style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}
+              >
+                Retry
+              </button>
+            </div>
+          ) : sessions.length === 0 ? (
+            <div style={{ padding: '1.5rem 0.5rem', fontSize: '0.82rem', color: 'var(--color-text-muted)', textAlign: 'center', lineHeight: 1.5 }}>
+              No past sessions yet.<br />Start asking a syllabus doubt!
             </div>
           ) : (
             sessions.map((s) => {
@@ -618,19 +656,30 @@ export function ChatPage() {
               )}
 
               {/* Message History */}
-              {messages.map((msg, idx) => (
-                <MessageBubble
-                  key={idx}
-                  message={msg}
-                  msgIndex={idx}
-                  studentId={studentId}
-                  onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
-                />
-              ))}
+              {messages.map((msg, idx) => {
+                const prevUserMsg = [...messages.slice(0, idx)].reverse().find((m) => m.role === 'user');
+                const retryText = prevUserMsg?.text || lastQuestion;
+
+                return (
+                  <MessageBubble
+                    key={idx}
+                    message={msg}
+                    msgIndex={idx}
+                    studentId={studentId}
+                    onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
+                    onRetryQuestion={retryText ? () => handleSend(retryText) : null}
+                  />
+                );
+              })}
 
               {/* Loading Indicator */}
               {loading && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
+                <div
+                  role="status"
+                  aria-live="polite"
+                  aria-busy="true"
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}
+                >
                   <div
                     style={{
                       width: '32px',

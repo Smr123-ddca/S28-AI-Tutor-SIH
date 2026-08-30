@@ -5,6 +5,8 @@ import { TopNav } from './TopNav';
 import { useAuth } from '../../context/AuthContext';
 import { Sparkles } from 'lucide-react';
 
+import { OfflineBanner } from '../common/OfflineBanner';
+
 export function AppShell({ children }) {
   const navigate = useNavigate();
   const { role, switchRole, isMockAuth } = useAuth();
@@ -22,6 +24,7 @@ export function AppShell({ children }) {
 
       {/* Main Content Area */}
       <div className="content-viewport">
+        <OfflineBanner />
         <TopNav />
         <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
           {children || <Outlet />}
