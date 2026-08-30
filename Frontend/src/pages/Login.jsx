@@ -157,7 +157,7 @@ export function Login() {
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             {isSignUp
-              ? 'Create your personalized syllabus AI tutoring account'
+              ? 'Create your personalized syllabus Learnify account'
               : 'Log in to continue your learning journey'}
           </p>
         </div>

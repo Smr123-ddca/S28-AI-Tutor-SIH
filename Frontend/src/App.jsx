@@ -8,7 +8,10 @@ import { Login } from './pages/Login';
 import { StudentDashboard } from './pages/StudentDashboard';
 import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
-import { TeacherDashboard } from './pages/TeacherDashboard';
+import { TeacherHome } from './pages/TeacherHome';
+import { TeacherUpload } from './pages/TeacherUpload';
+import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
+import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 
 // Shell layout wrapper with session check
 function ProtectedLayout() {
@@ -41,6 +44,13 @@ function ProtectedLayout() {
   return <AppShell />;
 }
 
+import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
+
+function RoleBasedHome() {
+  const { role } = useAuth();
+  return role === 'teacher' ? <TeacherHomeLanding /> : <Home />;
+}
+
 export function App() {
   return (
     <Routes>
@@ -49,8 +59,8 @@ export function App() {
 
       {/* Authenticated App Routes with Shell & Strict Role Guards */}
       <Route element={<ProtectedLayout />}>
-        {/* Home/Catalog is accessible by both authenticated roles */}
-        <Route path="/" element={<Home />} />
+        {/* Dynamic Entry Base */}
+        <Route path="/" element={<RoleBasedHome />} />
 
         {/* Student-Only Routes (Task 3: Redirects Teacher to /teacher) */}
         <Route element={<RequireRole role="student" />}>
@@ -59,9 +69,12 @@ export function App() {
           <Route path="/library" element={<LibraryPage />} />
         </Route>
 
-        {/* Teacher-Only Routes (Task 3: Redirects Student to /dashboard) */}
+        {/* Teacher-Only Routes */}
         <Route element={<RequireRole role="teacher" />}>
-          <Route path="/teacher" element={<TeacherDashboard />} />
+          <Route path="/teacher" element={<TeacherHome />} />
+          <Route path="/teacher/upload" element={<TeacherUpload />} />
+          <Route path="/teacher/prerequisites" element={<TeacherPrerequisites />} />
+          <Route path="/teacher/misconceptions" element={<TeacherMisconceptions />} />
         </Route>
       </Route>
 

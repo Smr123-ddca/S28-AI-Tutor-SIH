@@ -60,7 +60,7 @@ export function LibraryPage() {
           Document <span style={{ color: 'var(--color-orange)' }}>Library</span>
         </h1>
         <p className="text-body" style={{ maxWidth: '640px' }}>
-          Official textbooks, lecture notes, and slide decks uploaded by your professors. All AI Tutor responses are directly grounded in these materials.
+          Official textbooks, lecture notes, and slide decks uploaded by your professors. All Learnify responses are directly grounded in these materials.
         </p>
       </section>
 

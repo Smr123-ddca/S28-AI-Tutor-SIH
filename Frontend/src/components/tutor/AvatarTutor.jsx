@@ -49,31 +49,31 @@ export function AvatarTutor({
   const isSpeakingActive = effectiveState === 'speaking' || isSpeaking;
 
   // 1. Asynchronously preload & decode static images on mount
-  const staticImages = useMemo(() => [
-    { key: 'idle', src: idleImg, alt: 'AI Tutor Idle' },
-    { key: 'listening', src: listeningImg, alt: 'AI Tutor Listening' },
-    { key: 'thinking', src: thinkingImg, alt: 'AI Tutor Thinking' },
-    { key: 'blink', src: blinkImg, alt: 'AI Tutor Blinking' }
-  ], []);
+  const states = [
+    { key: 'idle', src: idleImg, alt: 'Learnify Idle' },
+    { key: 'listening', src: listeningImg, alt: 'Learnify Listening' },
+    { key: 'thinking', src: thinkingImg, alt: 'Learnify Thinking' },
+    { key: 'blink', src: blinkImg, alt: 'Learnify Blinking' }
+  ];
 
   useEffect(() => {
     async function preloadStaticImages() {
-      const decodePromises = staticImages.map(({ src }) => {
+      const loaded = {};
+      const decodePromises = states.map(async ({ key, src }) => {
         const img = new Image();
         img.src = src;
         if (typeof img.decode === 'function') {
-          return img.decode().catch((err) => {
-            console.warn('Image decode notice (falling back to cached load):', err);
-          });
+          await img.decode().catch(() => { });
         }
-        return Promise.resolve();
+        loaded[key] = img;
       });
 
       await Promise.all(decodePromises);
+      setPreloadedImages(loaded);
     }
 
     preloadStaticImages();
-  }, [staticImages]);
+  }, []);
 
   // 2. Preload, Prime & Permanently Mute the Speaking Video on Mount
   useEffect(() => {
@@ -208,13 +208,12 @@ export function AvatarTutor({
         gap: '1.25rem',
         position: 'relative',
         overflow: 'hidden',
-        border: `2px solid ${
-          isSpeakingActive
+        border: `2px solid ${isSpeakingActive
             ? 'var(--color-orange)'
             : isThinkingActive
-            ? 'var(--color-purple)'
-            : 'rgba(255, 255, 255, 0.12)'
-        }`,
+              ? 'var(--color-purple)'
+              : 'rgba(255, 255, 255, 0.12)'
+          }`,
         boxShadow:
           isSpeakingActive
             ? 'var(--shadow-orange)'
@@ -235,13 +234,12 @@ export function AvatarTutor({
           position: 'relative',
           overflow: 'hidden',
           backgroundColor: '#efe8df',
-          border: `2px solid ${
-            isSpeakingActive
+          border: `2px solid ${isSpeakingActive
               ? 'var(--color-orange)'
               : isThinkingActive
-              ? 'var(--color-purple)'
-              : 'rgba(255, 255, 255, 0.15)'
-          }`,
+                ? 'var(--color-purple)'
+                : 'rgba(255, 255, 255, 0.15)'
+            }`,
           boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
           transition: 'border-color var(--transition-normal)'
         }}
@@ -280,8 +278,8 @@ export function AvatarTutor({
         >
           {/* Layer 1: Permanent Baseline Idle Photo (zIndex: 1, Opacity 1) */}
           <img
-            src={idleImg}
-            alt="AI Tutor Idle"
+            src={preloadedImages['idle']?.src || idleImg}
+            alt="Learnify Idle"
             style={{
               position: 'absolute',
               inset: 0,
@@ -297,8 +295,8 @@ export function AvatarTutor({
 
           {/* Layer 2: Listening State Photo (zIndex: 2) */}
           <img
-            src={listeningImg}
-            alt="AI Tutor Listening"
+            src={preloadedImages['listening']?.src || listeningImg}
+            alt="Learnify Listening"
             style={{
               position: 'absolute',
               inset: 0,
@@ -315,8 +313,8 @@ export function AvatarTutor({
 
           {/* Layer 3: Thinking State Photo (zIndex: 3) */}
           <img
-            src={thinkingImg}
-            alt="AI Tutor Thinking"
+            src={preloadedImages['thinking']?.src || thinkingImg}
+            alt="Learnify Thinking"
             style={{
               position: 'absolute',
               inset: 0,
@@ -357,8 +355,8 @@ export function AvatarTutor({
 
           {/* Layer 5: Eye-Blink Overlay Photo (zIndex: 10, Natural eye blink over static photos) */}
           <img
-            src={blinkImg}
-            alt="AI Tutor Blink"
+            src={preloadedImages['blink']?.src || blinkImg}
+            alt="Learnify Blink"
             style={{
               position: 'absolute',
               inset: 0,
@@ -463,8 +461,8 @@ export function AvatarTutor({
                     isSpeakingActive
                       ? 'var(--color-orange)'
                       : isThinkingActive
-                      ? 'var(--color-purple)'
-                      : 'rgba(255, 255, 255, 0.4)',
+                        ? 'var(--color-purple)'
+                        : 'rgba(255, 255, 255, 0.4)',
                   borderRadius: '4px',
                   transition: 'height 0.11s ease, background-color var(--transition-fast)'
                 }}

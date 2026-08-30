@@ -43,7 +43,7 @@ export const MOCK_ANNOUNCEMENTS = [
   },
   {
     id: 'ann-2',
-    title: 'AI Tutor Gap Detection Active',
+    title: 'Learnify Gap Detection Active',
     content: 'The tutor now automatically surfaces prerequisite refreshers when you encounter complex concepts.',
     category: 'System Update',
     categoryColor: 'orange',

@@ -36,7 +36,7 @@ export function ChatPage() {
   const [tutorState, setTutorState] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [studentId, setStudentId] = useState('');
-  const [currentTopic, setCurrentTopic] = useState('Welcome to your AI Tutor');
+  const [currentTopic, setCurrentTopic] = useState('Welcome to Learnify');
   const [currentCourse, setCurrentCourse] = useState(searchParams.get('course') || null);
 
   const messagesEndRef = useRef(null);
@@ -166,7 +166,7 @@ export function ChatPage() {
         {
           role: 'bot',
           status: 'error',
-          message: err.message || 'Could not connect to AI Tutor backend. Please check connection.'
+          message: err.message || 'Could not connect to Learnify backend. Please check connection.'
         }
       ]);
       setTutorState('idle');
@@ -391,6 +391,7 @@ export function ChatPage() {
                 playSound('click');
                 setActiveMode(mode);
               }}
+              hidePracticeTest={messages.length === 0}
             />
           </div>
 
@@ -410,39 +411,6 @@ export function ChatPage() {
               <HintSystem onComplete={() => setActiveMode('ask_doubt')} />
             )}
 
-            {/* MODE 3: STUDY PLAN / MOCK TEST */}
-            {activeMode === 'study_plan' && (
-              <div className="card-white" style={{ padding: '2rem' }}>
-                <Pill color="yellow" size="sm" style={{ marginBottom: '0.75rem' }}>
-                  Custom Syllabus Diagnostic
-                </Pill>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                  Diagnostic Study Plan: Algorithms & Trees
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
-                  AI Tutor generated a 3-step mastery checkpoint based on your recent practice self-reports:
-                </p>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-orange)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 1: Prerequisite Re-alignment</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Review Call Stack Frame allocation in recursion (15 mins).</div>
-                  </div>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-purple)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 2: Interactive Tree Rotations</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Practice 4 AVL rebalancing questions with escalating hints (20 mins).</div>
-                  </div>
-                  <div style={{ padding: '1rem', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--color-offwhite)', borderLeft: '4px solid var(--color-yellow)' }}>
-                    <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>Step 3: Timed Mock Assessment</div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>5-question syllabus check with instant teacher analytics sync (10 mins).</div>
-                  </div>
-                </div>
-
-                <Button variant="orange" size="md" onClick={() => setActiveMode('practice_test')}>
-                  Begin Diagnostic Practice →
-                </Button>
-              </div>
-            )}
 
             {/* MODE 1: ASK A DOUBT (Main Chat & Q&A) */}
             {activeMode === 'ask_doubt' && (

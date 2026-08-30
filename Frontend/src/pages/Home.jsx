@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/common/Button';
@@ -6,20 +6,33 @@ import { Pill } from '../components/common/Pill';
 import { SegmentedControl } from '../components/common/SegmentedControl';
 import { StatCard } from '../components/cards/StatCard';
 import { CourseCard } from '../components/cards/CourseCard';
-import { PromoCard } from '../components/cards/PromoCard';
-import { MOCK_COURSES } from '../services/mockData';
+import { PromoIllustration } from '../components/layout/PromoIllustration';
+import { fetchLibraryDocuments } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export function Home() {
   const navigate = useNavigate();
-  const { switchRole } = useAuth();
+  const { switchRole, session } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [realCourses, setRealCourses] = useState([]);
+
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const data = await fetchLibraryDocuments(session?.access_token);
+        setRealCourses(data.documents || []);
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+      }
+    }
+    loadCourses();
+  }, [session?.access_token]);
 
   const categories = ['All', 'Computer Science', 'Mathematics', 'Physics'];
 
   const filteredCourses = selectedCategory === 'All'
-    ? MOCK_COURSES
-    : MOCK_COURSES.filter((c) => c.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+    ? realCourses
+    : realCourses.filter((c) => (c.subject || '').toLowerCase().includes(selectedCategory.toLowerCase()));
 
   return (
     <div className="page-container" style={{ paddingBottom: '4rem' }}>
@@ -40,7 +53,7 @@ export function Home() {
           {/* Eyebrow Trust Badge */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.25rem' }}>
             <Pill color="orange" size="sm" icon={Sparkles}>
-              AI-Powered Syllabus Tutor
+              Learnify Tutor for Students
             </Pill>
             <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
               Zero Hallucinations • Curriculum Grounded
@@ -53,7 +66,7 @@ export function Home() {
           </h1>
 
           <p className="text-body" style={{ maxWidth: '520px', marginBottom: '2rem', fontSize: '1.05rem' }}>
-            BODH bridges knowledge gaps with live Socratic hints, automated prerequisite detection, and verified textbook citations.
+            Learnify bridges knowledge gaps with live Socratic hints, automated prerequisite detection, and verified textbook citations.
           </p>
 
           {/* CTA Row */}
@@ -67,27 +80,12 @@ export function Home() {
             >
               Open Student Dashboard
             </Button>
-            <Button
-              variant="ink"
-              size="lg"
-              onClick={() => navigate('/chat')}
-              icon={Sparkles}
-            >
-              Ask AI Avatar Tutor
-            </Button>
           </div>
         </div>
 
         {/* Right Hero Graphic / Promo Card */}
-        <div style={{ position: 'relative' }}>
-          <PromoCard
-            category="Algorithms & AI"
-            categoryColor="yellow"
-            eyebrow="Curriculum Spotlight"
-            title="Binary Search Trees, Rotations & Graph Traversals"
-            extraCount={184}
-            onAction={() => navigate('/chat?q=Explain%20Binary%20Search%20Trees')}
-          />
+        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <PromoIllustration />
         </div>
       </section>
 
@@ -103,9 +101,9 @@ export function Home() {
         }}
       >
         <StatCard tag="Curriculum" tagColor="purple" number="+40" label="approved syllabus subjects" />
-        <StatCard tag="AI Tutor" tagColor="orange" number="100%" label="grounded textbook citations" />
-        <StatCard tag="Student Reviews" tagColor="yellow" number="★ 4.95" label="average tutor satisfaction" />
-        <StatCard tag="Remediation" tagColor="sky" number="92%" label="prerequisite gap resolution" />
+        <StatCard tag="Learnify Tutor" tagColor="orange" number="100%" label="grounded textbook citations" />
+        <StatCard tag="Knowledge Base" tagColor="yellow" number={realCourses.length > 0 ? `${realCourses.length}` : "Loading"} label="active learning modules" />
+        <StatCard tag="Availability" tagColor="purple" number="24/7" label="instant conceptual help" />
       </section>
 
       {/* =====================================================================
@@ -152,88 +150,19 @@ export function Home() {
           {filteredCourses.map((course) => (
             <CourseCard
               key={course.id}
-              category={course.category}
-              title={course.title}
-              progressCurrent={course.progressCurrent}
-              progressTotal={course.progressTotal}
-              participantAvatars={course.participantAvatars}
-              participantExtraCount={course.participantExtraCount}
-              onContinue={() => navigate(`/chat?course=${encodeURIComponent(course.title)}`)}
-              onBookmark={() => alert(`Saved ${course.title} to bookmarks!`)}
+              category={course.subject || 'Curriculum Module'}
+              title={course.id || course.filename}
+              progressCurrent={0}
+              progressTotal={course.totalChunks || course.chapters || 10}
+              participantAvatars={[]}
+              participantExtraCount={0}
+              onContinue={() => navigate(`/chat?course=${encodeURIComponent(course.id)}`)}
+              onBookmark={() => navigate('/library')}
             />
           ))}
         </div>
       </section>
 
-      {/* =====================================================================
-          DARK PROMO BAND
-          ===================================================================== */}
-      <section
-        className="card-ink"
-        style={{
-          marginTop: '4rem',
-          padding: '3rem 2.5rem',
-          borderRadius: 'var(--radius-xl)',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '2rem',
-          alignItems: 'center'
-        }}
-      >
-        <div>
-          <Pill color="yellow" size="sm" style={{ marginBottom: '1rem' }}>
-            Ready to Accelerate?
-          </Pill>
-          <h2 style={{ fontSize: '2rem', color: '#ffffff', marginBottom: '1rem', lineHeight: 1.2 }}>
-            Never get stuck on homework or exam concepts again.
-          </h2>
-          <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.75rem' }}>
-            Experience instant concept breakdowns with animated avatar explanations, practice checks, and auto-detected learning gaps.
-          </p>
-          <Button
-            variant="orange"
-            size="lg"
-            onClick={() => navigate('/chat')}
-            icon={Sparkles}
-          >
-            Launch Tutor Session
-          </Button>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            borderRadius: 'var(--radius-lg)',
-            padding: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem'
-          }}
-        >
-          <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-yellow)' }}>
-            Quick Navigation Links:
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-            <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
-              Student Dashboard
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => navigate('/library')}>
-              Document Library
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                switchRole('teacher');
-                navigate('/teacher');
-              }}
-            >
-              Teacher Analytics
-            </Button>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

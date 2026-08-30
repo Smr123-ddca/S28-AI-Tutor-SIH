@@ -41,19 +41,13 @@ export function IconRail() {
     {
       to: '/',
       icon: Home,
-      title: 'Course Catalog & Landing',
+      title: 'Home',
       roles: ['student', 'teacher']
-    },
-    {
-      to: '/dashboard',
-      icon: LayoutDashboard,
-      title: 'Student Dashboard',
-      roles: ['student']
     },
     {
       to: '/chat',
       icon: MessageSquareText,
-      title: 'AI Avatar Tutor',
+      title: 'Learnify Tutor Chat',
       roles: ['student']
     },
     {
@@ -63,9 +57,21 @@ export function IconRail() {
       roles: ['student']
     },
     {
-      to: '/teacher',
+      to: '/teacher/upload',
+      icon: Sparkles,
+      title: 'Upload Syllabus Material',
+      roles: ['teacher']
+    },
+    {
+      to: '/teacher/prerequisites',
+      icon: LayoutDashboard,
+      title: 'Prerequisite Charts',
+      roles: ['teacher']
+    },
+    {
+      to: '/teacher/misconceptions',
       icon: GraduationCap,
-      title: 'Teacher Analytics & Misconceptions',
+      title: 'Student Misconceptions',
       roles: ['teacher']
     }
   ];

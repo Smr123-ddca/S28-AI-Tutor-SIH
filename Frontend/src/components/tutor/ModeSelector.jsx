@@ -4,7 +4,8 @@ import { HelpCircle, CheckSquare, Sparkles } from 'lucide-react';
 export function ModeSelector({
   activeMode = 'ask_doubt', // 'ask_doubt' | 'practice_test' | 'study_plan'
   onSelectMode,
-  className = ''
+  className = '',
+  hidePracticeTest = false
 }) {
   const modes = [
     {
@@ -20,15 +21,8 @@ export function ModeSelector({
       description: 'Interactive questions with progressive hint ladders',
       icon: CheckSquare,
       accent: 'purple'
-    },
-    {
-      id: 'study_plan',
-      label: 'Study Plan / Mock Test',
-      description: 'Custom learning path and diagnostic assessment',
-      icon: Sparkles,
-      accent: 'yellow'
     }
-  ];
+  ].filter(m => !(m.id === 'practice_test' && hidePracticeTest));
 
   return (
     <div
