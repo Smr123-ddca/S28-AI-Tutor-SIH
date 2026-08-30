@@ -45,8 +45,8 @@ export function RequireRole({ role: requiredRole, children }) {
   // 2. Role mismatch redirects
   if (requiredRole && currentRole !== requiredRole) {
     if (currentRole === 'student') {
-      // Students redirected to their home dashboard
-      return <Navigate to="/dashboard" replace />;
+      // Students redirected to their tutor chat
+      return <Navigate to="/chat" replace />;
     } else if (currentRole === 'teacher') {
       // Teachers redirected to teacher dashboard
       return <Navigate to="/teacher" replace />;

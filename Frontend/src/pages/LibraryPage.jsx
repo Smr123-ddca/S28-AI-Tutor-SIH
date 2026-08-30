@@ -5,10 +5,6 @@ import {
   Download,
   Eye,
   Search,
-  CheckCircle,
-  File,
-  Layers,
-  Sparkles,
   X
 } from 'lucide-react';
 import { Button } from '../components/common/Button';

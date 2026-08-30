@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+<<<<<<< HEAD
+=======
+    "dev": "node index.js",
+>>>>>>> e8c8190bc317f8339f79447547b80a0df3ec41d0
     "test": "jest"
   },
   "keywords": [],

@@ -1,13 +1,13 @@
 /**
- * Mock Data Store for BODH / Study-app
+ * Mock Data Store for LearnifyTutor
  * All mock data is gated behind import.meta.env.VITE_USE_MOCKS === 'true'
  */
 
 export const MOCK_STUDENT = {
   id: 'mock-student-uuid-101',
-  email: 'alex.rivers@study.edu',
-  name: 'Alex Rivers',
-  handle: '@alex_learns',
+  email: 'debo@study.edu',
+  name: 'Debojeet',
+  handle: '@debojeet',
   role: 'student',
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
   stats: {
@@ -21,9 +21,9 @@ export const MOCK_STUDENT = {
 
 export const MOCK_TEACHER = {
   id: 'mock-teacher-uuid-202',
-  email: 'prof.sharma@study.edu',
-  name: 'Prof. Ananya Sharma',
-  handle: '@prof_sharma',
+  email: 'karisma@study.edu',
+  name: 'Karisma Guru',
+  handle: '@karisma',
   role: 'teacher',
   avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
   department: 'Computer Science & AI',
@@ -425,23 +425,35 @@ export const MOCK_INTERVENTIONS = [
 export const MOCK_PRACTICE_QUESTIONS_FLOW = [
   {
     id: 'pq-flow-1',
+    topic: 'Binary Search Trees & Degeneracy',
     question: 'In a Binary Search Tree with N nodes, what is the maximum number of comparisons needed to find a node in the worst-case scenario?',
     correctAnswerKeyword: 'n',
+    sampleHypotheses: [
+      'The tree degenerates into a linear linked list of height N.',
+      'Log(N) because the binary property halves the search space at each step.',
+      'O(N) comparisons because all nodes line up along a single chain.'
+    ],
     hints: [
       'Think about the shape of the tree if elements were inserted in sorted ascending order (e.g., 1, 2, 3, 4...).',
       'When every node has only a single right child, what classic linear data structure does the BST resemble?',
-      'In a degenerate BST of height N, you must traverse all levels from root to leaf, so the number of comparisons is proportional to...'
+      'In a degenerate BST of height N, you must traverse all levels from root to leaf, so the number of comparisons is proportional to N.'
     ],
     conceptRecap: 'In the worst case (a degenerate/skewed tree), the tree height is N, meaning search takes O(N) comparisons.'
   },
   {
     id: 'pq-flow-2',
+    topic: 'Recursion & Memory Frames',
     question: 'When a function calls itself recursively, where does the computer allocate the local variables and return address for each call instance?',
     correctAnswerKeyword: 'stack',
+    sampleHypotheses: [
+      'It gets stored on the heap with dynamic pointers.',
+      'A new frame is pushed onto the runtime Call Stack in LIFO order.',
+      'Global registers hold all active invocation contexts.'
+    ],
     hints: [
       'Consider the memory segment dedicated to dynamic function execution contexts (LIFO order).',
       'Each call pushes a new "activation record" or "frame" onto this segment.',
-      'It is called the Call _______ (opposed to the Heap for dynamic malloc allocations).'
+      'It is called the Call Stack (as opposed to the Heap for dynamic memory allocations).'
     ],
     conceptRecap: 'Each recursive invocation pushes a distinct activation record (stack frame) onto the Call Stack.'
   }

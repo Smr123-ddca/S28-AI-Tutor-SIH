@@ -52,11 +52,11 @@ export function TopNav() {
     >
       {/* Left: Greeting line */}
       <div>
-        <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
+        <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>
           Welcome back to
         </div>
         <div style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--color-ink)', lineHeight: 1.2 }}>
-          Study-app <span style={{ color: 'var(--color-orange)' }}>BODH</span>
+          Learnify<span style={{ color: 'var(--color-orange)' }}>Tutor</span>
         </div>
       </div>
 

@@ -5,7 +5,6 @@ import { AppShell } from './components/layout/AppShell';
 import { RequireRole } from './components/auth/RequireRole';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
-import { StudentDashboard } from './pages/StudentDashboard';
 import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { TeacherDashboard } from './pages/TeacherDashboard';
@@ -28,7 +27,7 @@ function ProtectedLayout() {
         }}
       >
         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
-        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading Study-app BODH...</div>
+        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading LearnifyTutor...</div>
       </div>
     );
   }
@@ -49,17 +48,18 @@ export function App() {
 
       {/* Authenticated App Routes with Shell & Strict Role Guards */}
       <Route element={<ProtectedLayout />}>
-        {/* Home/Catalog is accessible by both authenticated roles */}
+        {/* Home is accessible by both authenticated roles */}
         <Route path="/" element={<Home />} />
 
-        {/* Student-Only Routes (Task 3: Redirects Teacher to /teacher) */}
+        {/* Student-Only Routes (Redirects Teacher to /teacher) */}
         <Route element={<RequireRole role="student" />}>
-          <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/library" element={<LibraryPage />} />
+          {/* Legacy /dashboard redirects to /chat */}
+          <Route path="/dashboard" element={<Navigate to="/chat" replace />} />
         </Route>
 
-        {/* Teacher-Only Routes (Task 3: Redirects Student to /dashboard) */}
+        {/* Teacher-Only Routes (Redirects Student to /chat) */}
         <Route element={<RequireRole role="teacher" />}>
           <Route path="/teacher" element={<TeacherDashboard />} />
         </Route>
