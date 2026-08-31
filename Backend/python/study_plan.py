@@ -18,14 +18,12 @@ mock_val = os.getenv("_MOCK_BEHAVIOR")
 if not mock_val:
     try:
         from dotenv import load_dotenv
-        import google.generativeai as genai
+        
         load_dotenv(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env")))
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             print("GEMINI_API_KEY is not configured.", file=sys.stderr)
             sys.exit(1)
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-3.5-flash')
     except ImportError:
         print(json.dumps({"error": "Failed to import required libraries."}))
         sys.exit(1)
@@ -130,9 +128,9 @@ elif mock_val == "UNIT_CYCLE":
     pass
 else:
     try:
-        response = model.generate_content(prompt)
-        raw_response = response.text.strip()
-    except Exception as e:
+            from gemini_rest import generate_content
+            raw_response = generate_content(prompt).strip()
+        except Exception as e:
         print(f"Gemini API call failed: {e}", file=sys.stderr)
         raw_response = "[]"
 
