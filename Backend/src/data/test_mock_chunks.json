@@ -1,9 +1,0 @@
-[
-  {
-    "id": "chunk_A",
-    "text": "def hello_world():\n    print('hi')",
-    "chunk_index": 0,
-    "topic": "Python",
-    "chapter": "Intro"
-  }
-]

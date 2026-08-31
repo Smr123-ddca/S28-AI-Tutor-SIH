@@ -24,6 +24,24 @@ export function LibraryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [previewDoc, setPreviewDoc] = useState(null);
 
+  const handleDownload = async (doc) => {
+    try {
+      const res = await fetch(`/api/courses/${doc.id}/download`, {
+        headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}
+      });
+      if (!res.ok) throw new Error('Failed to download document. It might not be available on disk.');
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = doc.filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert('Download Error: ' + err.message);
+    }
+  };
+
   const subjects = ['All', 'Computer Science', 'Mathematics', 'Physics'];
 
   useEffect(() => {
@@ -191,7 +209,7 @@ export function LibraryPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => alert(`Downloading verified source: ${doc.filename}`)}
+                  onClick={() => handleDownload(doc)}
                   className="btn btn-orange btn-sm"
                   title="Download"
                 >
@@ -278,7 +296,7 @@ export function LibraryPage() {
                 variant="orange"
                 size="md"
                 onClick={() => {
-                  alert(`Downloading: ${previewDoc.filename}`);
+                  handleDownload(previewDoc);
                   setPreviewDoc(null);
                 }}
                 icon={Download}

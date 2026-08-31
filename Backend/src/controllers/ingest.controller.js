@@ -64,7 +64,7 @@ if (!fs.existsSync(DATA_DIR)) {
 
 
 // ============================================================
-// MEMORY REGISTRY FOR BATCHES
+// MEMORY REGISTRY FOR BATCHES & SSE PROGRESS
 // ============================================================
 
 const batchRegistry = {};
@@ -73,7 +73,27 @@ const getBatch = (batchId) => {
     return batchRegistry[batchId];
 };
 
+const progressClients = {};
 
+const subscribeProgress = (req, res) => {
+    const courseName = req.params.courseName;
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+
+    progressClients[courseName] = res;
+
+    req.on('close', () => {
+        delete progressClients[courseName];
+    });
+};
+
+function sendProgress(courseName, step, message) {
+    const client = progressClients[courseName];
+    if (client) {
+        client.write(`data: ${JSON.stringify({ step, message })}\n\n`);
+    }
+}
 // ============================================================
 // MULTER STORAGE
 // ============================================================
@@ -478,247 +498,92 @@ function runChunking(pdfPath) {
 
 
 // ============================================================
-// RUN PYTHON PREREQUISITES
+// RUN PYTHON V2 PIPELINE (QUALITY -> CONCEPTS -> PREREQUISITES)
 // ============================================================
 
-function runPrerequisites(
-    courseName
-) {
+function runPythonScript(scriptName, args) {
+    return new Promise((resolve, reject) => {
+        const scriptPath = path.join(__dirname, `../../python/${scriptName}`);
 
-    return new Promise(
-        (resolve, reject) => {
+        execFile(PYTHON_PATH, [scriptPath, ...args], {
+            cwd: path.join(__dirname, '../..'),
+            encoding: 'utf8',
+            maxBuffer: 50 * 1024 * 1024,
+            windowsHide: true,
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+        }, (error, stdout, stderr) => {
+            if (stderr) console.log(`[${scriptName} stderr]:`, stderr);
+            if (error) return reject(new Error(stderr || error.message));
+            if (!stdout || !stdout.trim()) return reject(new Error(`${scriptName} returned empty output.`));
 
-            const scriptPath =
-                path.join(
-                    __dirname,
-                    '../../python/prerequisites.py'
-                );
-
-
-            console.log(
-                '\n=========================================='
-            );
-
-            console.log(
-                '🤖 STARTING PREREQUISITE GENERATION'
-            );
-
-            console.log(
-                '=========================================='
-            );
-
-            console.log(
-                'Course:',
-                courseName
-            );
-
-            console.log(
-                'Python:',
-                PYTHON_PATH
-            );
-
-            console.log(
-                'Script:',
-                scriptPath
-            );
-
-
-            // ------------------------------------------------
-            // CHECK PYTHON
-            // ------------------------------------------------
-
-            if (PYTHON_PATH !== 'python' && false) {
-                return reject(
-                    new Error(
-                        `Python executable not found: ${PYTHON_PATH}`
-                    )
-                );
+            try {
+                const result = JSON.parse(stdout.trim());
+                resolve(result);
+            } catch (err) {
+                console.error(`❌ Invalid JSON from ${scriptName}. Output starts with:`, stdout.substring(0, 200));
+                reject(new Error(`Failed to parse output from ${scriptName}`));
             }
-
-
-            // ------------------------------------------------
-            // CHECK SCRIPT
-            // ------------------------------------------------
-
-            if (
-                !fs.existsSync(
-                    scriptPath
-                )
-            ) {
-
-                return reject(
-                    new Error(
-                        `Prerequisites script not found: ${scriptPath}`
-                    )
-                );
-
-            }
-
-
-            // ------------------------------------------------
-            // EXECUTE PYTHON
-            // ------------------------------------------------
-
-            execFile(
-
-                PYTHON_PATH,
-
-                [
-                    scriptPath,
-                    courseName
-                ],
-
-                {
-
-                    cwd:
-                        path.join(
-                            __dirname,
-                            '../..'
-                        ),
-
-                    encoding:
-                        'utf8',
-
-                    maxBuffer:
-                        50 * 1024 * 1024,
-
-                    windowsHide:
-                        true,
-
-                    env: {
-                        ...process.env,
-
-                        PYTHONIOENCODING:
-                            'utf-8'
-                    }
-
-                },
-
-                (
-                    error,
-                    stdout,
-                    stderr
-                ) => {
-
-                    // ------------------------------------------------
-                    // LOG STDERR
-                    // ------------------------------------------------
-
-                    if (stderr) {
-
-                        console.log(
-                            'Prerequisite log:',
-                            stderr
-                        );
-
-                    }
-
-
-                    // ------------------------------------------------
-                    // HANDLE PYTHON ERROR
-                    // ------------------------------------------------
-
-                    if (error) {
-
-                        console.error(
-                            '❌ Prerequisite generation failed'
-                        );
-
-                        console.error(
-                            error
-                        );
-
-                        return reject(
-                            new Error(
-                                stderr ||
-                                error.message
-                            )
-                        );
-
-                    }
-
-
-                    // ------------------------------------------------
-                    // CHECK OUTPUT
-                    // ------------------------------------------------
-
-                    if (
-                        !stdout ||
-                        !stdout.trim()
-                    ) {
-
-                        return reject(
-                            new Error(
-                                'Prerequisite script returned empty output.'
-                            )
-                        );
-
-                    }
-
-
-                    // ------------------------------------------------
-                    // PARSE JSON
-                    // ------------------------------------------------
-
-                    try {
-
-                        const result =
-                            JSON.parse(
-                                stdout.trim()
-                            );
-
-
-                        if (
-                            result.status !==
-                            'success'
-                        ) {
-
-                            throw new Error(
-                                result.error ||
-                                'Prerequisite generation failed.'
-                            );
-
-                        }
-
-
-                        console.log(
-                            '✅ Prerequisites generated'
-                        );
-
-
-                        resolve(
-                            result
-                        );
-
-                    } catch (
-                    parseError
-                    ) {
-
-                        console.error(
-                            '❌ Invalid prerequisite output'
-                        );
-
-                        console.error(
-                            stdout
-                        );
-
-                        reject(
-                            new Error(
-                                'Prerequisites returned invalid JSON.'
-                            )
-                        );
-
-                    }
-
-                }
-
-            );
-
-        }
-    );
-
+        });
+    });
 }
 
+async function runPrerequisites(courseName) {
+    console.log('\n==========================================');
+    console.log('🤖 STARTING V2 C1-C6 PIPELINE');
+    console.log('Course:', courseName);
+
+    const chunksPath = path.join(DATA_DIR, `${courseName}_chunks.json`);
+    const c1Path = path.join(DATA_DIR, `${courseName}_concept_relevance.json`);
+    const c2Path = path.join(DATA_DIR, `${courseName}_concepts.json`);
+    const c3Path = path.join(DATA_DIR, `${courseName}_hierarchy.json`);
+    const c4Path = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
+    const c5Path = path.join(DATA_DIR, `${courseName}_validation.json`);
+    const c6Path = path.join(DATA_DIR, `${courseName}_study_plan.json`);
+
+    if (!fs.existsSync(chunksPath)) {
+        throw new Error(`Chunks file not found: ${chunksPath}`);
+    }
+
+    sendProgress(courseName, 'C1', 'Executing chunk_quality.py (C1)...');
+    console.log('🔹 Executing chunk_quality.py (C1)...');
+    const c1Artifact = await runPythonScript('chunk_quality.py', [chunksPath]);
+    fs.writeFileSync(c1Path, JSON.stringify(c1Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'C2', 'Executing concept_extraction.py (C2)...');
+    console.log('🔹 Executing concept_extraction.py (C2)...');
+    const c2Artifact = await runPythonScript('concept_extraction.py', [chunksPath, c1Path]);
+    fs.writeFileSync(c2Path, JSON.stringify(c2Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'C3', 'Executing concept_hierarchy.py (C3)...');
+    console.log('🔹 Executing concept_hierarchy.py (C3)...');
+    const c3Artifact = await runPythonScript('concept_hierarchy.py', [c2Path]);
+    fs.writeFileSync(c3Path, JSON.stringify(c3Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'C4', 'Executing prerequisite_graph.py (C4)...');
+    console.log('🔹 Executing prerequisite_graph.py (C4)...');
+    const c4Artifact = await runPythonScript('prerequisite_graph.py', [c2Path, c3Path]);
+    fs.writeFileSync(c4Path, JSON.stringify(c4Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'C5', 'Executing graph_validation.py (C5)...');
+    console.log('🔹 Executing graph_validation.py (C5)...');
+    const c5Artifact = await runPythonScript('graph_validation.py', [c2Path, c3Path, c4Path]);
+    fs.writeFileSync(c5Path, JSON.stringify(c5Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'C6', 'Executing study_plan.py (C6)...');
+    console.log('🔹 Executing study_plan.py (C6)...');
+    const c6Artifact = await runPythonScript('study_plan.py', [c2Path, c3Path, c4Path, c5Path]);
+    fs.writeFileSync(c6Path, JSON.stringify(c6Artifact, null, 2), 'utf8');
+
+    sendProgress(courseName, 'DONE', 'Pipeline fully completed.');
+    console.log('✅ Full C1-C6 Pipeline completed successfully.');
+
+    return {
+        status: 'success',
+        course: courseName,
+        total_chunks: c1Artifact.source_chunks || 0,
+        output: c4Path
+    };
+}
 
 // ============================================================
 // UPDATE COURSES REGISTRY
@@ -1472,6 +1337,8 @@ module.exports = {
 
     generatePrerequisites,
 
-    getBatch
+    getBatch,
+
+    subscribeProgress
 
 };

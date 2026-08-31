@@ -69,7 +69,7 @@ export function TeacherHomeLanding() {
                         <Button
                             variant="orange"
                             size="lg"
-                            onClick={() => navigate('/teacher/upload')}
+                            onClick={() => navigate('/teacher')}
                             icon={Database}
                             iconPosition="right"
                         >
@@ -105,8 +105,8 @@ export function TeacherHomeLanding() {
             >
                 <StatCard tag="Curriculum Repository" tagColor="purple" number={loading ? '--' : `${documents.length}`} label="Active Source Documents" />
                 <StatCard tag="Semantic Architecture" tagColor="orange" number="C1-C5" label="Enabled Native AI Pipelines" />
+                <StatCard tag="Learning Structure" tagColor="yellow" number="Enabled" label="Prerequisite Mappings Generated" />
                 <StatCard tag="Class Diagnostic" tagColor="red" number="Live" label="Misconception Tracking Active" />
-                <StatCard tag="Learning Structure" tagColor="green" number="Enabled" label="Prerequisite Mappings Generated" />
             </section>
         </div>
     );

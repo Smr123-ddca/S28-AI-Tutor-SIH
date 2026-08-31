@@ -252,7 +252,45 @@ function deleteCourse(req, res) {
 
     } catch (error) {
         console.error('Failed to delete course:', error);
-        res.status(500).json({ status: 'error', message: 'Internal server error resolving strict deletion' });
+        res.status(500).json({ status: 'error', message: 'Internal server error while deleting.' });
+    }
+}
+
+function downloadCourseFile(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const coursesPath = path.join(__dirname, '../data/courses.json');
+        if (!fs.existsSync(coursesPath)) return res.status(404).json({ error: 'Courses registry not found' });
+
+        const courses = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
+        const course = courses.find(c => c.name === courseName);
+        if (!course) return res.status(404).json({ error: 'Course not found' });
+
+        // Verify published or teacher
+        if (course.status !== 'published') {
+            if (!req.user || req.user.role !== 'teacher') {
+                return res.status(403).json({ error: 'Students can only download published courses' });
+            }
+        }
+
+        const fileName = course.pdf || `${courseName}.pdf`;
+        const filePath = path.join(__dirname, '../data', fileName);
+
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ error: 'Source file not found on disk' });
+        }
+
+        res.download(filePath, fileName, (err) => {
+            if (err) {
+                console.error("File download error:", err);
+                if (!res.headersSent) {
+                    res.status(500).json({ error: 'Failed to download file' });
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Failed to serve download:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
 }
 
@@ -264,5 +302,6 @@ module.exports = {
     getPrerequisites,
     updatePrerequisites,
     getArtifacts,
-    deleteCourse
+    deleteCourse,
+    downloadCourseFile
 };

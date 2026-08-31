@@ -37,22 +37,6 @@ export function Login() {
 
   // Teacher Access Code State
   const [isTeacherSignup, setIsTeacherSignup] = useState(false);
-  const [inviteCodeInput, setInviteCodeInput] = useState('');
-  const [codeVerified, setCodeVerified] = useState(false);
-  const [codeError, setCodeError] = useState('');
-
-  const handleVerifyInviteCode = (e) => {
-    e.preventDefault();
-    setCodeError('');
-    if (inviteCodeInput.trim().toUpperCase() === EXPECTED_TEACHER_CODE.toUpperCase()) {
-      setCodeVerified(true);
-      setRole('teacher');
-    } else {
-      setCodeError('Invalid teacher invitation code. Contact your academic administrator.');
-      setCodeVerified(false);
-      setRole('student');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +44,7 @@ export function Login() {
     setSuccessMsg('');
     setLoading(true);
 
-    const effectiveRole = isSignUp ? (isTeacherSignup && codeVerified ? 'teacher' : 'student') : 'student';
+    const effectiveRole = isSignUp ? (isTeacherSignup ? 'teacher' : 'student') : 'student';
 
     try {
       if (isSignUp) {
@@ -262,7 +246,7 @@ export function Login() {
             />
           </div>
 
-          {/* TASK 2: TEACHER ACCESS WALL (Gated behind verified invite code) */}
+          {/* TEACHER/STUDENT ROLE SELECTION */}
           {isSignUp && (
             <div
               style={{
@@ -273,91 +257,51 @@ export function Login() {
                 marginTop: '0.25rem'
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                 <span style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--color-ink)' }}>
                   Account Type:
                 </span>
-                <span style={{ fontSize: '0.78rem', color: isTeacherSignup && codeVerified ? 'var(--color-purple)' : 'var(--color-orange)', fontWeight: 700 }}>
-                  {isTeacherSignup && codeVerified ? 'Educator / Teacher' : 'Standard Student'}
+                <span style={{ fontSize: '0.78rem', color: isTeacherSignup ? 'var(--color-purple)' : 'var(--color-orange)', fontWeight: 700 }}>
+                  {isTeacherSignup ? 'Educator / Teacher' : 'Standard Student'}
                 </span>
               </div>
 
-              {!isTeacherSignup ? (
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsTeacherSignup(true);
-                    setCodeVerified(false);
-                  }}
+                  onClick={() => setIsTeacherSignup(false)}
                   style={{
-                    fontSize: '0.8rem',
-                    color: 'var(--color-text-secondary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    cursor: 'pointer'
+                    flex: 1,
+                    padding: '0.5rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: !isTeacherSignup ? '2px solid var(--color-orange)' : '1px solid var(--color-border)',
+                    backgroundColor: !isTeacherSignup ? 'var(--color-orange-subtle)' : '#fff',
+                    fontWeight: !isTeacherSignup ? 700 : 500,
+                    color: !isTeacherSignup ? 'var(--color-orange)' : 'var(--color-text-secondary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
                   }}
                 >
-                  <GraduationCap size={15} style={{ color: 'var(--color-purple)' }} />
-                  <span>Registering as a Professor/Teacher? Click to enter access code</span>
+                  Student
                 </button>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-                    Teacher accounts require an authorized academic invite code.
-                  </div>
-
-                  {!codeVerified ? (
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <input
-                        type="text"
-                        value={inviteCodeInput}
-                        onChange={(e) => setInviteCodeInput(e.target.value)}
-                        placeholder="Invite Code (e.g. TEACH-BODH-2026)"
-                        style={{
-                          flex: 1,
-                          padding: '0.5rem 0.75rem',
-                          borderRadius: 'var(--radius-sm)',
-                          border: '1.5px solid var(--color-border)',
-                          fontSize: '0.82rem',
-                          outline: 'none',
-                          textTransform: 'uppercase'
-                        }}
-                      />
-                      <Button
-                        variant="ink"
-                        size="sm"
-                        onClick={handleVerifyInviteCode}
-                        icon={KeyRound}
-                      >
-                        Verify
-                      </Button>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#15803d', fontSize: '0.82rem', fontWeight: 600 }}>
-                      <CheckCircle2 size={16} /> Teacher Access Authorized ({EXPECTED_TEACHER_CODE})
-                    </div>
-                  )}
-
-                  {codeError && (
-                    <div style={{ fontSize: '0.75rem', color: '#dc2626', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                      <AlertCircle size={14} /> {codeError}
-                    </div>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsTeacherSignup(false);
-                      setCodeVerified(false);
-                      setRole('student');
-                    }}
-                    style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textAlign: 'left', marginTop: '0.2rem' }}
-                  >
-                    ← Switch back to Student account
-                  </button>
-                </div>
-              )}
+                <button
+                  type="button"
+                  onClick={() => setIsTeacherSignup(true)}
+                  style={{
+                    flex: 1,
+                    padding: '0.5rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: isTeacherSignup ? '2px solid var(--color-purple)' : '1px solid var(--color-border)',
+                    backgroundColor: isTeacherSignup ? 'var(--color-purple-light)' : '#fff',
+                    fontWeight: isTeacherSignup ? 700 : 500,
+                    color: isTeacherSignup ? 'var(--color-purple)' : 'var(--color-text-secondary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Teacher
+                </button>
+              </div>
             </div>
           )}
 
@@ -368,7 +312,7 @@ export function Login() {
             disabled={loading}
             style={{ width: '100%', marginTop: '0.5rem' }}
           >
-            {loading ? 'Processing...' : isSignUp ? (isTeacherSignup && codeVerified ? 'Register as Teacher' : 'Register as Student') : 'Log In'}
+            {loading ? 'Processing...' : isSignUp ? (isTeacherSignup ? 'Register as Teacher' : 'Register as Student') : 'Log In'}
           </Button>
         </form>
 
@@ -380,7 +324,6 @@ export function Login() {
             onClick={() => {
               setIsSignUp(!isSignUp);
               setIsTeacherSignup(false);
-              setCodeVerified(false);
             }}
             style={{ color: 'var(--color-orange)', fontWeight: 700, textDecoration: 'underline' }}
           >

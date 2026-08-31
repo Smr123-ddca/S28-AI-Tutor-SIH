@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Sparkles, MessageSquare, Plus, Clock, Search, BookOpen, ChevronRight } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { fetchSessions, fetchLibraryDocuments } from '../services/api';
@@ -7,7 +7,11 @@ import { useAuth } from '../context/AuthContext';
 
 export function StudentDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { session, displayName } = useAuth();
+
+  const queryParams = new URLSearchParams(location.search);
+  const searchQuery = queryParams.get('q') || '';
 
   const [sessions, setSessions] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -96,36 +100,42 @@ export function StudentDashboard() {
                 You have not started any sessions yet.
               </p>
             ) : (
-              sessions.map((s) => (
-                <div
-                  key={s.id}
-                  onClick={() => navigate(`/chat?session_id=${s.id}`)}
-                  style={{
-                    padding: '1rem',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--color-border)',
-                    backgroundColor: 'var(--color-offwhite)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.2s',
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--color-orange)'}
-                  onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-orange)' }}>
-                      {s.subject || s.course || 'General'}
-                    </span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
-                      {new Date(s.last_message_at || Date.now()).toLocaleDateString()}
-                    </span>
+              sessions.map((s) => {
+                const isSubjectMatch = s.subject && s.subject.toLowerCase().includes(searchQuery.toLowerCase());
+                const isTitleMatch = s.title && s.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const isHighlighted = searchQuery && (isSubjectMatch || isTitleMatch);
+
+                return (
+                  <div
+                    key={s.id}
+                    onClick={() => navigate(`/chat?session_id=${s.id}`)}
+                    style={{
+                      padding: '1rem',
+                      borderRadius: 'var(--radius-md)',
+                      border: isHighlighted ? '2px solid var(--color-orange)' : '1px solid var(--color-border)',
+                      backgroundColor: isHighlighted ? 'var(--color-orange-subtle)' : 'var(--color-offwhite)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--color-orange)'}
+                    onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--color-border)'}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-orange)' }}>
+                        {s.subject || s.course || 'General'}
+                      </span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                        {new Date(s.last_message_at || Date.now()).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-ink)' }}>
+                      {s.title || 'Untitled Session'}
+                    </div>
                   </div>
-                  <div style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-ink)' }}>
-                    {s.title || 'Untitled Session'}
-                  </div>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         </div>

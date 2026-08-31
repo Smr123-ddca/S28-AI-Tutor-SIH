@@ -17,7 +17,11 @@ export function TopNav() {
     e.preventDefault();
     if (searchValue.trim()) {
       playSound('click');
-      navigate(`/chat?q=${encodeURIComponent(searchValue)}`);
+      if (role === 'teacher') {
+        navigate(`/teacher?q=${encodeURIComponent(searchValue)}`);
+      } else {
+        navigate(`/dashboard?q=${encodeURIComponent(searchValue)}`);
+      }
     }
   };
 

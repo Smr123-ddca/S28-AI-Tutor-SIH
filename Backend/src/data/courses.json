@@ -1,49 +1,22 @@
 [
   {
-    "name": "DSA_Code_Reference",
-    "pdf": "DSA_Code_Reference.pdf",
-    "chunks": "DSA_Code_Reference_chunks.json",
-    "prerequisites": "DSA_Code_Reference_prerequisites.json",
+    "name": "DSA_Code_Reference_Annotated",
+    "pdf": "DSA_Code_Reference_Annotated.pdf",
+    "chunks": "DSA_Code_Reference_Annotated_chunks.json",
+    "prerequisites": "DSA_Code_Reference_Annotated_prerequisites.json",
     "status": "published",
     "audit": {
-      "approvedAt": "2026-08-29T12:06:35.415Z",
+      "approvedAt": "2026-08-31T10:10:21.356Z",
       "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
-      "publishedAt": "2026-08-29T12:06:39.996Z",
+      "publishedAt": "2026-08-31T10:10:29.804Z",
       "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
     }
   },
   {
-    "name": "sample_notes_data_structures",
-    "pdf": "sample_notes_data_structures.pdf",
-    "chunks": "sample_notes_data_structures_chunks.json",
-    "prerequisites": "sample_notes_data_structures_prerequisites.json",
-    "status": "published",
-    "audit": {
-      "approvedAt": "2026-08-29T12:58:21.844Z",
-      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
-      "publishedAt": "2026-08-29T12:58:26.291Z",
-      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
-    }
-  },
-  {
-    "name": "test_mock",
-    "pdf": "test_mock.pdf",
-    "chunks": "test_mock_chunks.json",
-    "prerequisites": "test_mock_prerequisites.json",
-    "status": "pending_review"
-  },
-  {
-    "name": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12__",
-    "pdf": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12__.pdf",
-    "chunks": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12___chunks.json",
-    "prerequisites": "Abraham_Silberschatz-Operating_System_Concepts__9th_2012.12___prerequisites.json",
-    "status": "pending_review"
-  },
-  {
-    "name": "DesignUnixOs",
-    "pdf": "DesignUnixOs.pdf",
-    "chunks": "DesignUnixOs_chunks.json",
-    "prerequisites": "DesignUnixOs_prerequisites.json",
+    "name": "DBMS_Code_Reference_Annotated",
+    "pdf": "DBMS_Code_Reference_Annotated.pdf",
+    "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
+    "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
     "status": "pending_review"
   }
 ]

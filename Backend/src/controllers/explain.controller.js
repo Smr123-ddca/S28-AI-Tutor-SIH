@@ -89,20 +89,27 @@ function classifyQuestion(question) {
 
 async function callGemini(promptText) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-3.6-flash",
+        model: "gemini-3.5-flash",
         generationConfig: {
             responseMimeType: "application/json",
             responseSchema: responseSchema
         }
     });
 
-    const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Gemini API Request Timeout")), 45000)
-    );
+    let timeoutId;
+    const timeoutPromise = new Promise((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error("Gemini API Request Timeout")), 45000);
+    });
 
-    const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
-    const response = await result.response;
-    return response.text();
+    try {
+        const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
+        clearTimeout(timeoutId);
+        const response = await result.response;
+        return response.text();
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
 }
 
 async function explain(req, res) {

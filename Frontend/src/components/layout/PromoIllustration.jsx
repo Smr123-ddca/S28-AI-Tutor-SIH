@@ -39,7 +39,7 @@ export function PromoIllustration() {
       </style>
 
       <img
-        src="/public/pencil-rider.png"
+        src="/pencil-rider.png"
         alt="Learnify Pencil Ride"
         className="promo-illustration-asset"
       />

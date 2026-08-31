@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { GraduationCap, UploadCloud, BookOpen, Trash2, Eye, Edit3, Settings, FileText, X } from 'lucide-react';
 import { Pill } from '../components/common/Pill';
-import { fetchLibraryDocuments, deleteCourse, uploadCourseDoc } from '../services/api';
+import { fetchLibraryDocuments, deleteCourse, uploadCourseDoc, generatePrerequisites } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export function TeacherHome() {
     const { session, displayName } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const queryParams = new URLSearchParams(location.search);
+    const searchQuery = queryParams.get('q') || '';
 
     // Upload state
     const [showUpload, setShowUpload] = useState(false);
     const [uploadFile, setUploadFile] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [uploadStage, setUploadStage] = useState('');
 
     const loadData = async () => {
         setLoading(true);
@@ -47,12 +52,52 @@ export function TeacherHome() {
             formData.append('files', uploadFile);
 
             const res = await uploadCourseDoc(formData, session?.access_token);
+
+            // Extract properly
+            const courseName =
+                res.courses && res.courses.length > 0
+                    ? res.courses[0].name
+                    : res.course || uploadFile.name.split('.')[0];
+
+            // Set up stream listener concurrently with pipeline launch
+            setUploadStage('C1: Starting Pipeline... (Waiting for backend)');
+            const progressRes = await fetch(`/api/ingest/progress/${encodeURIComponent(courseName)}`, {
+                headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}
+            });
+            const reader = progressRes.body.getReader();
+            const decoder = new TextDecoder();
+
+            // Trigger C1-C6 Prerequisite Pipeline Generation natively (fire-and-forget in UI)
+            generatePrerequisites(courseName, session?.access_token).catch(() => { });
+
+            // Read SSE chunks
+            try {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const chunkText = decoder.decode(value);
+                    const lines = chunkText.split('\n');
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.replace('data: ', ''));
+                                if (data.step === 'DONE') {
+                                    setUploadStage('');
+                                    reader.cancel();
+                                } else {
+                                    setUploadStage(data.message);
+                                }
+                            } catch (e) { }
+                        }
+                    }
+                }
+            } catch (e) { }
+
             setUploadSuccess(true);
             setUploadFile(null);
 
             // Auto-redirect to Review page
             setTimeout(() => {
-                const courseName = res.course || res.courseName || uploadFile.name.split('.')[0];
                 navigate(`/teacher/review?course=${encodeURIComponent(courseName)}`);
             }, 1000);
         } catch (err) {
@@ -87,41 +132,52 @@ export function TeacherHome() {
     const approved = documents.filter(d => d.status === 'approved');
     const pending = documents.filter(d => d.status === 'pending_review' || d.status === 'needs_revision');
 
-    const renderCourseCard = (doc, idx, showReviewAction = false) => (
-        <div key={idx} style={{ padding: '1.25rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', backgroundColor: '#fff', marginBottom: '0.85rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                        <b style={{ fontSize: '1.2rem', color: 'var(--color-ink)' }}>{doc.subject}</b>
-                        <StatusPill status={doc.status} />
-                    </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', display: 'flex', gap: '1rem' }}>
-                        <span>Reference: {doc.id}</span>
-                        <span>•</span>
-                        <span>Chunks: {doc.totalChunks}</span>
-                        <span>•</span>
-                        <span>Uploaded: {doc.uploadDate}</span>
-                    </div>
-                </div>
+    const renderCourseCard = (doc, idx, showReviewAction = false) => {
+        const isHighlighted = searchQuery && doc.subject.toLowerCase().includes(searchQuery.toLowerCase());
 
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {doc.status === 'published' && (
-                        <button onClick={() => navigate(`/teacher/review?course=${encodeURIComponent(doc.id)}`)} className="btn btn-outline" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                            <Settings size={14} /> Manage
+        return (
+            <div key={idx} style={{
+                padding: '1.25rem',
+                border: isHighlighted ? '2px solid var(--color-orange)' : '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-md)',
+                backgroundColor: isHighlighted ? 'var(--color-orange-subtle)' : '#fff',
+                marginBottom: '0.85rem',
+                transition: 'all 0.3s'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                            <b style={{ fontSize: '1.2rem', color: 'var(--color-ink)' }}>{doc.subject}</b>
+                            <StatusPill status={doc.status} />
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', display: 'flex', gap: '1rem' }}>
+                            <span>Reference: {doc.id}</span>
+                            <span>•</span>
+                            <span>Chunks: {doc.totalChunks}</span>
+                            <span>•</span>
+                            <span>Uploaded: {doc.uploadDate}</span>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        {doc.status === 'published' && (
+                            <button onClick={() => navigate(`/teacher/review?course=${encodeURIComponent(doc.id)}`)} className="btn btn-outline" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <Settings size={14} /> Manage
+                            </button>
+                        )}
+                        {(doc.status === 'pending_review' || doc.status === 'needs_revision' || doc.status === 'approved') && (
+                            <button onClick={() => navigate(`/teacher/review?course=${encodeURIComponent(doc.id)}`)} className="btn btn-purple" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <Edit3 size={14} /> Review & Approve
+                            </button>
+                        )}
+                        <button onClick={() => handleDelete(doc.id)} className="btn btn-outline" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#dc2626', borderColor: '#dc2626' }}>
+                            <Trash2 size={14} /> Delete
                         </button>
-                    )}
-                    {(doc.status === 'pending_review' || doc.status === 'needs_revision' || doc.status === 'approved') && (
-                        <button onClick={() => navigate(`/teacher/review?course=${encodeURIComponent(doc.id)}`)} className="btn btn-purple" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                            <Edit3 size={14} /> Review & Approve
-                        </button>
-                    )}
-                    <button onClick={() => handleDelete(doc.id)} className="btn btn-outline" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#dc2626', borderColor: '#dc2626' }}>
-                        <Trash2 size={14} /> Delete
-                    </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+    };
 
     return (
         <div className="page-container" style={{ paddingBottom: '4rem' }}>
@@ -152,9 +208,9 @@ export function TeacherHome() {
 
             {showUpload && (
                 <section style={{ marginBottom: '2.5rem' }}>
-                    <div className="card-white" style={{ padding: '2rem', border: '2px solid var(--color-purple)' }}>
+                    <div className="card-white" style={{ padding: '2rem', border: '2px solid var(--color-purple)', maxWidth: '650px', margin: '0 auto', textAlign: 'center' }}>
                         <h2 className="text-h2" style={{ marginBottom: '0.5rem', color: 'var(--color-purple)' }}>New Subject Ingestion</h2>
-                        <p className="text-body" style={{ marginBottom: '1.5rem', maxWidth: '600px' }}>
+                        <p className="text-body" style={{ marginBottom: '1.5rem' }}>
                             Upload PDF materials. They will be automatically processed by the backend (chunked, vectorized, and formulated into a prerequisite graph).
                         </p>
 
@@ -166,7 +222,7 @@ export function TeacherHome() {
                                 </p>
                             </div>
                         ) : (
-                            <form onSubmit={handleUploadSubmit} style={{ display: 'grid', gap: '1.5rem', maxWidth: '600px' }}>
+                            <form onSubmit={handleUploadSubmit} style={{ display: 'grid', gap: '1.5rem', width: '100%' }}>
                                 <div>
                                     <label
                                         style={{
@@ -206,7 +262,7 @@ export function TeacherHome() {
 
                                 <div>
                                     <Button variant="purple" size="lg" type="submit" style={{ width: '100%' }} disabled={isUploading || !uploadFile}>
-                                        {isUploading ? 'Native Pipeline Executing...' : 'Extract Chunks & Map Graph'}
+                                        {isUploading ? (uploadStage || 'Uploading document & starting backend...') : 'Extract Chunks & Map Graph'}
                                     </Button>
                                 </div>
                             </form>
