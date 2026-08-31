@@ -57,21 +57,15 @@ export function IconRail() {
       roles: ['student']
     },
     {
-      to: '/teacher/upload',
-      icon: Sparkles,
-      title: 'Upload Syllabus Material',
+      to: '/teacher',
+      icon: BookOpen,
+      title: 'Courses Workspace',
       roles: ['teacher']
     },
     {
-      to: '/teacher/prerequisites',
+      to: '/teacher/dashboard',
       icon: LayoutDashboard,
-      title: 'Prerequisite Charts',
-      roles: ['teacher']
-    },
-    {
-      to: '/teacher/misconceptions',
-      icon: GraduationCap,
-      title: 'Student Misconceptions',
+      title: 'Analytics Dashboard',
       roles: ['teacher']
     }
   ];

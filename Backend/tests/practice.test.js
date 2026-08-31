@@ -94,7 +94,7 @@ describe('Practice Endpoints', () => {
             }));
 
             const response = await request(app)
-                .get('/api/practice-questions')
+                .get('/api/practice-questions?session_id=mock-session')
                 .set('x-mock-user-id', 'student-A');
 
             expect(response.status).toBe(200);
@@ -127,7 +127,8 @@ describe('Practice Endpoints', () => {
 
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/hint')
-                .set('x-mock-user-id', 'student-A');
+                .set('x-mock-user-id', 'student-A')
+                .send({ session_id: 'mock-session' });
 
             expect(response.status).toBe(200);
             expect(response.body.hint).toBe('First hint');
@@ -143,7 +144,8 @@ describe('Practice Endpoints', () => {
 
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/hint')
-                .set('x-mock-user-id', 'student-A');
+                .set('x-mock-user-id', 'student-A')
+                .send({ session_id: 'mock-session' });
 
             expect(response.status).toBe(200);
             expect(response.body.hint).toBe('Second hint');
@@ -159,7 +161,8 @@ describe('Practice Endpoints', () => {
 
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/hint')
-                .set('x-mock-user-id', 'student-A');
+                .set('x-mock-user-id', 'student-A')
+                .send({ session_id: 'mock-session' });
 
             expect(response.status).toBe(400);
             expect(supabaseAdmin.update).not.toHaveBeenCalled();
@@ -173,7 +176,8 @@ describe('Practice Endpoints', () => {
 
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/hint')
-                .set('x-mock-user-id', 'student-B');
+                .set('x-mock-user-id', 'student-B')
+                .send({ session_id: 'mock-session' });
 
             expect(response.status).toBe(403);
             expect(supabaseAdmin.update).not.toHaveBeenCalled();
@@ -298,7 +302,7 @@ describe('Practice Endpoints', () => {
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/socratic')
                 .set('x-mock-user-id', 'student-A')
-                .send({ message: 'Help' });
+                .send({ message: 'Help', session_id: 'mock-session' });
 
             expect(response.status).toBe(400);
         });
@@ -316,7 +320,8 @@ describe('Practice Endpoints', () => {
 
             const response = await request(app)
                 .post('/api/practice-questions/pq-1/reveal')
-                .set('x-mock-user-id', 'student-A');
+                .set('x-mock-user-id', 'student-A')
+                .send({ session_id: 'mock-session' });
 
             expect(response.status).toBe(200);
             expect(supabaseAdmin.update).toHaveBeenCalledWith(expect.objectContaining({ answer_revealed: true }));

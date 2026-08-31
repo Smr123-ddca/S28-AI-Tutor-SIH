@@ -78,7 +78,7 @@ describe('Layer 6: Student Context Switching & Course-Aware Sessions', () => {
             .send({
                 question: 'What is an array?',
                 session_id: 'session123',
-                course: 'DSA'
+                subject: 'DSA'
             });
 
         expect(response.status).toBe(403);
@@ -106,7 +106,7 @@ describe('Layer 6: Student Context Switching & Course-Aware Sessions', () => {
             .send({
                 question: 'What is an array?',
                 session_id: 'session123',
-                course: 'DSA_Coding_Practice'
+                subject: 'DSA_Coding_Practice'
             });
 
         expect(response.status).not.toBe(403);
@@ -132,7 +132,7 @@ describe('Layer 6: Student Context Switching & Course-Aware Sessions', () => {
             .send({
                 question: 'Linked Lists?',
                 session_id: 'session_legacy',
-                course: 'DSA'
+                subject: 'DSA'
             });
 
         expect(response.status).not.toBe(403);

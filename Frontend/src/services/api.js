@@ -156,6 +156,28 @@ export async function publishCourse(courseName, token) {
   return await res.json();
 }
 
+export async function reviseCourse(courseName, reason, token) {
+  const res = await fetch(`/api/courses/${courseName}/revision`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ reason })
+  });
+  if (!res.ok) throw new Error('Failed to mark course for revision');
+  return await res.json();
+}
+
+export async function deleteCourse(courseName, token) {
+  const res = await fetch(`/api/courses/${courseName}`, {
+    method: 'DELETE',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to delete course');
+  return await res.json();
+}
+
 export function getCitationMeta(chunkId, fallbackChunk = {}) {
   return {
     source_chunk_id: chunkId,

@@ -9,7 +9,6 @@ import { StudentDashboard } from './pages/StudentDashboard';
 import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { TeacherHome } from './pages/TeacherHome';
-import { TeacherUpload } from './pages/TeacherUpload';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
 import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 
@@ -72,9 +71,8 @@ export function App() {
         {/* Teacher-Only Routes */}
         <Route element={<RequireRole role="teacher" />}>
           <Route path="/teacher" element={<TeacherHome />} />
-          <Route path="/teacher/upload" element={<TeacherUpload />} />
-          <Route path="/teacher/prerequisites" element={<TeacherPrerequisites />} />
-          <Route path="/teacher/misconceptions" element={<TeacherMisconceptions />} />
+          <Route path="/teacher/review" element={<TeacherPrerequisites />} />
+          <Route path="/teacher/dashboard" element={<TeacherMisconceptions />} />
         </Route>
       </Route>
 
