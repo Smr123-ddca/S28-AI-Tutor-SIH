@@ -87,6 +87,11 @@ for idx, c in enumerate(chunks):
 
 course_name = valid_chunks[0].get("topic", "Unknown_Course") if valid_chunks else "Unknown_Course"
 
+demo_limit = os.getenv("FAST_DEMO_LIMIT")
+if demo_limit and demo_limit.isdigit():
+    valid_chunks = valid_chunks[:int(demo_limit)]
+    print(f"FAST_DEMO_LIMIT active: Truncating to {demo_limit} chunks.", file=sys.stderr)
+
 CLASSES = [
     "CORE_CONCEPT", "DEFINITION", "EXPLANATION", "PROCEDURE", "EXAMPLE", 
     "CODE", "EXERCISE", "SUMMARY", "REFERENCE", "NAVIGATION", "METADATA", "NOISE"
