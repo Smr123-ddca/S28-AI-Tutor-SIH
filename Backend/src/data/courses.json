@@ -17,12 +17,6 @@
     "pdf": "DBMS_Code_Reference_Annotated.pdf",
     "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
     "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
-    "status": "published",
-    "audit": {
-      "approvedAt": "2026-08-31T11:02:03.533Z",
-      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
-      "publishedAt": "2026-08-31T11:02:11.143Z",
-      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
-    }
+    "status": "pending_review"
   }
 ]
