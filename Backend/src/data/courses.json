@@ -17,7 +17,13 @@
     "pdf": "DBMS_Code_Reference_Annotated.pdf",
     "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
     "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
-    "status": "pending_review"
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-08-31T14:20:10.003Z",
+      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
+      "publishedAt": "2026-08-31T14:20:17.125Z",
+      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
+    }
   },
   {
     "name": "TaskSync_FullStack_Structure_Guide__1_",

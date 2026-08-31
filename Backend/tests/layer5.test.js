@@ -13,6 +13,30 @@ const generateToken = (payload) => jwt.sign(payload, JWT_SECRET, { expiresIn: '1
 const studentToken = generateToken({ id: 'stu123', email: 'stu@test.com', role: 'student' });
 const teacherToken = generateToken({ id: 'tea123', email: 'tea@test.com', role: 'teacher' });
 
+jest.mock('../src/lib/supabaseAdmin', () => ({
+    supabaseAdmin: {
+        from: jest.fn().mockReturnValue({
+            select: jest.fn().mockReturnThis(),
+            eq: jest.fn().mockReturnThis(),
+            single: jest.fn().mockResolvedValue({ data: null, error: null }),
+            insert: jest.fn().mockResolvedValue({ data: { id: "mock-session" }, error: null })
+        })
+    }
+}));
+
+jest.mock('@google/generative-ai', () => {
+    return {
+        GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
+            getGenerativeModel: () => ({
+                generateContent: jest.fn().mockResolvedValue({
+                    response: { text: () => JSON.stringify({ status: 'insufficient_evidence', explanation_segments: [], practice_questions: [] }) }
+                })
+            })
+        })),
+        SchemaType: { OBJECT: "OBJECT", ARRAY: "ARRAY", STRING: "STRING" }
+    };
+});
+
 const app = express();
 app.use(express.json());
 

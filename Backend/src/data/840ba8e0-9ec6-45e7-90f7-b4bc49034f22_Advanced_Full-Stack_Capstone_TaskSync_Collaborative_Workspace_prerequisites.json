@@ -1,0 +1,29 @@
+{
+  "course": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace",
+  "relationships": [
+    {
+      "concept_id": "chunk_4",
+      "prerequisite_id": "chunk_1",
+      "reason": "Foundational dependency",
+      "confidence": 0.95
+    },
+    {
+      "concept_id": "chunk_5",
+      "prerequisite_id": "chunk_2",
+      "reason": "Logical progression",
+      "confidence": 0.88
+    },
+    {
+      "concept_id": "chunk_6",
+      "prerequisite_id": "chunk_3",
+      "reason": "Advanced topic requirement",
+      "confidence": 0.91
+    },
+    {
+      "concept_id": "chunk_6",
+      "prerequisite_id": "chunk_4",
+      "reason": "Synthesized knowledge requirement",
+      "confidence": 0.85
+    }
+  ]
+}

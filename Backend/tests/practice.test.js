@@ -61,7 +61,7 @@ jest.mock('../src/lib/supabaseAdmin', () => {
 describe('Practice Endpoints', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        supabaseAdmin.single.mockImplementation(() => Promise.resolve({ data: null, error: null }));
+        supabaseAdmin.single.mockImplementation(() => Promise.resolve({ data: { id: 'mock', student_id: 'student-A' }, error: null }));
         supabaseAdmin.order.mockImplementation(() => Promise.resolve({ data: [], error: null }));
     });
 

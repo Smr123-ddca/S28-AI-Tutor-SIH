@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 const cp = require('child_process');
 
+jest.setTimeout(30000);
+
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 describe('Layer 2: Prerequisite Generation Validation', () => {
