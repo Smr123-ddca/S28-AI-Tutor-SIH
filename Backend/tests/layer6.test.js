@@ -56,7 +56,7 @@ describe('Layer 6: Student Context Switching & Course-Aware Sessions', () => {
     it('Test C: Student cannot create a session for an unpublished course', async () => {
         const response = await request(app)
             .post('/api/sessions')
-            .send({ course: 'test_mock' }); // test_mock is pending_review
+            .send({ subject: 'test_mock' }); // test_mock is pending_review
 
         expect([400, 403, 404]).toContain(response.status);
     });
@@ -82,7 +82,7 @@ describe('Layer 6: Student Context Switching & Course-Aware Sessions', () => {
             });
 
         expect(response.status).toBe(403);
-        expect(response.body.error).toContain('course mismatch');
+        expect(response.body.error).toContain('subject mismatch');
     });
 
     it('should successfully isolate queries strictly correctly', async () => {

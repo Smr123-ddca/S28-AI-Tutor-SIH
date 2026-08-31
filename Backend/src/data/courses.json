@@ -18,5 +18,52 @@
     "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
     "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
     "status": "pending_review"
+  },
+  {
+    "name": "TaskSync_FullStack_Structure_Guide__1_",
+    "pdf": "TaskSync_FullStack_Structure_Guide__1_.pdf",
+    "chunks": "TaskSync_FullStack_Structure_Guide__1__chunks.json",
+    "prerequisites": "TaskSync_FullStack_Structure_Guide__1__prerequisites.json",
+    "status": "pending_review"
+  },
+  {
+    "name": "DSA_LinkedLists",
+    "pdf": "DSA_LinkedLists.pdf",
+    "chunks": "DSA_LinkedLists_chunks.json",
+    "prerequisites": "DSA_LinkedLists_prerequisites.json",
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-08-31T12:11:10.134Z",
+      "approvedBy": "61ebec08-6f24-4557-8b79-a116ab404874",
+      "publishedAt": "2026-08-31T12:11:10.781Z",
+      "publishedBy": "61ebec08-6f24-4557-8b79-a116ab404874"
+    }
+  },
+  {
+    "name": "DSA_LinkedLists_Test_2",
+    "pdf": "DSA_LinkedLists_Test_2.pdf",
+    "chunks": "DSA_LinkedLists_Test_2_chunks.json",
+    "prerequisites": "DSA_LinkedLists_Test_2_prerequisites.json",
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-08-31T12:13:17.940Z",
+      "approvedBy": "61ebec08-6f24-4557-8b79-a116ab404874",
+      "publishedAt": "2026-08-31T12:13:18.572Z",
+      "publishedBy": "61ebec08-6f24-4557-8b79-a116ab404874"
+    }
+  },
+  {
+    "name": "test_mock",
+    "pdf": "test_mock.pdf",
+    "chunks": "test_mock_chunks.json",
+    "prerequisites": "test_mock_prerequisites.json",
+    "status": "pending_review"
+  },
+  {
+    "name": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace",
+    "pdf": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace.pdf",
+    "chunks": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace_chunks.json",
+    "prerequisites": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace_prerequisites.json",
+    "status": "pending_review"
   }
 ]

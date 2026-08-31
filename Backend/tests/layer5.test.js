@@ -124,12 +124,12 @@ describe('Layer 5: Published Knowledge Integration API Tests', () => {
             .set('Authorization', `Bearer ${studentToken}`)
             .send({
                 question: 'Tell me about Rome.',
-                course: 'CourseC'
+                subject: 'CourseC'
             });
 
         // Because Course C is unpublished, the controller strictly blocks it with 403
         expect(res.statusCode).toEqual(403);
-        expect(res.body.error).toContain('Cannot query an unpublished or non-existent course');
+        expect(res.body.error).toContain('Cannot query an unpublished or non-existent subject');
     });
 
     test('Cross-contamination: Course A queries must NOT retrieve Course B facts', async () => {
@@ -138,7 +138,7 @@ describe('Layer 5: Published Knowledge Integration API Tests', () => {
             .set('Authorization', `Bearer ${studentToken}`)
             .send({
                 question: 'Tell me about living cells.', // This exists ONLY in Course B
-                course: 'CourseA' // Student searches within Course A
+                subject: 'CourseA' // Student searches within Course A
             });
 
         // Course A contains math entirely, so requesting biology fails cleanly
@@ -155,6 +155,6 @@ describe('Layer 5: Published Knowledge Integration API Tests', () => {
             });
 
         expect(res.statusCode).toEqual(400);
-        expect(res.body.error).toContain('course selection is mandatory');
+        expect(res.body.error).toContain('subject selection is mandatory');
     });
 });

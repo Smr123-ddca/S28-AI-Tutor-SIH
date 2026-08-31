@@ -162,9 +162,9 @@ elif mock_val == "DEPTH":
     raw_response = json.dumps(res)
 else:
     try:
-            from gemini_rest import generate_content
-            raw_response = generate_content(prompt).strip()
-        except Exception as e:
+        from gemini_rest import generate_content
+        raw_response = generate_content(prompt).strip()
+    except Exception as e:
         print(f"Gemini API call failed: {e}", file=sys.stderr)
         raw_response = "[]"
 

@@ -1,0 +1,2512 @@
+FAIL tests/prer...est.js   
+  (28.4 s):String) [], RemoteExcept   
+ ion
+    + FullyQualifiedErrorId : NativeC 
+   ommandError
+ 
+  ΓùÅ Console
+
+    console.log
+      Γùç injected env (3) from .env 
+// tip: Γîÿ custom filepath { path: 
+'/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.log
+      Γùç injected env (0) from .env 
+// tip: Γîÿ multiple files { path: 
+['.env.local', '.env'] }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/prerequisites.test.js:3:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1164:17)
+
+    console.log
+      ≡ƒñû GENERATE PREREQUISITES 
+REQUEST
+
+      at log (src/controllers/ingest.c
+ontroller.js:1168:17)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1172:17)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1176:17)
+
+    console.log
+      ≡ƒôª Found 3 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:1263:17)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:531:13)
+
+    console.log
+      ≡ƒñû STARTING V2 C1-C6 PIPELINE 
+(FAST DEMO MOCK)
+
+      at log (src/controllers/ingest.c
+ontroller.js:532:13)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:533:13)
+
+    console.log
+      Γ£à Full C1-C6 Pipeline 
+completed successfully.
+
+      at log (src/controllers/ingest.c
+ontroller.js:577:13)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1164:17)
+
+    console.log
+      ≡ƒñû GENERATE PREREQUISITES 
+REQUEST
+
+      at log (src/controllers/ingest.c
+ontroller.js:1168:17)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1172:17)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1176:17)
+
+    console.log
+      ≡ƒôª Found 3 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:1263:17)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:531:13)
+
+    console.log
+      ≡ƒñû STARTING V2 C1-C6 PIPELINE 
+(FAST DEMO MOCK)
+
+      at log (src/controllers/ingest.c
+ontroller.js:532:13)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:533:13)
+
+    console.log
+      Γ£à Full C1-C6 Pipeline 
+completed successfully.
+
+      at log (src/controllers/ingest.c
+ontroller.js:577:13)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1164:17)
+
+    console.log
+      ≡ƒñû GENERATE PREREQUISITES 
+REQUEST
+
+      at log (src/controllers/ingest.c
+ontroller.js:1168:17)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1172:17)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1176:17)
+
+    console.log
+      ≡ƒôª Found 3 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:1263:17)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:531:13)
+
+    console.log
+      ≡ƒñû STARTING V2 C1-C6 PIPELINE 
+(FAST DEMO MOCK)
+
+      at log (src/controllers/ingest.c
+ontroller.js:532:13)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:533:13)
+
+    console.log
+      Γ£à Full C1-C6 Pipeline 
+completed successfully.
+
+      at log (src/controllers/ingest.c
+ontroller.js:577:13)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1164:17)
+
+    console.log
+      ≡ƒñû GENERATE PREREQUISITES 
+REQUEST
+
+      at log (src/controllers/ingest.c
+ontroller.js:1168:17)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1172:17)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1176:17)
+
+    console.log
+      ≡ƒôª Found 3 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:1263:17)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:531:13)
+
+    console.log
+      ≡ƒñû STARTING V2 C1-C6 PIPELINE 
+(FAST DEMO MOCK)
+
+      at log (src/controllers/ingest.c
+ontroller.js:532:13)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:533:13)
+
+    console.log
+      Γ£à Full C1-C6 Pipeline 
+completed successfully.
+
+      at log (src/controllers/ingest.c
+ontroller.js:577:13)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1164:17)
+
+    console.log
+      ≡ƒñû GENERATE PREREQUISITES 
+REQUEST
+
+      at log (src/controllers/ingest.c
+ontroller.js:1168:17)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:1172:17)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1176:17)
+
+    console.log
+      ≡ƒôª Found 3 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:1263:17)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:531:13)
+
+    console.log
+      ≡ƒñû STARTING V2 C1-C6 PIPELINE 
+(FAST DEMO MOCK)
+
+      at log (src/controllers/ingest.c
+ontroller.js:532:13)
+
+    console.log
+      Course: Mock_Course_Layer2
+
+      at log (src/controllers/ingest.c
+ontroller.js:533:13)
+
+  ΓùÅ Layer 2: Prerequisite 
+Generation Validation ΓÇ║ Test A - 
+Valid prerequisite generation natively
+
+    thrown: "Exceeded timeout of 5000 
+ms for a test.
+    Add a timeout value to this test 
+to increase the timeout, if this is a 
+long-running test. See https://jestjs.
+io/docs/api#testname-fn-timeout."
+
+    [0m [90m 47 |[39m     
+})[33m;[39m
+     [90m 48 |[39m
+    [31m[1m>[22m[39m[90m 49 
+|[39m     it([32m'Test A - Valid 
+prerequisite generation 
+natively'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {
+     [90m    |[39m     
+[31m[1m^[22m[39m
+     [90m 50 |[39m         process[
+33m.[39menv[33m.[39m_MOCK_BEHAVIOR 
+[33m=[39m 
+[32m'SUCCESS'[39m[33m;[39m
+     [90m 51 |[39m         
+[36mconst[39m res [33m=[39m 
+[36mawait[39m request(app)
+     [90m 52 |[39m             [33m
+.[39mpost([32m'/api/ingest/generate-
+prerequisites'[39m)[0m
+
+      at it 
+(tests/prerequisites.test.js:49:5)
+      at Object.describe 
+(tests/prerequisites.test.js:12:1)
+
+  ΓùÅ Layer 2: Prerequisite 
+Generation Validation ΓÇ║ Test D - 
+Duplicate prevention seamlessly 
+natively
+
+    thrown: "Exceeded timeout of 5000 
+ms for a test.
+    Add a timeout value to this test 
+to increase the timeout, if this is a 
+long-running test. See https://jestjs.
+io/docs/api#testname-fn-timeout."
+
+    [0m [90m 63 |[39m     
+})[33m;[39m
+     [90m 64 |[39m
+    [31m[1m>[22m[39m[90m 65 
+|[39m     it([32m'Test D - 
+Duplicate prevention seamlessly 
+natively'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {
+     [90m    |[39m     
+[31m[1m^[22m[39m
+     [90m 66 |[39m         process[
+33m.[39menv[33m.[39m_MOCK_BEHAVIOR 
+[33m=[39m 
+[32m'DUPLICATES'[39m[33m;[39m
+     [90m 67 |[39m         
+[36mconst[39m res [33m=[39m 
+[36mawait[39m request(app)
+     [90m 68 |[39m             [33m
+.[39mpost([32m'/api/ingest/generate-
+prerequisites'[39m)[0m
+
+      at it 
+(tests/prerequisites.test.js:65:5)
+      at Object.describe 
+(tests/prerequisites.test.js:12:1)
+
+  ΓùÅ Layer 2: Prerequisite 
+Generation Validation ΓÇ║ Test E - 
+Cycle detection natively seamlessly 
+natively flawlessly (DAG test)
+
+    thrown: "Exceeded timeout of 5000 
+ms for a test.
+    Add a timeout value to this test 
+to increase the timeout, if this is a 
+long-running test. See https://jestjs.
+io/docs/api#testname-fn-timeout."
+
+    [0m [90m 75 |[39m     
+})[33m;[39m
+     [90m 76 |[39m
+    [31m[1m>[22m[39m[90m 77 
+|[39m     it([32m'Test E - Cycle 
+detection natively seamlessly 
+natively flawlessly (DAG 
+test)'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {
+     [90m    |[39m     
+[31m[1m^[22m[39m
+     [90m 78 |[39m         process[
+33m.[39menv[33m.[39m_MOCK_BEHAVIOR 
+[33m=[39m 
+[32m'CYCLE'[39m[33m;[39m
+     [90m 79 |[39m         
+[36mconst[39m res [33m=[39m 
+[36mawait[39m request(app)
+     [90m 80 |[39m             [33m
+.[39mpost([32m'/api/ingest/generate-
+prerequisites'[39m)[0m
+
+      at it 
+(tests/prerequisites.test.js:77:5)
+      at Object.describe 
+(tests/prerequisites.test.js:12:1)
+
+  ΓùÅ Layer 2: Prerequisite 
+Generation Validation ΓÇ║ Test F & I 
+- No prerequisites organically 
+effortlessly
+
+    thrown: "Exceeded timeout of 5000 
+ms for a test.
+    Add a timeout value to this test 
+to increase the timeout, if this is a 
+long-running test. See https://jestjs.
+io/docs/api#testname-fn-timeout."
+
+    [0m [90m 88 |[39m     
+})[33m;[39m
+     [90m 89 |[39m
+    [31m[1m>[22m[39m[90m 90 
+|[39m     it([32m'Test F & I - No 
+prerequisites organically 
+effortlessly'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {
+     [90m    |[39m     
+[31m[1m^[22m[39m
+     [90m 91 |[39m         process[
+33m.[39menv[33m.[39m_MOCK_BEHAVIOR 
+[33m=[39m 
+[32m'EMPTY'[39m[33m;[39m
+     [90m 92 |[39m         
+[36mconst[39m res [33m=[39m 
+[36mawait[39m request(app)
+     [90m 93 |[39m             [33m
+.[39mpost([32m'/api/ingest/generate-
+prerequisites'[39m)[0m
+
+      at it 
+(tests/prerequisites.test.js:90:5)
+      at Object.describe 
+(tests/prerequisites.test.js:12:1)
+
+  ΓùÅ Layer 2: Prerequisite 
+Generation Validation ΓÇ║ Test H - 
+Malformed Python output
+
+    thrown: "Exceeded timeout of 5000 
+ms for a test.
+    Add a timeout value to this test 
+to increase the timeout, if this is a 
+long-running test. See https://jestjs.
+io/docs/api#testname-fn-timeout."
+
+    [0m [90m 100 |[39m     
+})[33m;[39m
+     [90m 101 |[39m
+    [31m[1m>[22m[39m[90m 102 
+|[39m     it([32m'Test H - 
+Malformed Python 
+output'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {
+     [90m     |[39m     
+[31m[1m^[22m[39m
+     [90m 103 |[39m         process
+[33m.[39menv[33m.[39m_MOCK_BEHAVIOR
+ [33m=[39m 
+[32m'MALFORMED'[39m[33m;[39m
+     [90m 104 |[39m         
+[36mconst[39m res [33m=[39m 
+[36mawait[39m request(app)
+     [90m 105 |[39m             [33
+m.[39mpost([32m'/api/ingest/generate
+-prerequisites'[39m)[0m
+
+      at it 
+(tests/prerequisites.test.js:102:5)
+      at Object.describe 
+(tests/prerequisites.test.js:12:1)
+
+PASS tests/study_plan.test.js
+
+  ΓùÅ  Cannot log after tests are 
+done. Did you forget to wait for 
+something async in your test?
+    Attempted to log "Γ£à Full C1-C6 
+Pipeline completed successfully.".
+
+    [0m [90m 575 |[39m
+     [90m 576 |[39m     
+sendProgress(courseName[33m,[39m 
+[32m'DONE'[39m[33m,[39m 
+[32m'Pipeline fully 
+completed.'[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 577 
+|[39m     
+console[33m.[39mlog([32m'Γ£à Full 
+C1-C6 Pipeline completed 
+successfully.'[39m)[33m;[39m
+     [90m     |[39m             
+[31m[1m^[22m[39m
+     [90m 578 |[39m
+     [90m 579 |[39m     
+[36mreturn[39m {
+     [90m 580 |[39m         
+status[33m:[39m 
+[32m'success'[39m[33m,[39m[0m
+
+      at console.log (node_modules/@je
+st/console/build/index.js:147:10)
+      at log (src/controllers/ingest.c
+ontroller.js:577:13)
+      at generatePrerequisites (src/co
+ntrollers/ingest.controller.js:1273:13
+)
+
+PASS tests/graph_validation.test.js
+
+======================
+
+FAIL tests/layer5.test.js
+  ΓùÅ Console
+
+    console.log
+      Γùç injected env (3) from .env 
+// tip: Γîÿ override existing { 
+override: true }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(tests/layer5.test.js:7:21)
+
+    console.log
+      Successfully loaded 3 chunks 
+from 2 published courses into memory.
+
+      at Object.log [as loadData] 
+(src/data/store.js:41:17)
+
+    console.log
+      Successfully loaded 103 chunks 
+from 3 published courses into memory.
+
+      at Object.log [as loadData] 
+(src/data/store.js:41:17)
+
+  ΓùÅ Layer 5: Published Knowledge 
+Integration API Tests ΓÇ║ Retrieval 
+should return empty set for queries 
+on an Unpublished course (CourseC)
+
+    
+expect(received).toEqual(expected) // 
+deep equality
+
+    Expected: 403
+    Received: 400
+
+    [0m [90m 129 |[39m
+     [90m 130 |[39m         [90m// 
+Because Course C is unpublished, the 
+controller strictly blocks it with 
+403[39m
+    [31m[1m>[22m[39m[90m 131 
+|[39m         expect(res[33m.[39mst
+atusCode)[33m.[39mtoEqual([35m403[
+39m)[33m;[39m
+     [90m     |[39m                 
+               [31m[1m^[22m[39m
+     [90m 132 |[39m         expect(r
+es[33m.[39mbody[33m.[39merror)[33
+m.[39mtoContain([32m'Cannot query 
+an unpublished or non-existent 
+course'[39m)[33m;[39m
+     [90m 133 |[39m     
+})[33m;[39m
+     [90m 134 |[39m[0m
+
+      at Object.toEqual 
+(tests/layer5.test.js:131:32)
+
+  ΓùÅ Layer 5: Published Knowledge 
+Integration API Tests ΓÇ║ 
+Cross-contamination: Course A queries 
+must NOT retrieve Course B facts
+
+    
+expect(received).toEqual(expected) // 
+deep equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 143 |[39m
+     [90m 144 |[39m         [90m// 
+Course A contains math entirely, so 
+requesting biology fails cleanly[39m
+    [31m[1m>[22m[39m[90m 145 
+|[39m         expect(res[33m.[39mst
+atusCode)[33m.[39mtoEqual([35m200[
+39m)[33m;[39m
+     [90m     |[39m                 
+               [31m[1m^[22m[39m
+     [90m 146 |[39m         expect(r
+es[33m.[39mbody[33m.[39mstatus)[3
+3m.[39mtoBe([32m'insufficient_eviden
+ce'[39m)[33m;[39m
+     [90m 147 |[39m     
+})[33m;[39m
+     [90m 148 |[39m[0m
+
+      at Object.toEqual 
+(tests/layer5.test.js:145:32)
+
+  ΓùÅ Layer 5: Published Knowledge 
+Integration API Tests ΓÇ║ Publish 
+visibility: Missing course argument 
+blocks explain controller
+
+    
+expect(received).toContain(expected) 
+// indexOf
+
+    Expected substring: "course 
+selection is mandatory"
+    Received string:    "Missing 
+required field: subject. A valid 
+published subject selection is 
+mandatory."
+
+    [0m [90m 156 |[39m
+     [90m 157 |[39m         expect(r
+es[33m.[39mstatusCode)[33m.[39mtoE
+qual([35m400[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 158 
+|[39m         expect(res[33m.[39mbo
+dy[33m.[39merror)[33m.[39mtoContai
+n([32m'course selection is 
+mandatory'[39m)[33m;[39m
+     [90m     |[39m                 
+               [31m[1m^[22m[39m
+     [90m 159 |[39m     
+})[33m;[39m
+     [90m 160 |[39m })[33m;[39m
+     [90m 161 |[39m[0m
+
+      at Object.toContain 
+(tests/layer5.test.js:158:32)
+
+======================
+
+FAIL tests/layer6.test.js
+  ΓùÅ Console
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/layer6.test.js:44:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+    console.log
+      Successfully loaded 0 chunks 
+from 0 published courses into memory.
+
+      at log (src/data/store.js:41:17)
+
+    console.log
+      --- Query Pipeline ---
+
+      at log (src/controllers/explain.
+controller.js:274:17)
+
+    console.log
+      Original: What is an array?
+
+      at log (src/controllers/explain.
+controller.js:275:17)
+
+    console.log
+      Normalized: array
+
+      at log (src/controllers/explain.
+controller.js:276:17)
+
+    console.log
+      Expanded: array
+
+      at log (src/controllers/explain.
+controller.js:277:17)
+
+    console.log
+      Type: COMPLETE
+
+      at log (src/controllers/explain.
+controller.js:278:17)
+
+    console.log
+      Tokens: [ 'array' ]
+
+      at log (src/controllers/explain.
+controller.js:279:17)
+
+    console.log
+      ----------------------
+
+      at log (src/controllers/explain.
+controller.js:286:17)
+
+    console.log
+      --- Classification Audit ---
+
+      at log (src/controllers/explain.
+controller.js:318:17)
+
+    console.log
+      Question: What is an array?
+
+      at log (src/controllers/explain.
+controller.js:319:17)
+
+    console.log
+      Classification: concept_question
+
+      at log (src/controllers/explain.
+controller.js:320:17)
+
+    console.log
+      Reason: No graded-work patterns 
+matched.
+
+      at log (src/controllers/explain.
+controller.js:321:17)
+
+    console.log
+      ----------------------------
+
+      at log (src/controllers/explain.
+controller.js:322:17)
+
+    console.error
+      Gemini call or parse failed: 
+GoogleGenerativeAIFetchError: 
+[GoogleGenerativeAI Error]: Error 
+fetching from https://generativelangua
+ge.googleapis.com/v1beta/models/gemini
+-3.5-flash:generateContent: [400 Bad 
+Request] API key not valid. Please 
+pass a valid API key. [{"@type":"type.
+googleapis.com/google.rpc.ErrorInfo","
+reason":"API_KEY_INVALID","domain":"go
+ogleapis.com","metadata":{"service":"g
+enerativelanguage.googleapis.com"}},{"
+@type":"type.googleapis.com/google.rpc
+.LocalizedMessage","locale":"en-US","m
+essage":"API key not valid. Please 
+pass a valid API key."}]
+          at handleResponseNotOk (C:\U
+sers\HP\OneDrive\Documents\GitHub\S28-
+AI-Tutor-SIH\Backend\node_modules\@goo
+gle\generative-ai\dist\index.js:434:11
+)
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:103:5)
+          at makeRequest (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\node_modules\@google\gene
+rative-ai\dist\index.js:403:9)
+          at generateContent (C:\Users
+\HP\OneDrive\Documents\GitHub\S28-AI-T
+utor-SIH\Backend\node_modules\@google\
+generative-ai\dist\index.js:867:22)
+          at callGemini (C:\Users\HP\O
+neDrive\Documents\GitHub\S28-AI-Tutor-
+SIH\Backend\src\controllers\explain.co
+ntroller.js:105:24)
+          at explain (C:\Users\HP\OneD
+rive\Documents\GitHub\S28-AI-Tutor-SIH
+\Backend\src\controllers\explain.contr
+oller.js:436:33) {
+        status: 400,
+        statusText: 'Bad Request',
+        errorDetails: [
+          {
+            '@type': 'type.googleapis.
+com/google.rpc.ErrorInfo',
+            reason: 'API_KEY_INVALID',
+            domain: 'googleapis.com',
+            metadata: [Object]
+          },
+          {
+            '@type': 'type.googleapis.
+com/google.rpc.LocalizedMessage',
+            locale: 'en-US',
+            message: 'API key not 
+valid. Please pass a valid API key.'
+          }
+        ]
+      }
+
+    [0m [90m 444 |[39m         } 
+[36mcatch[39m (err) {
+     [90m 445 |[39m             
+metaGeminiStatus [33m=[39m 
+[32m"failure_aborted"[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 446 
+|[39m             
+console[33m.[39merror([32m"Gemini 
+call or parse 
+failed:"[39m[33m,[39m 
+err)[33m;[39m
+     [90m     |[39m                 
+    [31m[1m^[22m[39m
+     [90m 447 |[39m
+     [90m 448 |[39m             
+[36mconst[39m errStr [33m=[39m 
+err[33m.[39mtoString() [33m+[39m 
+(err[33m.[39mmessage [33m||[39m 
+[32m""[39m)[33m;[39m
+     [90m 449 |[39m             
+[36mlet[39m safeMsg [33m=[39m 
+[32m"The AI service is temporarily 
+unavailable."[39m[33m;[39m[0m
+
+      at error (src/controllers/explai
+n.controller.js:446:21)
+
+    console.log
+      --- Query Pipeline ---
+
+      at log (src/controllers/explain.
+controller.js:274:17)
+
+    console.log
+      Original: Linked Lists?
+
+      at log (src/controllers/explain.
+controller.js:275:17)
+
+    console.log
+      Normalized: linked
+
+      at log (src/controllers/explain.
+controller.js:276:17)
+
+    console.log
+      Expanded: linked
+
+      at log (src/controllers/explain.
+controller.js:277:17)
+
+    console.log
+      Type: COMPLETE
+
+      at log (src/controllers/explain.
+controller.js:278:17)
+
+    console.log
+      Tokens: [ 'linked' ]
+
+      at log (src/controllers/explain.
+controller.js:279:17)
+
+    console.log
+      ----------------------
+
+      at log (src/controllers/explain.
+controller.js:286:17)
+
+    console.log
+      --- Classification Audit ---
+
+      at log (src/controllers/explain.
+controller.js:318:17)
+
+    console.log
+      Question: Linked Lists?
+
+      at log (src/controllers/explain.
+controller.js:319:17)
+
+    console.log
+      Classification: concept_question
+
+      at log (src/controllers/explain.
+controller.js:320:17)
+
+    console.log
+      Reason: No graded-work patterns 
+matched.
+
+      at log (src/controllers/explain.
+controller.js:321:17)
+
+    console.log
+      ----------------------------
+
+      at log (src/controllers/explain.
+controller.js:322:17)
+
+    console.error
+      Failed to record chat log 
+externally: TypeError: 
+supabaseAdmin.from(...).insert is not 
+a function
+          at insert (C:\Users\HP\OneDr
+ive\Documents\GitHub\S28-AI-Tutor-SIH\
+Backend\src\controllers\chatlog.contro
+ller.js:37:80)
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:103:5)
+
+    [0m [90m 62 |[39m         
+[36mreturn[39m 
+currentSessionId[33m;[39m
+     [90m 63 |[39m     } 
+[36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 64 
+|[39m         
+console[33m.[39merror([32m"Failed 
+to record chat log 
+externally:"[39m[33m,[39m 
+error)[33m;[39m
+     [90m    |[39m                 
+[31m[1m^[22m[39m
+     [90m 65 |[39m         
+[36mthrow[39m error[33m;[39m
+     [90m 66 |[39m     }
+     [90m 67 |[39m }[0m
+
+      at error (src/controllers/chatlo
+g.controller.js:64:17)
+
+    console.error
+      Failed to log chat interaction: 
+TypeError: 
+supabaseAdmin.from(...).insert is not 
+a function
+          at insert (C:\Users\HP\OneDr
+ive\Documents\GitHub\S28-AI-Tutor-SIH\
+Backend\src\controllers\chatlog.contro
+ller.js:37:80)
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:103:5)
+
+    [0m [90m 177 |[39m             
+            
+statusObj[33m.[39msession_id 
+[33m=[39m loggedData[33m;[39m
+     [90m 178 |[39m                 
+    }
+    [31m[1m>[22m[39m[90m 179 
+|[39m                 
+})[33m.[39m[36mcatch[39m(err 
+[33m=>[39m 
+console[33m.[39merror([32m"Failed 
+to log chat 
+interaction:"[39m[33m,[39m 
+err))[33m;[39m
+     [90m     |[39m                 
+                        
+[31m[1m^[22m[39m
+     [90m 180 |[39m
+     [90m 181 |[39m                 
+[36mif[39m (isNewSession) {
+     [90m 182 |[39m                 
+    [36mawait[39m 
+logPromise[33m;[39m[0m
+
+      at error (src/controllers/explai
+n.controller.js:179:41)
+
+  ΓùÅ Layer 6: Student Context 
+Switching & Course-Aware Sessions ΓÇ║ 
+Test F: Course mismatch between 
+session and request is rejected
+
+    
+expect(received).toContain(expected) 
+// indexOf
+
+    Expected substring: "course 
+mismatch"
+    Received string:    "Session 
+subject mismatch. This session 
+belongs to another subject."
+
+    [0m [90m 83 |[39m
+     [90m 84 |[39m         expect(re
+sponse[33m.[39mstatus)[33m.[39mtoB
+e([35m403[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 85 
+|[39m         expect(response[33m.[
+39mbody[33m.[39merror)[33m.[39mtoC
+ontain([32m'course 
+mismatch'[39m)[33m;[39m
+     [90m    |[39m                  
+                   
+[31m[1m^[22m[39m
+     [90m 86 |[39m     })[33m;[39m
+     [90m 87 |[39m
+     [90m 88 |[39m     
+it([32m'should successfully isolate 
+queries strictly 
+correctly'[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {[0m
+
+      at Object.toContain 
+(tests/layer6.test.js:85:37)
+
+======================
+
+FAIL tests/practice.test.js
+  ΓùÅ Console
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/practice.test.js:28:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+  ΓùÅ Practice Endpoints ΓÇ║ GET 
+/api/practice-questions ΓÇ║ should 
+return owned practice questions
+
+    expect(received).toBe(expected) 
+// Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m  98 |[39m             
+    [33m.[39m[36mset[39m([32m'x-m
+ock-user-id'[39m[33m,[39m 
+[32m'student-A'[39m)[33m;[39m
+     [90m  99 |[39m
+    [31m[1m>[22m[39m[90m 100 
+|[39m             expect(response[33
+m.[39mstatus)[33m.[39mtoBe([35m200
+[39m)[33m;[39m
+     [90m     |[39m                 
+                    
+[31m[1m^[22m[39m
+     [90m 101 |[39m             expe
+ct(supabaseAdmin[33m.[39meq)[33m.[
+39mtoHaveBeenCalledWith([32m'student_
+id'[39m[33m,[39m 
+[32m'student-A'[39m)[33m;[39m
+     [90m 102 |[39m         
+})[33m;[39m
+     [90m 103 |[39m     
+})[33m;[39m[0m
+
+      at Object.toBe 
+(tests/practice.test.js:100:37)
+
+======================
+
+FAIL tests/explain.test.js
+  ΓùÅ Console
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/explain.test.js:25:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+  ΓùÅ Explain Controller - Practice 
+Generation Phase 2 ΓÇ║ 1, 2, 3, 4, 5, 
+6: Eligible conceptual question 
+generates 2 practice questions and 
+persists them successfully
+
+    expect(received).toBe(expected) 
+// Object.is equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 137 |[39m             
+[33m.[39msend({ question[33m:[39m 
+[32m"Explain Newton's second 
+law"[39m[33m,[39m 
+session_id[33m:[39m 
+[32m"sess-123"[39m[33m,[39m 
+course[33m:[39m [32m"DSA"[39m 
+})[33m;[39m
+     [90m 138 |[39m
+    [31m[1m>[22m[39m[90m 139 
+|[39m         expect(response[33m.[
+39mstatus)[33m.[39mtoBe([35m200[39
+m)[33m;[39m
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 140 |[39m
+     [90m 141 |[39m         [90m// 
+API Response Modification Check[39m
+     [90m 142 |[39m         expect(r
+esponse[33m.[39mbody[33m.[39mpract
+ice)[33m.[39mtoBeDefined()[33m;[39
+m[0m
+
+      at Object.toBe 
+(tests/explain.test.js:139:33)
+
+  ΓùÅ Explain Controller - Practice 
+Generation Phase 2 ΓÇ║ 7, 8, 9: 
+Non-practice-worthy models correctly 
+skip generation
+
+    expect(received).toBe(expected) 
+// Object.is equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 168 |[39m             
+[33m.[39msend({ question[33m:[39m 
+[32m"solve this for my 
+homework"[39m[33m,[39m 
+course[33m:[39m [32m"DSA"[39m 
+})[33m;[39m
+     [90m 169 |[39m
+    [31m[1m>[22m[39m[90m 170 
+|[39m         expect(response[33m.[
+39mstatus)[33m.[39mtoBe([35m200[39
+m)[33m;[39m
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 171 |[39m         [90m// 
+Has guided_mode instead, skips Gemini 
+and practice generation entirely[39m
+     [90m 172 |[39m         expect(r
+esponse[33m.[39mbody[33m.[39mstatu
+s)[33m.[39mtoBe([32m'guided_mode'[
+39m)[33m;[39m
+     [90m 173 |[39m         expect(s
+upabaseAdmin[33m.[39minsert)[33m.[
+39mtoHaveBeenCalledTimes([35m0[39m)
+[33m;[39m[0m
+
+      at Object.toBe 
+(tests/explain.test.js:170:33)
+
+  ΓùÅ Explain Controller - Practice 
+Generation Phase 2 ΓÇ║ 10: Practice 
+generation database failure does NOT 
+break chat response
+
+    expect(received).toBe(expected) 
+// Object.is equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 196 |[39m             
+[33m.[39msend({ question[33m:[39m 
+[32m"Explain logic 
+gates"[39m[33m,[39m 
+course[33m:[39m [32m"DSA"[39m 
+})[33m;[39m
+     [90m 197 |[39m
+    [31m[1m>[22m[39m[90m 198 
+|[39m         expect(response[33m.[
+39mstatus)[33m.[39mtoBe([35m200[39
+m)[33m;[39m [90m// the response is 
+perfectly uninterrupted[39m
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 199 |[39m         expect(r
+esponse[33m.[39mbody[33m.[39mpract
+ice[33m.[39mavailable)[33m.[39mtoB
+e([36mtrue[39m)[33m;[39m
+     [90m 200 |[39m         expect(s
+upabaseAdmin[33m.[39minsert)[33m.[
+39mtoHaveBeenCalledTimes([35m1[39m)
+[33m;[39m
+     [90m 201 |[39m     
+})[33m;[39m[0m
+
+      at Object.toBe 
+(tests/explain.test.js:198:33)
+
+PASS tests/chunk_quality.test.js 
+(8.541 s)
+PASS tests/upload.test.js (5.434 s)
+  ΓùÅ Console
+
+    console.log
+      Γùç injected env (3) from .env 
+// tip: Γùê encrypted .env 
+[www.dotenvx.com]
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.log
+      Γùç injected env (0) from .env 
+// tip: Γîÿ enable debugging { debug: 
+true }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/upload.test.js:3:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+    console.log
+      
+      ≡ƒôÜ Processing course: 
+test_mock
+
+      at log (src/controllers/ingest.c
+ontroller.js:919:21)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:229:21)
+
+    console.log
+      ≡ƒÉì STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.c
+ontroller.js:233:21)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:237:21)
+
+    console.log
+      PDF: C:\Users\HP\OneDrive\Docume
+nts\GitHub\S28-AI-Tutor-SIH\Backend\da
+ta\ingest-uploads\5820d6e2-ee8b-4621-8
+0a1-6886b9ea31e2\test_mock.pdf
+
+      at log (src/controllers/ingest.c
+ontroller.js:241:21)
+
+    console.log
+      Script: C:\Users\HP\OneDrive\Doc
+uments\GitHub\S28-AI-Tutor-SIH\Backend
+\python\chunking.py
+
+      at log (src/controllers/ingest.c
+ontroller.js:246:21)
+
+    console.log
+      Python: python
+
+      at log (src/controllers/ingest.c
+ontroller.js:251:21)
+
+    console.log
+      Γ£à Chunking created 1 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:415:33)
+
+    console.log
+      Γ£à Chunks saved: C:\Users\HP\On
+eDrive\Documents\GitHub\S28-AI-Tutor-S
+IH\Backend\src\data\test_mock_chunks.j
+son
+
+      at log (src/controllers/ingest.c
+ontroller.js:961:21)
+
+    console.log
+      Γ£à courses.json updated
+
+      at log (src/controllers/ingest.c
+ontroller.js:705:13)
+
+    console.log
+      ≡ƒº╣ Cleaned temporary 
+artifacts for batch C:\Users\HP\OneDri
+ve\Documents\GitHub\S28-AI-Tutor-SIH\B
+ackend\data\ingest-uploads\5820d6e2-ee
+8b-4621-80a1-6886b9ea31e2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1112:25)
+
+    console.log
+      
+      ≡ƒôÜ Processing course: 
+test_mock
+
+      at log (src/controllers/ingest.c
+ontroller.js:919:21)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:229:21)
+
+    console.log
+      ≡ƒÉì STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.c
+ontroller.js:233:21)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:237:21)
+
+    console.log
+      PDF: C:\Users\HP\OneDrive\Docume
+nts\GitHub\S28-AI-Tutor-SIH\Backend\da
+ta\ingest-uploads\0c693244-6021-49d6-8
+9bb-a23b4c11d8de\test_mock.pdf
+
+      at log (src/controllers/ingest.c
+ontroller.js:241:21)
+
+    console.log
+      Script: C:\Users\HP\OneDrive\Doc
+uments\GitHub\S28-AI-Tutor-SIH\Backend
+\python\chunking.py
+
+      at log (src/controllers/ingest.c
+ontroller.js:246:21)
+
+    console.log
+      Python: python
+
+      at log (src/controllers/ingest.c
+ontroller.js:251:21)
+
+    console.error
+      Γ¥î Failed to parse or validate 
+chunking output
+
+    [0m [90m 472 |[39m             
+        ) {
+     [90m 473 |[39m
+    [31m[1m>[22m[39m[90m 474 
+|[39m                         
+console[33m.[39merror(
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 475 |[39m                 
+            [32m'Γ¥î Failed to parse 
+or validate chunking output'[39m
+     [90m 476 |[39m                 
+        )[33m;[39m
+     [90m 477 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:474:33)
+      at cb 
+(tests/upload.test.js:14:24)
+      at execFile (src/controllers/ing
+est.controller.js:293:13)
+      at runChunking (src/controllers/
+ingest.controller.js:219:12)
+      at runChunking (src/controllers/
+ingest.controller.js:930:23)
+      at Layer.handleRequest (node_mod
+ules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib
+/route.js:157:13)
+      at done (node_modules/multer/lib
+/make-middleware.js:70:7)
+      at indicateDone (node_modules/mu
+lter/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-
+middleware.js:247:11
+      at WriteStream.<anonymous> (node
+_modules/multer/storage/disk.js:47:9)
+
+    console.error
+      Unexpected token 'i', "invalid 
+js"... is not valid JSON
+
+    [0m [90m 476 |[39m             
+            )[33m;[39m
+     [90m 477 |[39m
+    [31m[1m>[22m[39m[90m 478 
+|[39m                         
+console[33m.[39merror(
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 479 |[39m                 
+            
+parseError[33m.[39mmessage
+     [90m 480 |[39m                 
+        )[33m;[39m
+     [90m 481 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:478:33)
+      at cb 
+(tests/upload.test.js:14:24)
+      at execFile (src/controllers/ing
+est.controller.js:293:13)
+      at runChunking (src/controllers/
+ingest.controller.js:219:12)
+      at runChunking (src/controllers/
+ingest.controller.js:930:23)
+      at Layer.handleRequest (node_mod
+ules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib
+/route.js:157:13)
+      at done (node_modules/multer/lib
+/make-middleware.js:70:7)
+      at indicateDone (node_modules/mu
+lter/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-
+middleware.js:247:11
+      at WriteStream.<anonymous> (node
+_modules/multer/storage/disk.js:47:9)
+
+    console.error
+      
+      Γ¥î INGESTION UPLOAD ERROR
+
+    [0m [90m 1073 |[39m     ) {
+     [90m 1074 |[39m
+    [31m[1m>[22m[39m[90m 1075 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1076 |[39m             
+[32m'\nΓ¥î INGESTION UPLOAD 
+ERROR'[39m
+     [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1075:17)
+
+    console.error
+      Error: Unexpected token 'i', 
+"invalid js"... is not valid JSON
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+src\controllers\ingest.controller.js:4
+83:29
+          at cb (C:\Users\HP\OneDrive\
+Documents\GitHub\S28-AI-Tutor-SIH\Back
+end\tests\upload.test.js:14:24)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+305:39
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+312:13
+          at mockConstructor (C:\Users
+\HP\OneDrive\Documents\GitHub\S28-AI-T
+utor-SIH\Backend\node_modules\jest-moc
+k\build\index.js:72:19)
+          at execFile (C:\Users\HP\One
+Drive\Documents\GitHub\S28-AI-Tutor-SI
+H\Backend\src\controllers\ingest.contr
+oller.js:293:13)
+          at new Promise (<anonymous>)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:219:12)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:930:23)
+          at Layer.handleRequest (C:\U
+sers\HP\OneDrive\Documents\GitHub\S28-
+AI-Tutor-SIH\Backend\node_modules\rout
+er\lib\layer.js:152:17)
+          at next (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\router\lib\route.js
+:157:13)
+          at done (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\multer\lib\make-mid
+dleware.js:70:7)
+          at indicateDone (C:\Users\HP
+\OneDrive\Documents\GitHub\S28-AI-Tuto
+r-SIH\Backend\node_modules\multer\lib\
+make-middleware.js:74:68)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\multer\lib\make-middlewar
+e.js:247:11
+          at WriteStream.<anonymous> (
+C:\Users\HP\OneDrive\Documents\GitHub\
+S28-AI-Tutor-SIH\Backend\node_modules\
+multer\storage\disk.js:47:9)
+          at WriteStream.emit 
+(node:events:520:35)
+          at finish (node:internal/str
+eams/writable:953:10)
+          at 
+node:internal/streams/writable:934:13
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:89:21)
+
+    [0m [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m
+    [31m[1m>[22m[39m[90m 1079 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1080 |[39m             
+error
+     [90m 1081 |[39m         
+)[33m;[39m
+     [90m 1082 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1079:17)
+
+    console.log
+      ≡ƒº╣ Cleaned temporary 
+artifacts for batch C:\Users\HP\OneDri
+ve\Documents\GitHub\S28-AI-Tutor-SIH\B
+ackend\data\ingest-uploads\0c693244-60
+21-49d6-89bb-a23b4c11d8de
+
+      at log (src/controllers/ingest.c
+ontroller.js:1112:25)
+
+    console.log
+      
+      ≡ƒôÜ Processing course: 
+test_mock
+
+      at log (src/controllers/ingest.c
+ontroller.js:919:21)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:229:21)
+
+    console.log
+      ≡ƒÉì STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.c
+ontroller.js:233:21)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:237:21)
+
+    console.log
+      PDF: C:\Users\HP\OneDrive\Docume
+nts\GitHub\S28-AI-Tutor-SIH\Backend\da
+ta\ingest-uploads\94a197d5-fc7b-4590-b
+062-809865dfb7f2\test_mock.pdf
+
+      at log (src/controllers/ingest.c
+ontroller.js:241:21)
+
+    console.log
+      Script: C:\Users\HP\OneDrive\Doc
+uments\GitHub\S28-AI-Tutor-SIH\Backend
+\python\chunking.py
+
+      at log (src/controllers/ingest.c
+ontroller.js:246:21)
+
+    console.log
+      Python: python
+
+      at log (src/controllers/ingest.c
+ontroller.js:251:21)
+
+    console.log
+      Γ£à Chunking created 0 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:415:33)
+
+    console.error
+      
+      Γ¥î INGESTION UPLOAD ERROR
+
+    [0m [90m 1073 |[39m     ) {
+     [90m 1074 |[39m
+    [31m[1m>[22m[39m[90m 1075 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1076 |[39m             
+[32m'\nΓ¥î INGESTION UPLOAD 
+ERROR'[39m
+     [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1075:17)
+
+    console.error
+      Error: Chunking completed but 
+created 0 chunks. Document might be 
+empty.
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+src\controllers\ingest.controller.js:4
+29:33
+          at cb (C:\Users\HP\OneDrive\
+Documents\GitHub\S28-AI-Tutor-SIH\Back
+end\tests\upload.test.js:17:24)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+305:39
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+312:13
+          at mockConstructor (C:\Users
+\HP\OneDrive\Documents\GitHub\S28-AI-T
+utor-SIH\Backend\node_modules\jest-moc
+k\build\index.js:72:19)
+          at execFile (C:\Users\HP\One
+Drive\Documents\GitHub\S28-AI-Tutor-SI
+H\Backend\src\controllers\ingest.contr
+oller.js:293:13)
+          at new Promise (<anonymous>)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:219:12)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:930:23)
+          at Layer.handleRequest (C:\U
+sers\HP\OneDrive\Documents\GitHub\S28-
+AI-Tutor-SIH\Backend\node_modules\rout
+er\lib\layer.js:152:17)
+          at next (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\router\lib\route.js
+:157:13)
+          at done (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\multer\lib\make-mid
+dleware.js:70:7)
+          at indicateDone (C:\Users\HP
+\OneDrive\Documents\GitHub\S28-AI-Tuto
+r-SIH\Backend\node_modules\multer\lib\
+make-middleware.js:74:68)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\multer\lib\make-middlewar
+e.js:247:11
+          at WriteStream.<anonymous> (
+C:\Users\HP\OneDrive\Documents\GitHub\
+S28-AI-Tutor-SIH\Backend\node_modules\
+multer\storage\disk.js:47:9)
+          at WriteStream.emit 
+(node:events:520:35)
+          at finish (node:internal/str
+eams/writable:953:10)
+          at 
+node:internal/streams/writable:934:13
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:89:21)
+
+    [0m [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m
+    [31m[1m>[22m[39m[90m 1079 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1080 |[39m             
+error
+     [90m 1081 |[39m         
+)[33m;[39m
+     [90m 1082 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1079:17)
+
+    console.log
+      ≡ƒº╣ Cleaned temporary 
+artifacts for batch C:\Users\HP\OneDri
+ve\Documents\GitHub\S28-AI-Tutor-SIH\B
+ackend\data\ingest-uploads\94a197d5-fc
+7b-4590-b062-809865dfb7f2
+
+      at log (src/controllers/ingest.c
+ontroller.js:1112:25)
+
+    console.log
+      
+      ≡ƒôÜ Processing course: 
+test_mock
+
+      at log (src/controllers/ingest.c
+ontroller.js:919:21)
+
+    console.log
+      
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:229:21)
+
+    console.log
+      ≡ƒÉì STARTING PYTHON CHUNKING
+
+      at log (src/controllers/ingest.c
+ontroller.js:233:21)
+
+    console.log
+      ================================
+==========
+
+      at log (src/controllers/ingest.c
+ontroller.js:237:21)
+
+    console.log
+      PDF: C:\Users\HP\OneDrive\Docume
+nts\GitHub\S28-AI-Tutor-SIH\Backend\da
+ta\ingest-uploads\427c16d6-bbe6-4ac0-a
+9ee-1a3732064608\test_mock.pdf
+
+      at log (src/controllers/ingest.c
+ontroller.js:241:21)
+
+    console.log
+      Script: C:\Users\HP\OneDrive\Doc
+uments\GitHub\S28-AI-Tutor-SIH\Backend
+\python\chunking.py
+
+      at log (src/controllers/ingest.c
+ontroller.js:246:21)
+
+    console.log
+      Python: python
+
+      at log (src/controllers/ingest.c
+ontroller.js:251:21)
+
+    console.log
+      Γ£à Chunking created 2 chunks
+
+      at log (src/controllers/ingest.c
+ontroller.js:415:33)
+
+    console.error
+      Γ¥î Failed to parse or validate 
+chunking output
+
+    [0m [90m 472 |[39m             
+        ) {
+     [90m 473 |[39m
+    [31m[1m>[22m[39m[90m 474 
+|[39m                         
+console[33m.[39merror(
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 475 |[39m                 
+            [32m'Γ¥î Failed to parse 
+or validate chunking output'[39m
+     [90m 476 |[39m                 
+        )[33m;[39m
+     [90m 477 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:474:33)
+      at cb 
+(tests/upload.test.js:20:24)
+      at execFile (src/controllers/ing
+est.controller.js:293:13)
+      at runChunking (src/controllers/
+ingest.controller.js:219:12)
+      at runChunking (src/controllers/
+ingest.controller.js:930:23)
+      at Layer.handleRequest (node_mod
+ules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib
+/route.js:157:13)
+      at done (node_modules/multer/lib
+/make-middleware.js:70:7)
+      at indicateDone (node_modules/mu
+lter/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-
+middleware.js:247:11
+      at WriteStream.<anonymous> (node
+_modules/multer/storage/disk.js:47:9)
+
+    console.error
+      Schema validation failed: 
+Duplicate chunk ID detected (chunk1).
+
+    [0m [90m 476 |[39m             
+            )[33m;[39m
+     [90m 477 |[39m
+    [31m[1m>[22m[39m[90m 478 
+|[39m                         
+console[33m.[39merror(
+     [90m     |[39m                 
+                [31m[1m^[22m[39m
+     [90m 479 |[39m                 
+            
+parseError[33m.[39mmessage
+     [90m 480 |[39m                 
+        )[33m;[39m
+     [90m 481 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:478:33)
+      at cb 
+(tests/upload.test.js:20:24)
+      at execFile (src/controllers/ing
+est.controller.js:293:13)
+      at runChunking (src/controllers/
+ingest.controller.js:219:12)
+      at runChunking (src/controllers/
+ingest.controller.js:930:23)
+      at Layer.handleRequest (node_mod
+ules/router/lib/layer.js:152:17)
+      at next (node_modules/router/lib
+/route.js:157:13)
+      at done (node_modules/multer/lib
+/make-middleware.js:70:7)
+      at indicateDone (node_modules/mu
+lter/lib/make-middleware.js:74:68)
+      at node_modules/multer/lib/make-
+middleware.js:247:11
+      at WriteStream.<anonymous> (node
+_modules/multer/storage/disk.js:47:9)
+
+    console.error
+      
+      Γ¥î INGESTION UPLOAD ERROR
+
+    [0m [90m 1073 |[39m     ) {
+     [90m 1074 |[39m
+    [31m[1m>[22m[39m[90m 1075 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1076 |[39m             
+[32m'\nΓ¥î INGESTION UPLOAD 
+ERROR'[39m
+     [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1075:17)
+
+    console.error
+      Error: Schema validation 
+failed: Duplicate chunk ID detected 
+(chunk1).
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+src\controllers\ingest.controller.js:4
+83:29
+          at cb (C:\Users\HP\OneDrive\
+Documents\GitHub\S28-AI-Tutor-SIH\Back
+end\tests\upload.test.js:20:24)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+305:39
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\jest-mock\build\index.js:
+312:13
+          at mockConstructor (C:\Users
+\HP\OneDrive\Documents\GitHub\S28-AI-T
+utor-SIH\Backend\node_modules\jest-moc
+k\build\index.js:72:19)
+          at execFile (C:\Users\HP\One
+Drive\Documents\GitHub\S28-AI-Tutor-SI
+H\Backend\src\controllers\ingest.contr
+oller.js:293:13)
+          at new Promise (<anonymous>)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:219:12)
+          at runChunking (C:\Users\HP\
+OneDrive\Documents\GitHub\S28-AI-Tutor
+-SIH\Backend\src\controllers\ingest.co
+ntroller.js:930:23)
+          at Layer.handleRequest (C:\U
+sers\HP\OneDrive\Documents\GitHub\S28-
+AI-Tutor-SIH\Backend\node_modules\rout
+er\lib\layer.js:152:17)
+          at next (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\router\lib\route.js
+:157:13)
+          at done (C:\Users\HP\OneDriv
+e\Documents\GitHub\S28-AI-Tutor-SIH\Ba
+ckend\node_modules\multer\lib\make-mid
+dleware.js:70:7)
+          at indicateDone (C:\Users\HP
+\OneDrive\Documents\GitHub\S28-AI-Tuto
+r-SIH\Backend\node_modules\multer\lib\
+make-middleware.js:74:68)
+          at C:\Users\HP\OneDrive\Docu
+ments\GitHub\S28-AI-Tutor-SIH\Backend\
+node_modules\multer\lib\make-middlewar
+e.js:247:11
+          at WriteStream.<anonymous> (
+C:\Users\HP\OneDrive\Documents\GitHub\
+S28-AI-Tutor-SIH\Backend\node_modules\
+multer\storage\disk.js:47:9)
+          at WriteStream.emit 
+(node:events:520:35)
+          at finish (node:internal/str
+eams/writable:953:10)
+          at 
+node:internal/streams/writable:934:13
+          at 
+processTicksAndRejections (node:intern
+al/process/task_queues:89:21)
+
+    [0m [90m 1077 |[39m         
+)[33m;[39m
+     [90m 1078 |[39m
+    [31m[1m>[22m[39m[90m 1079 
+|[39m         
+console[33m.[39merror(
+     [90m      |[39m                
+ [31m[1m^[22m[39m
+     [90m 1080 |[39m             
+error
+     [90m 1081 |[39m         
+)[33m;[39m
+     [90m 1082 |[39m[0m
+
+      at error (src/controllers/ingest
+.controller.js:1079:17)
+
+    console.log
+      ≡ƒº╣ Cleaned temporary 
+artifacts for batch C:\Users\HP\OneDri
+ve\Documents\GitHub\S28-AI-Tutor-SIH\B
+ackend\data\ingest-uploads\427c16d6-bb
+e6-4ac0-a9ee-1a3732064608
+
+      at log (src/controllers/ingest.c
+ontroller.js:1112:25)
+
+PASS tests/concept_extraction.test.js 
+(8.57 s)
+PASS tests/concept_hierarchy.test.js 
+(6.205 s)
+PASS tests/prerequisite_graph.test.js
+PASS tests/trace.test.js
+  ΓùÅ Console
+
+    console.log
+      Γùç injected env (3) from .env 
+// tip: Γîÿ custom filepath { path: 
+'/custom/path/.env' }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/trace.test.js:2:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+    console.log
+      Token: Success
+
+      at Object.log 
+(tests/trace.test.js:11:17)
+
+    console.log
+      Upload: { error: 'Unauthorized: 
+Invalid token' }
+
+      at Object.log 
+(tests/trace.test.js:19:17)
+
+    console.log
+      Approve: { error: 
+'Unauthorized: Invalid token' }
+
+      at Object.log 
+(tests/trace.test.js:25:17)
+
+    console.log
+      Publish: { error: 
+'Unauthorized: Invalid token' }
+
+      at Object.log 
+(tests/trace.test.js:31:17)
+
+    console.log
+      Explain 1 Exact Phrase: {
+        "error": "Unauthorized: 
+Invalid token"
+      }
+
+      at Object.log 
+(tests/trace.test.js:42:17)
+
+    console.log
+      Explain 2 Natural: {
+        "error": "Unauthorized: 
+Invalid token"
+      }
+
+      at Object.log 
+(tests/trace.test.js:53:17)
+
+    console.log
+      Explain 3 Different: {
+        "error": "Unauthorized: 
+Invalid token"
+      }
+
+      at Object.log 
+(tests/trace.test.js:64:17)
+
+PASS tests/layer7.test.js
+  ΓùÅ Console
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/layer7.test.js:47:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: undefined
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+PASS tests/api.test.js
+  ΓùÅ Console
+
+    console.log
+      Γùç injected env (3) from .env 
+// tip: Γîÿ suppress logs { quiet: 
+true }
+
+      at _log (node_modules/dotenv/lib
+/main.js:131:11)
+
+    console.warn
+      Legacy prerequisites.json not 
+found, falling back to empty 
+prerequisites mapping.
+
+    [0m [90m 4 |[39m     
+prerequisites [33m=[39m require([32
+m'../data/prerequisites.json'[39m)[3
+3m;[39m
+     [90m 5 |[39m } [36mcatch[39m 
+(error) {
+    [31m[1m>[22m[39m[90m 6 
+|[39m     
+console[33m.[39mwarn([32m"Legacy 
+prerequisites.json not found, falling 
+back to empty prerequisites 
+mapping."[39m)[33m;[39m
+     [90m   |[39m             
+[31m[1m^[22m[39m
+     [90m 7 |[39m }
+     [90m 8 |[39m [36mconst[39m { 
+getChunks } [33m=[39m require([32m'
+../data/store'[39m)[33m;[39m
+     [90m 9 |[39m[0m
+
+      at Object.warn (src/controllers/
+gap.controller.js:6:13)
+      at Object.require (src/controlle
+rs/explain.controller.js:3:27)
+      at Object.require 
+(src/routes/api.routes.js:3:21)
+      at Object.require 
+(src/app.js:3:19)
+      at Object.require 
+(tests/api.test.js:12:13)
+
+    console.log
+      ≡ƒÉì Python executable: python
+
+      at Object.log (src/controllers/i
+ngest.controller.js:36:9)
+
+    console.log
+      ≡ƒÉì Python exists: true
+
+      at Object.log (src/controllers/i
+ngest.controller.js:37:9)
+
+    console.log
+      Successfully loaded 103 chunks 
+from 3 published courses into memory.
+
+      at log (src/data/store.js:41:17)
+
+PASS tests/layer4.test.js
+  ΓùÅ Console
+
+    console.log
+      Successfully loaded 0 chunks 
+from 0 published courses into memory.
+
+      at Object.log [as loadData] 
+(src/data/store.js:41:17)
+
+

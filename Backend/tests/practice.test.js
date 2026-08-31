@@ -51,7 +51,7 @@ jest.mock('../src/lib/supabaseAdmin', () => {
         then: jest.fn((resolve) => resolve({ data: null, error: null }))
     };
     // Initialize methods used for mock implementations
-    builder.single = jest.fn().mockImplementation(() => Promise.resolve({ data: null, error: null }));
+    builder.single = jest.fn().mockImplementation(() => Promise.resolve({ data: { id: 'mock', student_id: 'student-A', chunk_id: 'chunk_1', subject: 'CourseA' }, error: null }));
     builder.order = jest.fn().mockImplementation(() => Promise.resolve({ data: null, error: null }));
     return {
         supabaseAdmin: builder

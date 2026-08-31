@@ -196,23 +196,24 @@ elif mock_val == "WARNINGS":
         "isolated_concepts": [{"concept_id": "iso1", "status": "POSSIBLY_MISSING_DEPENDENCY", "reason": "Orphan", "confidence": 0.8}],
         "suspicious_relationships": [{"concept_id": "c1", "prerequisite_id": "c3", "issue": "WEAK_PREREQUISITE", "severity": "MEDIUM", "reason": "Unrelated", "confidence": 0.7}],
         "missing_intermediates": [{"type": "MISSING_INTERMEDIATE_CONCEPT", "before": "c1", "after": "c9", "suggested_existing_concept": "c5", "reason": "Jump", "confidence": 0.9}],
-        "conceptual_jumps": [{"prerequisite_id": "c1", "concept_id": "c9", "type": "LARGE_CONCEPTUAL_JUMP", "severity": "HIGH", "reason": "Huge bound"}],
-        "high_connectivity": [{"concept_id": "c4", "type": "HIGH_CONNECTIVITY", "incoming": 8, "outgoing": 8, "severity": "MEDIUM"}],
-        "learning_paths": [{"path": ["c1", "c2"], "evaluation": "Pedagogically ok"}],
-        "recommendations": ["Review c9 limits"]
+        "conceptual_jumps": [{"prerequisite_id": "c1", "concept_id": "c2", "type": "LARGE_CONCEPTUAL_JUMP", "severity": "HIGH", "reason": "Jump is too large"}],
+        "high_connectivity": [{"concept_id": "c1", "type": "HIGH_CONNECTIVITY", "incoming": 3, "outgoing": 10, "severity": "MEDIUM"}],
+        "learning_paths": [{"path": ["c1", "c2", "c3"], "evaluation": "Pedagogically ok"}],
+        "recommendations": ["Add more intermediate concepts to bridge the gaps."]
     })
 else:
     try:
-            from gemini_rest import generate_content
-            raw_response = generate_content(prompt).strip()
-        except Exception as e:
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash") # Added model initialization since it was missing
+        response = model.generate_content(prompt)
+        raw_response = response.text
+        # Strip markdown formatting from the response
+        raw_response = re.sub(r"^```[a-z]*\n*", "", raw_response, flags=re.IGNORECASE)
+        raw_response = re.sub(r"\n*```$", "", raw_response).strip()
+    except Exception as e:
         print(f"Gemini API call failed: {e}", file=sys.stderr)
         raw_response = "{}"
-
-raw_response = re.sub(r"^```json\s*", "", raw_response, flags=re.IGNORECASE)
-raw_response = re.sub(r"^```\s*", "", raw_response)
-raw_response = re.sub(r"\s*```$", "", raw_response)
-raw_response = raw_response.strip()
 
 try:
     evals = json.loads(raw_response) if raw_response else {}

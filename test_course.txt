@@ -1,0 +1,10 @@
+Advanced Machine Learning Basics
+
+Chapter 1: Neural Networks
+Neurons are the foundational building blocks of all neural networks. A neural network layers these neurons in sequences and passes weights forward to eventually classify inputs. The activation functions squash the output values into standard ranges.
+
+Chapter 2: Backpropagation
+Backpropagation relies on understanding how neurons work (Chapter 1) so it can calculate the gradients backwards. Gradients adjust the weights.
+
+Chapter 3: Convolutional Networks
+CNNs use spatial filters suited for images. They require an understanding of general Neural Networks and Backpropagation mechanics as a prerequisite to accurately interpret spatial gradient updates.
