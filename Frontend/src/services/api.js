@@ -5,14 +5,14 @@
 
 export const isUsingMocks = () => false;
 
-export async function explainQuestion({ question, student_id, session_id, token, subject }) {
+export async function explainQuestion({ question, student_id, session_id, token, subject, clarification_context }) {
   const response = await fetch('/api/explain', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     },
-    body: JSON.stringify({ question, student_id, session_id, subject })
+    body: JSON.stringify({ question, student_id, session_id, subject, clarification_context })
   });
   if (!response.ok) {
     const errData = await response.json().catch(() => ({}));

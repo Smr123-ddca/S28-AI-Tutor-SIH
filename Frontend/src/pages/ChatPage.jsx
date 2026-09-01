@@ -168,7 +168,7 @@ export function ChatPage() {
     }
   };
 
-  const handleSend = async (customText) => {
+  const handleSend = async (customText, originalVagueQuestion = null) => {
     const textToSend = customText || inputQuery;
     if (!textToSend.trim() || loading) return;
 
@@ -180,13 +180,18 @@ export function ChatPage() {
     setTutorState('thinking');
 
     try {
-      const data = await explainQuestion({
+      const payload = {
         question: textToSend,
         student_id: studentId,
         session_id: currentSessionId,
         token: session?.access_token,
         subject: currentSubject
-      });
+      };
+      if (originalVagueQuestion) {
+        payload.clarification_context = { original_question: originalVagueQuestion };
+      }
+
+      const data = await explainQuestion(payload);
 
       // Response arrived: switch to speaking state with speech simulation
       playSound('responseReady');
@@ -462,7 +467,10 @@ export function ChatPage() {
                     msgIndex={idx}
                     studentId={studentId}
                     onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
-                    onSelectOption={(option) => handleSend(option)}
+                    onSelectOption={(option) => {
+                      const originalQ = messages[idx - 1]?.text || messages[idx - 1]?.content;
+                      handleSend(option, originalQ);
+                    }}
                   />
                 ))}
 
