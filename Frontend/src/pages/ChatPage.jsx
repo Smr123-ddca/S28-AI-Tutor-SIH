@@ -46,7 +46,9 @@ export function ChatPage() {
     async function loadSubjects() {
       try {
         const docsData = await fetchLibraryDocuments(session?.access_token);
-        const availableSubjects = (docsData.documents || []).map(d => d.subject);
+        // Ensure students can only talk to published subjects
+        const publishedDocs = (docsData.documents || []).filter(d => d.status === 'published');
+        const availableSubjects = publishedDocs.map(d => d.subject);
         const uniqueSubjects = [...new Set(availableSubjects)].filter(Boolean);
         setSubjects(uniqueSubjects);
         if (!currentSubject && uniqueSubjects.length > 0) {
