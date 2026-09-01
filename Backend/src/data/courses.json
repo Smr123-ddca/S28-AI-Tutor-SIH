@@ -30,6 +30,19 @@
     "pdf": "TaskSync_FullStack_Structure_Guide__1_.pdf",
     "chunks": "TaskSync_FullStack_Structure_Guide__1__chunks.json",
     "prerequisites": "TaskSync_FullStack_Structure_Guide__1__prerequisites.json",
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-09-01T15:10:30.832Z",
+      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
+      "publishedAt": "2026-09-01T15:10:53.181Z",
+      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
+    }
+  },
+  {
+    "name": "DSA_Code_Reference",
+    "pdf": "DSA_Code_Reference.pdf",
+    "chunks": "DSA_Code_Reference_chunks.json",
+    "prerequisites": "DSA_Code_Reference_prerequisites.json",
     "status": "pending_review"
   }
 ]
