@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { ShieldCheck } from 'lucide-react'
 import './TinyShapes.css' // assuming styles are global or can keep inline
 
 function StudentChat({ session, refreshPractice }) {
@@ -453,6 +454,31 @@ function StudentChat({ session, refreshPractice }) {
 
                             botContent = (
                                 <div style={{ width: '100%' }}>
+                                    {msg.is_coaching && (
+                                        <div
+                                            style={{
+                                                padding: '0.85rem 1.1rem',
+                                                backgroundColor: 'var(--color-purple-light, #f3e8ff)',
+                                                border: '1.5px solid #d8b4fe',
+                                                borderRadius: 'var(--radius-md, 8px)',
+                                                marginBottom: '1.25rem',
+                                                display: 'flex',
+                                                alignItems: 'flex-start',
+                                                gap: '0.65rem'
+                                            }}
+                                        >
+                                            <ShieldCheck size={18} style={{ color: '#7e22ce', flexShrink: 0, marginTop: '2px' }} />
+                                            <div>
+                                                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--color-ink, #111827)', textTransform: 'uppercase' }}>
+                                                    Guided Coaching Mode
+                                                </div>
+                                                <div style={{ fontSize: '0.88rem', color: '#5b21b6', lineHeight: 1.4, marginTop: '0.15rem' }}>
+                                                    I can't provide direct answers to graded problems, but I'll guide you step-by-step until you solve it.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
                                     {msg.addressed_gap && (
                                         <div style={{ background: '#fef3c7', color: '#92400e', padding: '0.75rem', borderRadius: '8px', marginBottom: '1rem', fontSize: '0.95rem', fontWeight: '500' }}>
                                             💡 Addressing prerequisite: {msg.gap_section_label}
