@@ -9,7 +9,7 @@ const { getChunks } = require('../data/store');
 
 async function recordSessionEvent(req, res) {
     const { chunk_id, correct } = req.body;
-    const student_id = req.user.id;
+    const student_id = req.user?.id;
 
     if (!student_id || !chunk_id || typeof correct !== 'boolean') {
         return res.status(400).json({ error: "Missing required fields: student_id, chunk_id, correct (boolean)" });
@@ -81,7 +81,7 @@ async function getLikelyGaps(student_id, chunk_id) {
 
 async function detectGap(req, res) {
     const { chunk_id } = req.body;
-    const student_id = req.user.id;
+    const student_id = req.user?.id;
 
     if (!student_id || !chunk_id) {
         return res.status(400).json({ error: "Missing required fields: student_id, chunk_id" });

@@ -61,13 +61,15 @@ async function explain(req, res) {
         const dur = (performance.now() - start).toFixed(2);
         const msg = `[EXPLAIN TIMING] stage=${stage} duration=${dur}ms`;
         timings.push(msg);
-        if (process.env.DEBUG_TIMING === 'true') fs.appendFileSync('timing.log', msg + '\n');
+        if (process.env.DEBUG_TIMING === 'true') {
+            try { fs.appendFileSync('timing.log', msg + '\n'); } catch (e) { }
+        }
     };
 
     let tStart = performance.now();
 
-    const { question, session_id, context_limit, subject } = req.body;
-    const student_id = req.user.id;
+    const { question, session_id, context_limit = 6, subject } = req.body;
+    const student_id = req.user?.id || req.body.student_id;
 
     if (!question) {
         if (process.env.DEBUG_TIMING === 'true') recordT('Validation', tStart);
@@ -342,14 +344,19 @@ async function explain(req, res) {
 
         let systemInstruction = `
 You are an AI Tutor.
-You must use ONLY the provided source material to answer factual course questions. Never use outside knowledge for factual claims.
+When approved Source Material is supplied, use that evidence as the sole source of factual information. Do not introduce information from general knowledge.
+
 Distinction explicit:
 - "Source Material" is the evidence for factual claims.
 - "Recent conversation" provides conversational context.
 - Previous conversation must NOT be treated as course evidence.
 
 If the user asks a question about the conversation history (e.g. "What did I ask you previously?"), answer it using the conversational context.
-If they ask a factual question that is not covered by the Source Material, explain that you don't have approved course material covering it.
+
+CRITICAL EVIDENCE RULE:
+If Source Material IS provided, you MUST set status to 'answered'. Use ONLY the provided material to synthesize your explanation. If the evidence only partially answers the question, answer the portion supported by the evidence and explicitly state what is not covered. Do NOT return 'insufficient_evidence'.
+If NO Source Material is provided (i.e. "No matching source material found") AND the question is a factual course question, ONLY THEN may you return 'insufficient_evidence'.
+
 Otherwise, break your factual explanation into 2-4 short segments. Each segment must be tagged with the source_chunk_id from which that information was derived.
 Generate exactly 2 short practice questions based on the factual material.
 `;
@@ -427,18 +434,21 @@ Generate exactly 2 short practice questions based on the factual material.
         // ════════════════════════════════════════════════════════════════
         let practiceMeta = { available: false, count: 0 };
 
-        if (parsedResult.status === 'answered' && classificationResult.classification === 'concept_question' && parsedResult.practice_questions && parsedResult.practice_questions.length > 0) {
-            practiceMeta.available = true;
-            practiceMeta.count = parsedResult.practice_questions.length;
+        if (parsedResult.status === 'answered' && classificationResult.classification === 'concept_question' && parsedResult.practice_questions) {
 
-            const { supabaseAdmin } = require('../lib/supabaseAdmin');
-            const chunkId = contextChunks && contextChunks.length > 0 ? contextChunks[0].id : null;
-            const targetSession = session_id && session_id !== 'untracked' ? session_id : null;
+            const validQuestions = parsedResult.practice_questions.filter(pq => pq.question && pq.concept && pq.hint_1 && pq.hint_2);
 
-            // Fire and forget so we don't break the main chat response on failure
-            if (supabaseAdmin) {
-                Promise.all(parsedResult.practice_questions.map(pq => {
-                    return supabaseAdmin.from('practice_questions').insert({
+            if (validQuestions.length === 2) {
+                practiceMeta.available = true;
+                practiceMeta.count = 2;
+
+                const { supabaseAdmin } = require('../lib/supabaseAdmin');
+                const chunkId = contextChunks && contextChunks.length > 0 ? contextChunks[0].id : null;
+                const targetSession = session_id && session_id !== 'untracked' ? session_id : null;
+
+                // Fire and forget so we don't break the main chat response on failure
+                if (supabaseAdmin) {
+                    const insertPayload = validQuestions.map(pq => ({
                         student_id,
                         session_id: targetSession,
                         chunk_id: chunkId,
@@ -448,10 +458,19 @@ Generate exactly 2 short practice questions based on the factual material.
                         hint_1: pq.hint_1,
                         hint_2: pq.hint_2,
                         status: 'pending'
-                    });
-                })).catch(e => {
-                    console.error("Failed to asynchronously store practice questions:", e);
-                });
+                    }));
+
+                    (async () => {
+                        try {
+                            const { error } = await supabaseAdmin.from('practice_questions').insert(insertPayload);
+                            if (error) console.error("Failed to asynchronously store practice questions:", error);
+                        } catch (e) {
+                            console.error("Exception during practice insert:", e);
+                        }
+                    })();
+                }
+            } else {
+                console.warn("Invalid practice questions returned. Expected exactly 2, got", validQuestions.length);
             }
         }
 
