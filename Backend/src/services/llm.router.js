@@ -188,18 +188,13 @@ async function callOpenRouterFallback(prompt, schemaName) {
     const config = schemas[schemaName].jsonSchema;
 
     try {
-        const structuralPrompt = prompt + "\n\nCRITICAL INSTRUCTION: You MUST return strictly valid JSON matching the exact requested schema. Do not output any conversational text, markdown formatting, or preamble. Return ONLY a single raw JSON object or array.";
+        const structuralPrompt = prompt + "\n\nCRITICAL INSTRUCTION: You MUST return strictly valid JSON. Do not output any conversational text, markdown formatting, or preamble. Return ONLY a single raw JSON object matching the following structure exactly:\n" + JSON.stringify(config.schema, null, 2);
 
         const response = await openai.chat.completions.create({
             model: openRouterFallbackModel,
             messages: [{ role: "user", content: structuralPrompt }],
             response_format: {
-                type: "json_schema",
-                json_schema: {
-                    name: config.name,
-                    schema: config.schema,
-                    strict: true
-                }
+                type: "json_object"
             }
         });
 
