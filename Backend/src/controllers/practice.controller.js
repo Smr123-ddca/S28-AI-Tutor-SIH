@@ -1,28 +1,8 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
-const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
 const { getChunks } = require('../data/store');
 const retrievalService = require('../services/retrieval.service');
+const { generateWithFallback } = require('../services/llm.router');
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const evaluationSchema = {
-    type: SchemaType.OBJECT,
-    properties: {
-        evaluation: { type: SchemaType.STRING, description: "Must be exactly 'correct', 'partial', or 'incorrect'" },
-        reason: { type: SchemaType.STRING, description: "Brief explanation of the evaluation" }
-    },
-    required: ["evaluation", "reason"]
-};
-
-const socraticSchema = {
-    type: SchemaType.OBJECT,
-    properties: {
-        evaluation: { type: SchemaType.STRING, description: "Must be exactly 'correct', 'partial', or 'incorrect'" },
-        message: { type: SchemaType.STRING, description: "The guiding question, or a confirmation of success. Do not state the final answer unless they just got it correct." }
-    },
-    required: ["evaluation", "message"]
-};
 async function createQuestion(req, res) {
     const student_id = req.user.id;
     const { session_id, chunk_id, subject, question, concept, hint_1, hint_2, status = 'pending' } = req.body;
@@ -174,16 +154,7 @@ ${question.concept}
 Student's Answer:
 ${answer}
 `;
-        const model = genAI.getGenerativeModel({
-            model: "gemini-3.6-flash",
-            generationConfig: {
-                responseMimeType: "application/json",
-                responseSchema: evaluationSchema
-            }
-        });
-
-        const result = await model.generateContent(prompt);
-        const text = await result.response.text();
+        const text = await generateWithFallback(prompt, "EVALUATE");
         evaluationResult = JSON.parse(text);
 
         if (!['correct', 'partial', 'incorrect'].includes(evaluationResult.evaluation)) {
@@ -333,12 +304,8 @@ ${message}
 
     let evaluationResult = null;
     try {
-        const model = genAI.getGenerativeModel({
-            model: "gemini-3.6-flash",
-            generationConfig: { responseMimeType: "application/json", responseSchema: socraticSchema }
-        });
-        const result = await model.generateContent(prompt);
-        evaluationResult = JSON.parse(await result.response.text());
+        const text = await generateWithFallback(prompt, "SOCRATIC");
+        evaluationResult = JSON.parse(text);
         if (!['correct', 'partial', 'incorrect'].includes(evaluationResult.evaluation)) evaluationResult.evaluation = 'incorrect';
     } catch (err) {
         return res.status(500).json({ error: "Failed to evaluate" });

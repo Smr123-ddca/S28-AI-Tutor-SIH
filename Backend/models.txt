@@ -1,53 +1,19 @@
-Model: models/gemini-2.5-flash | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-2.5-pro | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-2.5-flash-preview-tts | Methods: ['countTokens', 'generateContent']
-Model: models/gemini-2.5-pro-preview-tts | Methods: ['countTokens', 'generateContent', 'batchGenerateContent']
-Model: models/gemma-4-26b-a4b-it | Methods: ['generateContent', 'countTokens']
-Model: models/gemma-4-31b-it | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-flash-latest | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-flash-lite-latest | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-pro-latest | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-2.5-flash-lite | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-2.5-flash-image | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3-flash-preview | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.1-pro-preview | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.1-pro-preview-customtools | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.1-flash-lite-preview | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.1-flash-lite | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3-pro-image-preview | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3-pro-image | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/nano-banana-pro-preview | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3.1-flash-image-preview | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3.1-flash-image | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3.1-flash-lite-image | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-3.5-flash | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.5-flash-lite | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-omni-flash-preview | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-omni-1.1-flash | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-3.5-transcribe | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-3.6-flash | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-3.7-flash | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/lyria-3-clip-preview | Methods: ['generateContent', 'countTokens']
-Model: models/lyria-3-pro-preview | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-3.1-flash-tts-preview | Methods: ['generateContent', 'countTokens', 'batchGenerateContent']
-Model: models/gemini-robotics-er-1.6-preview | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-robotics-er-2-preview | Methods: ['generateContent', 'countTokens', 'createCachedContent', 'batchGenerateContent']
-Model: models/gemini-2.5-computer-use-preview-10-2025 | Methods: ['generateContent', 'countTokens']
-Model: models/antigravity-preview-05-2026 | Methods: ['generateContent', 'countTokens']
-Model: models/deep-research-max-preview-04-2026 | Methods: ['generateContent', 'countTokens']
-Model: models/deep-research-preview-04-2026 | Methods: ['generateContent', 'countTokens']
-Model: models/deep-research-pro-preview-12-2025 | Methods: ['generateContent', 'countTokens']
-Model: models/gemini-embedding-001 | Methods: ['embedContent', 'countTextTokens', 'countTokens', 'asyncBatchEmbedContent']
-Model: models/gemini-embedding-2-preview | Methods: ['embedContent', 'countTextTokens', 'countTokens', 'asyncBatchEmbedContent']
-Model: models/gemini-embedding-2 | Methods: ['embedContent', 'countTextTokens', 'countTokens', 'asyncBatchEmbedContent']
-Model: models/aqa | Methods: ['generateAnswer']
-Model: models/veo-3.1-generate-preview | Methods: ['predictLongRunning']
-Model: models/veo-3.1-fast-generate-preview | Methods: ['predictLongRunning']
-Model: models/veo-3.1-lite-generate-preview | Methods: ['predictLongRunning']
-Model: models/gemini-3.5-transcribe-live | Methods: ['bidiGenerateContent']
-Model: models/gemini-2.5-flash-native-audio-latest | Methods: ['countTokens', 'bidiGenerateContent']
-Model: models/gemini-2.5-flash-native-audio-preview-09-2025 | Methods: ['countTokens', 'bidiGenerateContent']
-Model: models/gemini-2.5-flash-native-audio-preview-12-2025 | Methods: ['countTokens', 'bidiGenerateContent']
-Model: models/gemini-3.1-flash-live-preview | Methods: ['bidiGenerateContent']
-Model: models/gemini-robotics-er-2-streaming-preview | Methods: ['bidiGenerateContent']
-Model: models/gemini-3.5-live-translate-preview | Methods: ['bidiGenerateContent']
+inclusionai/ling-3.0-flash-fin:free
+dots-studio/dots-3-note-preview:free
+liquid/lfm-2.5-2.6b:free
+nvidia/nemotron-3.5-lightning:free
+thinkingmachines/inkling-small:free
+poolside/laguna-s-2.1:free
+thinkingmachines/inkling:free
+poolside/laguna-xs-2.1:free
+cohere/north-mini-code:free
+z-ai/glm-5.2:free
+nvidia/nemotron-3.5-content-safety:free
+nvidia/nemotron-3-ultra-550b-a55b:free
+minimax/minimax-m3:free
+nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
+google/gemma-4-26b-a4b-it:free
+google/gemma-4-31b-it:free
+minimax/minimax-m2.7:free
+nvidia/nemotron-3-super-120b-a12b:free
+openrouter/free

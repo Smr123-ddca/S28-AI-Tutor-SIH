@@ -17,7 +17,8 @@ import {
   fetchSessions,
   fetchSessionMessages,
   updateSessionTitle,
-  fetchLibraryDocuments
+  fetchLibraryDocuments,
+  deleteSession
 } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useSoundManager } from '../services/soundManager';
@@ -149,6 +150,22 @@ export function ChatPage() {
     setSessions(data.sessions || []);
   };
 
+  const handleContextMenu = async (e, sid) => {
+    e.preventDefault();
+    if (window.confirm('Are you sure you want to delete this session?')) {
+      try {
+        await deleteSession(sid, session?.access_token);
+        if (currentSessionId === sid) {
+          handleNewChat();
+        }
+        const data = await fetchSessions(session?.access_token);
+        setSessions(data.sessions || []);
+      } catch (err) {
+        console.error('Error deleting session:', err);
+      }
+    }
+  };
+
   const handleSend = async (customText) => {
     const textToSend = customText || inputQuery;
     if (!textToSend.trim() || loading) return;
@@ -267,6 +284,7 @@ export function ChatPage() {
             return (
               <div
                 key={s.id}
+                onContextMenu={(e) => handleContextMenu(e, s.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

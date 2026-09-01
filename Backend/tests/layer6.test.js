@@ -22,6 +22,18 @@ jest.mock('fs', () => {
     };
 });
 
+// MOCK GEMINI BEFORE REQUIRING APP
+jest.mock('@google/generative-ai', () => ({
+    GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
+        getGenerativeModel: () => ({
+            generateContent: jest.fn().mockResolvedValue({
+                response: { text: () => JSON.stringify({ status: 'insufficient_evidence', explanation_segments: [], practice_questions: [] }) }
+            })
+        })
+    })),
+    SchemaType: { OBJECT: "OBJECT", ARRAY: "ARRAY", STRING: "STRING" }
+}));
+
 // MOCK AUTH MIDDLEWARE BEFORE REQUIRING APP OR ROUTES
 jest.mock('../src/middleware/auth.middleware', () => ({
     authenticate: (req, res, next) => {

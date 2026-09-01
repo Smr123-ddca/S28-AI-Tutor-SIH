@@ -84,6 +84,15 @@ export async function updateSessionTitle(sessionId, title, token) {
   return await res.json();
 }
 
+export async function deleteSession(sessionId, token) {
+  const res = await fetch(`/api/sessions/${sessionId}`, {
+    method: 'DELETE',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to delete session');
+  return await res.json();
+}
+
 export async function fetchLibraryDocuments(token) {
   const res = await fetch('/api/courses', {
     headers: token ? { Authorization: `Bearer ${token}` } : {}

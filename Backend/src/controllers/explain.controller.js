@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI, SchemaType } = require('@google/generative-ai');
+const { generateWithFallback } = require('../services/llm.router');
 const retrievalService = require('../services/retrieval.service');
 const { getLikelyGaps } = require('./gap.controller');
 const { getChunks } = require('../data/store');
@@ -6,43 +6,6 @@ const { recordChatLog } = require('./chatlog.controller');
 const { normalizeForRetrieval } = require('../utils/nlp');
 const { analyzeQuery } = require('../utils/queryAnalyzer');
 const { buildRetrievalQuery } = require('../utils/queryExpander');
-
-// Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const responseSchema = {
-    type: SchemaType.OBJECT,
-    properties: {
-        status: { type: SchemaType.STRING, description: "Must be 'answered' or 'insufficient_evidence'" },
-        message: { type: SchemaType.STRING, description: "Only used if status is 'insufficient_evidence' or 'answered' without source chunks." },
-        explanation_segments: {
-            type: SchemaType.ARRAY,
-            items: {
-                type: SchemaType.OBJECT,
-                properties: {
-                    text: { type: SchemaType.STRING, description: "The explanation text" },
-                    source_chunk_id: { type: SchemaType.STRING, description: "The ID of the source chunk used, or 'none' if answering from conversational context." }
-                },
-                required: ["text", "source_chunk_id"]
-            }
-        },
-        practice_questions: {
-            type: SchemaType.ARRAY,
-            items: {
-                type: SchemaType.OBJECT,
-                properties: {
-                    question: { type: SchemaType.STRING, description: "The practice question text" },
-                    concept: { type: SchemaType.STRING, description: "The core concept being tested" },
-                    hint_1: { type: SchemaType.STRING, description: "A simple hint to guide the student" },
-                    hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" }
-                },
-                required: ["question", "concept", "hint_1", "hint_2"]
-            }
-        }
-    },
-    required: ["status", "explanation_segments", "practice_questions"]
-};
 
 // Heuristic function to classify questions
 function classifyQuestion(question) {
@@ -87,30 +50,7 @@ function classifyQuestion(question) {
     };
 }
 
-async function callGemini(promptText) {
-    const model = genAI.getGenerativeModel({
-        model: "gemini-3.5-flash",
-        generationConfig: {
-            responseMimeType: "application/json",
-            responseSchema: responseSchema
-        }
-    });
-
-    let timeoutId;
-    const timeoutPromise = new Promise((_, reject) => {
-        timeoutId = setTimeout(() => reject(new Error("Gemini API Request Timeout")), 45000);
-    });
-
-    try {
-        const result = await Promise.race([model.generateContent(promptText), timeoutPromise]);
-        clearTimeout(timeoutId);
-        const response = await result.response;
-        return response.text();
-    } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-    }
-}
+// Replaced native callGemini with generic LLM Router
 
 async function explain(req, res) {
     const { performance } = require('perf_hooks');
@@ -433,7 +373,7 @@ Generate exactly 2 short practice questions based on the factual material.
 
         try {
             let gStart = performance.now();
-            const rawResponse = await callGemini(prompt);
+            const rawResponse = await generateWithFallback(prompt, "EXPLAIN");
             if (process.env.DEBUG_TIMING === 'true') recordT('GeminiNetworkWait', gStart);
 
             metaGeminiStatus = "success";
