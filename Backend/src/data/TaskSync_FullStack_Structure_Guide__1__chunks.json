@@ -1,0 +1,156 @@
+[
+  {
+    "id": "chunk_1",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "TaskSync",
+    "section_label": "TaskSync",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 1,
+    "text": "Full-stack structure & endpoint reference — React frontend + Express/PostgreSQL backend\nThis is your single source of truth while building: what folders/files to create, what each backend endpoint does, what each React piece\nneeds to call, and exactly how the two sides connect (cookies, CORS, env vars). Database schema and API contract match the original\ncapstone spec — only the frontend is React instead of vanilla JS."
+  },
+  {
+    "id": "chunk_2",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "1. Backend Structure",
+    "section_label": "1. Backend Structure",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 1,
+    "text": "Backend/\n├── server.js                 // entry point — imports app, calls app.listen()\n├── app.js                    // Express app: middleware, routes mounted here\n├── .env                      // already exists — DB creds, JWT secret, PORT\n├── db/\n│   ├── index.js              // already exists — pg Pool + query()\n│   └── InitDb.js              // already exists — CREATE TABLE statements\n├── utils/\n│   ├── jwt.js                 // already exists — sign/verify/cookie helpers\n│   └── password.js            // already exists — bcrypt hash/compare\n├── middleware/\n│   ├── requireAuth.js          // verifies JWT cookie, sets req.user\n│   ├── requireProjectMember.js  // checks project_members row exists\n│   └── requireProjectAdmin.js   // same + role === 'admin'\n├── controllers/\n│   ├── authController.js       // register, login, logout logic\n│   ├── projectController.js    // create/list/get project, invite\n│   ├── taskController.js       // list/create/update tasks\n│   └── activityController.js   // get activity feed\n└── routes/\n├── authRoutes.js\n├── projectRoutes.js\n├── taskRoutes.js\n└── activityRoutes.js\nController/Service/Route pattern, simplified for your timeline: routes define the URL + which middleware runs, controllers hold the actual\nlogic and talk to the DB directly via query() . Skip a separate \"service\" layer unless you have spare time — for a 1-day build, routes →\ncontrollers → db is enough layering."
+  },
+  {
+    "id": "chunk_3",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "How the pieces wire together in app.js",
+    "section_label": "How the pieces wire together in app.js",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 1,
+    "text": "const express = require('express');\nconst cors = require('cors');\nconst cookieParser = require('cookie-parser');\nconst { initDatabase } = require('./db/InitDb');\nconst app = express();\napp.use(cors({ origin: 'http://localhost:5173', credentials: true }));\napp.use(express.json());\napp.use(cookieParser());\napp.use('/api/auth', require('./routes/authRoutes'));\napp.use('/api/projects', require('./routes/projectRoutes'));\napp.use('/api/tasks', require('./routes/taskRoutes'));\nmodule.exports = { app, initDatabase };\n// server.js\nconst { app, initDatabase } = require('./app');\nrequire('dotenv').config();\nconst PORT = process.env.PORT || 3000;\ninitDatabase().then(() => {\napp.listen(PORT, () => console.log(`Server running on port ${PORT}`));\n});"
+  },
+  {
+    "id": "chunk_4",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "2. API Endpoints",
+    "section_label": "2. API Endpoints",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Method\nEndpoint\nGuard\nWhat it does\nPOST\n/api/auth/register\nPublic\nHash password (bcrypt), insert into users .\nPOST\n/api/auth/login\nPublic\nVerify credentials, sign JWT, set HttpOnly cookie.\nPOST\n/api/auth/logout\nLogged In\nClear the auth cookie.\nPOST\n/api/projects\nLogged In\nTransaction: insert project, then insert project_members row (role='admin').\nGET\n/api/projects\nLogged In\nJoin projects + project_members for this user, plus completion % via SQL aggregation.\nGET\n/api/projects/:id\nProject Member\nSingle project's details.\nPOST\n/api/projects/:id/invite\nProject Admin\nInsert a project_members row for the invited user.\nGET\n/api/projects/:id/tasks\nProject Member\nAll tasks. Supports ?status= , ?priority= , ?assignedTo= , ?search= .\nPOST\n/api/projects/:id/tasks\nProject Member\nCreate task (title, description, priority, due_date). Logs activity.\nPUT\n/api/tasks/:taskId\nProject Member\nUpdate status/assignee/priority/due_date. Logs activity on status or assignee change.\nGET\n/api/projects/:id/activity\nProject Member\nLatest 20 activity_logs rows, newest first.\nMiddleware order matters: requireAuth always runs first (it needs to set req.user before anything else can check membership).\nrequireProjectMember / requireProjectAdmin run next, and read req.params.id — so your route param must literally be named :id for\nthat to work without extra code."
+  },
+  {
+    "id": "chunk_5",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "3. Frontend Structure (React + Vite)",
+    "section_label": "3. Frontend Structure (React + Vite)",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Frontend/src/\n├── main.jsx                    // already exists\n├── App.jsx                     // view state, currentUser, routes between pages\n├── api/\n│   └── client.js                // fetch wrapper — base URL + credentials: 'include'\n├── context/\n│   └── AuthContext.jsx           // (optional) current user across the app\n├── pages/\n│   ├── Login.jsx\n│   ├── Register.jsx\n│   ├── Dashboard.jsx\n│   └── ProjectBoard.jsx\n└── components/\n├── CreateProjectModal.jsx\n├── CreateTaskModal.jsx\n├── TaskModal.jsx\n├── FilterBar.jsx\n├── KanbanColumn.jsx\n├── TaskCard.jsx\n└── ActivityFeed.jsx"
+  },
+  {
+    "id": "chunk_6",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "The fetch wrapper (build this first — everything else depends on it)",
+    "section_label": "The fetch wrapper (build this first — everything else depends on it)",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 3,
+    "text": "// src/api/client.js\nconst BASE_URL = 'http://localhost:3000/api';\nexport async function apiRequest(path, options = {}) {\nconst res = await fetch(`${BASE_URL}${path}`, {\n...options,\ncredentials: 'include',          // sends the HttpOnly cookie\nheaders: {\n'Content-Type': 'application/json',\n...options.headers,\n},\n});\nif (!res.ok) {\nconst error = await res.json().catch(() => ({}));\nthrow new Error(error.message || `Request failed: ${res.status}`);\n}\nreturn res.json();\n}\nEvery component calls this instead of raw fetch() — one place to fix bugs, one place to add auth headers later if needed."
+  },
+  {
+    "id": "chunk_7",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "Component ↔ Endpoint map",
+    "section_label": "Component ↔ Endpoint map",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Component\nCalls\nNotes\nLogin.jsx\nPOST /api/auth/login\nOn success → set user in App state → switch view to\n'dashboard'.\nRegister.jsx\nPOST /api/auth/register\nOn success → redirect to login view.\nDashboard.jsx\nGET /api/projects\nFetch in useEffect on mount; render project cards +\nprogress bars.\nCreateProjectModal.jsx\nPOST /api/projects\nOn success → re-fetch project list or prepend to local\nstate.\nProjectBoard.jsx\nGET /api/projects/:id/tasks , GET\n/api/projects/:id/activity\nRe-fetch tasks whenever filters change (dependency\narray).\nTaskCard.jsx\nPUT /api/tasks/:taskId\nFired from status dropdown or drag-drop onDrop .\nCreateTaskModal.jsx\nPOST /api/projects/:id/tasks\nOn success → add task to local state, close modal.\nTaskModal.jsx\nPUT /api/tasks/:taskId\nEditing priority/due_date/assignee from the detail view.\nFilterBar.jsx\n— (triggers parent's fetch)\nControlled inputs; parent builds the query string.\nActivityFeed.jsx\nGET /api/projects/:id/activity\nRe-fetch after any task create/move."
+  },
+  {
+    "id": "chunk_8",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "CORS (backend)",
+    "section_label": "CORS (backend)",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Different ports in dev = different origins, so the browser blocks cookies by default unless you explicitly allow it:\napp.use(cors({\norigin: 'http://localhost:5173',   // Vite dev server\ncredentials: true,                  // allow cookies\n}));"
+  },
+  {
+    "id": "chunk_9",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "Cookie inclusion (frontend)",
+    "section_label": "Cookie inclusion (frontend)",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Every request that should carry the auth cookie needs credentials: 'include' — already handled if you use the apiRequest() wrapper\nabove consistently instead of raw fetch() ."
+  },
+  {
+    "id": "chunk_10",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "Environment variables",
+    "section_label": "Environment variables",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 4,
+    "text": "Where\nVariable\nPurpose\nBackend\n.env"
+  },
+  {
+    "id": "chunk_11",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "JWT_SECRET , JWT_EXPIRES_IN",
+    "section_label": "JWT_SECRET , JWT_EXPIRES_IN",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "Signing/verifying tokens\nBackend\n.env"
+  },
+  {
+    "id": "chunk_12",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD",
+    "section_label": "PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "Postgres connection (already set)\nBackend\n.env"
+  },
+  {
+    "id": "chunk_13",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "PORT , NODE_ENV",
+    "section_label": "PORT , NODE_ENV",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "Server port, cookie secure flag\nFrontend\nBase URL in api/client.js\nHardcode http://localhost:3000/api for now — fine for a 1-day build; move to\nimport.meta.env.VITE_API_URL only if you have spare time"
+  },
+  {
+    "id": "chunk_14",
+    "topic": "TaskSync_FullStack_Structure_Guide__1_",
+    "chapter": "General",
+    "section": "5. Build Order Checklist",
+    "section_label": "5. Build Order Checklist",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "TaskSync — reference doc generated for your capstone build. Backend/DB schema unchanged from the original spec; only frontend architecture adapted to React.\nWire up server.js / app.js , confirm initDatabase() runs, tables visible in pgAdmin4\n☐\nAuth middleware: requireAuth , requireProjectMember , requireProjectAdmin\n☐\nAuth routes + controller (register/login/logout)\n☐\nReact: api/client.js , Login.jsx , Register.jsx , wire up CORS\n☐\nProjects: create (transaction) + list (with progress %) routes\n☐\nReact: Dashboard.jsx , CreateProjectModal.jsx\n☐\nTasks: list (with filters) + create + update routes\n☐\nReact: ProjectBoard.jsx , TaskCard.jsx , status dropdown wired to PUT\n☐\nDrag-and-drop on top of the existing dropdown logic\n☐\nSearch/filter bar wired to query string\n☐\nActivity logs: insert on task create/move/assign + invite; GET /activity route\n☐\nReact: ActivityFeed.jsx , TaskModal.jsx polish\n☐"
+  }
+]

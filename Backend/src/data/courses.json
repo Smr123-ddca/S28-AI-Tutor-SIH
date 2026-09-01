@@ -13,23 +13,23 @@
     }
   },
   {
-    "name": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace",
-    "pdf": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace.pdf",
-    "chunks": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace_chunks.json",
-    "prerequisites": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace_prerequisites.json",
-    "status": "published",
-    "audit": {
-      "approvedAt": "2026-08-31T15:54:01.518Z",
-      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
-      "publishedAt": "2026-08-31T15:54:07.159Z",
-      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
-    }
-  },
-  {
     "name": "DBMS_Code_Reference_Annotated",
     "pdf": "DBMS_Code_Reference_Annotated.pdf",
     "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
     "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-09-01T09:53:50.139Z",
+      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
+      "publishedAt": "2026-09-01T09:53:56.028Z",
+      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
+    }
+  },
+  {
+    "name": "TaskSync_FullStack_Structure_Guide__1_",
+    "pdf": "TaskSync_FullStack_Structure_Guide__1_.pdf",
+    "chunks": "TaskSync_FullStack_Structure_Guide__1__chunks.json",
+    "prerequisites": "TaskSync_FullStack_Structure_Guide__1__prerequisites.json",
     "status": "pending_review"
   }
 ]
