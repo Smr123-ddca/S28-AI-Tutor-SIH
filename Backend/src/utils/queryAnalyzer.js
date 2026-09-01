@@ -33,7 +33,9 @@ const EXPLICIT_CONTEXT_PATTERNS = [
     /\b(why\s+does\s+it)\b/i,
     /\b(how\s+does\s+it)\b/i,
     // Add variations for "what about the [ordinal] one" where stop words might be stripped
-    /\b(what\s+about\s+the\s+(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|previous|next)\s+one)\b/i
+    /\b(what\s+about\s+the\s+(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|previous|next)\s+one)\b/i,
+    /^(yes,?\s*please\s*walk\s*me\s*through\b)/i,
+    /\b(walk\s+me\s+through\s+(the|this|that)\s+concept)\b/i
 ];
 
 /**
