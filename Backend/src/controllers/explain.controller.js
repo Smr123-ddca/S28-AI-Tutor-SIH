@@ -100,13 +100,13 @@ async function explain(req, res) {
         const dur = (performance.now() - start).toFixed(2);
         const msg = `[EXPLAIN TIMING] stage=${stage} duration=${dur}ms`;
         timings.push(msg);
-        fs.appendFileSync('timing.log', msg + '\n');
+        try { fs.appendFileSync('timing.log', msg + '\n'); } catch (e) { }
     };
 
     let tStart = performance.now();
 
-    const { question, session_id, context_limit } = req.body;
-    const student_id = req.user.id;
+    const { question, session_id, context_limit = 6 } = req.body;
+    const student_id = req.user?.id || req.body.student_id;
 
     if (!question) {
         recordT('Validation', tStart);

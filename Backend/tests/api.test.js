@@ -1,4 +1,12 @@
 const request = require('supertest');
+// Mock authentication so protected routes can be tested
+jest.mock('../src/middleware/auth.middleware', () => ({
+    authenticate: (req, res, next) => {
+        req.user = { id: 'test-student-id', role: 'student' };
+        next();
+    },
+    requireRole: (role) => (req, res, next) => next()
+}));
 const app = require('../src/app');
 const { loadData } = require('../src/data/store');
 

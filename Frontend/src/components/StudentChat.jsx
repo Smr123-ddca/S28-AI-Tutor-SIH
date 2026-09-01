@@ -36,7 +36,6 @@ function StudentChat({ session, refreshPractice }) {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
-
     useEffect(() => {
         if (session?.access_token) {
             loadSessions();
