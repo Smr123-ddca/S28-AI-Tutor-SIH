@@ -228,7 +228,18 @@ async function generateWithFallback(prompt, schemaName) {
     // 2. Primary Execution
     try {
         console.log("[LLM] Attempting Provider: Gemini");
-        return await callGeminiPrimary(prompt, schemaName);
+        let output = await callGeminiPrimary(prompt, schemaName);
+
+        // Globally extract JSON to bypass proxy injection warnings from cloud providers
+        const jsonMatch = output.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+        if (jsonMatch) {
+            output = jsonMatch[0];
+        }
+
+        // Proactively test parse. If this throws, it seamlessly triggers fallback.
+        JSON.parse(output);
+
+        return output;
     } catch (geminiError) {
         let errStr = geminiError.toString() + (geminiError.message || "");
         console.error(`[LLM] Gemini failed (${errStr}). Falling back to OpenRouter...`);
