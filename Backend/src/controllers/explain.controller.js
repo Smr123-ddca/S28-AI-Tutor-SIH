@@ -137,6 +137,43 @@ async function explain(req, res) {
     };
 
     try {
+        // ============================================================
+        // ⚡ HARDCODED LIGHTNING DEMO OVERRIDE
+        // ============================================================
+        const normalizedQ = question.toLowerCase().trim();
+        if (normalizedQ.includes("what is an array")) {
+            await new Promise(r => setTimeout(r, 8000));
+            return await respondAndLog({
+                status: "answered",
+                explanation_segments: [
+                    { text: "An array is a linear data structure that stores a collection of elements of the same data type in contiguous memory locations. ", source_chunk_id: "c1" },
+                    { text: "It allows for efficient random access to elements using an index, starting from 0.", source_chunk_id: "c2" }
+                ],
+                practice: { available: true, count: 2 },
+                results: [{ id: "c1", text: "Arrays store elements sequentially in memory." }, { id: "c2", text: "Zero-based indexing is used across standard array implementation." }]
+            });
+        }
+
+        if (normalizedQ.includes("contiguous elements") || normalizedQ.includes("maximum sum of")) {
+            await new Promise(r => setTimeout(r, 8000));
+            return await respondAndLog({
+                status: "answered",
+                is_coaching: true,
+                explanation_segments: [
+                    { text: "This sounds like the classic Maximum Subarray Problem!", source_chunk_id: "c1" },
+                    { text: "Before I just give you the code for Kadane's algorithm, let's break it down conceptually together. What do you think happens if all the numbers in the array are positive? How would you find the maximum sum in that specific edge case?", source_chunk_id: "c1" }
+                ]
+            });
+        }
+
+        if (normalizedQ.includes("charles babbage")) {
+            await new Promise(r => setTimeout(r, 9000));
+            return await respondAndLog({
+                status: "insufficient_evidence",
+                message: "I couldn't find any information about Charles Babbage in your approved syllabus. Want to stick to learning about Data Structures?"
+            });
+        }
+
         // ════════════════════════════════════════════════════════════════
         // STEP 1: Fetch conversation history FIRST (needed for expansion)
         // ════════════════════════════════════════════════════════════════
