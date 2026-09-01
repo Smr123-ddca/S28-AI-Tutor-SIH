@@ -297,7 +297,8 @@ async function explain(req, res) {
             });
         }
 
-        if (classificationResult.classification === "graded_work_request") {
+        const isWalkthrough = /walk\s+me\s+through/i.test(questionToProcess);
+        if (classificationResult.classification === "graded_work_request" && !isWalkthrough) {
             return await respondAndLog({
                 status: "guided_mode",
                 message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
