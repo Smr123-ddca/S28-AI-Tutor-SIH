@@ -23,6 +23,7 @@ export function MessageBubble({
   msgIndex,
   studentId,
   onAcceptWalkthrough,
+  onSelectOption,
   className = ''
 }) {
   // User message
@@ -183,6 +184,48 @@ export function MessageBubble({
             }}
           >
             {botMessage || 'Unable to generate response. Please verify backend connection.'}
+          </div>
+        )}
+
+        {/* State 6: Clarification State */}
+        {status === 'clarification' && (
+          <div
+            style={{
+              padding: '1.15rem',
+              backgroundColor: 'var(--color-purple-light)',
+              borderRadius: 'var(--radius-md)',
+              borderLeft: '4px solid #6366f1',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.85rem'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+              <Sparkles size={22} style={{ color: '#4f46e5', flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>
+                  Clarification Required
+                </div>
+                <div style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                  {botMessage || "I'm not sure what you're referring to. Could you clarify your question?"}
+                </div>
+              </div>
+            </div>
+            {message.clarification?.options && message.clarification.options.length > 0 && onSelectOption && (
+              <div style={{ alignSelf: 'flex-start', marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {message.clarification.options.map((opt, oIdx) => (
+                  <button
+                    key={oIdx}
+                    type="button"
+                    onClick={() => onSelectOption(opt)}
+                    className="btn btn-outline btn-sm"
+                    style={{ textAlign: 'left', height: 'auto', whiteSpace: 'normal', display: 'block' }}
+                  >
+                    "{opt}" ?
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

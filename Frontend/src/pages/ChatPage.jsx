@@ -462,6 +462,7 @@ export function ChatPage() {
                     msgIndex={idx}
                     studentId={studentId}
                     onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
+                    onSelectOption={(option) => handleSend(option)}
                   />
                 ))}
 
