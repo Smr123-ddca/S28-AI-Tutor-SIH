@@ -169,7 +169,11 @@ async function explain(req, res) {
                     status: 'pending'
                 }
             ];
-            await supabaseAdmin.from('practice_questions').insert(insertPayload).catch(e => console.error("Mock DB Insert Fail:", e));
+            try {
+                await supabaseAdmin.from('practice_questions').insert(insertPayload);
+            } catch (e) {
+                console.error("Mock DB Insert Fail:", e);
+            }
         };
 
         if (normalizedQ.includes("what is an array")) {
