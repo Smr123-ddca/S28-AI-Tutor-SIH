@@ -12,90 +12,9 @@ import { TeacherHome } from './pages/TeacherHome';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
 import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 
-<<<<<<< HEAD
 // Shell layout wrapper with session check
 function ProtectedLayout() {
   const { session, loading, isMockAuth } = useAuth();
-=======
-function App() {
-  const [session, setSession] = useState(null)
-  const [role, setRole] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [view, setView] = useState('home')
-  const [practiceCount, setPracticeCount] = useState(0)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session) {
-        fetchUserRole(session.user.id)
-      } else {
-        setLoading(false)
-      }
-    })
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      if (session) {
-        fetchUserRole(session.user.id)
-      } else {
-        setRole(null)
-        setLoading(false)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const fetchUserRole = async (userId) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', userId)
-        .single()
-
-      if (error) {
-        console.error('Error fetching role:', error)
-      } else {
-        setRole(data?.role)
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const fetchPracticeCount = async () => {
-    if (role !== 'student' || !session) return;
-    try {
-      const res = await fetch('/api/practice-questions', {
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const pendingCount = data.questions ? data.questions.filter(q => q.status === 'pending' && !q.answer_revealed).length : 0;
-        setPracticeCount(pendingCount);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  useEffect(() => {
-    if (role === 'student' && session) {
-      fetchPracticeCount();
-    }
-  }, [role, session])
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setView('home')
-  }
->>>>>>> 8e4cde74d8e84d274a58d8f7de47c0af090761e2
 
   if (loading) {
     return (
@@ -121,41 +40,7 @@ function App() {
     return <Navigate to="/login" replace />;
   }
 
-<<<<<<< HEAD
   return <AppShell />;
-=======
-  const displayName = session.user?.user_metadata?.display_name || session.user?.email || 'User';
-
-  return (
-    <div className="app-wrapper">
-      <Navbar
-        setView={setView}
-        currentView={view}
-        handleLogout={handleLogout}
-        displayName={displayName}
-        role={role}
-        practiceCount={practiceCount}
-      />
-
-      {view === 'home' && <Home role={role} setView={setView} />}
-      {view === 'about' && <About />}
-
-      {view === 'app' && (
-        <div className="app-container" style={{ paddingTop: '2rem' }}>
-          {role === 'student' && <StudentChat session={session} refreshPractice={fetchPracticeCount} />}
-          {role === 'teacher' && <TeacherDashboard session={session} />}
-          {!role && <div>Error: Role not found for this user.</div>}
-        </div>
-      )}
-
-      {view === 'practice' && role === 'student' && (
-        <div className="app-container" style={{ paddingTop: '2rem' }}>
-          <Practice session={session} refreshPractice={fetchPracticeCount} setView={setView} />
-        </div>
-      )}
-    </div>
-  )
->>>>>>> 8e4cde74d8e84d274a58d8f7de47c0af090761e2
 }
 
 import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
