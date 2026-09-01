@@ -151,7 +151,7 @@ async function callGeminiPrimary(prompt, schemaName) {
     const start = Date.now();
 
     // Safety fallback for tests using fake gemini model string originally explicitly inside practice eval
-    const modelString = schemaName === 'EVALUATE' || schemaName === 'SOCRATIC' ? 'gemini-1.5-flash' : 'gemini-3.5-flash';
+    const modelString = 'gemini-1.5-flash';
 
     const config = schemas[schemaName].gemini;
     const model = genAI.getGenerativeModel({
@@ -253,7 +253,32 @@ async function generateWithFallback(prompt, schemaName) {
         // 4. Fallback Execution
         try {
             console.log("[LLM] Attempting Provider: OpenRouter");
-            return await callOpenRouterFallback(prompt, schemaName);
+            let output = await callOpenRouterFallback(prompt, schemaName);
+            const jsonMatch = output.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+            if (jsonMatch) output = jsonMatch[0];
+
+            try {
+                JSON.parse(output);
+                return output;
+            } catch (parseErr) {
+                console.log("[LLM] OpenRouter returned malformed JSON. Attempting native repair...");
+                let repaired = output;
+                const openBraces = (repaired.match(/\{/g) || []).length;
+                const closeBraces = (repaired.match(/\}/g) || []).length;
+                const openBrackets = (repaired.match(/\[/g) || []).length;
+                const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+                if (!repaired.endsWith('"') && !repaired.endsWith('}') && !repaired.endsWith(']')) {
+                    repaired += '"';
+                }
+                for (let i = 0; i < (openBrackets - closeBrackets); i++) repaired += "]";
+                for (let i = 0; i < (openBraces - closeBraces); i++) repaired += "}";
+
+                // Test repair
+                JSON.parse(repaired);
+                console.log("[LLM] OpenRouter JSON successfully repaired.");
+                return repaired;
+            }
         } catch (fallbackError) {
             console.error("[LLM] Both Gemini and OpenRouter failed conclusively.");
             // Pass the original Gemini format up so existing logic blocks process the safe-fallbacks identically
