@@ -151,7 +151,7 @@ async function callGeminiPrimary(prompt, schemaName) {
     const start = Date.now();
 
     // Safety fallback for tests using fake gemini model string originally explicitly inside practice eval
-    const modelString = 'gemini-1.5-flash';
+    const modelString = 'gemini-3.5-flash';
 
     const config = schemas[schemaName].gemini;
     const model = genAI.getGenerativeModel({
