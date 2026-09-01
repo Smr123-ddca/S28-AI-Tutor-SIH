@@ -288,23 +288,16 @@ async function explain(req, res) {
         const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
         if (process.env.DEBUG_TIMING === 'true') recordT('EvidenceGate', eStart);
 
-        if (!hasGoodEvidence && !transcript) {
+        const isGuidedMode = classificationResult.classification === "graded_work_request";
+        const isWalkthrough = /walk\s+me\s+through/i.test(questionToProcess);
+        const shouldCoach = isGuidedMode || isWalkthrough;
+
+        if (!hasGoodEvidence && !transcript && !shouldCoach) {
             return await respondAndLog({
                 status: "insufficient_evidence",
                 message: "I don't have approved course material covering this.",
                 results: results,
                 diagnostics: queryResult.diagnostics
-            });
-        }
-
-        const isWalkthrough = /walk\s+me\s+through/i.test(questionToProcess);
-        if (classificationResult.classification === "graded_work_request" && !isWalkthrough) {
-            return await respondAndLog({
-                status: "guided_mode",
-                message: "I can't give you the direct answer to what looks like a graded question, but I can help you understand the concept behind it. Would you like a walkthrough of the relevant concept instead?",
-                top_topic: results[0]?.topic,
-                top_section: results[0]?.section_label,
-                results: results
             });
         }
 
@@ -366,6 +359,10 @@ Generate exactly 2 short practice questions based on the factual material.
 
         if (transcript) {
             systemInstruction += `\n\nRecent conversation:\n${transcript}`;
+        }
+
+        if (shouldCoach) {
+            systemInstruction += `\n\nCRITICAL INSTRUCTION: The student is asking about graded homework or explicitly requested a walkthrough. DO NOT GIVE THEM THE DIRECT ANSWER or provide complete code solutions. You MUST adopt a Socratic coaching persona. Ask a guiding question to help them figure out the next step. You may use general programming knowledge to coach them through the concept.`;
         }
 
         let geminiQuestion = question;
@@ -462,6 +459,7 @@ Generate exactly 2 short practice questions based on the factual material.
         return await respondAndLog({
             status: parsedResult.status || "answered",
             ...(gapData || {}),
+            is_coaching: shouldCoach,
             explanation_segments: parsedResult.explanation_segments || [],
             practice: practiceMeta,
             results: contextChunks
