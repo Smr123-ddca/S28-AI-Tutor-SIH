@@ -14,6 +14,7 @@ export function TeacherPrerequisites() {
     const [courses, setCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState('');
     const [chunks, setChunks] = useState([]);
+    const [concepts, setConcepts] = useState([]);
     const [relationships, setRelationships] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedChunkId, setSelectedChunkId] = useState(null);
@@ -59,12 +60,16 @@ export function TeacherPrerequisites() {
             setLoading(true);
             try {
                 setChunks([]);
+                setConcepts([]);
                 setRelationships([]);
                 setSelectedChunkId(null);
                 const artifacts = await getCourseArtifacts(selectedCourse, session?.access_token);
 
                 if (artifacts && artifacts.chunks) {
                     setChunks(artifacts.chunks);
+                }
+                if (artifacts && artifacts.concepts && artifacts.concepts.concepts) {
+                    setConcepts(artifacts.concepts.concepts);
                 }
                 if (artifacts && artifacts.prerequisites && artifacts.prerequisites.relationships) {
                     setRelationships(artifacts.prerequisites.relationships);
@@ -125,11 +130,30 @@ export function TeacherPrerequisites() {
     // UI HELPER VARS
     const selectedChunk = chunks.find(c => c.id === selectedChunkId);
 
-    // Dependencies: Things selected concept requires
-    const prerequisites = relationships.filter(r => r.concept_id === selectedChunkId);
+    // Build canonical lookup: chunk_id → concept_id
+    // concept_extraction.py stores evidence: [{ chunk_id, classification }] on every concept.
+    // This is the only canonical chunk→concept mapping in the repository.
+    const chunkToConceptId = useMemo(() => {
+        const map = new Map();
+        concepts.forEach(concept => {
+            if (concept.concept_id && Array.isArray(concept.evidence)) {
+                concept.evidence.forEach(ev => {
+                    if (ev.chunk_id) map.set(ev.chunk_id, concept.concept_id);
+                });
+            }
+        });
+        return map;
+    }, [concepts]);
+
+    // Resolve selected chunk to its canonical concept_id.
+    // Falls back to selectedChunkId so demo-mock artifacts (keyed by chunk ID) continue to work.
+    const selectedConceptId = selectedChunkId != null ? (chunkToConceptId.get(selectedChunkId) ?? selectedChunkId) : null;
+
+    // Dependencies: Things the selected concept requires (must learn first)
+    const prerequisites = relationships.filter(r => r.concept_id === selectedConceptId);
 
     // Dependents: Things that require the selected concept
-    const dependents = relationships.filter(r => r.prerequisite_id === selectedChunkId);
+    const dependents = relationships.filter(r => r.prerequisite_id === selectedConceptId);
 
     // Group chunks by chapter/topic
     const hierarchy = useMemo(() => {

@@ -153,9 +153,11 @@ function getArtifacts(req, res) {
         const courseName = req.params.courseName;
         const chunksPath = path.join(__dirname, '../data', `${courseName}_chunks.json`);
         const prereqPath = path.join(__dirname, '../data', `${courseName}_prerequisites.json`);
+        const conceptsPath = path.join(__dirname, '../data', `${courseName}_concepts.json`);
 
         let chunks = [];
         let prerequisites = { course: courseName, relationships: [] };
+        let concepts = { course: courseName, concepts: [] };
 
         if (fs.existsSync(chunksPath)) {
             chunks = JSON.parse(fs.readFileSync(chunksPath, 'utf8'));
@@ -165,10 +167,15 @@ function getArtifacts(req, res) {
             prerequisites = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
         }
 
+        if (fs.existsSync(conceptsPath)) {
+            concepts = JSON.parse(fs.readFileSync(conceptsPath, 'utf8'));
+        }
+
         res.json({
             status: 'success',
             course: courseName,
             chunks,
+            concepts,
             prerequisites
         });
     } catch (error) {
@@ -176,6 +183,7 @@ function getArtifacts(req, res) {
         res.status(500).json({ status: 'error', message: 'Internal server error resolving artifacts.' });
     }
 }
+
 
 function deleteCourse(req, res) {
     try {
