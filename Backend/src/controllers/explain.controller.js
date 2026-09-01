@@ -208,6 +208,17 @@ async function explain(req, res) {
             currentSubject: null // Will be populated when subject tracking exists
         });
 
+        if (queryResult.queryType === 'CONTEXT_DEPENDENT' && session_id && session_id !== 'untracked') {
+            const memoryService = require('../services/memory.service');
+            const rewrittenQuery = await memoryService.rewriteQueryWithContext(questionToProcess, session_id);
+            if (rewrittenQuery && rewrittenQuery !== questionToProcess) {
+                const { tokenize } = require('../utils/nlp');
+                queryResult.expandedQuery = rewrittenQuery;
+                queryResult.expandedTokens = tokenize(rewrittenQuery);
+                queryResult.requiresClarification = false; // Defer to OpenAI's judgement
+            }
+        }
+
         if (process.env.DEBUG_TIMING === 'true') recordT('QueryPreprocessing', ppStart);
 
         // ── Diagnostic logging ──

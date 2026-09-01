@@ -13,19 +13,6 @@
     }
   },
   {
-    "name": "DSA_LinkedLists",
-    "pdf": "DSA_LinkedLists.pdf",
-    "chunks": "DSA_LinkedLists_chunks.json",
-    "prerequisites": "DSA_LinkedLists_prerequisites.json",
-    "status": "published",
-    "audit": {
-      "approvedAt": "2026-08-31T12:11:10.134Z",
-      "approvedBy": "61ebec08-6f24-4557-8b79-a116ab404874",
-      "publishedAt": "2026-08-31T12:11:10.781Z",
-      "publishedBy": "61ebec08-6f24-4557-8b79-a116ab404874"
-    }
-  },
-  {
     "name": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace",
     "pdf": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace.pdf",
     "chunks": "840ba8e0-9ec6-45e7-90f7-b4bc49034f22_Advanced_Full-Stack_Capstone_TaskSync_Collaborative_Workspace_chunks.json",
@@ -37,5 +24,12 @@
       "publishedAt": "2026-08-31T15:54:07.159Z",
       "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
     }
+  },
+  {
+    "name": "DBMS_Code_Reference_Annotated",
+    "pdf": "DBMS_Code_Reference_Annotated.pdf",
+    "chunks": "DBMS_Code_Reference_Annotated_chunks.json",
+    "prerequisites": "DBMS_Code_Reference_Annotated_prerequisites.json",
+    "status": "pending_review"
   }
 ]
