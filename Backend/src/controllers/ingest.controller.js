@@ -528,9 +528,10 @@ function runPythonScript(scriptName, args) {
     });
 }
 
-async function runPrerequisites(courseName) {
+// ⚡ FAST DEMO MOCK — preserved as fallback, NOT the real pipeline
+async function runDemoMockPrerequisites(courseName) {
     console.log('\n==========================================');
-    console.log('🤖 STARTING V2 C1-C6 PIPELINE (FAST DEMO MOCK)');
+    console.log('⚡ FAST DEMO MOCK — runDemoMockPrerequisites');
     console.log('Course:', courseName);
 
     const chunksPath = path.join(DATA_DIR, `${courseName}_chunks.json`);
@@ -542,18 +543,14 @@ async function runPrerequisites(courseName) {
 
     const chunks = JSON.parse(fs.readFileSync(chunksPath, 'utf8'));
 
-    sendProgress(courseName, 'C1', 'Evaluating content chunks... (Simulated)');
+    sendProgress(courseName, 'C1', 'Evaluating content chunks... (Demo Mock)');
     await new Promise(r => setTimeout(r, 800));
-
-    sendProgress(courseName, 'C2', 'Extracting core concepts... (Simulated)');
+    sendProgress(courseName, 'C2', 'Extracting core concepts... (Demo Mock)');
     await new Promise(r => setTimeout(r, 800));
-
-    sendProgress(courseName, 'C3', 'Structuring semantic hierarchy... (Simulated)');
+    sendProgress(courseName, 'C3', 'Structuring semantic hierarchy... (Demo Mock)');
     await new Promise(r => setTimeout(r, 800));
+    sendProgress(courseName, 'C4', 'Mapping prerequisite topological edges... (Demo Mock)');
 
-    sendProgress(courseName, 'C4', 'Mapping prerequisite topological edges... (Simulated)');
-
-    // Synthesize mock relationships from actual chunks to look real
     const relationships = [];
     if (chunks.length > 5) {
         relationships.push({ concept_id: chunks[3].id, prerequisite_id: chunks[0].id, reason: 'Foundational dependency', confidence: 0.95 });
@@ -562,26 +559,113 @@ async function runPrerequisites(courseName) {
         relationships.push({ concept_id: chunks[5].id, prerequisite_id: chunks[3].id, reason: 'Synthesized knowledge requirement', confidence: 0.85 });
     }
 
-    fs.writeFileSync(c4Path, JSON.stringify({
-        course: courseName,
-        relationships: relationships
-    }, null, 2), 'utf8');
+    fs.writeFileSync(c4Path, JSON.stringify({ course: courseName, relationships }, null, 2), 'utf8');
 
     await new Promise(r => setTimeout(r, 800));
-    sendProgress(courseName, 'C5', 'Validating dependency cycles... (Simulated)');
+    sendProgress(courseName, 'C5', 'Validating dependency cycles... (Demo Mock)');
     await new Promise(r => setTimeout(r, 600));
-
-    sendProgress(courseName, 'C6', 'Finalizing study plan... (Simulated)');
+    sendProgress(courseName, 'C6', 'Finalizing study plan... (Demo Mock)');
     await new Promise(r => setTimeout(r, 600));
+    sendProgress(courseName, 'DONE', 'Pipeline fully completed (demo mock).');
+    console.log('✅ Demo mock pipeline completed.');
 
-    sendProgress(courseName, 'DONE', 'Pipeline fully completed.');
-    console.log('✅ Full C1-C6 Pipeline completed successfully.');
+    return { status: 'success', course: courseName, total_chunks: chunks.length, output: c4Path };
+}
+
+// ============================================================
+// REAL V2 PYTHON PIPELINE (C1 → C2 → C3 → C4)
+// ============================================================
+async function runPrerequisites(courseName) {
+    console.log('\n==========================================');
+    console.log('🤖 STARTING REAL V2 PYTHON PIPELINE');
+    console.log('Course:', courseName);
+
+    const chunksPath = path.join(DATA_DIR, `${courseName}_chunks.json`);
+    const qualityPath = path.join(DATA_DIR, `${courseName}_quality.json`);
+    const conceptsPath = path.join(DATA_DIR, `${courseName}_concepts.json`);
+    const hierarchyPath = path.join(DATA_DIR, `${courseName}_hierarchy.json`);
+    const prereqPath = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
+
+    if (!fs.existsSync(chunksPath)) {
+        throw new Error(`Chunks file not found: ${chunksPath}. Upload content first.`);
+    }
+
+    // ── C1: Chunk Quality Evaluation ──────────────────────────────
+    sendProgress(courseName, 'C1', 'Evaluating chunk quality and educational relevance...');
+    console.log('▶ C1: chunk_quality.py');
+    let qualityResult;
+    try {
+        qualityResult = await runPythonScript('chunk_quality.py', [chunksPath]);
+    } catch (err) {
+        console.error('❌ C1 chunk_quality failed:', err.message);
+        sendProgress(courseName, 'ERROR', `C1 failed: ${err.message}`);
+        throw err;
+    }
+    fs.writeFileSync(qualityPath, JSON.stringify(qualityResult, null, 2), 'utf8');
+    console.log(`✅ C1 done — ${qualityResult.included_chunks || 0} chunks eligible for concept extraction.`);
+
+    // ── C2: Concept Extraction ─────────────────────────────────────
+    sendProgress(courseName, 'C2', `Extracting canonical concepts from ${qualityResult.included_chunks || '?'} eligible chunks...`);
+    console.log('▶ C2: concept_extraction.py');
+    let conceptsResult;
+    try {
+        conceptsResult = await runPythonScript('concept_extraction.py', [chunksPath, qualityPath]);
+    } catch (err) {
+        console.error('❌ C2 concept_extraction failed:', err.message);
+        sendProgress(courseName, 'ERROR', `C2 failed: ${err.message}`);
+        throw err;
+    }
+    fs.writeFileSync(conceptsPath, JSON.stringify(conceptsResult, null, 2), 'utf8');
+    const conceptCount = (conceptsResult.concepts || []).length;
+    console.log(`✅ C2 done — ${conceptCount} canonical concepts extracted.`);
+
+    // ── C3: Concept Hierarchy ──────────────────────────────────────
+    sendProgress(courseName, 'C3', `Structuring semantic hierarchy for ${conceptCount} concepts...`);
+    console.log('▶ C3: concept_hierarchy.py');
+    let hierarchyResult;
+    try {
+        hierarchyResult = await runPythonScript('concept_hierarchy.py', [conceptsPath]);
+    } catch (err) {
+        console.error('❌ C3 concept_hierarchy failed:', err.message);
+        sendProgress(courseName, 'ERROR', `C3 failed: ${err.message}`);
+        throw err;
+    }
+    fs.writeFileSync(hierarchyPath, JSON.stringify(hierarchyResult, null, 2), 'utf8');
+    console.log('✅ C3 done — hierarchy artifact written.');
+
+    // ── C4: Prerequisite Graph Generation ─────────────────────────
+    sendProgress(courseName, 'C4', 'Generating prerequisite dependency graph via LLM...');
+    console.log('▶ C4: prerequisite_graph.py');
+    let prereqResult;
+    try {
+        prereqResult = await runPythonScript('prerequisite_graph.py', [conceptsPath, hierarchyPath]);
+    } catch (err) {
+        console.error('❌ C4 prerequisite_graph failed:', err.message);
+        sendProgress(courseName, 'ERROR', `C4 failed: ${err.message}`);
+        throw err;
+    }
+
+    const finalRelationships = prereqResult.relationships || [];
+    const finalArtifact = {
+        course: courseName,
+        relationship_count: finalRelationships.length,
+        relationships: finalRelationships,
+        quality: prereqResult.quality || {},
+        statistics: prereqResult.statistics || {}
+    };
+    fs.writeFileSync(prereqPath, JSON.stringify(finalArtifact, null, 2), 'utf8');
+    console.log(`✅ C4 done — ${finalRelationships.length} valid prerequisite relationships written.`);
+
+    // ── C5/C6: Final Status ────────────────────────────────────────
+    sendProgress(courseName, 'C5', `Validated ${finalRelationships.length} prerequisite edges. Finalizing...`);
+    sendProgress(courseName, 'DONE', `Pipeline complete — ${conceptCount} concepts, ${finalRelationships.length} relationships.`);
 
     return {
         status: 'success',
         course: courseName,
-        total_chunks: chunks.length,
-        output: c4Path
+        concept_count: conceptCount,
+        relationship_count: finalRelationships.length,
+        output: prereqPath
     };
 }
 

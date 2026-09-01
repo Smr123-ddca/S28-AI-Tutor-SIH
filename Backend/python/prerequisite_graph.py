@@ -82,20 +82,38 @@ Determine actual **learning dependencies** between these concepts.
 
 Rules:
 1. Output an array of relationship objects strictly identifying what concepts require other concepts to be understood.
-2. A relationship means the learner strongly depends on understanding `prerequisite_id` BEFORE learning `concept_id`.
+2. A relationship means the learner strongly depends on understanding `prerequisite_id` BEFORE learning `concept_id`. Do NOT reverse the direction.
 3. Use relationship types: "REQUIRED", "SUPPORTING", or "RELATED".
 4. Provide a scalar `confidence` score (0.0 to 1.0). (0.90+ for very strong prereqs).
-5. Specify a concise educational `reason` for the dependency.
+5. Specify a concise educational `reason` for the dependency. 
+   Only generate an edge when the supplied descriptions/evidence support a real learning dependency. Do NOT generate relationships merely because concepts occur in the same course, share keywords, or are semantically related. Prefer a smaller number of strong edges over a dense graph of weak edges.
 6. List `evidence` chunk IDs supporting this (borrow from the concept definitions if appropriate).
 7. Do NOT connect concepts simply because they are in the same domain.
-8. Output schema:
+8. Exact ID Mapping Requirement:
+   The Source Concepts array contains a strict `id` field for each concept (e.g., "concept_0001"). 
+   You MUST map these EXACT `id` values into the `concept_id` and `prerequisite_id` fields.
+   - Never output concept names in these fields.
+   - Never invent IDs.
+   - Never use placeholder examples like concept_A or concept_B unless those strings explicitly exist in the input.
+
+Example Output Schema Constraint:
+If the input contains "id": "concept_0001" (Arrays) and "id": "concept_0002" (Searching), and Arrays is a prerequisite for Searching:
+
 [
-  {{ "concept_id": "concept_B", "prerequisite_id": "concept_A", "relationship": "REQUIRED", "confidence": 0.95, "reason": "B builds entirely on A", "evidence": ["chunk_X"] }}
+  {{
+    "concept_id": "concept_0002",
+    "prerequisite_id": "concept_0001",
+    "relationship": "REQUIRED",
+    "confidence": 0.95,
+    "reason": "Searching builds on understanding the underlying collection and array access.",
+    "evidence": ["chunk_X"]
+  }}
 ]
 
 Source Concepts:
 {json.dumps(inputs, ensure_ascii=False)}
 """
+
 
 raw_response = ""
 if mock_val == "MALFORMED":
