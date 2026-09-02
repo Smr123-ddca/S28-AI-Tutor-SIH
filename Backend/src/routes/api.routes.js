@@ -27,6 +27,7 @@ const {
     suggestAiGrade,
     getGradingStats
 } = require('../controllers/grading.controller');
+const { handleTeacherCopilot } = require('../controllers/copilot.controller');
 
 const router = express.Router();
 
@@ -70,8 +71,9 @@ router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
     res.json(batch);
 });
 
-// Analytics (Teacher Only)
+// Analytics & Co-pilot (Teacher Only)
 router.get('/analytics/class', requireRole('teacher'), getClassAnalytics);
+router.post('/teacher-copilot', requireRole('teacher'), handleTeacherCopilot);
 
 // Courses
 // Courses
