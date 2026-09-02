@@ -9,7 +9,8 @@ import {
   LogOut,
   Sparkles,
   BarChart2,
-  ClipboardCheck
+  Award,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -47,6 +48,18 @@ export function IconRail() {
       roles: ['student', 'teacher']
     },
     {
+      to: '/dashboard',
+      icon: LayoutDashboard,
+      title: 'Student Dashboard',
+      roles: ['student']
+    },
+    {
+      to: '/assignments',
+      icon: FileText,
+      title: 'Assignments & Tasks',
+      roles: ['student']
+    },
+    {
       to: '/chat',
       icon: MessageSquareText,
       title: 'Learnify Tutor Chat',
@@ -65,15 +78,15 @@ export function IconRail() {
       roles: ['teacher']
     },
     {
-      to: '/teacher/dashboard',
-      icon: LayoutDashboard,
-      title: 'Analytics Dashboard',
+      to: '/teacher/grading',
+      icon: Award,
+      title: 'Grading & Submissions',
       roles: ['teacher']
     },
     {
-      to: '/teacher/grading',
-      icon: ClipboardCheck,
-      title: 'Class Grading',
+      to: '/teacher/dashboard',
+      icon: LayoutDashboard,
+      title: 'Analytics Dashboard',
       roles: ['teacher']
     },
     {

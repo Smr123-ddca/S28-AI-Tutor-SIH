@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, GraduationCap, LayoutDashboard, Database } from 'lucide-react';
+import { Sparkles, GraduationCap, LayoutDashboard, Database, Award } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { Pill } from '../components/common/Pill';
 import { StatCard } from '../components/cards/StatCard';
@@ -61,7 +61,7 @@ export function TeacherHomeLanding() {
                     </h1>
 
                     <p className="text-body" style={{ maxWidth: '520px', marginBottom: '2rem', fontSize: '1.05rem' }}>
-                        Upload your course material and let Learnify organize concepts, prerequisites, and learning paths so your students can learn directly from the material you teach.
+                        Upload your course material and let Learnify organize concepts, evaluate assignments, and provide AI-guided grading and remedial pathways.
                     </p>
 
                     {/* CTA Row */}
@@ -78,10 +78,10 @@ export function TeacherHomeLanding() {
                         <Button
                             variant="ink"
                             size="lg"
-                            onClick={() => navigate('/teacher')}
-                            icon={LayoutDashboard}
+                            onClick={() => navigate('/teacher/grading')}
+                            icon={Award}
                         >
-                            View My Courses
+                            Grading & Submissions
                         </Button>
                     </div>
                 </div>
