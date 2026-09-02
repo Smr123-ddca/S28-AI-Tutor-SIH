@@ -7,7 +7,7 @@ const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessi
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch, subscribeProgress } = require('../controllers/ingest.controller');
 const { getCourses, approveCourse, reviseCourse, publishCourse, getArtifacts, deleteCourse } = require('../controllers/course.controller');
-const { getClassAnalytics } = require('../controllers/analytics.controller');
+const { getClassAnalytics, getClassGrading } = require('../controllers/analytics.controller');
 const {
     createQuestion,
     getQuestions,
@@ -62,6 +62,7 @@ router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
 
 // Analytics (Teacher Only)
 router.get('/analytics/class', requireRole('teacher'), getClassAnalytics);
+router.get('/analytics/grading', requireRole('teacher'), getClassGrading);
 
 // Courses
 // Courses

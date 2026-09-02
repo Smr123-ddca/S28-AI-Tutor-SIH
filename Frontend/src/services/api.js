@@ -254,3 +254,14 @@ export async function fetchClassAnalytics(subject, token) {
   if (!res.ok) throw new Error('Failed to fetch class analytics');
   return await res.json();
 }
+
+export async function fetchClassGrading(subject, token) {
+  const url = subject
+    ? `/api/analytics/grading?subject=${encodeURIComponent(subject)}`
+    : '/api/analytics/grading';
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch class grading');
+  return await res.json();
+}

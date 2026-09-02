@@ -8,7 +8,8 @@ import {
   Home,
   LogOut,
   Sparkles,
-  BarChart2
+  BarChart2,
+  ClipboardCheck
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -67,6 +68,12 @@ export function IconRail() {
       to: '/teacher/dashboard',
       icon: LayoutDashboard,
       title: 'Analytics Dashboard',
+      roles: ['teacher']
+    },
+    {
+      to: '/teacher/grading',
+      icon: ClipboardCheck,
+      title: 'Class Grading',
       roles: ['teacher']
     },
     {

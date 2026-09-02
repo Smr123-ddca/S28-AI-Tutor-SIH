@@ -76,37 +76,32 @@ for c in c2_concepts:
     })
 
 prompt = f"""
-You are an AI specializing in curriculum design and learning science.
+You are an expert curriculum-design assistant.
 Analyze the following canonical concepts for "{course_name}".
-Determine actual **learning dependencies** between these concepts.
+Your task is to identify only genuinely grounded learning dependencies.
 
-Rules:
-1. Output an array of relationship objects strictly identifying what concepts require other concepts to be understood.
-2. A relationship means the learner strongly depends on understanding `prerequisite_id` BEFORE learning `concept_id`. Do NOT reverse the direction.
-3. Use relationship types: "REQUIRED", "SUPPORTING", or "RELATED".
-4. Provide a scalar `confidence` score (0.0 to 1.0). (0.90+ for very strong prereqs).
-5. Specify a concise educational `reason` for the dependency. 
-   Only generate an edge when the supplied descriptions/evidence support a real learning dependency. Do NOT generate relationships merely because concepts occur in the same course, share keywords, or are semantically related. Prefer a smaller number of strong edges over a dense graph of weak edges.
-6. List `evidence` chunk IDs supporting this (borrow from the concept definitions if appropriate).
-7. Do NOT connect concepts simply because they are in the same domain.
-8. Exact ID Mapping Requirement:
-   The Source Concepts array contains a strict `id` field for each concept (e.g., "concept_0001"). 
-   You MUST map these EXACT `id` values into the `concept_id` and `prerequisite_id` fields.
-   - Never output concept names in these fields.
-   - Never invent IDs.
-   - Never use placeholder examples like concept_A or concept_B unless those strings explicitly exist in the input.
+Strict rules:
+1. Output ONLY a JSON array of prerequisite relationship objects.
+2. A relationship means the learner must understand `prerequisite_id` BEFORE learning `concept_id`.
+3. Use `concept_id` and `prerequisite_id` values copied EXACTLY from the supplied `id` fields in the source concepts.
+4. Never output concept names, never invent IDs, never use placeholders like `concept_A`, `concept_B`, `topic_1`, or `prereq_x`.
+5. Only use IDs that appear in the provided source concepts array.
+6. Only include a relationship when the course material supports it as a true learning dependency.
+7. Do not create edges just because concepts share a domain, keywords, or close semantic similarity.
+8. `relationship` must be one of: "REQUIRED", "SUPPORTING", or "RELATED".
+9. `confidence` must be a number between 0.0 and 1.0. Prefer very strong edges; avoid weak inferences.
+10. `reason` must explain the actual learning dependency in one sentence.
+11. `evidence` should be a compact list of supporting chunk IDs if available; otherwise use an empty array.
 
-Example Output Schema Constraint:
-If the input contains "id": "concept_0001" (Arrays) and "id": "concept_0002" (Searching), and Arrays is a prerequisite for Searching:
-
+Example of the required format:
 [
   {{
-    "concept_id": "concept_0002",
-    "prerequisite_id": "concept_0001",
-    "relationship": "REQUIRED",
-    "confidence": 0.95,
-    "reason": "Searching builds on understanding the underlying collection and array access.",
-    "evidence": ["chunk_X"]
+   "concept_id": "concept_0007",
+   "prerequisite_id": "concept_0003",
+   "relationship": "REQUIRED",
+   "confidence": 0.87,
+   "reason": "The course introduces X before students can apply Y in practice.",
+   "evidence": ["chunk_101"]
   }}
 ]
 
@@ -116,6 +111,9 @@ Source Concepts:
 
 
 raw_response = ""
+model_status = "MODEL_VALID_OUTPUT"
+model_failure_reason = None
+
 if mock_val == "MALFORMED":
     raw_response = "invalid {"
 elif mock_val == "NO_OUTPUT":
@@ -154,7 +152,12 @@ else:
     try:
         from gemini_rest import generate_content
         raw_response = generate_content(prompt).strip()
+        if not raw_response:
+            model_status = "MODEL_EMPTY_RESPONSE"
+            model_failure_reason = "LLM returned empty content."
     except Exception as e:
+        model_status = "MODEL_FAILURE"
+        model_failure_reason = str(e)
         print(f"Gemini API call failed: {e}", file=sys.stderr)
         raw_response = "[]"
 
@@ -166,9 +169,13 @@ raw_response = raw_response.strip()
 try:
     relations = json.loads(raw_response) if raw_response else []
 except json.JSONDecodeError:
+    model_status = "MODEL_INVALID_JSON"
+    model_failure_reason = "LLM output could not be parsed as JSON."
     relations = []
 
 if not isinstance(relations, list):
+    model_status = "MODEL_INVALID_JSON"
+    model_failure_reason = "LLM output was not a JSON array."
     relations = []
 
 # ============================================================
@@ -179,42 +186,57 @@ status = "healthy"
 cycles_removed = []
 isolated_count = 0
 
+diagnostic_counts = {
+    "concepts_supplied": len(c2_concepts),
+    "llm_candidates_returned": len(relations),
+    "malformed_candidates": 0,
+    "unknown_id_candidates": 0,
+    "self_loop_candidates": 0,
+    "low_confidence_candidates": 0,
+    "cycle_rejected_candidates": 0,
+    "final_valid_relationships": 0,
+}
+
 filtered_relations = []
 seen_edges = {}
 
 for r in relations:
-    if not isinstance(r, dict): continue
-    
+    if not isinstance(r, dict):
+        diagnostic_counts["malformed_candidates"] += 1
+        continue
+
     cid = str(r.get("concept_id", "")).strip()
     pid = str(r.get("prerequisite_id", "")).strip()
     rel = str(r.get("relationship", "SUPPORTING")).upper()
     conf = r.get("confidence", 0.0)
     reason = str(r.get("reason", "")).strip()
-    
+
     if not reason:
         reason = "Implicitly identified by curriculum model."
-        
+
     try:
         conf = float(conf)
     except:
         conf = 0.0
-        
+
     if conf < 0.0 or conf > 1.0:
         continue
-        
+
     if cid not in valid_concept_ids or pid not in valid_concept_ids:
-        continue # Hallucination block
-        
+        diagnostic_counts["unknown_id_candidates"] += 1
+        continue
+
     if cid == pid:
-        continue # Self loop block
-        
+        diagnostic_counts["self_loop_candidates"] += 1
+        continue
+
     if conf < 0.60:
-        continue # Cut weak edges entirely
-        
+        diagnostic_counts["low_confidence_candidates"] += 1
+        continue
+
     if rel not in ["REQUIRED", "SUPPORTING", "RELATED"]:
         rel = "SUPPORTING"
-        
-    # Standardize edge deduplication taking highest confidence
+
     edge_key = f"{pid}->{cid}"
     if edge_key in seen_edges:
         if conf > seen_edges[edge_key]["confidence"]:
@@ -226,7 +248,7 @@ for r in relations:
             "relationship": rel,
             "confidence": conf,
             "reason": reason,
-            "evidence": r.get("evidence", [])[:5] # Bound evidence strings
+            "evidence": r.get("evidence", [])[:5]
         }
 
 final_edges = list(seen_edges.values())
@@ -292,12 +314,13 @@ while True:
             
     # Break it
     target = final_edges[weakest_idx]
+    diagnostic_counts["cycle_rejected_candidates"] += 1
     cycles_removed.append({
         "relationship": f"{target['prerequisite_id']} -> {target['concept_id']}",
         "reason": "Created a cyclic dependency; lowest-confidence edge in cycle.",
         "confidence": target["confidence"]
     })
-    
+
     del final_edges[weakest_idx]
 
 if cycles_detected_count > 0:
@@ -344,13 +367,23 @@ def find_depth(u):
 depths = [find_depth(r) for r in valid_concept_ids if in_degree[r] == 0]
 max_path_depth = max(depths) if depths else 0
 
+diagnostic_counts["final_valid_relationships"] = len(final_edges)
+
 final_artifact = {
     "course": course_name,
     "source_concepts": len(valid_concept_ids),
     "relationship_count": len(final_edges),
     "relationships": final_edges,
+    "diagnostics": {
+        **diagnostic_counts,
+        "model_status": model_status,
+        "model_failure_reason": model_failure_reason,
+        "candidate_relationships_seen": len(relations),
+    },
     "quality": {
         "status": status,
+        "model_status": model_status,
+        "model_failure_reason": model_failure_reason,
         "cycles_detected": cycles_detected_count,
         "cycles_removed": len(cycles_removed),
         "removed_cycles_log": cycles_removed,
@@ -367,4 +400,5 @@ final_artifact = {
 }
 
 print(json.dumps(final_artifact, ensure_ascii=False, indent=2), flush=True)
+print(json.dumps({"diagnostics": final_artifact["diagnostics"]}, ensure_ascii=False), file=sys.stderr, flush=True)
 sys.exit(0)

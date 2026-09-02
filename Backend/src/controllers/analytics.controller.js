@@ -65,27 +65,29 @@ async function getClassAnalytics(req, res) {
         // joined with their parent practice_questions for concept + subject info.
         // We use Supabase's select with embedded resource to avoid N+1.
         // ——————————————————————————————————————————————
-        let attemptsQuery = supabaseAdmin
-            .from('practice_attempts')
-            .select(`
+        let attemptsQuery = supabaseAdmin.from('practice_attempts');
+        let attemptsSelection = attemptsQuery.select(`
+            id,
+            student_id,
+            evaluation,
+            attempt_number,
+            practice_question_id,
+            practice_questions!inner(
                 id,
-                student_id,
-                evaluation,
-                attempt_number,
-                practice_question_id,
-                practice_questions!inner(
-                    id,
-                    concept,
-                    subject
-                )
-            `);
+                concept,
+                subject
+            )
+        `);
 
-        if (subject) {
-            // Filter by subject via the joined practice_questions table
-            attemptsQuery = attemptsQuery.eq('practice_questions.subject', subject);
+        if (subject && attemptsSelection && typeof attemptsSelection.eq === 'function') {
+            // Filter by subject via the joined practice_questions table.
+            attemptsSelection = attemptsSelection.eq('practice_questions.subject', subject);
         }
 
-        const { data: attempts, error: attemptsError } = await attemptsQuery;
+        const attemptsResponse = attemptsSelection && typeof attemptsSelection.then === 'function'
+            ? await attemptsSelection
+            : attemptsSelection;
+        const { data: attempts, error: attemptsError } = attemptsResponse || {};
 
         if (attemptsError) {
             console.error('[analytics] Failed to fetch attempts:', attemptsError);
@@ -101,10 +103,17 @@ async function getClassAnalytics(req, res) {
 
         let profilesMap = {};
         if (uniqueStudentIds.length > 0) {
-            const { data: profiles } = await supabaseAdmin
-                .from('profiles')
-                .select('id, full_name, email')
-                .in('id', uniqueStudentIds);
+            let profilesQuery = supabaseAdmin.from('profiles');
+            let profilesSelection = profilesQuery.select('id, full_name, email');
+
+            if (profilesSelection && typeof profilesSelection.in === 'function') {
+                profilesSelection = profilesSelection.in('id', uniqueStudentIds);
+            }
+
+            const profilesResponse = profilesSelection && typeof profilesSelection.then === 'function'
+                ? await profilesSelection
+                : profilesSelection;
+            const { data: profiles } = profilesResponse || {};
 
             (profiles || []).forEach(p => {
                 profilesMap[p.id] = p.full_name || p.email || `Student (${p.id.slice(0, 8)})`;
@@ -368,4 +377,273 @@ async function getClassAnalytics(req, res) {
     }
 }
 
-module.exports = { getClassAnalytics };
+function getGradingStatus(score) {
+    if (score >= 75) return 'strong';
+    if (score >= 50) return 'developing';
+    return 'needs_review';
+}
+
+function getDistributionBucket(score) {
+    if (score >= 90) return '90-100%';
+    if (score >= 75) return '75-89%';
+    if (score >= 50) return '50-74%';
+    return 'Below 50%';
+}
+
+async function getClassGrading(req, res) {
+    const { subject } = req.query;
+
+    try {
+        let attemptsQuery = supabaseAdmin.from('practice_attempts');
+        let attemptsSelection = attemptsQuery.select(`
+            id,
+            student_id,
+            evaluation,
+            attempt_number,
+            practice_question_id,
+            practice_questions!inner(
+                id,
+                question,
+                concept,
+                subject
+            )
+        `);
+
+        if (subject && typeof attemptsSelection.eq === 'function') {
+            attemptsSelection = attemptsSelection.eq('practice_questions.subject', subject);
+        }
+
+        const attemptsResponse = attemptsSelection && typeof attemptsSelection.then === 'function'
+            ? await attemptsSelection
+            : attemptsSelection;
+        const { data: attempts, error: attemptsError } = attemptsResponse || {};
+
+        if (attemptsError) {
+            console.error('[analytics] Failed to fetch grading attempts:', attemptsError);
+            return res.status(500).json({ error: 'Failed to fetch practice data', details: attemptsError.message });
+        }
+
+        const allAttempts = attempts || [];
+        if (allAttempts.length === 0) {
+            return res.json({
+                subject: subject || 'all',
+                empty: true,
+                message: 'No graded activity yet.',
+                details: 'Students need to complete practice activity before class grading insights appear.',
+                summary: {
+                    students: 0,
+                    attempts: 0,
+                    average_score: 0,
+                    students_needing_review: 0,
+                    questions_evaluated: 0
+                },
+                distribution: {
+                    '90-100%': 0,
+                    '75-89%': 0,
+                    '50-74%': 0,
+                    'Below 50%': 0
+                },
+                students: [],
+                common_difficulties: []
+            });
+        }
+
+        const uniqueStudentIds = [...new Set(allAttempts.map(a => a.student_id))];
+
+        let profilesMap = {};
+        if (uniqueStudentIds.length > 0) {
+            let profilesQuery = supabaseAdmin.from('profiles');
+            let profilesSelection = profilesQuery.select('id, full_name, email');
+            if (profilesSelection && typeof profilesSelection.in === 'function') {
+                profilesSelection = profilesSelection.in('id', uniqueStudentIds);
+            }
+
+            const profilesResponse = profilesSelection && typeof profilesSelection.then === 'function'
+                ? await profilesSelection
+                : profilesSelection;
+            const { data: profiles } = profilesResponse || {};
+
+            (profiles || []).forEach(profile => {
+                profilesMap[profile.id] = profile.full_name || profile.email || `Student (${profile.id.slice(0, 8)})`;
+            });
+        }
+
+        const studentMap = {};
+        const issueCounts = {};
+        const questionsSeen = new Set();
+
+        allAttempts.forEach((attempt) => {
+            const studentId = attempt.student_id;
+            const question = attempt.practice_questions;
+            const concept = question?.concept || 'Uncategorized';
+            const questionId = attempt.practice_question_id;
+
+            if (questionId) questionsSeen.add(questionId);
+
+            if (!studentMap[studentId]) {
+                studentMap[studentId] = {
+                    student_id: studentId,
+                    name: profilesMap[studentId] || `Student (${studentId.slice(0, 8)})`,
+                    total_attempts: 0,
+                    correct: 0,
+                    incorrect: 0,
+                    questions: {}
+                };
+            }
+
+            const student = studentMap[studentId];
+            student.total_attempts += 1;
+
+            if (attempt.evaluation === 'correct') student.correct += 1;
+            if (attempt.evaluation === 'incorrect') student.incorrect += 1;
+
+            const qKey = questionId || `${concept}-${student.total_attempts}`;
+            if (!student.questions[qKey]) {
+                student.questions[qKey] = {
+                    question_id: questionId,
+                    question: question?.question || 'Practice question',
+                    concept,
+                    attempts: 0,
+                    correct: 0,
+                    incorrect: 0,
+                    latest_result: 'incorrect',
+                    latest_score: 0,
+                    latest_attempt_number: 0
+                };
+            }
+
+            const questionSummary = student.questions[qKey];
+            questionSummary.attempts += 1;
+
+            if (attempt.evaluation === 'correct') {
+                questionSummary.correct += 1;
+            } else if (attempt.evaluation === 'incorrect') {
+                questionSummary.incorrect += 1;
+            }
+
+            if ((attempt.attempt_number || 0) >= (questionSummary.latest_attempt_number || 0)) {
+                questionSummary.latest_result = attempt.evaluation || 'incorrect';
+                questionSummary.latest_score = attempt.evaluation === 'correct' ? 100 : attempt.evaluation === 'partial' ? 50 : 0;
+                questionSummary.latest_attempt_number = attempt.attempt_number || 0;
+            }
+
+            if (!issueCounts[concept]) {
+                issueCounts[concept] = {
+                    concept,
+                    incorrect_attempts: 0,
+                    students_affected: new Set()
+                };
+            }
+
+            if (attempt.evaluation === 'incorrect') {
+                issueCounts[concept].incorrect_attempts += 1;
+                issueCounts[concept].students_affected.add(studentId);
+            }
+        });
+
+        const prereqRelationships = subject ? loadPrerequisites(subject) : [];
+        const conceptPrereqMap = {};
+        prereqRelationships.forEach((relationship) => {
+            if (!relationship.concept_id) return;
+            if (!conceptPrereqMap[relationship.concept_id]) {
+                conceptPrereqMap[relationship.concept_id] = [];
+            }
+            conceptPrereqMap[relationship.concept_id].push(relationship.prerequisite_id);
+        });
+
+        const students = Object.values(studentMap).map((student) => {
+            const questionList = Object.values(student.questions)
+                .map((item) => ({
+                    question_id: item.question_id,
+                    question: item.question,
+                    concept: item.concept,
+                    result: item.latest_result,
+                    score: item.latest_score
+                }))
+                .sort((a, b) => {
+                    const order = { incorrect: 0, partial: 1, correct: 2 };
+                    return (order[a.result] ?? 99) - (order[b.result] ?? 99);
+                });
+
+            const score = student.total_attempts > 0 ? (student.correct / student.total_attempts) * 100 : 0;
+            const status = getGradingStatus(score);
+            const conceptCounts = {};
+            questionList.forEach((item) => {
+                if (!item.concept) return;
+                conceptCounts[item.concept] = (conceptCounts[item.concept] || 0) + (item.result === 'incorrect' ? 1 : 0);
+            });
+
+            const weakConcepts = Object.entries(conceptCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([concept]) => concept);
+
+            const learningGap = weakConcepts
+                .map((concept) => {
+                    const prereqs = conceptPrereqMap[concept] || [];
+                    if (!prereqs.length) return null;
+                    return {
+                        weak_concept: concept,
+                        prerequisite_concept: prereqs[0]
+                    };
+                })
+                .filter(Boolean)[0] || null;
+
+            return {
+                student_id: student.student_id,
+                name: student.name,
+                score: Math.round(score),
+                status,
+                correct: student.correct,
+                incorrect: student.incorrect,
+                questions_attempted: questionList.length,
+                questions: questionList,
+                learning_gap: learningGap
+            };
+        }).sort((a, b) => b.score - a.score);
+
+        const summary = {
+            students: students.length,
+            attempts: allAttempts.length,
+            average_score: students.length > 0
+                ? Math.round((students.reduce((sum, student) => sum + student.score, 0) / students.length))
+                : 0,
+            students_needing_review: students.filter((student) => student.status === 'needs_review').length,
+            questions_evaluated: questionsSeen.size
+        };
+
+        const distribution = {
+            '90-100%': 0,
+            '75-89%': 0,
+            '50-74%': 0,
+            'Below 50%': 0
+        };
+
+        students.forEach((student) => {
+            const bucket = getDistributionBucket(student.score);
+            distribution[bucket] += 1;
+        });
+
+        const commonDifficulties = Object.values(issueCounts)
+            .map((item) => ({
+                concept: item.concept,
+                incorrect_attempts: item.incorrect_attempts,
+                students_affected: item.students_affected.size
+            }))
+            .sort((a, b) => b.incorrect_attempts - a.incorrect_attempts);
+
+        return res.json({
+            subject: subject || 'all',
+            empty: false,
+            summary,
+            distribution,
+            students,
+            common_difficulties: commonDifficulties,
+            students_needing_review: summary.students_needing_review
+        });
+    } catch (err) {
+        console.error('[analytics] Unexpected error computing class grading:', err);
+        return res.status(500).json({ error: 'Internal server error computing grading' });
+    }
+}
+
+module.exports = { getClassAnalytics, getClassGrading };
