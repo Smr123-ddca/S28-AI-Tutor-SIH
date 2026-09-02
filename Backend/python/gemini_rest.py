@@ -25,7 +25,6 @@ def generate_content_openrouter(prompt):
     payload = {
         "model": fallback_model,
         "messages": [{"role": "user", "content": prompt}],
-        "response_format": {"type": "json_object"},
     }
 
     try:

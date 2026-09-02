@@ -167,15 +167,26 @@ raw_response = re.sub(r"\s*```$", "", raw_response)
 raw_response = raw_response.strip()
 
 try:
-    relations = json.loads(raw_response) if raw_response else []
+    parsed = json.loads(raw_response) if raw_response else []
 except json.JSONDecodeError:
     model_status = "MODEL_INVALID_JSON"
     model_failure_reason = "LLM output could not be parsed as JSON."
-    relations = []
+    parsed = []
 
-if not isinstance(relations, list):
+if isinstance(parsed, dict):
+    for key in ["relationships", "edges", "prerequisites", "data"]:
+        if key in parsed and isinstance(parsed[key], list):
+            relations = parsed[key]
+            break
+    else:
+        model_status = "MODEL_INVALID_JSON"
+        model_failure_reason = "LLM output was an object but did not include a relationships array."
+        relations = []
+elif isinstance(parsed, list):
+    relations = parsed
+else:
     model_status = "MODEL_INVALID_JSON"
-    model_failure_reason = "LLM output was not a JSON array."
+    model_failure_reason = "LLM output was not a JSON array or object wrapper."
     relations = []
 
 # ============================================================
