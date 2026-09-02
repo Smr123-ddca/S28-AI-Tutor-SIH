@@ -1,16 +1,4 @@
 const request = require('supertest');
-<<<<<<< HEAD
-
-// MOCK AUTH MIDDLEWARE BEFORE REQUIRING APP OR ROUTES
-jest.mock('../src/middleware/auth.middleware', () => ({
-    authenticate: (req, res, next) => {
-        req.user = { id: 'test', role: 'student' };
-        next();
-    },
-    requireRole: () => (req, res, next) => next()
-}));
-
-=======
 // Mock authentication so protected routes can be tested
 jest.mock('../src/middleware/auth.middleware', () => ({
     authenticate: (req, res, next) => {
@@ -19,7 +7,6 @@ jest.mock('../src/middleware/auth.middleware', () => ({
     },
     requireRole: (role) => (req, res, next) => next()
 }));
->>>>>>> 8e4cde74d8e84d274a58d8f7de47c0af090761e2
 const app = require('../src/app');
 const { loadData } = require('../src/data/store');
 describe('API Routes', () => {

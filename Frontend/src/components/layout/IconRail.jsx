@@ -7,7 +7,8 @@ import {
   GraduationCap,
   Home,
   LogOut,
-  Sparkles
+  Sparkles,
+  BarChart2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -66,6 +67,12 @@ export function IconRail() {
       to: '/teacher/dashboard',
       icon: LayoutDashboard,
       title: 'Analytics Dashboard',
+      roles: ['teacher']
+    },
+    {
+      to: '/teacher/analytics',
+      icon: BarChart2,
+      title: 'Class Analytics',
       roles: ['teacher']
     }
   ];

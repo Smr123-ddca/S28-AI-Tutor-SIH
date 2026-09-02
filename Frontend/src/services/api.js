@@ -243,3 +243,14 @@ export async function requestPracticeHint(id, token) {
   if (!res.ok) throw new Error('Failed to request hint');
   return await res.json();
 }
+
+export async function fetchClassAnalytics(subject, token) {
+  const url = subject
+    ? `/api/analytics/class?subject=${encodeURIComponent(subject)}`
+    : '/api/analytics/class';
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch class analytics');
+  return await res.json();
+}
