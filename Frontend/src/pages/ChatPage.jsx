@@ -4,231 +4,70 @@ import {
   Send,
   Plus,
   Edit2,
-  Sparkles
+  Sparkles,
+  Trash2
 } from 'lucide-react';
-import { AvatarTutor } from '../components/tutor/AvatarTutor';
 import { MessageBubble } from '../components/tutor/MessageBubble';
 import { ModeSelector } from '../components/tutor/ModeSelector';
 import { HintSystem } from '../components/tutor/HintSystem';
 import { Button } from '../components/common/Button';
-import { Pill } from '../components/common/Pill';
-import {
-  explainQuestion,
-  fetchSessions,
-  fetchSessionMessages,
-  updateSessionTitle,
-  fetchLibraryDocuments,
-  deleteSession
-} from '../services/api';
-import { useAuth } from '../context/AuthContext';
-import { useSoundManager } from '../services/soundManager';
+import { useChatStream } from '../context/ChatStreamContext';
 
 export function ChatPage() {
   const [searchParams] = useSearchParams();
-  const { session } = useAuth();
-  const { playSound } = useSoundManager();
+  const {
+    sessions,
+    currentSessionId,
+    currentSubject,
+    setCurrentSubject,
+    subjects,
+    tutorState,
+    studentId,
+    activeMessages,
+    isCurrentGenerating,
+    selectSession,
+    newChat,
+    sendMessage,
+    renameSession,
+    deleteSession
+  } = useChatStream();
 
-  // State Management
-  const [sessions, setSessions] = useState([]);
-  const [currentSessionId, setCurrentSessionId] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
-  const [loading, setLoading] = useState(false);
   const [activeMode, setActiveMode] = useState('ask_doubt'); // 'ask_doubt' | 'practice_test' | 'study_plan'
-  const [tutorState, setTutorState] = useState('idle'); // 'idle' | 'listening' | 'thinking' | 'speaking'
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [studentId, setStudentId] = useState('');
-  const [currentTopic, setCurrentTopic] = useState('Welcome to Learnify');
-  const [currentSubject, setCurrentSubject] = useState(searchParams.get('subject') || null);
-  const [subjects, setSubjects] = useState([]);
-
-  useEffect(() => {
-    async function loadSubjects() {
-      try {
-        const docsData = await fetchLibraryDocuments(session?.access_token);
-        // Ensure students can only talk to published subjects
-        const publishedDocs = (docsData.documents || []).filter(d => d.status === 'published');
-        const availableSubjects = publishedDocs.map(d => d.subject);
-        const uniqueSubjects = [...new Set(availableSubjects)].filter(Boolean);
-        setSubjects(uniqueSubjects);
-        if (!currentSubject && uniqueSubjects.length > 0) {
-          setCurrentSubject(uniqueSubjects[0]);
-        }
-      } catch (err) {
-        console.error('Error fetching subjects:', err);
-      }
-    }
-    loadSubjects();
-  }, [session?.access_token]);
-
   const messagesEndRef = useRef(null);
-
-  // Initialize unique student ID
-  useEffect(() => {
-    let sid = localStorage.getItem('ai_tutor_student_id');
-    if (!sid) {
-      sid = crypto.randomUUID();
-      localStorage.setItem('ai_tutor_student_id', sid);
-    }
-    setStudentId(sid);
-  }, []);
-
-  // Fetch Session History on Mount
-  useEffect(() => {
-    async function loadSessions() {
-      try {
-        const data = await fetchSessions(session?.access_token);
-        setSessions(data.sessions || []);
-      } catch (err) {
-        console.error('Error fetching sessions:', err);
-      }
-    }
-    loadSessions();
-  }, [session?.access_token]);
 
   // Handle URL deep links (?session_id=... or ?q=...)
   useEffect(() => {
     const sessionIdParam = searchParams.get('session_id');
     const queryParam = searchParams.get('q');
-    const subjectParam = searchParams.get('subject') || searchParams.get('course'); // maintain legacy link compatibility
+    const subjectParam = searchParams.get('subject') || searchParams.get('course');
 
-    if (subjectParam && !currentSubject) {
+    if (subjectParam && (!currentSubject || currentSubject !== subjectParam)) {
       setCurrentSubject(subjectParam);
     }
 
-    if (sessionIdParam) {
-      handleSelectSession(sessionIdParam);
+    if (sessionIdParam && sessionIdParam !== currentSessionId) {
+      selectSession(sessionIdParam);
     } else if (queryParam) {
       setInputQuery(queryParam);
     }
-  }, [searchParams]);
+  }, [searchParams, selectSession, currentSubject, setCurrentSubject, currentSessionId]);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom when messages change or generation starts
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, loading]);
+  }, [activeMessages, isCurrentGenerating]);
 
-  const handleSelectSession = async (sid) => {
-    playSound('click');
-    setCurrentSessionId(sid);
-
-    // Update currentSubject based on the selected session
-    const selected = sessions.find(s => s.id === sid);
-    if (selected && selected.course) {
-      setCurrentSubject(selected.course);
-    }
-
-    setLoading(true);
-    setTutorState('thinking');
-    try {
-      const data = await fetchSessionMessages(sid, session?.access_token);
-      const formatted = (data.messages || []).map((m) => {
-        if (m.role === 'user') return { role: 'user', text: m.content };
-        return { role: 'bot', ...(m.response_json || { status: 'answered', message: m.content }) };
-      });
-      setMessages(formatted);
-      setTutorState('idle');
-    } catch (e) {
-      console.error('Error fetching session messages:', e);
-      setTutorState('idle');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleNewChat = () => {
-    playSound('click');
-    setCurrentSessionId(null);
-    setMessages([]);
-    setTutorState('idle');
-    setIsSpeaking(false);
-  };
-
-  const handleRenameTitle = async (sid, oldTitle) => {
-    const newTitle = prompt('Enter new session title:', oldTitle);
-    if (!newTitle || newTitle === oldTitle) return;
-    await updateSessionTitle(sid, newTitle, session?.access_token);
-    const data = await fetchSessions(session?.access_token);
-    setSessions(data.sessions || []);
-  };
-
-  const handleContextMenu = async (e, sid) => {
-    e.preventDefault();
-    if (window.confirm('Are you sure you want to delete this session?')) {
-      try {
-        await deleteSession(sid, session?.access_token);
-        if (currentSessionId === sid) {
-          handleNewChat();
-        }
-        const data = await fetchSessions(session?.access_token);
-        setSessions(data.sessions || []);
-      } catch (err) {
-        console.error('Error deleting session:', err);
-      }
-    }
-  };
-
-  const handleSend = async (customText, originalVagueQuestion = null) => {
+  const handleSend = (customText, originalVagueQuestion = null) => {
     const textToSend = customText || inputQuery;
-    if (!textToSend.trim() || loading) return;
+    if (!textToSend.trim() || isCurrentGenerating) return;
 
-    playSound('messageSent');
-    const userMsg = { role: 'user', text: textToSend };
-    setMessages((prev) => [...prev, userMsg]);
+    sendMessage({
+      question: textToSend,
+      customSubject: currentSubject,
+      originalVagueQuestion
+    });
     setInputQuery('');
-    setLoading(true);
-    setTutorState('thinking');
-
-    try {
-      const payload = {
-        question: textToSend,
-        student_id: studentId,
-        session_id: currentSessionId,
-        token: session?.access_token,
-        subject: currentSubject
-      };
-      if (originalVagueQuestion) {
-        payload.clarification_context = { original_question: originalVagueQuestion };
-      }
-
-      const data = await explainQuestion(payload);
-
-      // Response arrived: switch to speaking state with speech simulation
-      playSound('responseReady');
-      setTutorState('speaking');
-      setIsSpeaking(true);
-
-      if (data.results && data.results.length > 0 && data.results[0].topic) {
-        setCurrentTopic(data.results[0].topic);
-      }
-
-      setMessages((prev) => [...prev, { role: 'bot', ...data }]);
-
-      if (data.session_id && data.session_id !== currentSessionId) {
-        setCurrentSessionId(data.session_id);
-        const refetched = await fetchSessions(session?.access_token);
-        setSessions(refetched.sessions || []);
-      }
-
-      // Simulate tutor vocalization / presence window
-      setTimeout(() => {
-        setIsSpeaking(false);
-        setTutorState('idle');
-      }, 4000);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'bot',
-          status: 'error',
-          message: err.message || 'Could not connect to Learnify backend. Please check connection.'
-        }
-      ]);
-      setTutorState('idle');
-      setIsSpeaking(false);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -244,7 +83,7 @@ export function ChatPage() {
       }}
     >
       {/* =====================================================================
-          LEFT COLUMN: HISTORY SIDEBAR (Collapsible on Mobile)
+          LEFT COLUMN: HISTORY SIDEBAR
           ===================================================================== */}
       <aside
         style={{
@@ -262,7 +101,7 @@ export function ChatPage() {
           <Button
             variant="orange"
             size="md"
-            onClick={handleNewChat}
+            onClick={newChat}
             icon={Plus}
             style={{ width: '100%' }}
           >
@@ -291,7 +130,10 @@ export function ChatPage() {
             return (
               <div
                 key={s.id}
-                onContextMenu={(e) => handleContextMenu(e, s.id)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  deleteSession(s.id);
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -306,7 +148,7 @@ export function ChatPage() {
                 }}
               >
                 <div
-                  onClick={() => handleSelectSession(s.id)}
+                  onClick={() => selectSession(s.id)}
                   style={{
                     flex: 1,
                     overflow: 'hidden',
@@ -320,21 +162,44 @@ export function ChatPage() {
                   {s.title || 'Untitled Session'}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRenameTitle(s.id, s.title);
-                  }}
-                  style={{
-                    opacity: isCurrent ? 1 : 0.3,
-                    color: 'var(--color-text-muted)',
-                    padding: '0.2rem'
-                  }}
-                  title="Rename"
-                >
-                  <Edit2 size={13} />
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      renameSession(s.id, s.title);
+                    }}
+                    style={{
+                      opacity: isCurrent ? 1 : 0.3,
+                      color: 'var(--color-text-muted)',
+                      padding: '0.2rem',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    title="Rename"
+                  >
+                    <Edit2 size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteSession(s.id);
+                    }}
+                    style={{
+                      opacity: isCurrent ? 0.7 : 0.2,
+                      color: '#dc2626',
+                      padding: '0.2rem',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    title="Delete session"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -354,8 +219,7 @@ export function ChatPage() {
           overflow: 'hidden'
         }}
       >
-
-        {/* PANE 2: INTERACTION PANE (3 MODES + MESSAGES + INPUT) */}
+        {/* INTERACTION PANE */}
         <div
           style={{
             display: 'flex',
@@ -371,11 +235,8 @@ export function ChatPage() {
           <div style={{ padding: '1.25rem 2rem 0.75rem', borderBottom: '1px solid var(--color-border)' }}>
             <ModeSelector
               activeMode={activeMode}
-              onSelectMode={(mode) => {
-                playSound('click');
-                setActiveMode(mode);
-              }}
-              hidePracticeTest={messages.length === 0}
+              onSelectMode={(mode) => setActiveMode(mode)}
+              hidePracticeTest={activeMessages.length === 0}
             />
           </div>
 
@@ -390,16 +251,15 @@ export function ChatPage() {
               scrollBehavior: 'smooth'
             }}
           >
-            {/* MODE 2: PRACTICE TEST (Socratic Progressive Hints) */}
+            {/* MODE 2: PRACTICE TEST */}
             {activeMode === 'practice_test' && (
               <HintSystem onComplete={() => setActiveMode('ask_doubt')} sessionId={currentSessionId} />
             )}
 
-
-            {/* MODE 1: ASK A DOUBT (Main Chat & Q&A) */}
+            {/* MODE 1: ASK A DOUBT */}
             {activeMode === 'ask_doubt' && (
               <>
-                {messages.length === 0 && !loading && (
+                {activeMessages.length === 0 && !isCurrentGenerating && (
                   <div
                     style={{
                       height: '100%',
@@ -451,16 +311,15 @@ export function ChatPage() {
                         }}
                       >
                         {subjects.length === 0 && <option value="">Loading subjects...</option>}
-                        {subjects.map(c => (
+                        {subjects.map((c) => (
                           <option key={c} value={c}>{c}</option>
                         ))}
                       </select>
                     </div>
-
                   </div>
                 )}
 
-                {messages.map((msg, idx) => (
+                {activeMessages.map((msg, idx) => (
                   <MessageBubble
                     key={idx}
                     message={msg}
@@ -468,13 +327,13 @@ export function ChatPage() {
                     studentId={studentId}
                     onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
                     onSelectOption={(option) => {
-                      const originalQ = messages[idx - 1]?.text || messages[idx - 1]?.content;
+                      const originalQ = activeMessages[idx - 1]?.text || activeMessages[idx - 1]?.content;
                       handleSend(option, originalQ);
                     }}
                   />
                 ))}
 
-                {loading && (
+                {isCurrentGenerating && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
                     <div
                       style={{
@@ -491,7 +350,7 @@ export function ChatPage() {
                       <Sparkles size={16} className="animate-float" />
                     </div>
                     <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
-                      Tutor is retrieving syllabus material and grounding explanation...
+                      Tutor is retrieving syllabus material and generating grounded explanation...
                     </span>
                   </div>
                 )}
@@ -525,15 +384,9 @@ export function ChatPage() {
                 <input
                   type="text"
                   value={inputQuery}
-                  onChange={(e) => {
-                    setInputQuery(e.target.value);
-                    if (tutorState === 'idle') setTutorState('listening');
-                  }}
-                  onBlur={() => {
-                    if (tutorState === 'listening') setTutorState('idle');
-                  }}
+                  onChange={(e) => setInputQuery(e.target.value)}
                   placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
-                  disabled={loading}
+                  disabled={isCurrentGenerating}
                   style={{
                     flex: 1,
                     padding: '0.9rem 3.5rem 0.9rem 1.4rem',
@@ -547,17 +400,17 @@ export function ChatPage() {
                 />
                 <button
                   type="submit"
-                  disabled={loading || !inputQuery.trim() || !currentSubject}
+                  disabled={isCurrentGenerating || !inputQuery.trim() || !currentSubject}
                   className="btn-orange btn-icon"
                   style={{
                     position: 'absolute',
                     right: '6px',
                     width: '40px',
                     height: '40px',
-                    opacity: loading || !inputQuery.trim() || !currentSubject ? 0.4 : 1,
-                    cursor: loading || !inputQuery.trim() || !currentSubject ? 'not-allowed' : 'pointer'
+                    opacity: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 0.4 : 1,
+                    cursor: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 'not-allowed' : 'pointer'
                   }}
-                  title={!currentSubject ? "Please select a subject context in the new session screen." : "Send Doubt"}
+                  title={!currentSubject ? 'Please select a subject context in the new session screen.' : 'Send Doubt'}
                   aria-label="Send Doubt"
                 >
                   <Send size={18} />
@@ -570,3 +423,5 @@ export function ChatPage() {
     </div>
   );
 }
+
+export default ChatPage;

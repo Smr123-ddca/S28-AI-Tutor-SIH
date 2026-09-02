@@ -140,6 +140,46 @@ const schemas = {
                 additionalProperties: false
             }
         }
+    },
+    "SUGGEST_GRADE": {
+        gemini: {
+            type: SchemaType.OBJECT,
+            properties: {
+                suggested_grade: { type: SchemaType.NUMBER, description: "Numeric grade score between 0 and 100" },
+                feedback: { type: SchemaType.STRING, description: "Actionable, constructive feedback for the student" },
+                strengths: {
+                    type: SchemaType.ARRAY,
+                    items: { type: SchemaType.STRING },
+                    description: "Key strengths identified in the student's submission"
+                },
+                areas_for_improvement: {
+                    type: SchemaType.ARRAY,
+                    items: { type: SchemaType.STRING },
+                    description: "Specific areas where the student can improve"
+                }
+            },
+            required: ["suggested_grade", "feedback"]
+        },
+        jsonSchema: {
+            name: "suggest_grade_response",
+            schema: {
+                type: "object",
+                properties: {
+                    suggested_grade: { type: "number", description: "Numeric grade score between 0 and 100" },
+                    feedback: { type: "string", description: "Constructive feedback text" },
+                    strengths: {
+                        type: "array",
+                        items: { type: "string" }
+                    },
+                    areas_for_improvement: {
+                        type: "array",
+                        items: { type: "string" }
+                    }
+                },
+                required: ["suggested_grade", "feedback"],
+                additionalProperties: false
+            }
+        }
     }
 };
 

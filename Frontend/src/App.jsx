@@ -6,12 +6,14 @@ import { RequireRole } from './components/auth/RequireRole';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { StudentAssignments } from './pages/StudentAssignments';
 import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { TeacherHome } from './pages/TeacherHome';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
 import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 import { TeacherAnalytics } from './pages/TeacherAnalytics';
+import { TeacherGrading } from './pages/TeacherGrading';
 
 // Shell layout wrapper with session check
 function ProtectedLayout() {
@@ -65,6 +67,7 @@ export function App() {
         {/* Student-Only Routes (Task 3: Redirects Teacher to /teacher) */}
         <Route element={<RequireRole role="student" />}>
           <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/assignments" element={<StudentAssignments />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/library" element={<LibraryPage />} />
         </Route>
@@ -72,6 +75,7 @@ export function App() {
         {/* Teacher-Only Routes */}
         <Route element={<RequireRole role="teacher" />}>
           <Route path="/teacher" element={<TeacherHome />} />
+          <Route path="/teacher/grading" element={<TeacherGrading />} />
           <Route path="/teacher/review" element={<TeacherPrerequisites />} />
           <Route path="/teacher/dashboard" element={<TeacherMisconceptions />} />
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />

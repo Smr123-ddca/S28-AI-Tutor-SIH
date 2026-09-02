@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Award, LayoutDashboard } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { Pill } from '../components/common/Pill';
 import { SegmentedControl } from '../components/common/SegmentedControl';
@@ -79,6 +79,14 @@ export function Home() {
               iconPosition="right"
             >
               Open Learnify Chat
+            </Button>
+            <Button
+              variant="ink"
+              size="lg"
+              onClick={() => navigate('/dashboard')}
+              icon={Award}
+            >
+              My Grades & Coursework
             </Button>
           </div>
         </div>

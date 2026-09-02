@@ -17,6 +17,16 @@ const {
     socraticAttempt,
     revealAnswer
 } = require('../controllers/practice.controller');
+const {
+    getAssignments,
+    createAssignment,
+    getSubmissions,
+    getSubmissionById,
+    submitAssignment,
+    gradeSubmission,
+    suggestAiGrade,
+    getGradingStats
+} = require('../controllers/grading.controller');
 
 const router = express.Router();
 
@@ -70,9 +80,18 @@ router.post('/courses/:courseName/approve', requireRole('teacher'), approveCours
 router.post('/courses/:courseName/revision', requireRole('teacher'), reviseCourse);
 router.post('/courses/:courseName/publish', requireRole('teacher'), publishCourse);
 router.get('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').getPrerequisites);
-router.put('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').updatePrerequisites);
 router.get('/courses/:courseName/artifacts', requireRole('teacher'), getArtifacts);
 router.get('/courses/:courseName/download', require('../controllers/course.controller').downloadCourseFile);
 router.delete('/courses/:courseName', requireRole('teacher'), deleteCourse);
+
+// Assignments & Submissions
+router.get('/assignments', getAssignments);
+router.post('/assignments', requireRole('teacher'), createAssignment);
+router.get('/submissions', getSubmissions);
+router.get('/submissions/:id', getSubmissionById);
+router.post('/submissions', submitAssignment);
+router.put('/submissions/:id/grade', requireRole('teacher'), gradeSubmission);
+router.post('/submissions/:id/ai-suggest', requireRole('teacher'), suggestAiGrade);
+router.get('/grading/stats', requireRole('teacher'), getGradingStats);
 
 module.exports = router;

@@ -30,6 +30,12 @@
     "pdf": "DSA_Code_Reference_Annotated.pdf",
     "chunks": "DSA_Code_Reference_Annotated_chunks.json",
     "prerequisites": "DSA_Code_Reference_Annotated_prerequisites.json",
-    "status": "pending_review"
+    "status": "published",
+    "audit": {
+      "approvedAt": "2026-09-02T01:35:56.768Z",
+      "approvedBy": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4",
+      "publishedAt": "2026-09-02T01:36:01.761Z",
+      "publishedBy": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
+    }
   }
 ]
