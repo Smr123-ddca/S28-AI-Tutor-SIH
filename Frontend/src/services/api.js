@@ -1,5 +1,5 @@
 /**
- * API Service for BODH (AI Tutor)
+ * API Service for Learnify (AI Tutor)
  * Real backend connections mapped to integrate/rag-ingestion backend routes.
  */
 

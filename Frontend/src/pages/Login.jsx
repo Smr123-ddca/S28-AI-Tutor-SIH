@@ -22,7 +22,7 @@ import { Sparkles, KeyRound, CheckCircle2, AlertCircle, GraduationCap } from 'lu
  * The check below against VITE_TEACHER_INVITE_CODE is a placeholder UI gate.
  * =====================================================================
  */
-const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-BODH-2026';
+const EXPECTED_TEACHER_CODE = import.meta.env.VITE_TEACHER_INVITE_CODE || 'TEACH-LEARNIFY-2026';
 
 export function Login() {
   const navigate = useNavigate();
@@ -137,7 +137,7 @@ export function Login() {
             <Sparkles size={26} />
           </div>
           <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-ink)' }}>
-            {isSignUp ? 'Join Study-app' : 'Welcome to BODH'}
+            {isSignUp ? 'Join Study-app' : 'Welcome to Learnify'}
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
             {isSignUp

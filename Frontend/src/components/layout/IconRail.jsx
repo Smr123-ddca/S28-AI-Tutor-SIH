@@ -132,7 +132,7 @@ export function IconRail() {
             color: '#ffffff',
             boxShadow: 'var(--shadow-orange)'
           }}
-          title="BODH | Study-app"
+          title="Learnify | Study-app"
         >
           <Sparkles size={22} />
         </NavLink>
