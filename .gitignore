@@ -5,4 +5,6 @@ package-lock.json
 __pycache__/
 *.pyc
 Backend/src/data/Mock_Course_*
+Backend/src/data/test_mock_*
+Backend/tests/temp_*
 

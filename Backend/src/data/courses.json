@@ -37,5 +37,12 @@
       "publishedAt": "2026-09-02T01:36:01.761Z",
       "publishedBy": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
     }
+  },
+  {
+    "name": "test_mock",
+    "pdf": "test_mock.pdf",
+    "chunks": "test_mock_chunks.json",
+    "prerequisites": "test_mock_prerequisites.json",
+    "status": "pending_review"
   }
 ]

@@ -50,9 +50,10 @@ const schemas = {
                             question: { type: SchemaType.STRING, description: "The practice question text" },
                             concept: { type: SchemaType.STRING, description: "The core concept being tested" },
                             hint_1: { type: SchemaType.STRING, description: "A simple hint to guide the student" },
-                            hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" }
+                            hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" },
+                            expected_answer: { type: SchemaType.STRING, description: "The ground truth factual answer / expected solution" }
                         },
-                        required: ["question", "concept", "hint_1", "hint_2"]
+                        required: ["question", "concept", "hint_1", "hint_2", "expected_answer"]
                     }
                 }
             },
@@ -85,9 +86,10 @@ const schemas = {
                                 question: { type: "string" },
                                 concept: { type: "string" },
                                 hint_1: { type: "string" },
-                                hint_2: { type: "string" }
+                                hint_2: { type: "string" },
+                                expected_answer: { type: "string" }
                             },
-                            required: ["question", "concept", "hint_1", "hint_2"],
+                            required: ["question", "concept", "hint_1", "hint_2", "expected_answer"],
                             additionalProperties: false
                         }
                     }

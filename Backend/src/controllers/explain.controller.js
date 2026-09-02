@@ -137,94 +137,6 @@ async function explain(req, res) {
     };
 
     try {
-        // ============================================================
-        // ⚡ HARDCODED LIGHTNING DEMO OVERRIDE
-        // ============================================================
-        const normalizedQ = question.toLowerCase().trim();
-        // Helper to instantly provision the practice DB natively
-        const insertMockPractice = async (q1, q2) => {
-            const { supabaseAdmin } = require('../lib/supabaseAdmin');
-            if (!supabaseAdmin || !student_id) return;
-            const insertPayload = [
-                {
-                    student_id,
-                    session_id: session_id && session_id !== 'untracked' ? session_id : null,
-                    chunk_id: 'c1',
-                    subject: subject || 'temporary-subject',
-                    question: q1.question,
-                    concept: q1.concept,
-                    hint_1: q1.hint_1,
-                    hint_2: q1.hint_2,
-                    status: 'pending'
-                },
-                {
-                    student_id,
-                    session_id: session_id && session_id !== 'untracked' ? session_id : null,
-                    chunk_id: 'c1',
-                    subject: subject || 'temporary-subject',
-                    question: q2.question,
-                    concept: q2.concept,
-                    hint_1: q2.hint_1,
-                    hint_2: q2.hint_2,
-                    status: 'pending'
-                }
-            ];
-            try {
-                await supabaseAdmin.from('practice_questions').insert(insertPayload);
-            } catch (e) {
-                console.error("Mock DB Insert Fail:", e);
-            }
-        };
-
-        if (normalizedQ.includes("what is an array")) {
-            await Promise.all([
-                new Promise(r => setTimeout(r, 8000)),
-                insertMockPractice(
-                    { question: "What is the primary advantage of storing elements in contiguous memory locations?", concept: "Array Memory Allocation", hint_1: "Think about accessing elements randomly.", hint_2: "How does mathematical indexing work with memory blocks?" },
-                    { question: "Why does standard array indexing begin at 0 instead of 1?", concept: "Zero-Based Indexing", hint_1: "Think about pointers.", hint_2: "The index represents an offset from the fundamental base address." }
-                )
-            ]);
-
-            return await respondAndLog({
-                status: "answered",
-                explanation_segments: [
-                    { text: "An array is a linear data structure that stores a collection of elements of the same data type in contiguous memory locations. ", source_chunk_id: "c1" },
-                    { text: "It allows for efficient random access to elements using an index, starting from 0.", source_chunk_id: "c2" }
-                ],
-                practice: { available: true, count: 2 },
-                results: [{ id: "c1", text: "Arrays store elements sequentially in memory." }, { id: "c2", text: "Zero-based indexing is used across standard array implementation." }]
-            });
-        }
-
-        if (normalizedQ.includes("contiguous elements") || normalizedQ.includes("maximum sum of")) {
-            await Promise.all([
-                new Promise(r => setTimeout(r, 8000)),
-                insertMockPractice(
-                    { question: "In Kadane's algorithm, what do we do when our running contiguous subarray sum becomes strictly negative?", concept: "Subarray Reset Mechanics", hint_1: "Consider what adding a negative sum to a future element does.", hint_2: "We reset the running local sum to 0." },
-                    { question: "Can Kadane's algorithm handle an array consisting entirely of negative integers?", concept: "Edge Case Handling", hint_1: "What does the maximum track if all numbers drop below 0?", hint_2: "Yes, by tracking the maximum element seen so far." }
-                )
-            ]);
-
-            return await respondAndLog({
-                status: "answered",
-                is_coaching: true,
-                explanation_segments: [
-                    { text: "This sounds like the classic Maximum Subarray Problem!", source_chunk_id: "c1" },
-                    { text: "Before I just give you the code for Kadane's algorithm, let's break it down conceptually together. What do you think happens if all the numbers in the array are positive? How would you find the maximum sum in that specific edge case?", source_chunk_id: "c1" }
-                ],
-                practice: { available: true, count: 2 },
-                results: [{ id: "c1", text: "Kadane's algorithm solves maximum subarray problems." }]
-            });
-        }
-
-        if (normalizedQ.includes("charles babbage")) {
-            await new Promise(r => setTimeout(r, 9000));
-            return await respondAndLog({
-                status: "insufficient_evidence",
-                message: "I couldn't find any information about Charles Babbage in your approved syllabus. Want to stick to learning about Data Structures?"
-            });
-        }
-
         // ════════════════════════════════════════════════════════════════
         // STEP 1: Fetch conversation history FIRST (needed for expansion)
         // ════════════════════════════════════════════════════════════════
@@ -521,30 +433,33 @@ Generate exactly 2 short practice questions based on the factual material.
         // STEP 10: Asynchronously Store Practice Questions
         // ════════════════════════════════════════════════════════════════
         let practiceMeta = { available: false, count: 0 };
+        let returnedPracticeQuestions = [];
 
         if (parsedResult.status === 'answered' && classificationResult.classification === 'concept_question' && parsedResult.practice_questions) {
 
             const validQuestions = parsedResult.practice_questions.filter(pq => pq.question && pq.concept && pq.hint_1 && pq.hint_2);
 
-            if (validQuestions.length === 2) {
+            if (validQuestions.length > 0) {
                 practiceMeta.available = true;
-                practiceMeta.count = 2;
+                practiceMeta.count = validQuestions.length;
+                returnedPracticeQuestions = validQuestions;
 
                 const { supabaseAdmin } = require('../lib/supabaseAdmin');
                 const chunkId = contextChunks && contextChunks.length > 0 ? contextChunks[0].id : null;
                 const targetSession = session_id && session_id !== 'untracked' ? session_id : null;
 
-                // Fire and forget so we don't break the main chat response on failure
+                // Store practice questions with expected_answer for accurate validation
                 if (supabaseAdmin) {
                     const insertPayload = validQuestions.map(pq => ({
                         student_id,
                         session_id: targetSession,
                         chunk_id: chunkId,
-                        subject: 'temporary-subject', // per requirements
+                        subject: subject || 'General',
                         question: pq.question,
                         concept: pq.concept,
                         hint_1: pq.hint_1,
                         hint_2: pq.hint_2,
+                        expected_answer: pq.expected_answer || null,
                         status: 'pending'
                     }));
 
@@ -558,7 +473,7 @@ Generate exactly 2 short practice questions based on the factual material.
                     })();
                 }
             } else {
-                console.warn("Invalid practice questions returned. Expected exactly 2, got", validQuestions.length);
+                console.warn("Invalid practice questions returned. Got", validQuestions.length);
             }
         }
 
@@ -569,6 +484,7 @@ Generate exactly 2 short practice questions based on the factual material.
             is_coaching: shouldCoach,
             explanation_segments: parsedResult.explanation_segments || [],
             practice: practiceMeta,
+            practice_questions: returnedPracticeQuestions,
             results: contextChunks
         });
     } catch (error) {

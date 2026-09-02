@@ -1,6 +1,61 @@
 {
   "assignments": [
     {
+      "id": "asg-1788317597481",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T02:53:17.481Z"
+    },
+    {
+      "id": "asg-1788317579105",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T02:52:59.105Z"
+    },
+    {
+      "id": "asg-1788317120229",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T02:45:20.229Z"
+    },
+    {
+      "id": "asg-1788317111690",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T02:45:11.690Z"
+    },
+    {
+      "id": "asg-1788317097259",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T02:44:57.259Z"
+    },
+    {
       "id": "asg-1788316175858",
       "course_name": "DBMS_Code_Reference_Annotated",
       "title": "Transactions & ACID Properties",
@@ -113,6 +168,96 @@
   ],
   "submissions": [
     {
+      "id": "sub-1788317597471",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T02:53:17.471Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
+      "id": "sub-1788317579096",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T02:52:59.096Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
+      "id": "sub-1788317120218",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T02:45:20.218Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
+      "id": "sub-1788317111676",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T02:45:11.676Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
+      "id": "sub-1788317097246",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T02:44:57.246Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
+      "id": "sub-1788316514223",
+      "assignment_id": "asg-1788315216832",
+      "student_id": "54c1e0a8-cb3b-43dc-9c30-c0faf9617db4",
+      "student_name": "Debo",
+      "submission_text": "debo test",
+      "submitted_at": "2026-09-02T02:35:14.223Z",
+      "grade": 55,
+      "feedback": "good",
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "graded",
+      "graded_at": "2026-09-02T02:36:35.842Z",
+      "graded_by": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
+    },
+    {
       "id": "sub-1788316175845",
       "assignment_id": "asg-103",
       "student_id": "student-test-submission-uuid",
@@ -169,7 +314,7 @@
       "ai_suggested_grade": 92,
       "ai_suggested_feedback": "Strong understanding of join algorithms and index traversal mechanics. Covers both nested-loop indexing and hash join space tradeoffs.",
       "status": "graded",
-      "graded_at": "2026-09-01T11:00:00.000Z",
+      "graded_at": "2026-09-02T02:41:57.491Z",
       "graded_by": "9ab265e9-a934-477c-8fc4-9a922e120183"
     },
     {
@@ -184,7 +329,7 @@
       "ai_suggested_grade": 92,
       "ai_suggested_feedback": "Excellent explanation of join algorithms with accurate complexity details.",
       "status": "graded",
-      "graded_at": "2026-09-02T02:29:35.895Z",
+      "graded_at": "2026-09-02T02:53:17.514Z",
       "graded_by": "teacher-123"
     },
     {

@@ -90,11 +90,16 @@ async function createAttempt(req, res) {
     const student_id = req.user.id;
     const { practice_question_id, answer } = req.body;
 
-    if (!practice_question_id || !answer) {
-        return res.status(400).json({ error: "Missing required fields" });
+    if (!practice_question_id || typeof answer !== 'string') {
+        return res.status(400).json({ error: "practice_question_id and answer are required." });
     }
 
-    // Verify ownership of the practice question first
+    const trimmedAnswer = answer.trim();
+    if (!trimmedAnswer || trimmedAnswer.length === 0) {
+        return res.status(400).json({ error: "Answer cannot be empty." });
+    }
+
+    // Verify ownership of the practice question
     const { data: question, error: questionError } = await supabaseAdmin
         .from('practice_questions')
         .select('*')
@@ -117,7 +122,7 @@ async function createAttempt(req, res) {
     }
     const attempt_number = (pastAttempts ? pastAttempts.length : 0) + 1;
 
-    // Retrieve Evidence
+    // Retrieve Source Material for Ground-Truth Verification
     let evidenceText = "No matching source material found.";
     if (question.chunk_id) {
         const allChunks = getChunks();
@@ -133,71 +138,71 @@ async function createAttempt(req, res) {
         if (results && results.length > 0) evidenceText = results[0].text;
     }
 
-    // ⚡ HARDCODED LIGHTNING DEMO OVERRIDE FOR PRACTICE GRADING ⚡
-    if (question.chunk_id === 'c1' || question.question.includes("advantage of storing elements") || question.question.includes("indexing begin at 0") || question.question.includes("Kadane")) {
-        await new Promise(r => setTimeout(r, 1500)); // Brief realistic delay
-        let evalMock = 'correct';
-        if (answer.length < 5) evalMock = 'incorrect';
-
-        const { data: attempt, error: attemptError } = await supabaseAdmin
-            .from('practice_attempts')
-            .insert({
-                practice_question_id,
-                student_id,
-                answer,
-                evaluation: evalMock,
-                attempt_number,
-                hints_used: question.hints_requested || 0,
-                answer_revealed: false
-            })
-            .select()
-            .single();
-
-        let completed = false;
-        if (evalMock === 'correct') {
-            completed = true;
-            await supabaseAdmin.from('practice_questions').update({ status: 'completed', completed_at: new Date().toISOString() }).eq('id', practice_question_id).eq('student_id', student_id);
-        }
-
-        return res.json({
-            success: true,
-            evaluation: evalMock,
-            attempt_number,
-            hints_used: question.hints_requested || 0,
-            completed
-        });
-    }
-
-    // Call Gemini
+    // Direct Normalized Exact Match against Expected Answer (if available)
     let evaluationResult = null;
-    try {
-        const prompt = `
-You are an AI Tutor evaluating a student's answer to a practice question.
-Evaluate the student's answer against the factual Source Material exclusively. 
-Categorize the answer as exactly 'correct', 'partial', or 'incorrect'.
-Do not penalize exact wording if the core concept is understood.
+    const normalizedStudentAnswer = trimmedAnswer.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const expectedAnswer = question.expected_answer ? question.expected_answer.trim() : null;
+    const normalizedExpected = expectedAnswer ? expectedAnswer.toLowerCase().replace(/[^a-z0-9]/g, '') : null;
 
-Source Material:
-${evidenceText}
+    if (normalizedExpected && normalizedStudentAnswer.length > 0 && normalizedStudentAnswer === normalizedExpected) {
+        evaluationResult = {
+            evaluation: 'correct',
+            reason: 'Exact match with expected factual answer.'
+        };
+    } else if (trimmedAnswer.length < 2) {
+        // Immediate reject for single character / empty gibberish
+        evaluationResult = {
+            evaluation: 'incorrect',
+            reason: 'Answer is too short or incomplete.'
+        };
+    } else {
+        // Strict AI Evaluation
+        try {
+            const prompt = `
+You are an AI Tutor evaluating a student's answer to a practice question.
+Evaluate whether the student's answer is factually correct and accurately answers the question based on the Source Material and Expected Concept.
 
 Question:
 ${question.question}
 
-Core Concept:
-${question.concept}
+Core Concept Tested:
+${question.concept || 'General'}
 
-Student's Answer:
-${answer}
+${expectedAnswer ? `Expected Ground-Truth Key Facts / Solution:\n${expectedAnswer}\n` : ''}
+Source Material:
+${evidenceText}
+
+Student's Submitted Answer:
+"${trimmedAnswer}"
+
+Evaluation Rules:
+1. Categorize as 'correct' ONLY if the student accurately answers the question and demonstrates correct understanding of the core concept.
+2. Categorize as 'partial' if the student is on the right track but misses a key detail or gives an incomplete answer.
+3. Categorize as 'incorrect' if the answer is factually wrong, off-topic, nonsense/gibberish, contradictory, or fails to answer the question.
+4. NEVER mark an answer as 'correct' if it is incorrect, evasive, or unverified.
 `;
-        const text = await generateWithFallback(prompt, "EVALUATE");
-        evaluationResult = JSON.parse(text);
+            const text = await generateWithFallback(prompt, "EVALUATE");
+            const parsed = JSON.parse(text);
 
-        if (!['correct', 'partial', 'incorrect'].includes(evaluationResult.evaluation)) {
-            evaluationResult.evaluation = 'incorrect';
+            if (parsed && ['correct', 'partial', 'incorrect'].includes(parsed.evaluation)) {
+                evaluationResult = {
+                    evaluation: parsed.evaluation,
+                    reason: parsed.reason || ''
+                };
+            } else {
+                evaluationResult = {
+                    evaluation: 'incorrect',
+                    reason: 'Answer could not be confirmed as correct against source materials.'
+                };
+            }
+        } catch (err) {
+            console.error("Evaluation LLM error:", err);
+            // Defensively fallback to incorrect - NEVER default to correct on failure!
+            evaluationResult = {
+                evaluation: 'incorrect',
+                reason: 'Unable to verify answer at this time. Please check your solution.'
+            };
         }
-    } catch (err) {
-        console.error("Gemini evaluation error:", err);
-        return res.status(500).json({ error: "Failed to evaluate answer. Please try again." });
     }
 
     // Insert the attempt securely
@@ -206,10 +211,11 @@ ${answer}
         .insert({
             practice_question_id,
             student_id,
-            answer,
+            answer: trimmedAnswer,
             evaluation: evaluationResult.evaluation,
             attempt_number,
             hints_used: question.hints_requested || 0,
+            tutor_response: evaluationResult.reason,
             answer_revealed: false
         })
         .select()
@@ -229,11 +235,11 @@ ${answer}
             .eq('id', practice_question_id)
             .eq('student_id', student_id);
     }
-    // Do NOT move it backwards or flag it as anything other than pending per requirement.
 
     return res.json({
         success: true,
         evaluation: evaluationResult.evaluation,
+        reason: evaluationResult.reason,
         attempt_number,
         hints_used: question.hints_requested || 0,
         completed
@@ -389,14 +395,21 @@ async function revealAnswer(req, res) {
         if (chunk) evidenceText = chunk.text;
     }
 
-    let answerText = "";
-    try {
-        const prompt = `Provide a concise, direct answer and brief explanation to the following question, relying ONLY on the Source Material provided.\n\nSource: ${evidenceText}\n\nQuestion: ${question.question}`;
-        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
-        const result = await model.generateContent(prompt);
-        answerText = await result.response.text();
-    } catch (err) {
-        return res.status(500).json({ error: "Failed to generate answer" });
+    let answerText = question.expected_answer || "";
+    if (!answerText) {
+        try {
+            const prompt = `Provide a concise, direct answer and brief explanation to the following question, relying ONLY on the Source Material provided.\n\nSource: ${evidenceText}\n\nQuestion: ${question.question}`;
+            answerText = await generateWithFallback(prompt, "EVALUATE");
+            try {
+                const parsed = JSON.parse(answerText);
+                if (parsed && parsed.reason) answerText = parsed.reason;
+            } catch (e) {
+                // Keep raw text if not JSON
+            }
+        } catch (err) {
+            console.error("Failed to generate revealed answer:", err);
+            answerText = "Refer to the course study materials for this concept.";
+        }
     }
 
     await supabaseAdmin.from('practice_questions').update({ answer_revealed: true }).eq('id', id);
