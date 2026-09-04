@@ -34,6 +34,133 @@ async function createQuestion(req, res) {
     return res.json({ question: data });
 }
 
+async function generateTeacherPractice(req, res) {
+    const { subject, concept, student_id, count = 3, difficulty = 'medium' } = req.body || {};
+
+    if (!subject || !concept) {
+        return res.status(400).json({ error: 'Subject and concept are required.' });
+    }
+
+    const targetStudentId = student_id || req.user.id;
+    const questionCount = Math.min(5, Math.max(1, Number(count) || 3));
+    const difficultyLabel = ['easy', 'medium', 'hard'].includes((difficulty || '').toLowerCase())
+        ? (difficulty || 'medium').toLowerCase()
+        : 'medium';
+
+    const prompt = `
+You are generating targeted practice questions for a teacher's intervention workflow in Learnify Tutor.
+Generate ${questionCount} practice questions for student support.
+
+Requirements:
+- Subject: ${subject}
+- Weak concept: ${concept}
+- Difficulty: ${difficultyLabel}
+- Focus on the exact concept and common misconceptions.
+- Each question should be grounded in the existing course content and not generic trivia.
+- Return valid JSON only with a top-level object containing a "questions" array.
+- Each question object must include exactly:
+  question, concept, hint_1, hint_2, expected_answer, difficulty
+- Keep questions realistic for a ${difficultyLabel} level, and ensure they are targeted to the weak concept.
+- Do not include markdown, commentary, or extra keys.
+`;
+
+    try {
+        const raw = await generateWithFallback(prompt, 'TARGETED_PRACTICE');
+        const parsed = JSON.parse(raw);
+        const questionList = Array.isArray(parsed?.questions) ? parsed.questions : [];
+
+        if (!questionList.length) {
+            return res.status(422).json({ error: 'The model did not return valid practice questions.' });
+        }
+
+        const sanitized = questionList.slice(0, questionCount).map((q, index) => ({
+            id: `preview-${Date.now()}-${index}`,
+            question: String(q.question || '').trim(),
+            concept: String(q.concept || concept).trim(),
+            hint_1: String(q.hint_1 || '').trim(),
+            hint_2: String(q.hint_2 || '').trim(),
+            expected_answer: String(q.expected_answer || '').trim(),
+            difficulty: ['easy', 'medium', 'hard'].includes(String(q.difficulty || '').toLowerCase())
+                ? String(q.difficulty).toLowerCase()
+                : difficultyLabel
+        })).filter(q => q.question && q.hint_1 && q.hint_2 && q.expected_answer);
+
+        if (!sanitized.length) {
+            return res.status(422).json({ error: 'Generated questions were incomplete or invalid.' });
+        }
+
+        return res.json({
+            success: true,
+            student_id: targetStudentId,
+            subject,
+            concept,
+            questions: sanitized
+        });
+    } catch (err) {
+        console.error('Teacher targeted practice generation failed:', err);
+        return res.status(500).json({
+            error: 'Unable to generate targeted practice questions right now. Please try again.',
+            details: err.message || 'Generation failed'
+        });
+    }
+}
+
+async function assignTeacherPractice(req, res) {
+    const { student_id, subject, concept, questions = [] } = req.body || {};
+
+    if (!subject || !concept) {
+        return res.status(400).json({ error: 'Subject and concept are required.' });
+    }
+
+    const targetStudentId = student_id || req.user.id;
+    const validQuestions = Array.isArray(questions) ? questions : [];
+
+    if (!validQuestions.length) {
+        return res.status(400).json({ error: 'No questions were supplied for assignment.' });
+    }
+
+    const payload = validQuestions.map((q, index) => ({
+        student_id: targetStudentId,
+        session_id: null,
+        chunk_id: null,
+        subject,
+        concept: String(q.concept || concept).trim(),
+        question: String(q.question || '').trim(),
+        hint_1: String(q.hint_1 || '').trim(),
+        hint_2: String(q.hint_2 || '').trim(),
+        expected_answer: String(q.expected_answer || '').trim(),
+        status: 'pending',
+        hints_requested: 0
+    })).filter(q => q.question && q.hint_1 && q.hint_2 && q.expected_answer);
+
+    if (!payload.length) {
+        return res.status(422).json({ error: 'No valid question rows could be assigned.' });
+    }
+
+    try {
+        const { data, error } = await supabaseAdmin
+            .from('practice_questions')
+            .insert(payload)
+            .select();
+
+        if (error) {
+            return res.status(500).json({ error: error.message || 'Failed to assign practice.' });
+        }
+
+        return res.json({
+            success: true,
+            assigned: data?.length || payload.length,
+            student_id: targetStudentId,
+            subject,
+            concept,
+            questions: data || payload
+        });
+    } catch (err) {
+        console.error('Teacher targeted practice assignment failed:', err);
+        return res.status(500).json({ error: 'Failed to save the targeted practice assignment.' });
+    }
+}
+
 async function getQuestions(req, res) {
     const student_id = req.user.id;
     const session_id = req.query.session_id;
@@ -433,6 +560,8 @@ async function revealAnswer(req, res) {
 
 module.exports = {
     createQuestion,
+    generateTeacherPractice,
+    assignTeacherPractice,
     getQuestions,
     getQuestionById,
     createAttempt,

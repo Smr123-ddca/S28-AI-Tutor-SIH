@@ -255,6 +255,38 @@ export async function fetchClassAnalytics(subject, token) {
   return await res.json();
 }
 
+export async function generateTeacherPracticeQuestions({ subject, concept, student_id, count, difficulty }, token) {
+  const res = await fetch('/api/teacher/practice/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ subject, concept, student_id, count, difficulty })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to generate targeted practice');
+  }
+  return await res.json();
+}
+
+export async function assignTeacherPracticeQuestions({ student_id, subject, concept, questions }, token) {
+  const res = await fetch('/api/teacher/practice/assign', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ student_id, subject, concept, questions })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to assign targeted practice');
+  }
+  return await res.json();
+}
+
 export async function fetchAssignments({ course_name, token } = {}) {
   const url = course_name ? `/api/assignments?course_name=${encodeURIComponent(course_name)}` : '/api/assignments';
   const res = await fetch(url, {

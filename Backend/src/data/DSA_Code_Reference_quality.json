@@ -1,0 +1,689 @@
+{
+  "course": "DSA_Code_Reference",
+  "source_chunks": 67,
+  "evaluated_chunks": 67,
+  "included_chunks": 66,
+  "excluded_chunks": 1,
+  "chunks": [
+    {
+      "chunk_id": "chunk_1",
+      "classification": "SUMMARY",
+      "educational_value": 0.5,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.1,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": false,
+      "reason": "A meta-summary describing the scope of the entire course; it lists topics but contains no actual concept definitions, procedures, or code to extract."
+    },
+    {
+      "chunk_id": "chunk_2",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Demonstrates array rotation via slicing with complexity notes; introduces the slicing technique as a reusable primitive."
+    },
+    {
+      "chunk_id": "chunk_3",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Shows the two-pointer technique for in-place array reversal; fundamental pattern used in many subsequent algorithms."
+    },
+    {
+      "chunk_id": "chunk_4",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Kadane's algorithm for maximum subarray sum; introduces dynamic programming thinking and greedy choice property."
+    },
+    {
+      "chunk_id": "chunk_5",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Two-pointer technique for pair sum in sorted arrays; a key pattern prerequisite for understanding more complex search problems."
+    },
+    {
+      "chunk_id": "chunk_6",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Sliding window technique for longest unique substring; introduces hash map tracking and window boundary management."
+    },
+    {
+      "chunk_id": "chunk_7",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Two-pointer palindrome check; simple application of pointer manipulation relevant to string algorithms."
+    },
+    {
+      "chunk_id": "chunk_8",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Singly linked list implementation; foundational data structure concept prerequisite for all linked list problems."
+    },
+    {
+      "chunk_id": "chunk_9",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Iterative linked list reversal via pointer rewiring; a classic and frequently tested algorithmic pattern."
+    },
+    {
+      "chunk_id": "chunk_10",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Floyd's cycle detection algorithm using slow/fast pointers; essential concept for linked list and graph cycle problems."
+    },
+    {
+      "chunk_id": "chunk_11",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Merge two sorted linked lists; demonstrates the merge subroutine fundamental to merge sort and external sorting."
+    },
+    {
+      "chunk_id": "chunk_12",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Doubly linked list implementation; extends the linked list concept with bidirectional traversal capability."
+    },
+    {
+      "chunk_id": "chunk_13",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Stack implementation using a dynamic array; foundational LIFO structure prerequisite for all stack-based applications."
+    },
+    {
+      "chunk_id": "chunk_14",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Balanced bracket validation; classic stack application demonstrating the LIFO matching principle."
+    },
+    {
+      "chunk_id": "chunk_15",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Postfix expression evaluation using a stack; demonstrates stack application in arithmetic expression processing."
+    },
+    {
+      "chunk_id": "chunk_16",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Queue implementation using deque; introduces FIFO structure and the efficiency benefit of deque over list pop(0)."
+    },
+    {
+      "chunk_id": "chunk_17",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Circular queue with fixed capacity; demonstrates ring-buffer indexing and overflow/underflow handling."
+    },
+    {
+      "chunk_id": "chunk_18",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "MinStack with auxiliary stack; demonstrates the design pattern of maintaining extra state alongside a primary structure."
+    },
+    {
+      "chunk_id": "chunk_19",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Recursive factorial; textbook introduction to recursion concepts, base cases, and recursive decomposition."
+    },
+    {
+      "chunk_id": "chunk_20",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Naive recursive Fibonacci; demonstrates exponential time complexity and motivates the need for memoization and DP."
+    },
+    {
+      "chunk_id": "chunk_21",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Fast exponentiation via recursive halving; introduces the divide-and-conquer paradigm with logarithmic complexity."
+    },
+    {
+      "chunk_id": "chunk_22",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Tower of Hanoi recursive solution; classic recursion exercise demonstrating recursive decomposition and backtracking patterns."
+    },
+    {
+      "chunk_id": "chunk_23",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.4,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Linear search; fundamental searching algorithm serving as a baseline for understanding more efficient search methods."
+    },
+    {
+      "chunk_id": "chunk_24",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Binary search (iterative); a cornerstone algorithm prerequisite for numerous advanced problems including bounds and searches."
+    },
+    {
+      "chunk_id": "chunk_25",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Binary search (recursive variant); reinforces the same concept via recursive expression, aiding conceptual understanding."
+    },
+    {
+      "chunk_id": "chunk_26",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Finding first and last positions via dual binary searches; extends binary search to bound-finding, a key advanced technique."
+    },
+    {
+      "chunk_id": "chunk_27",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Bubble sort with early termination; introduces sorting as a fundamental operation and the concept of adaptive sorting."
+    },
+    {
+      "chunk_id": "chunk_28",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Selection sort; demonstrates the selection paradigm and in-place sorting with quadratic complexity."
+    },
+    {
+      "chunk_id": "chunk_29",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Insertion sort; builds the sorted array incrementally, relevant for understanding nearly-sorted data and shell sort."
+    },
+    {
+      "chunk_id": "chunk_30",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Merge sort; classic divide-and-conquer sorting with guaranteed O(n log n) performance and the merge subroutine."
+    },
+    {
+      "chunk_id": "chunk_31",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Quick sort with Lomuto partition; demonstrates in-place divide-and-conquer, pivot selection, and average vs worst-case analysis."
+    },
+    {
+      "chunk_id": "chunk_32",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Heap sort using max-heap; introduces heap data structure and the heapify operation, bridging sorting and priority queues."
+    },
+    {
+      "chunk_id": "chunk_33",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Counting sort; a non-comparison sort demonstrating linear-time sorting under specific constraints (small integer range)."
+    },
+    {
+      "chunk_id": "chunk_34",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Hash table with chaining collision resolution; foundational hash map concept prerequisite for hashing-based algorithms."
+    },
+    {
+      "chunk_id": "chunk_35",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Two Sum using hash map; quintessential hash table application demonstrating the complement-finding pattern."
+    },
+    {
+      "chunk_id": "chunk_36",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Group anagrams using sorted-key hashing; demonstrates creative hash key design and grouping patterns."
+    },
+    {
+      "chunk_id": "chunk_37",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "First unique character using frequency counting; combines hash map counting with sequential scanning."
+    },
+    {
+      "chunk_id": "chunk_38",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Binary search tree with insert and search; foundational tree structure enforcing the BST ordering invariant."
+    },
+    {
+      "chunk_id": "chunk_39",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Three DFS traversal orders (inorder, preorder, postorder) for trees; fundamental tree traversal concepts essential for tree algorithms."
+    },
+    {
+      "chunk_id": "chunk_40",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Level-order traversal (BFS) on trees; introduces breadth-first exploration using a queue for tree processing."
+    },
+    {
+      "chunk_id": "chunk_41",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Maximum depth of binary tree via recursion; combines tree traversal with recursive depth computation."
+    },
+    {
+      "chunk_id": "chunk_42",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Validate BST using min/max range constraints; demonstrates the range-propagation technique essential for tree validation."
+    },
+    {
+      "chunk_id": "chunk_43",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Lowest common ancestor in BST using ordering; leverages BST properties for efficient LCA without extra storage."
+    },
+    {
+      "chunk_id": "chunk_44",
+      "classification": "CODE",
+      "educational_value": 0.6,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Heap operations using Python's heapq; practical introduction to priority queues and heap data structure usage."
+    },
+    {
+      "chunk_id": "chunk_45",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Kth largest element using min-heap of size k; demonstrates the heap selection pattern for top-K problems."
+    },
+    {
+      "chunk_id": "chunk_46",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Merge K sorted lists using a min-heap; combines heap usage with multi-way merging, a critical advanced technique."
+    },
+    {
+      "chunk_id": "chunk_47",
+      "classification": "CODE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Graph representation via adjacency list; foundational graph data structure prerequisite for all graph algorithms."
+    },
+    {
+      "chunk_id": "chunk_48",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Breadth-first search on graphs; fundamental graph traversal algorithm for shortest paths and connectivity."
+    },
+    {
+      "chunk_id": "chunk_49",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Depth-first search on graphs; foundational traversal method for connectivity, cycles, and topological sorting."
+    },
+    {
+      "chunk_id": "chunk_50",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Directed graph cycle detection using DFS with recursion stack marker; essential concept for dependency analysis and topological sort."
+    },
+    {
+      "chunk_id": "chunk_51",
+      "classification": "PROCEDURE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Describes and implements topological sort for DAGs using in-degree counting."
+    },
+    {
+      "chunk_id": "chunk_52",
+      "classification": "PROCEDURE",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Dijkstra's algorithm for shortest paths with non-negative weights using a min-heap."
+    },
+    {
+      "chunk_id": "chunk_53",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Counts connected components in an undirected graph using DFS traversal."
+    },
+    {
+      "chunk_id": "chunk_54",
+      "classification": "EXPLANATION",
+      "educational_value": 0.93,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.88,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Demonstrates top-down memoized DP for Fibonacci, highlighting caching benefits over naive recursion."
+    },
+    {
+      "chunk_id": "chunk_55",
+      "classification": "EXPLANATION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.88,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Shows space-optimized iterative DP for Fibonacci using two rolling variables."
+    },
+    {
+      "chunk_id": "chunk_56",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements 0/1 knapsack problem solution using dynamic programming."
+    },
+    {
+      "chunk_id": "chunk_57",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Computes longest common subsequence length between two strings using DP."
+    },
+    {
+      "chunk_id": "chunk_58",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements O(n log n) longest increasing subsequence using patience sorting and binary search."
+    },
+    {
+      "chunk_id": "chunk_59",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Solves the minimum coin change problem (unbounded knapsack variant) using 1D DP."
+    },
+    {
+      "chunk_id": "chunk_60",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Computes Levenshtein edit distance between two strings using DP."
+    },
+    {
+      "chunk_id": "chunk_61",
+      "classification": "PROCEDURE",
+      "educational_value": 0.88,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Greedy activity selection scheduling by earliest finish time."
+    },
+    {
+      "chunk_id": "chunk_62",
+      "classification": "PROCEDURE",
+      "educational_value": 0.85,
+      "conceptual_density": 0.75,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Generates all permutations of a list via backtracking and swapping."
+    },
+    {
+      "chunk_id": "chunk_63",
+      "classification": "PROCEDURE",
+      "educational_value": 0.85,
+      "conceptual_density": 0.75,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Solves N-queens problem using backtracking with constraint checking."
+    },
+    {
+      "chunk_id": "chunk_64",
+      "classification": "PROCEDURE",
+      "educational_value": 0.85,
+      "conceptual_density": 0.75,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Generates power set of a set using backtracking."
+    },
+    {
+      "chunk_id": "chunk_65",
+      "classification": "EXPLANATION",
+      "educational_value": 0.8,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Introduces Trie data structure for prefix-based string storage and autocomplete; demonstrates insert, search, and starts_with methods."
+    },
+    {
+      "chunk_id": "chunk_66",
+      "classification": "EXPLANATION",
+      "educational_value": 0.93,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.92,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Union-Find (Disjoint Set) with path compression and union by rank for MST and cycle detection."
+    },
+    {
+      "chunk_id": "chunk_67",
+      "classification": "PROCEDURE",
+      "educational_value": 0.93,
+      "conceptual_density": 0.88,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Kruskal's minimum spanning tree algorithm using edge sorting and Union-Find cycle detection."
+    }
+  ],
+  "classification_distribution": {
+    "SUMMARY": 1,
+    "CODE": 49,
+    "PROCEDURE": 13,
+    "EXPLANATION": 4
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": []
+  }
+}

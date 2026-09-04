@@ -4,6 +4,7 @@ import { Pill } from '../components/common/Pill';
 import { StatCard } from '../components/cards/StatCard';
 import { fetchLibraryDocuments } from '../services/api';
 import { fetchClassAnalytics } from '../services/api';
+import { generateTeacherPracticeQuestions, assignTeacherPracticeQuestions } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { TeacherCopilotChat } from '../components/tutor/TeacherCopilotChat';
 
@@ -87,7 +88,7 @@ function AttentionBadge({ level }) {
 // =====================================================================
 // Student Attention Card
 // =====================================================================
-function StudentAttentionCard({ student }) {
+function StudentAttentionCard({ student, onAssignPractice }) {
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -166,6 +167,24 @@ function StudentAttentionCard({ student }) {
                             </div>
                         </div>
                     ))}
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                            type="button"
+                            onClick={() => onAssignPractice?.(student)}
+                            style={{
+                                border: 'none',
+                                backgroundColor: 'var(--color-purple)',
+                                color: '#fff',
+                                padding: '0.7rem 1rem',
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                                fontWeight: 700,
+                                fontSize: '0.82rem'
+                            }}
+                        >
+                            Assign Targeted Practice
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
@@ -186,6 +205,214 @@ function buildReasonText(sig) {
     return parts.length > 0 ? parts.join(' and ') + '.' : 'May benefit from additional instructor support.';
 }
 
+function PracticeGeneratorModal({ open, onClose, selectedSubject, student, subjects, token, onAssigned }) {
+    const defaultConcept = student?.signals?.[0]?.concept || '';
+    const [form, setForm] = useState({
+        subject: selectedSubject || '',
+        concept: defaultConcept,
+        count: 3,
+        difficulty: 'medium',
+        student_id: student?.student_id || ''
+    });
+    const [questions, setQuestions] = useState([]);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isAssigning, setIsAssigning] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    useEffect(() => {
+        if (open) {
+            const nextConcept = student?.signals?.[0]?.concept || '';
+            setForm({
+                subject: selectedSubject || '',
+                concept: nextConcept,
+                count: 3,
+                difficulty: 'medium',
+                student_id: student?.student_id || ''
+            });
+            setQuestions([]);
+            setError('');
+            setSuccess('');
+        }
+    }, [open, selectedSubject, student]);
+
+    if (!open) return null;
+
+    const handleGenerate = async () => {
+        if (!form.subject || !form.concept) {
+            setError('Please choose a subject and concept before generating practice.');
+            return;
+        }
+
+        setIsGenerating(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const res = await generateTeacherPracticeQuestions({
+                subject: form.subject,
+                concept: form.concept,
+                student_id: form.student_id,
+                count: Number(form.count) || 3,
+                difficulty: form.difficulty
+            }, token);
+            setQuestions(res.questions || []);
+            if (!res.questions?.length) {
+                setError('No practice questions were returned for this concept.');
+            }
+        } catch (err) {
+            setError(err.message || 'Failed to generate targeted practice.');
+            setQuestions([]);
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    const handleAssign = async () => {
+        if (!form.student_id || !questions.length) {
+            setError('Generate questions before assigning the practice set.');
+            return;
+        }
+
+        setIsAssigning(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const res = await assignTeacherPracticeQuestions({
+                student_id: form.student_id,
+                subject: form.subject,
+                concept: form.concept,
+                questions
+            }, token);
+            setSuccess(`Assigned ${res.assigned || questions.length} targeted questions to ${student?.name || 'the student'}.`);
+            if (onAssigned) onAssigned();
+        } catch (err) {
+            setError(err.message || 'Failed to assign the targeted practice set.');
+        } finally {
+            setIsAssigning(false);
+        }
+    };
+
+    const removeQuestion = (index) => {
+        setQuestions(prev => prev.filter((_, i) => i !== index));
+    };
+
+    return (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(15, 23, 42, 0.58)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
+            <div style={{ width: 'min(920px, 100%)', maxHeight: '90vh', overflowY: 'auto', backgroundColor: '#fff', borderRadius: '20px', boxShadow: '0 20px 50px rgba(15, 23, 42, 0.18)', padding: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div>
+                        <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>
+                            Targeted Support
+                        </div>
+                        <h3 style={{ margin: '0.2rem 0 0', fontSize: '1.6rem', color: 'var(--color-ink)' }}>
+                            Assign targeted practice
+                        </h3>
+                    </div>
+                    <button type="button" onClick={onClose} style={{ border: 'none', background: 'var(--color-offwhite)', width: '36px', height: '36px', borderRadius: '50%', fontSize: '1.2rem', cursor: 'pointer' }}>×</button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontWeight: 700, color: 'var(--color-ink)', fontSize: '0.82rem' }}>
+                        Student
+                        <input
+                            type="text"
+                            value={student?.name || 'Selected student'}
+                            readOnly
+                            style={{ padding: '0.75rem 0.9rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#f8fafc' }}
+                        />
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontWeight: 700, color: 'var(--color-ink)', fontSize: '0.82rem' }}>
+                        Subject
+                        <select value={form.subject} onChange={e => setForm(prev => ({ ...prev, subject: e.target.value }))} style={{ padding: '0.75rem 0.9rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#fff' }}>
+                            {subjects.map(subject => (
+                                <option key={subject} value={subject}>{subject.replace(/_/g, ' ')}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontWeight: 700, color: 'var(--color-ink)', fontSize: '0.82rem' }}>
+                        Number of questions
+                        <select value={form.count} onChange={e => setForm(prev => ({ ...prev, count: e.target.value }))} style={{ padding: '0.75rem 0.9rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#fff' }}>
+                            {[1, 2, 3, 4, 5].map(count => <option key={count} value={count}>{count}</option>)}
+                        </select>
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontWeight: 700, color: 'var(--color-ink)', fontSize: '0.82rem' }}>
+                        Difficulty
+                        <select value={form.difficulty} onChange={e => setForm(prev => ({ ...prev, difficulty: e.target.value }))} style={{ padding: '0.75rem 0.9rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#fff' }}>
+                            <option value="easy">Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </label>
+                </div>
+
+                <label style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontWeight: 700, color: 'var(--color-ink)', fontSize: '0.82rem', marginBottom: '1rem' }}>
+                    Weak concept to target
+                    <input
+                        type="text"
+                        value={form.concept}
+                        onChange={e => setForm(prev => ({ ...prev, concept: e.target.value }))}
+                        style={{ padding: '0.8rem 0.9rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#fff' }}
+                    />
+                </label>
+
+                {error && (
+                    <div style={{ padding: '0.8rem 1rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', borderRadius: '10px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                        {error}
+                    </div>
+                )}
+
+                {success && (
+                    <div style={{ padding: '0.8rem 1rem', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', color: '#166534', borderRadius: '10px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+                        {success}
+                    </div>
+                )}
+
+                <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                    <button type="button" onClick={handleGenerate} disabled={isGenerating || isAssigning} style={{ padding: '0.75rem 1rem', borderRadius: '10px', border: 'none', backgroundColor: 'var(--color-orange)', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>
+                        {isGenerating ? 'Generating…' : 'Generate'}
+                    </button>
+                    <button type="button" onClick={onClose} style={{ padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid var(--color-border)', backgroundColor: '#fff', color: 'var(--color-ink)', cursor: 'pointer', fontWeight: 700 }}>
+                        Cancel
+                    </button>
+                </div>
+
+                {questions.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h4 style={{ margin: 0, fontSize: '1rem', color: 'var(--color-ink)' }}>Review generated questions</h4>
+                            <button type="button" onClick={handleAssign} disabled={isAssigning} style={{ padding: '0.7rem 1rem', borderRadius: '10px', border: 'none', backgroundColor: '#16a34a', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>
+                                {isAssigning ? 'Assigning…' : 'Assign practice'}
+                            </button>
+                        </div>
+
+                        {questions.map((question, index) => (
+                            <div key={`${question.question}-${index}`} style={{ border: '1px solid var(--color-border)', borderRadius: '12px', padding: '1rem', backgroundColor: 'var(--color-offwhite)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                    <div style={{ fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.5rem' }}>
+                                        Q{index + 1}. {question.question}
+                                    </div>
+                                    <button type="button" onClick={() => removeQuestion(index)} style={{ border: 'none', background: 'transparent', color: '#991b1b', cursor: 'pointer', fontWeight: 700 }}>Remove</button>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
+                                    <div><b>Concept:</b> {question.concept}</div>
+                                    <div><b>Difficulty:</b> {question.difficulty}</div>
+                                </div>
+                                <div style={{ marginTop: '0.75rem', display: 'grid', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
+                                    <div><b>Hint 1:</b> {question.hint_1}</div>
+                                    <div><b>Hint 2:</b> {question.hint_2}</div>
+                                    <div><b>Expected answer:</b> {question.expected_answer}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
+
 // =====================================================================
 // Main TeacherAnalytics Page
 // =====================================================================
@@ -197,6 +424,8 @@ export function TeacherAnalytics() {
     const [loading, setLoading] = useState(false);
     const [loadingSubjects, setLoadingSubjects] = useState(true);
     const [error, setError] = useState(null);
+    const [practiceModalOpen, setPracticeModalOpen] = useState(false);
+    const [practiceTargetStudent, setPracticeTargetStudent] = useState(null);
 
     // Load available subjects
     useEffect(() => {
@@ -237,6 +466,22 @@ export function TeacherAnalytics() {
         }
         loadAnalytics();
     }, [selectedSubject, session?.access_token]);
+
+    const openPracticeGenerator = (student) => {
+        const weakestSignal = (student?.signals || []).reduce((best, current) => {
+            if (!best) return current;
+            if ((current.accuracy ?? 100) < (best.accuracy ?? 100)) return current;
+            if ((current.repeated_mistakes ?? 0) > (best.repeated_mistakes ?? 0)) return current;
+            return best;
+        }, null);
+
+        setPracticeTargetStudent({
+            ...student,
+            signals: student?.signals || [],
+            weakest_signal: weakestSignal || student?.signals?.[0] || null
+        });
+        setPracticeModalOpen(true);
+    };
 
     // Compute summary strip
     const summaryStats = useMemo(() => {
@@ -312,6 +557,18 @@ export function TeacherAnalytics() {
             {/* ── Analytics Content ── */}
             {analytics && !loading && (
                 <>
+                    <PracticeGeneratorModal
+                        open={practiceModalOpen}
+                        onClose={() => setPracticeModalOpen(false)}
+                        selectedSubject={selectedSubject}
+                        student={practiceTargetStudent}
+                        subjects={subjects}
+                        token={session?.access_token}
+                        onAssigned={() => {
+                            setPracticeModalOpen(false);
+                            setPracticeTargetStudent(null);
+                        }}
+                    />
                     {/* ── Summary Stats ── */}
                     <section style={{
                         display: 'grid',
@@ -495,7 +752,7 @@ export function TeacherAnalytics() {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                     {analytics.students_needing_attention.map((student, idx) => (
-                                        <StudentAttentionCard key={idx} student={student} />
+                                        <StudentAttentionCard key={idx} student={student} onAssignPractice={openPracticeGenerator} />
                                     ))}
                                 </div>
                             </>

@@ -202,6 +202,55 @@ const schemas = {
                 additionalProperties: false
             }
         }
+    },
+    "TARGETED_PRACTICE": {
+        gemini: {
+            type: SchemaType.OBJECT,
+            properties: {
+                questions: {
+                    type: SchemaType.ARRAY,
+                    items: {
+                        type: SchemaType.OBJECT,
+                        properties: {
+                            question: { type: SchemaType.STRING, description: "The prompt for the student practice question" },
+                            concept: { type: SchemaType.STRING, description: "The concept this question is targeting" },
+                            hint_1: { type: SchemaType.STRING, description: "A short hint that nudges the student without giving the answer" },
+                            hint_2: { type: SchemaType.STRING, description: "A second hint for deeper guidance" },
+                            expected_answer: { type: SchemaType.STRING, description: "The correct answer or concise explanation" },
+                            difficulty: { type: SchemaType.STRING, description: "Must be one of easy, medium, or hard" }
+                        },
+                        required: ["question", "concept", "hint_1", "hint_2", "expected_answer", "difficulty"]
+                    }
+                }
+            },
+            required: ["questions"]
+        },
+        jsonSchema: {
+            name: "targeted_practice_response",
+            schema: {
+                type: "object",
+                properties: {
+                    questions: {
+                        type: "array",
+                        items: {
+                            type: "object",
+                            properties: {
+                                question: { type: "string" },
+                                concept: { type: "string" },
+                                hint_1: { type: "string" },
+                                hint_2: { type: "string" },
+                                expected_answer: { type: "string" },
+                                difficulty: { type: "string" }
+                            },
+                            required: ["question", "concept", "hint_1", "hint_2", "expected_answer", "difficulty"],
+                            additionalProperties: false
+                        }
+                    }
+                },
+                required: ["questions"],
+                additionalProperties: false
+            }
+        }
     }
 };
 

@@ -1,6 +1,17 @@
 {
   "assignments": [
     {
+      "id": "asg-1788502570845",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-04T06:16:10.845Z"
+    },
+    {
       "id": "asg-1788324333418",
       "course_name": "DBMS_Code_Reference_Annotated",
       "title": "test 1234",
@@ -21,6 +32,17 @@
       "due_date": null,
       "created_by": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4",
       "created_at": "2026-09-02T03:43:09.153Z"
+    },
+    {
+      "id": "asg-1788345056551",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-02T10:30:56.551Z"
     },
     {
       "id": "asg-1788317597481",
@@ -190,6 +212,21 @@
   ],
   "submissions": [
     {
+      "id": "sub-1788502570751",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-04T06:16:10.751Z",
+      "grade": 75,
+      "feedback": "",
+      "ai_suggested_grade": 5,
+      "ai_suggested_feedback": "Your submission appears to be a placeholder and does not contain the actual implementation or explanation of the Express.js middleware, JWT token verification, or role-based validation. To receive credit, please submit your complete code and detailed explanations covering the requirements outlined in the rubric.",
+      "status": "graded",
+      "graded_at": "2026-09-04T07:17:53.600Z",
+      "graded_by": "9ab265e9-a934-477c-8fc4-9a922e120183"
+    },
+    {
       "id": "sub-1788324353585",
       "assignment_id": "asg-1788324333418",
       "student_id": "54c1e0a8-cb3b-43dc-9c30-c0faf9617db4",
@@ -234,19 +271,34 @@
       "graded_by": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
     },
     {
+      "id": "sub-1788345056407",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-02T10:30:56.407Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
+    {
       "id": "sub-1788317597471",
       "assignment_id": "asg-103",
       "student_id": "student-test-submission-uuid",
       "student_name": "Alex Rivers",
       "submission_text": "Student solution explaining Express auth middleware.",
       "submitted_at": "2026-09-02T02:53:17.471Z",
-      "grade": 90,
-      "feedback": "good solution",
-      "ai_suggested_grade": null,
-      "ai_suggested_feedback": null,
-      "status": "graded",
-      "graded_at": "2026-09-02T03:38:40.445Z",
-      "graded_by": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": 5,
+      "ai_suggested_feedback": "It appears that your submission contains only a placeholder statement rather than the actual assignment content. To receive credit, please submit your complete Express.js middleware implementation, including the code for token extraction, verification, error handling, and the role-based authorization hierarchy, alongside your explanation of the JWT lifecycle. If this was an upload error, please reach out to have your actual work evaluated.",
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
     },
     {
       "id": "sub-1788317579096",
@@ -395,7 +447,7 @@
       "ai_suggested_grade": 92,
       "ai_suggested_feedback": "Excellent explanation of join algorithms with accurate complexity details.",
       "status": "graded",
-      "graded_at": "2026-09-02T02:53:17.514Z",
+      "graded_at": "2026-09-04T06:16:11.206Z",
       "graded_by": "teacher-123"
     },
     {

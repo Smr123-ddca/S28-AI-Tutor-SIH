@@ -57,8 +57,12 @@ export function AuthProvider({ children }) {
     const mockUser = targetRole === 'teacher' ? MOCK_TEACHER : MOCK_STUDENT;
     setRole(targetRole);
     setUser(mockUser);
+    const mockToken = targetRole === 'teacher'
+      ? 'mock-teacher-jwt-token-xyz'
+      : 'mock-student-jwt-token-xyz';
+
     setSession({
-      access_token: 'mock-supabase-jwt-token-xyz',
+      access_token: mockToken,
       user: {
         id: mockUser.id,
         email: mockUser.email,

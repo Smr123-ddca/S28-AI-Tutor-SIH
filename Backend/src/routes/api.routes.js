@@ -10,6 +10,8 @@ const { getCourses, approveCourse, reviseCourse, publishCourse, getArtifacts, de
 const { getClassAnalytics, getClassGrading } = require('../controllers/analytics.controller');
 const {
     createQuestion,
+    generateTeacherPractice,
+    assignTeacherPractice,
     getQuestions,
     getQuestionById,
     createAttempt,
@@ -58,6 +60,9 @@ router.post('/practice-questions/:id/socratic', socraticAttempt);
 router.post('/practice-questions/:id/reveal', revealAnswer);
 router.post('/practice-attempts', createAttempt);
 
+// Teacher-targeted practice generation
+router.post('/teacher/practice/generate', requireRole('teacher'), generateTeacherPractice);
+router.post('/teacher/practice/assign', requireRole('teacher'), assignTeacherPractice);
 
 // Ingestion Sub-layer A (Upload)
 router.post('/ingest/upload', requireRole('teacher'), uploadMiddleware, handleUpload);

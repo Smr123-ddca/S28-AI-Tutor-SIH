@@ -401,4 +401,179 @@ async function getClassAnalytics(req, res) {
     }
 }
 
-module.exports = { getClassAnalytics };
+async function getClassGrading(req, res) {
+    const { subject } = req.query;
+
+    try {
+        let attempts = [];
+
+        try {
+            let query = supabaseAdmin
+                .from('practice_attempts')
+                .select(`
+                    id,
+                    student_id,
+                    evaluation,
+                    created_at,
+                    practice_question_id,
+                    practice_questions!inner(id, concept, subject)
+                `)
+                .order('created_at', { ascending: false });
+
+            if (subject) {
+                query = query.ilike('practice_questions.subject', `%${subject}%`);
+            }
+
+            const { data, error } = await query;
+            if (!error && Array.isArray(data)) {
+                attempts = data;
+            }
+        } catch (e) {
+            attempts = [];
+        }
+
+        if (attempts.length === 0) {
+            return res.json({
+                subject: subject || 'all',
+                empty: true,
+                message: 'Students need to complete practice activity before class grading insights appear.',
+                summary: {
+                    students: 0,
+                    attempts: 0,
+                    average_score: 0,
+                    students_needing_review: 0,
+                    questions_evaluated: 0
+                },
+                distribution: {
+                    '90-100%': 0,
+                    '75-89%': 0,
+                    '50-74%': 0,
+                    'Below 50%': 0
+                },
+                students: [],
+                question_performance: [],
+                common_difficulties: []
+            });
+        }
+
+        const studentMap = new Map();
+        const questionMap = new Map();
+        const conceptMistakes = new Map();
+        let totalWeightedScore = 0;
+
+        for (const attempt of attempts) {
+            const evaluation = (attempt.evaluation || 'incorrect').toLowerCase();
+            const scoreContribution = evaluation === 'correct' ? 1 : evaluation === 'partial' ? 0.5 : 0;
+            const studentId = attempt.student_id || 'unknown-student';
+            const concept = attempt.practice_questions?.concept || 'General Practice';
+            const questionId = attempt.practice_question_id || attempt.practice_questions?.id || `${studentId}-${concept}-${attempt.id}`;
+
+            totalWeightedScore += scoreContribution;
+
+            if (!studentMap.has(studentId)) {
+                studentMap.set(studentId, {
+                    student_id: studentId,
+                    student_name: 'Student',
+                    correct: 0,
+                    incorrect: 0,
+                    partial: 0,
+                    total_attempts: 0,
+                    score: 0,
+                    status: 'needs_review'
+                });
+            }
+
+            const studentRow = studentMap.get(studentId);
+            studentRow.total_attempts += 1;
+
+            if (evaluation === 'correct') studentRow.correct += 1;
+            else if (evaluation === 'partial') studentRow.partial += 1;
+            else studentRow.incorrect += 1;
+
+            if (!questionMap.has(questionId)) {
+                questionMap.set(questionId, {
+                    question_id: questionId,
+                    concept,
+                    correct: 0,
+                    incorrect: 0,
+                    partial: 0,
+                    score: 0
+                });
+            }
+
+            const questionEntry = questionMap.get(questionId);
+            if (evaluation === 'correct') {
+                questionEntry.correct += 1;
+            } else if (evaluation === 'partial') {
+                questionEntry.partial += 1;
+            } else {
+                questionEntry.incorrect += 1;
+                conceptMistakes.set(concept, (conceptMistakes.get(concept) || 0) + 1);
+            }
+
+            questionEntry.score = Math.round(((questionEntry.correct + (questionEntry.partial * 0.5)) / (questionEntry.correct + questionEntry.partial + questionEntry.incorrect)) * 100);
+        }
+
+        const students = Array.from(studentMap.values()).map(student => {
+            const score = student.total_attempts > 0
+                ? Math.round(((student.correct + (student.partial * 0.5)) / student.total_attempts) * 100)
+                : 0;
+
+            let status = 'needs_review';
+            if (score >= 75) status = 'strong';
+            else if (score >= 60) status = 'developing';
+
+            return {
+                ...student,
+                score,
+                status,
+                student_name: resolveStudentName(student.student_id, null, null)
+            };
+        }).sort((a, b) => b.score - a.score);
+
+        const distribution = { '90-100%': 0, '75-89%': 0, '50-74%': 0, 'Below 50%': 0 };
+        students.forEach(student => {
+            if (student.score >= 90) distribution['90-100%'] += 1;
+            else if (student.score >= 75) distribution['75-89%'] += 1;
+            else if (student.score >= 50) distribution['50-74%'] += 1;
+            else distribution['Below 50%'] += 1;
+        });
+
+        const averageScore = attempts.length > 0 ? Math.round((totalWeightedScore / attempts.length) * 100) : 0;
+
+        const questionPerformance = Array.from(questionMap.values())
+            .map(entry => ({
+                ...entry,
+                result: entry.incorrect > 0 ? 'Incorrect' : 'Correct',
+                score: entry.score
+            }))
+            .sort((a, b) => b.incorrect - a.incorrect);
+
+        const commonDifficulties = Array.from(conceptMistakes.entries())
+            .map(([concept, incorrect_attempts]) => ({ concept, incorrect_attempts }))
+            .sort((a, b) => b.incorrect_attempts - a.incorrect_attempts)
+            .slice(0, 8);
+
+        return res.json({
+            subject: subject || 'all',
+            empty: false,
+            summary: {
+                students: students.length,
+                attempts: attempts.length,
+                average_score: averageScore,
+                students_needing_review: students.filter(student => student.status === 'needs_review').length,
+                questions_evaluated: questionPerformance.length
+            },
+            distribution,
+            students,
+            question_performance: questionPerformance,
+            common_difficulties: commonDifficulties,
+            source: 'practice_attempts'
+        });
+    } catch (err) {
+        console.error('[analytics] Unexpected error computing grading summary:', err);
+        return res.status(500).json({ error: 'Internal server error computing grading summary' });
+    }
+}
+
+module.exports = { getClassAnalytics, getClassGrading };
