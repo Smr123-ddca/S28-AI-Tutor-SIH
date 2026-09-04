@@ -190,7 +190,7 @@ Clone the repository and install all workspace dependencies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YourUsername/S28-AI-Tutor-SIH.git
+git clone https://github.com/Smr123-ddca/S28-AI-Tutor-SIH.git
 cd S28-AI-Tutor-SIH
 
 # Install root dependencies
