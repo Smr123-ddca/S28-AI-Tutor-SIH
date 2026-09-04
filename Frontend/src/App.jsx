@@ -33,7 +33,7 @@ function ProtectedLayout() {
         }}
       >
         <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>✨</div>
-        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading Study-app BODH...</div>
+        <div style={{ fontWeight: 600, fontSize: '1rem' }}>Loading Study-app Learnify...</div>
       </div>
     );
   }

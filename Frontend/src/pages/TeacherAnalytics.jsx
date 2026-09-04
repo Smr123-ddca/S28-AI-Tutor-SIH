@@ -5,6 +5,7 @@ import { StatCard } from '../components/cards/StatCard';
 import { fetchLibraryDocuments } from '../services/api';
 import { fetchClassAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { TeacherCopilotChat } from '../components/tutor/TeacherCopilotChat';
 
 // =====================================================================
 // Mastery Bar Component
@@ -338,6 +339,11 @@ export function TeacherAnalytics() {
                             number={summaryStats.needingAttention}
                             label="Students Need Support"
                         />
+                    </section>
+
+                    {/* ── Teacher Co-pilot Interactive Assistant ── */}
+                    <section style={{ marginBottom: '2.5rem' }}>
+                        <TeacherCopilotChat />
                     </section>
 
                     {/* ── Class Learning Heatmap ── */}

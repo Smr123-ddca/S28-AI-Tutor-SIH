@@ -1,5 +1,5 @@
 /**
- * API Service for BODH (AI Tutor)
+ * API Service for Learnify (AI Tutor)
  * Real backend connections mapped to integrate/rag-ingestion backend routes.
  */
 
@@ -356,4 +356,21 @@ export async function submitStudentAssignment({ assignment_id, submission_text, 
   }
   return await res.json();
 }
+
+export async function askTeacherCopilot(message, token) {
+  const res = await fetch('/api/teacher-copilot', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ message })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || errData.reply || `API Error (${res.status})`);
+  }
+  return await res.json();
+}
+
 

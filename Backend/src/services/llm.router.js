@@ -182,6 +182,26 @@ const schemas = {
                 additionalProperties: false
             }
         }
+    },
+    "TEACHER_COPILOT": {
+        gemini: {
+            type: SchemaType.OBJECT,
+            properties: {
+                answer: { type: SchemaType.STRING, description: "Conversational answer strictly grounded in data under 100 words." }
+            },
+            required: ["answer"]
+        },
+        jsonSchema: {
+            name: "teacher_copilot_response",
+            schema: {
+                type: "object",
+                properties: {
+                    answer: { type: "string", description: "Conversational answer strictly grounded in data under 100 words." }
+                },
+                required: ["answer"],
+                additionalProperties: false
+            }
+        }
     }
 };
 

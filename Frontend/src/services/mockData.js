@@ -1,5 +1,5 @@
 /**
- * Mock Data Store for BODH / Study-app
+ * Mock Data Store for Learnify / Study-app
  * All mock data is gated behind import.meta.env.VITE_USE_MOCKS === 'true'
  */
 
