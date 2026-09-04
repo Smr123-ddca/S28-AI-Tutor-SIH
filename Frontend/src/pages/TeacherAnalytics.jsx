@@ -5,6 +5,7 @@ import { StatCard } from '../components/cards/StatCard';
 import { fetchLibraryDocuments } from '../services/api';
 import { fetchClassAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { TeacherCopilotChat } from '../components/tutor/TeacherCopilotChat';
 
 // =====================================================================
 // Mastery Bar Component
@@ -123,6 +124,7 @@ function StudentAttentionCard({ student }) {
                         </div>
                         <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.1rem' }}>
                             {student.signals.length} concept{student.signals.length !== 1 ? 's' : ''} flagged
+                            {student.average_score_pct !== null && student.average_score_pct !== undefined ? ` • Avg Mastery: ${student.average_score_pct}%` : ''}
                         </div>
                     </div>
                 </div>
@@ -146,12 +148,12 @@ function StudentAttentionCard({ student }) {
                                 <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-ink)' }}>
                                     {sig.concept}
                                 </div>
-                                <StatusBadge status={sig.accuracy !== null && sig.accuracy < 50 ? 'needs_attention' : 'developing'} />
+                                <StatusBadge status={sig.accuracy !== null && sig.accuracy < 60 ? 'needs_attention' : 'developing'} />
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, auto)', gap: '0.5rem 1.5rem', fontSize: '0.82rem', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
-                                <span><b>Accuracy:</b> {sig.accuracy !== null ? `${sig.accuracy}%` : 'N/A'}</span>
-                                <span><b>Attempts:</b> {sig.total_attempts}</span>
-                                <span><b>Repeated mistakes:</b> {sig.repeated_mistakes}</span>
+                                <span><b>Mastery / Accuracy:</b> {sig.accuracy !== null ? `${sig.accuracy}%` : 'N/A'}</span>
+                                <span><b>Activity Count:</b> {sig.total_attempts}</span>
+                                <span><b>Struggling Attempts:</b> {sig.repeated_mistakes}</span>
                             </div>
                             {sig.prereq_weakness.length > 0 && (
                                 <div style={{ marginTop: '0.5rem', padding: '0.5rem 0.75rem', backgroundColor: '#fef3c7', borderRadius: '6px', fontSize: '0.8rem', color: '#92400e' }}>
@@ -172,16 +174,16 @@ function StudentAttentionCard({ student }) {
 
 function buildReasonText(sig) {
     const parts = [];
-    if (sig.repeated_mistakes >= 3) {
-        parts.push(`${sig.repeated_mistakes} repeated incorrect answers on "${sig.concept}"`);
+    if (sig.accuracy !== null && sig.accuracy < 60) {
+        parts.push(`below mastery threshold (${sig.accuracy}%)`);
     }
-    if (sig.accuracy !== null && sig.accuracy < 50 && sig.total_attempts >= 3) {
-        parts.push(`low mastery (${sig.accuracy}% accuracy)`);
+    if (sig.repeated_mistakes >= 1) {
+        parts.push(`${sig.repeated_mistakes} struggling attempt${sig.repeated_mistakes !== 1 ? 's' : ''}`);
     }
-    if (sig.prereq_weakness.length > 0) {
+    if (sig.prereq_weakness && sig.prereq_weakness.length > 0) {
         parts.push(`weak on prerequisite${sig.prereq_weakness.length > 1 ? 's' : ''}: ${sig.prereq_weakness.map(p => p.concept).join(', ')}`);
     }
-    return parts.length > 0 ? parts.join(' and ') + '.' : 'May benefit from additional support.';
+    return parts.length > 0 ? parts.join(' and ') + '.' : 'May benefit from additional instructor support.';
 }
 
 // =====================================================================
@@ -337,6 +339,11 @@ export function TeacherAnalytics() {
                             number={summaryStats.needingAttention}
                             label="Students Need Support"
                         />
+                    </section>
+
+                    {/* ── Teacher Co-pilot Interactive Assistant ── */}
+                    <section style={{ marginBottom: '2.5rem' }}>
+                        <TeacherCopilotChat />
                     </section>
 
                     {/* ── Class Learning Heatmap ── */}

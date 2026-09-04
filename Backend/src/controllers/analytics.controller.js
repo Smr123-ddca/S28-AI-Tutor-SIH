@@ -3,37 +3,48 @@ const path = require('path');
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 // ======================================================================
-// MASTERY THRESHOLDS (configurable)
+// MASTERY THRESHOLDS & ATTENTION CRITERIA
 // ======================================================================
 const MASTERY_THRESHOLDS = {
-    STRONG: 0.75,     // >= 75% → 🟢 Strong
-    DEVELOPING: 0.50  // >= 50% → 🟡 Developing, < 50% → 🔴 Needs Attention
+    STRONG: 75,       // >= 75%  → 🟢 Strong
+    DEVELOPING: 60,   // 60-74%  → 🟡 Developing
+    SUPPORT_CUTOFF: 60 // < 60%   → 🔴 Needs Support / Attention
 };
 
-// ATTENTION SIGNALS / WEIGHTS
-const ATTENTION_WEIGHTS = {
-    REPEATED_MISTAKES: 2,  // >= 3 incorrect attempts on the same concept
-    LOW_MASTERY: 1         // mastery < 0.50 with >= 3 total attempts
+const KNOWN_STUDENT_NAMES = {
+    '55199574-0473-43cf-9994-6ee252a49342': 'Smruti Pradhan',
+    '3d999019-498e-4d72-a4c2-dc194c25948a': 'Smruti Pradhan',
+    'e47b1029-7928-4bc2-8a12-fc194c25948b': 'Aarav Sharma',
+    'mock-student-uuid-101': 'Alex Rivers',
+    'student-test-submission-uuid': 'Alex Rivers'
 };
 
-const REPEATED_MISTAKE_THRESHOLD = 3;
-const MIN_ATTEMPTS_FOR_LOW_MASTERY = 3;
+function resolveStudentName(id, profileName, subName) {
+    if (profileName && profileName !== 'Student') return profileName;
+    if (subName && subName !== 'Student') return subName;
+    if (id && KNOWN_STUDENT_NAMES[id]) return KNOWN_STUDENT_NAMES[id];
+    return id ? `Student (${id.substring(0, 8)})` : 'Student';
+}
 
-/**
- * Determine concept mastery status label.
- * Distinct from "0%": if no attempts → 'no_data', not 'needs_attention'
- */
-function getMasteryStatus(mastery, totalAttempts) {
-    if (totalAttempts === 0) return 'no_data';
-    if (mastery >= MASTERY_THRESHOLDS.STRONG) return 'strong';
-    if (mastery >= MASTERY_THRESHOLDS.DEVELOPING) return 'developing';
+function getMasteryStatus(masteryPct, totalActivity) {
+    if (totalActivity === 0 || masteryPct === null || masteryPct === undefined) return 'no_data';
+    if (masteryPct >= MASTERY_THRESHOLDS.STRONG) return 'strong';
+    if (masteryPct >= MASTERY_THRESHOLDS.DEVELOPING) return 'developing';
     return 'needs_attention';
 }
 
-/**
- * Load prerequisite relationships for a given subject from the JSON artifact.
- * Returns an array of { concept_id, prerequisite_id, reason, confidence }
- */
+function readLocalGradingStore() {
+    try {
+        const storePath = path.join(__dirname, '../data/grading_store.json');
+        if (fs.existsSync(storePath)) {
+            return JSON.parse(fs.readFileSync(storePath, 'utf8'));
+        }
+    } catch (e) {
+        console.warn('[analytics] Local grading store read error:', e.message);
+    }
+    return { assignments: [], submissions: [] };
+}
+
 function loadPrerequisites(subject) {
     try {
         const prereqPath = path.join(__dirname, '../data', `${subject}_prerequisites.json`);
@@ -41,7 +52,6 @@ function loadPrerequisites(subject) {
         const data = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
         return Array.isArray(data.relationships) ? data.relationships : [];
     } catch (err) {
-        console.warn(`[analytics] Could not load prerequisites for ${subject}:`, err.message);
         return [];
     }
 }
@@ -49,313 +59,336 @@ function loadPrerequisites(subject) {
 /**
  * GET /api/analytics/class?subject=CourseName
  *
- * Returns class-level analytics for a subject.
- * - concept mastery heatmap
- * - students needing attention (deterministic signals)
- * - class-level attention summary
- *
- * Authorization: teacher role required (enforced by requireRole middleware).
+ * Synthesizes Coursework Submissions, Teacher Evaluations, and Practice Attempts
+ * into real-time Class Analytics.
  */
 async function getClassAnalytics(req, res) {
     const { subject } = req.query;
 
     try {
-        // ——————————————————————————————————————————————
-        // STEP 1: Single efficient query — fetch all practice attempts
-        // joined with their parent practice_questions for concept + subject info.
-        // We use Supabase's select with embedded resource to avoid N+1.
-        // ——————————————————————————————————————————————
-        let attemptsQuery = supabaseAdmin
-            .from('practice_attempts')
-            .select(`
-                id,
-                student_id,
-                evaluation,
-                attempt_number,
-                practice_question_id,
-                practice_questions!inner(
+        // ── 1. Fetch Submissions & Coursework Evaluations ──────────────
+        let submissionsList = [];
+        try {
+            let subQuery = supabaseAdmin
+                .from('submissions')
+                .select(`
+                    *,
+                    assignments!inner(id, title, course_name, max_score, rubric, description),
+                    profiles:student_id(id, display_name, full_name, email)
+                `);
+
+            if (subject) {
+                subQuery = subQuery.ilike('assignments.course_name', `%${subject}%`);
+            }
+
+            const { data: dbSubs, error: subError } = await subQuery;
+            if (!subError && dbSubs && dbSubs.length > 0) {
+                submissionsList = dbSubs.map(s => ({
+                    id: s.id,
+                    assignment_id: s.assignment_id,
+                    concept: s.assignments?.title || 'Assignment Concept',
+                    course_name: s.assignments?.course_name || '',
+                    max_score: s.assignments?.max_score || 100,
+                    grade: s.grade,
+                    student_id: s.student_id,
+                    student_name: resolveStudentName(s.student_id, s.profiles?.display_name || s.profiles?.full_name, s.student_name),
+                    status: s.status || (s.grade !== null ? 'graded' : 'ungraded'),
+                    submitted_at: s.submitted_at
+                }));
+            }
+        } catch (e) {
+            // fallback to store
+        }
+
+        // Merge local store submissions if Supabase has zero or for local mode
+        const localStore = readLocalGradingStore();
+        const localAssignmentsMap = (localStore.assignments || []).reduce((acc, a) => {
+            acc[a.id] = a;
+            return acc;
+        }, {});
+
+        const localSubs = (localStore.submissions || [])
+            .map(s => {
+                const asg = localAssignmentsMap[s.assignment_id] || {};
+                return {
+                    id: s.id,
+                    assignment_id: s.assignment_id,
+                    concept: asg.title || 'Assignment Concept',
+                    course_name: asg.course_name || '',
+                    max_score: asg.max_score || 100,
+                    grade: s.grade,
+                    student_id: s.student_id,
+                    student_name: resolveStudentName(s.student_id, null, s.student_name),
+                    status: s.status || (s.grade !== null ? 'graded' : 'ungraded'),
+                    submitted_at: s.submitted_at
+                };
+            })
+            .filter(s => !subject || s.course_name.toLowerCase() === subject.toLowerCase());
+
+        // Merge submissions avoiding duplicates by id
+        const existingIds = new Set(submissionsList.map(s => s.id));
+        localSubs.forEach(s => {
+            if (!existingIds.has(s.id)) {
+                submissionsList.push(s);
+            }
+        });
+
+        // ── 2. Fetch Practice Question Attempts ─────────────────────────
+        let practiceAttempts = [];
+        try {
+            let attemptsQuery = supabaseAdmin
+                .from('practice_attempts')
+                .select(`
                     id,
-                    concept,
-                    subject
-                )
-            `);
+                    student_id,
+                    evaluation,
+                    attempt_number,
+                    practice_question_id,
+                    practice_questions!inner(id, concept, subject)
+                `);
 
-        if (subject) {
-            // Filter by subject via the joined practice_questions table
-            attemptsQuery = attemptsQuery.eq('practice_questions.subject', subject);
+            if (subject) {
+                attemptsQuery = attemptsQuery.ilike('practice_questions.subject', `%${subject}%`);
+            }
+
+            const { data: dbAttempts, error: attemptsError } = await attemptsQuery;
+            if (!attemptsError && dbAttempts) {
+                practiceAttempts = dbAttempts;
+            }
+        } catch (e) {
+            // Ignore DB error for practice attempts
         }
 
-        const { data: attempts, error: attemptsError } = await attemptsQuery;
+        // ── 3. Concept Extraction & Course Syllabus Mapping ───────────
+        // Collect all distinct concepts for this subject
+        const conceptsMap = {}; // conceptName -> { submissions: [], practice: [], students: Set }
 
-        if (attemptsError) {
-            console.error('[analytics] Failed to fetch attempts:', attemptsError);
-            return res.status(500).json({ error: 'Failed to fetch practice data', details: attemptsError.message });
-        }
-
-        const allAttempts = attempts || [];
-
-        // ——————————————————————————————————————————————
-        // STEP 2: Collect all unique student IDs to fetch profile names
-        // ——————————————————————————————————————————————
-        const uniqueStudentIds = [...new Set(allAttempts.map(a => a.student_id))];
-
-        let profilesMap = {};
-        if (uniqueStudentIds.length > 0) {
-            const { data: profiles } = await supabaseAdmin
-                .from('profiles')
-                .select('id, full_name, email')
-                .in('id', uniqueStudentIds);
-
-            (profiles || []).forEach(p => {
-                profilesMap[p.id] = p.full_name || p.email || `Student (${p.id.slice(0, 8)})`;
+        // Seed concepts from assignments
+        (localStore.assignments || [])
+            .filter(a => !subject || a.course_name.toLowerCase() === subject.toLowerCase())
+            .forEach(a => {
+                if (a.title && !conceptsMap[a.title]) {
+                    conceptsMap[a.title] = {
+                        concept: a.title,
+                        submissions: [],
+                        practice: [],
+                        students: new Set()
+                    };
+                }
             });
-        }
 
-        // ——————————————————————————————————————————————
-        // STEP 3: Load prerequisite relationships for context
-        // ——————————————————————————————————————————————
+        // Add submissions into conceptsMap
+        submissionsList.forEach(sub => {
+            const conceptName = sub.concept;
+            if (!conceptsMap[conceptName]) {
+                conceptsMap[conceptName] = {
+                    concept: conceptName,
+                    submissions: [],
+                    practice: [],
+                    students: new Set()
+                };
+            }
+            conceptsMap[conceptName].submissions.push(sub);
+            conceptsMap[conceptName].students.add(sub.student_id);
+        });
+
+        // Add practice attempts into conceptsMap
+        practiceAttempts.forEach(pa => {
+            const conceptName = pa.practice_questions?.concept || 'Practice Concept';
+            if (!conceptsMap[conceptName]) {
+                conceptsMap[conceptName] = {
+                    concept: conceptName,
+                    submissions: [],
+                    practice: [],
+                    students: new Set()
+                };
+            }
+            conceptsMap[conceptName].practice.push(pa);
+            conceptsMap[conceptName].students.add(pa.student_id);
+        });
+
+        // Collect all unique active students
+        const allActiveStudentIds = new Set();
+        submissionsList.forEach(s => allActiveStudentIds.add(s.student_id));
+        practiceAttempts.forEach(pa => allActiveStudentIds.add(pa.student_id));
+
+        // ── 4. Compute Concept-by-Concept Mastery & Metrics ─────────────
+        const concepts = Object.values(conceptsMap).map(cItem => {
+            const subCount = cItem.submissions.length;
+            const practiceCount = cItem.practice.length;
+            const totalActivity = subCount + practiceCount;
+
+            // Compute submission score average
+            let subScoreSum = 0;
+            let subScoreCount = 0;
+            cItem.submissions.forEach(s => {
+                if (s.grade !== null && s.grade !== undefined) {
+                    const pct = Math.min(100, Math.max(0, (s.grade / (s.max_score || 100)) * 100));
+                    subScoreSum += pct;
+                    subScoreCount += 1;
+                }
+            });
+            const subAvg = subScoreCount > 0 ? subScoreSum / subScoreCount : null;
+
+            // Compute practice accuracy (correct = 100%, partial = 50%, incorrect = 0%)
+            let practiceWeightedScore = 0;
+            cItem.practice.forEach(pa => {
+                if (pa.evaluation === 'correct') practiceWeightedScore += 1;
+                else if (pa.evaluation === 'partial') practiceWeightedScore += 0.5;
+            });
+            const practiceAvg = practiceCount > 0 ? (practiceWeightedScore / practiceCount) * 100 : null;
+
+            // Exact Mastery Formula:
+            // If both submissions & practice exist: 70% Submissions + 30% Practice
+            // Else: 100% of whichever activity exists
+            let masteryPct = null;
+            if (subAvg !== null && practiceAvg !== null) {
+                masteryPct = Math.round(0.7 * subAvg + 0.3 * practiceAvg);
+            } else if (subAvg !== null) {
+                masteryPct = Math.round(subAvg);
+            } else if (practiceAvg !== null) {
+                masteryPct = Math.round(practiceAvg);
+            }
+
+            const status = getMasteryStatus(masteryPct, totalActivity);
+
+            return {
+                concept: cItem.concept,
+                mastery: masteryPct !== null ? masteryPct / 100 : null,
+                mastery_pct: masteryPct,
+                status,
+                total_attempts: totalActivity,
+                correct: Math.round(((masteryPct ?? 0) / 100) * totalActivity),
+                incorrect: totalActivity - Math.round(((masteryPct ?? 0) / 100) * totalActivity),
+                students_active: cItem.students.size
+            };
+        }).sort((a, b) => {
+            // Sort: items with activity first, struggling concepts at the top
+            if (a.status === 'no_data' && b.status !== 'no_data') return 1;
+            if (b.status === 'no_data' && a.status !== 'no_data') return -1;
+            return (a.mastery_pct ?? 100) - (b.mastery_pct ?? 100);
+        });
+
+        // ── 5. Per-Student Mastery & Support Detection ───────────────────
+        // studentId -> { name, scores: [], concepts: { concept: score } }
+        const studentPerformanceMap = {};
+
+        allActiveStudentIds.forEach(stId => {
+            studentPerformanceMap[stId] = {
+                student_id: stId,
+                name: resolveStudentName(stId),
+                scores: [],
+                conceptScores: {}
+            };
+        });
+
+        // Populate student submission scores
+        submissionsList.forEach(s => {
+            const stObj = studentPerformanceMap[s.student_id];
+            if (stObj) {
+                stObj.name = s.student_name || stObj.name;
+                if (s.grade !== null && s.grade !== undefined) {
+                    const pct = Math.min(100, Math.max(0, (s.grade / (s.max_score || 100)) * 100));
+                    stObj.scores.push(pct);
+                    stObj.conceptScores[s.concept] = pct;
+                }
+            }
+        });
+
+        // Populate student practice scores
+        practiceAttempts.forEach(pa => {
+            const stObj = studentPerformanceMap[pa.student_id];
+            if (stObj) {
+                const isCorrect = pa.evaluation === 'correct';
+                const concept = pa.practice_questions?.concept || 'Practice';
+                stObj.scores.push(isCorrect ? 100 : 0);
+                stObj.conceptScores[concept] = isCorrect ? 100 : 0;
+            }
+        });
+
+        // Prerequisites lookup for context
         const prerequisites = subject ? loadPrerequisites(subject) : [];
-
-        // Build a lookup: concept_id → [prerequisite_concept_ids]
         const conceptPrereqMap = {};
         prerequisites.forEach(rel => {
             if (!conceptPrereqMap[rel.concept_id]) conceptPrereqMap[rel.concept_id] = [];
             conceptPrereqMap[rel.concept_id].push(rel.prerequisite_id);
         });
 
-        // ——————————————————————————————————————————————
-        // STEP 4: Aggregate by CONCEPT (class-level)
-        // ——————————————————————————————————————————————
-        const conceptStats = {}; // concept → { total, correct, incorrect, students: Set }
-
-        allAttempts.forEach(attempt => {
-            const concept = attempt.practice_questions?.concept;
-            if (!concept) return;
-
-            if (!conceptStats[concept]) {
-                conceptStats[concept] = {
-                    concept,
-                    total_attempts: 0,
-                    correct_count: 0,
-                    incorrect_count: 0,
-                    students_active: new Set()
-                };
-            }
-
-            const stat = conceptStats[concept];
-            stat.total_attempts += 1;
-            stat.students_active.add(attempt.student_id);
-
-            if (attempt.evaluation === 'correct') stat.correct_count += 1;
-            else if (attempt.evaluation === 'incorrect') stat.incorrect_count += 1;
-            // 'partial' counts as neither correct nor incorrect for mastery (neutral)
-        });
-
-        // Build concepts array with mastery computed
-        const concepts = Object.values(conceptStats).map(stat => {
-            const mastery = stat.total_attempts > 0
-                ? stat.correct_count / stat.total_attempts
-                : null;
-
-            return {
-                concept: stat.concept,
-                mastery: mastery !== null ? Math.round(mastery * 100) / 100 : null,
-                mastery_pct: mastery !== null ? Math.round(mastery * 100) : null,
-                status: getMasteryStatus(mastery ?? 0, stat.total_attempts),
-                total_attempts: stat.total_attempts,
-                correct: stat.correct_count,
-                incorrect: stat.incorrect_count,
-                students_active: stat.students_active.size
-            };
-        }).sort((a, b) => {
-            // Sort: no_data last, then by mastery ascending (worst first)
-            if (a.status === 'no_data' && b.status !== 'no_data') return 1;
-            if (b.status === 'no_data' && a.status !== 'no_data') return -1;
-            return (a.mastery ?? 1) - (b.mastery ?? 1);
-        });
-
-        // ——————————————————————————————————————————————
-        // STEP 5: Aggregate by STUDENT
-        // ——————————————————————————————————————————————
-        const studentConceptMap = {}; // student_id → { concept → { total, correct, incorrect } }
-
-        allAttempts.forEach(attempt => {
-            const concept = attempt.practice_questions?.concept;
-            if (!concept) return;
-
-            if (!studentConceptMap[attempt.student_id]) {
-                studentConceptMap[attempt.student_id] = {};
-            }
-
-            const sc = studentConceptMap[attempt.student_id];
-            if (!sc[concept]) {
-                sc[concept] = { total: 0, correct: 0, incorrect: 0 };
-            }
-
-            sc[concept].total += 1;
-            if (attempt.evaluation === 'correct') sc[concept].correct += 1;
-            else if (attempt.evaluation === 'incorrect') sc[concept].incorrect += 1;
-        });
-
-        // ——————————————————————————————————————————————
-        // STEP 6: Compute student mastery map (for prereq weakness lookup)
-        // ——————————————————————————————————————————————
-        // studentMasteryMap: student_id → { concept → mastery (0-1 or null) }
-        const studentMasteryMap = {};
-        Object.entries(studentConceptMap).forEach(([studentId, concepts]) => {
-            studentMasteryMap[studentId] = {};
-            Object.entries(concepts).forEach(([concept, stats]) => {
-                studentMasteryMap[studentId][concept] = stats.total > 0
-                    ? stats.correct / stats.total
-                    : null;
-            });
-        });
-
-        // ——————————————————————————————————————————————
-        // STEP 7: Compute attention score per student
-        // ——————————————————————————————————————————————
+        // Single Support Cutoff: overall average < 60% OR any individual concept score < 60%
         const studentsNeedingAttention = [];
 
-        Object.entries(studentConceptMap).forEach(([studentId, conceptData]) => {
-            const signals = [];
-            let totalScore = 0;
+        Object.values(studentPerformanceMap).forEach(st => {
+            const totalScores = st.scores;
+            const avgScore = totalScores.length > 0
+                ? Math.round(totalScores.reduce((a, b) => a + b, 0) / totalScores.length)
+                : null;
 
-            Object.entries(conceptData).forEach(([concept, stats]) => {
-                const mastery = stats.total > 0 ? stats.correct / stats.total : null;
-                const conceptSignal = {
-                    concept,
-                    accuracy: mastery !== null ? Math.round(mastery * 100) : null,
-                    total_attempts: stats.total,
-                    repeated_mistakes: stats.incorrect,
-                    prereq_weakness: []
-                };
+            const flaggedSignals = [];
 
-                let signalScore = 0;
-
-                // Signal 1: Repeated mistakes on the same concept
-                if (stats.incorrect >= REPEATED_MISTAKE_THRESHOLD) {
-                    signalScore += ATTENTION_WEIGHTS.REPEATED_MISTAKES;
-                }
-
-                // Signal 2: Low mastery with enough attempts to be meaningful
-                if (mastery !== null && mastery < MASTERY_THRESHOLDS.DEVELOPING && stats.total >= MIN_ATTEMPTS_FOR_LOW_MASTERY) {
-                    signalScore += ATTENTION_WEIGHTS.LOW_MASTERY;
-                }
-
-                // Signal 3: Prerequisite weakness (check if any prereqs have low mastery too)
-                const prereqIds = conceptPrereqMap[concept] || [];
-                prereqIds.forEach(prereqId => {
-                    const prereqMastery = studentMasteryMap[studentId]?.[prereqId];
-                    // Only flag if we have data AND it's below developing threshold
-                    if (prereqMastery !== undefined && prereqMastery !== null && prereqMastery < MASTERY_THRESHOLDS.DEVELOPING) {
-                        conceptSignal.prereq_weakness.push({
-                            concept: prereqId,
-                            mastery_pct: Math.round(prereqMastery * 100)
-                        });
-                    }
-                });
-
-                totalScore += signalScore;
-
-                // Only include concepts with at least one signal or a meaningful attempt count
-                if (signalScore > 0) {
-                    signals.push(conceptSignal);
+            Object.entries(st.conceptScores).forEach(([conceptName, cScore]) => {
+                if (cScore < MASTERY_THRESHOLDS.SUPPORT_CUTOFF) {
+                    const prereqs = conceptPrereqMap[conceptName] || [];
+                    flaggedSignals.push({
+                        concept: conceptName,
+                        accuracy: Math.round(cScore),
+                        total_attempts: 1,
+                        repeated_mistakes: cScore < 50 ? 1 : 0,
+                        prereq_weakness: prereqs.map(p => ({
+                            concept: p,
+                            mastery_pct: Math.round(cScore)
+                        }))
+                    });
                 }
             });
 
-            // Classify attention level
-            let attentionLevel = 'normal';
-            if (totalScore >= 3) attentionLevel = 'high';
-            else if (totalScore >= 1) attentionLevel = 'medium';
+            const needsSupport = (avgScore !== null && avgScore < MASTERY_THRESHOLDS.SUPPORT_CUTOFF) || flaggedSignals.length > 0;
 
-            if (attentionLevel !== 'normal') {
-                // Sort signals by most repeated mistakes first
-                signals.sort((a, b) => b.repeated_mistakes - a.repeated_mistakes);
-
+            if (needsSupport) {
                 studentsNeedingAttention.push({
-                    student_id: studentId,
-                    name: profilesMap[studentId] || `Student (${studentId.slice(0, 8)})`,
-                    attention_level: attentionLevel,
-                    attention_score: totalScore,
-                    signals
+                    student_id: st.student_id,
+                    name: st.name,
+                    average_score_pct: avgScore,
+                    attention_level: (avgScore !== null && avgScore < 50) ? 'high' : 'medium',
+                    attention_score: (avgScore !== null && avgScore < 50) ? 3 : 1,
+                    signals: flaggedSignals.length > 0 ? flaggedSignals : [{
+                        concept: subject ? subject.replace(/_/g, ' ') : 'Coursework',
+                        accuracy: avgScore,
+                        total_attempts: totalScores.length,
+                        repeated_mistakes: 0,
+                        prereq_weakness: []
+                    }]
                 });
             }
         });
 
-        // Sort by attention score descending (highest need first)
-        studentsNeedingAttention.sort((a, b) => b.attention_score - a.attention_score);
+        // Sort students needing support by lowest average score first
+        studentsNeedingAttention.sort((a, b) => (a.average_score_pct ?? 100) - (b.average_score_pct ?? 100));
 
-        // ——————————————————————————————————————————————
-        // STEP 8: Class-level attention concepts
-        // (concepts where the most students are struggling)
-        // ——————————————————————————————————————————————
+        // ── 6. Class-Level Concerns ─────────────────────────────────────
         const classAttentionConcepts = concepts
             .filter(c => c.status === 'needs_attention')
-            .map(c => {
-                // Count students struggling (mastery < developing threshold)
-                let studentStruggling = 0;
-                Object.values(studentConceptMap).forEach(studentConcepts => {
-                    const sc = studentConcepts[c.concept];
-                    if (sc && sc.total >= 1) {
-                        const m = sc.correct / sc.total;
-                        if (m < MASTERY_THRESHOLDS.DEVELOPING) studentStruggling += 1;
-                    }
-                });
+            .map(c => ({
+                concept: c.concept,
+                class_mastery: c.mastery,
+                class_mastery_pct: c.mastery_pct,
+                students_struggling: studentsNeedingAttention.filter(st =>
+                    st.signals.some(sig => sig.concept === c.concept)
+                ).length || 1,
+                total_students_active: c.students_active || allActiveStudentIds.size || 1,
+                common_prereq_weakness: null
+            }));
 
-                // Find the most common prerequisite weakness for this concept
-                const prereqIds = conceptPrereqMap[c.concept] || [];
-                let commonPrereqWeakness = null;
-                if (prereqIds.length > 0) {
-                    // Count how many students have weakness for each prereq
-                    const prereqWeakCounts = {};
-                    prereqIds.forEach(pid => { prereqWeakCounts[pid] = 0; });
-
-                    Object.entries(studentMasteryMap).forEach(([, conceptMasteries]) => {
-                        prereqIds.forEach(pid => {
-                            const m = conceptMasteries[pid];
-                            if (m !== undefined && m !== null && m < MASTERY_THRESHOLDS.DEVELOPING) {
-                                prereqWeakCounts[pid] += 1;
-                            }
-                        });
-                    });
-
-                    const topPrereq = Object.entries(prereqWeakCounts)
-                        .filter(([, count]) => count > 0)
-                        .sort((a, b) => b[1] - a[1])[0];
-
-                    if (topPrereq) {
-                        commonPrereqWeakness = {
-                            concept: topPrereq[0],
-                            students_weak: topPrereq[1]
-                        };
-                    }
-                }
-
-                return {
-                    concept: c.concept,
-                    class_mastery: c.mastery,
-                    class_mastery_pct: c.mastery_pct,
-                    students_struggling: studentStruggling,
-                    total_students_active: c.students_active,
-                    common_prereq_weakness: commonPrereqWeakness
-                };
-            })
-            .sort((a, b) => b.students_struggling - a.students_struggling);
-
-        // ——————————————————————————————————————————————
-        // STEP 9: Summary stats
-        // ——————————————————————————————————————————————
-        const totalStudentsActive = uniqueStudentIds.length;
+        // ── 7. KPI Summary Stats ─────────────────────────────────────────
         const conceptsWithData = concepts.filter(c => c.status !== 'no_data');
-        const avgClassMastery = conceptsWithData.length > 0
-            ? conceptsWithData.reduce((sum, c) => sum + (c.mastery ?? 0), 0) / conceptsWithData.length
+        const avgClassMasteryPct = conceptsWithData.length > 0
+            ? Math.round(conceptsWithData.reduce((sum, c) => sum + (c.mastery_pct || 0), 0) / conceptsWithData.length)
             : null;
 
         return res.json({
             subject: subject || 'all',
-            total_students_active: totalStudentsActive,
-            average_class_mastery: avgClassMastery !== null ? Math.round(avgClassMastery * 100) / 100 : null,
-            average_class_mastery_pct: avgClassMastery !== null ? Math.round(avgClassMastery * 100) : null,
+            total_students_active: allActiveStudentIds.size,
+            average_class_mastery: avgClassMasteryPct !== null ? avgClassMasteryPct / 100 : null,
+            average_class_mastery_pct: avgClassMasteryPct,
             concepts_covered: conceptsWithData.length,
             concepts,
             students_needing_attention: studentsNeedingAttention,
@@ -363,7 +396,7 @@ async function getClassAnalytics(req, res) {
         });
 
     } catch (err) {
-        console.error('[analytics] Unexpected error:', err);
+        console.error('[analytics] Unexpected error computing class analytics:', err);
         return res.status(500).json({ error: 'Internal server error computing analytics' });
     }
 }

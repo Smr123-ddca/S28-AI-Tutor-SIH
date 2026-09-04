@@ -1,5 +1,5 @@
 /**
- * API Service for BODH (AI Tutor)
+ * API Service for Learnify (AI Tutor)
  * Real backend connections mapped to integrate/rag-ingestion backend routes.
  */
 
@@ -254,3 +254,123 @@ export async function fetchClassAnalytics(subject, token) {
   if (!res.ok) throw new Error('Failed to fetch class analytics');
   return await res.json();
 }
+
+export async function fetchAssignments({ course_name, token } = {}) {
+  const url = course_name ? `/api/assignments?course_name=${encodeURIComponent(course_name)}` : '/api/assignments';
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch assignments');
+  return await res.json();
+}
+
+export async function createAssignment(assignmentData, token) {
+  const res = await fetch('/api/assignments', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify(assignmentData)
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to create assignment');
+  }
+  return await res.json();
+}
+
+export async function fetchSubmissions({ course_name, assignment_id, status, token } = {}) {
+  const params = new URLSearchParams();
+  if (course_name) params.append('course_name', course_name);
+  if (assignment_id) params.append('assignment_id', assignment_id);
+  if (status) params.append('status', status);
+
+  const queryStr = params.toString();
+  const url = queryStr ? `/api/submissions?${queryStr}` : '/api/submissions';
+
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch submissions');
+  return await res.json();
+}
+
+export async function fetchSubmissionDetails(submissionId, token) {
+  const res = await fetch(`/api/submissions/${submissionId}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch submission details');
+  return await res.json();
+}
+
+export async function submitGrade({ submissionId, grade, feedback, token }) {
+  const res = await fetch(`/api/submissions/${submissionId}/grade`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ grade, feedback })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to submit grade');
+  }
+  return await res.json();
+}
+
+export async function requestAiGradingSuggestion(submissionId, token) {
+  const res = await fetch(`/api/submissions/${submissionId}/ai-suggest`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || errData.details || 'Failed to generate AI grade suggestion');
+  }
+  return await res.json();
+}
+
+export async function fetchGradingStats({ course_name, token } = {}) {
+  const url = course_name ? `/api/grading/stats?course_name=${encodeURIComponent(course_name)}` : '/api/grading/stats';
+  const res = await fetch(url, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch grading stats');
+  return await res.json();
+}
+
+export async function submitStudentAssignment({ assignment_id, submission_text, token }) {
+  const res = await fetch('/api/submissions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ assignment_id, submission_text })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || 'Failed to submit assignment');
+  }
+  return await res.json();
+}
+
+export async function askTeacherCopilot(message, token) {
+  const res = await fetch('/api/teacher-copilot', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify({ message })
+  });
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.error || errData.reply || `API Error (${res.status})`);
+  }
+  return await res.json();
+}
+
+

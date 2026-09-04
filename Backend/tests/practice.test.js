@@ -197,6 +197,140 @@ describe('Practice Endpoints', () => {
             });
         });
 
+        it('should reject empty or whitespace answers with 400', async () => {
+            const response = await request(app)
+                .post('/api/practice-attempts')
+                .set('x-mock-user-id', 'student-A')
+                .send({
+                    practice_question_id: 'pq-1',
+                    answer: '    '
+                });
+
+            expect(response.status).toBe(400);
+            expect(response.body.error).toMatch(/Answer cannot be empty/i);
+        });
+
+        it('should evaluate single-character garbage answer as incorrect without calling LLM', async () => {
+            supabaseAdmin.single
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'pq-1', chunk_id: 'c-1', question: 'Explain arrays', concept: 'Arrays', subject: 'DSA' },
+                    error: null
+                }))
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'attempt-garbage', evaluation: 'incorrect' },
+                    error: null
+                }));
+
+            const response = await request(app)
+                .post('/api/practice-attempts')
+                .set('x-mock-user-id', 'student-A')
+                .send({
+                    practice_question_id: 'pq-1',
+                    answer: 'x'
+                });
+
+            expect(response.status).toBe(200);
+            expect(response.body.evaluation).toBe('incorrect');
+            expect(response.body.completed).toBe(false);
+        });
+
+        it('should evaluate exact match against expected_answer as correct', async () => {
+            supabaseAdmin.single
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: {
+                        id: 'pq-1',
+                        chunk_id: 'c-1',
+                        question: 'What is the time complexity of binary search?',
+                        concept: 'Search Algorithms',
+                        expected_answer: 'O(log n)',
+                        subject: 'DSA'
+                    },
+                    error: null
+                }))
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'attempt-match', evaluation: 'correct' },
+                    error: null
+                }));
+
+            const response = await request(app)
+                .post('/api/practice-attempts')
+                .set('x-mock-user-id', 'student-A')
+                .send({
+                    practice_question_id: 'pq-1',
+                    answer: 'O(log n)'
+                });
+
+            expect(response.status).toBe(200);
+            expect(response.body.evaluation).toBe('correct');
+            expect(response.body.completed).toBe(true);
+        });
+
+        it('should evaluate backward-compatible question without expected_answer strictly via LLM', async () => {
+            _mockGenerateContent.mockResolvedValueOnce({
+                response: {
+                    text: jest.fn().mockReturnValue(JSON.stringify({
+                        evaluation: 'incorrect',
+                        reason: 'The answer contradicts indexing principles.'
+                    }))
+                }
+            });
+
+            supabaseAdmin.single
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: {
+                        id: 'pq-legacy',
+                        chunk_id: 'c-1',
+                        question: 'Why does indexing begin at 0?',
+                        concept: 'Zero-based Indexing',
+                        expected_answer: null, // legacy question
+                        subject: 'DSA'
+                    },
+                    error: null
+                }))
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'attempt-legacy', evaluation: 'incorrect' },
+                    error: null
+                }));
+
+            const response = await request(app)
+                .post('/api/practice-attempts')
+                .set('x-mock-user-id', 'student-A')
+                .send({
+                    practice_question_id: 'pq-legacy',
+                    answer: 'Because 0 is a nice number'
+                });
+
+            expect(response.status).toBe(200);
+            expect(response.body.evaluation).toBe('incorrect');
+            expect(response.body.completed).toBe(false);
+        });
+
+        it('should fallback to incorrect when LLM evaluation fails or throws', async () => {
+            _mockGenerateContent.mockRejectedValueOnce(new Error('LLM Gateway Timeout'));
+
+            supabaseAdmin.single
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'pq-1', chunk_id: 'c-1', question: 'Q', concept: 'C', subject: 'S' },
+                    error: null
+                }))
+                .mockImplementationOnce(() => Promise.resolve({
+                    data: { id: 'attempt-err', evaluation: 'incorrect' },
+                    error: null
+                }));
+
+            const response = await request(app)
+                .post('/api/practice-attempts')
+                .set('x-mock-user-id', 'student-A')
+                .send({
+                    practice_question_id: 'pq-1',
+                    answer: 'Some complex answer'
+                });
+
+            expect(response.status).toBe(200);
+            expect(response.body.evaluation).toBe('incorrect');
+            expect(response.body.completed).toBe(false);
+        });
+
         it('should evaluate an incorrect attempt against an owned question without changing completed status', async () => {
             supabaseAdmin.single
                 // 1) Verify ownership 
@@ -209,10 +343,6 @@ describe('Practice Endpoints', () => {
                     data: { id: 'attempt-1', evaluation: 'incorrect' },
                     error: null
                 }));
-
-            // 3) Eq logic returns arrays for past attempts, let's mock the select call chain that doesn't use single()
-            // This is handled by default via mockReturnThis in jest for `.eq`
-            supabaseAdmin.select.mockImplementationOnce(() => supabaseAdmin);
 
             const response = await request(app)
                 .post('/api/practice-attempts')
@@ -263,7 +393,7 @@ describe('Practice Endpoints', () => {
                 .set('x-mock-user-id', 'student-A')
                 .send({
                     practice_question_id: 'pq-1',
-                    answer: 'Correc Answer'
+                    answer: 'Correct Answer'
                 });
 
             expect(response.status).toBe(200);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 /**
  * =====================================================================
- * SOUND MANAGER FOR BODH (AI Tutor)
+ * SOUND MANAGER FOR Learnify (AI Tutor)
  * =====================================================================
  * Centralized sound management for short UI cues (not speech narration).
  *
@@ -41,7 +41,7 @@ class SoundManager {
 
   loadMuteState() {
     try {
-      const saved = localStorage.getItem('bodh_sound_muted');
+      const saved = localStorage.getItem('learnify_sound_muted');
       return saved === 'true';
     } catch {
       return false;
@@ -50,7 +50,7 @@ class SoundManager {
 
   saveMuteState(muted) {
     try {
-      localStorage.setItem('bodh_sound_muted', muted ? 'true' : 'false');
+      localStorage.setItem('learnify_sound_muted', muted ? 'true' : 'false');
     } catch (e) {
       console.warn('Could not save sound settings to localStorage', e);
     }

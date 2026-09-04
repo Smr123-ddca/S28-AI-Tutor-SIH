@@ -16,10 +16,10 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized: Invalid token' });
         }
 
-        // Query profiles for user's role
+        // Query profiles for user's role and details
         const { data: profile, error: profileError } = await supabaseAdmin
             .from('profiles')
-            .select('role')
+            .select('*')
             .eq('id', user.id)
             .single();
 
@@ -27,10 +27,14 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized: Profile not found' });
         }
 
+        const displayName = profile.display_name || profile.full_name || profile.name || user.user_metadata?.full_name || user.user_metadata?.name || (user.email ? user.email.split('@')[0] : 'Student');
+
         // Attach user id and role to the request object
         req.user = {
             id: user.id,
-            role: profile.role
+            role: profile.role,
+            display_name: displayName,
+            email: user.email || profile.email || ''
         };
 
         next();

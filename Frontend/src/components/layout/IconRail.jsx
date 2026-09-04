@@ -8,7 +8,9 @@ import {
   Home,
   LogOut,
   Sparkles,
-  BarChart2
+  BarChart2,
+  Award,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -46,6 +48,18 @@ export function IconRail() {
       roles: ['student', 'teacher']
     },
     {
+      to: '/dashboard',
+      icon: LayoutDashboard,
+      title: 'Student Dashboard',
+      roles: ['student']
+    },
+    {
+      to: '/assignments',
+      icon: FileText,
+      title: 'Assignments & Tasks',
+      roles: ['student']
+    },
+    {
       to: '/chat',
       icon: MessageSquareText,
       title: 'Learnify Tutor Chat',
@@ -61,6 +75,12 @@ export function IconRail() {
       to: '/teacher',
       icon: BookOpen,
       title: 'Courses Workspace',
+      roles: ['teacher']
+    },
+    {
+      to: '/teacher/grading',
+      icon: Award,
+      title: 'Grading & Submissions',
       roles: ['teacher']
     },
     {
@@ -112,7 +132,7 @@ export function IconRail() {
             color: '#ffffff',
             boxShadow: 'var(--shadow-orange)'
           }}
-          title="BODH | Study-app"
+          title="Learnify | Study-app"
         >
           <Sparkles size={22} />
         </NavLink>

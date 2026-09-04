@@ -50,9 +50,10 @@ const schemas = {
                             question: { type: SchemaType.STRING, description: "The practice question text" },
                             concept: { type: SchemaType.STRING, description: "The core concept being tested" },
                             hint_1: { type: SchemaType.STRING, description: "A simple hint to guide the student" },
-                            hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" }
+                            hint_2: { type: SchemaType.STRING, description: "A more detailed hint or conceptual clue" },
+                            expected_answer: { type: SchemaType.STRING, description: "The ground truth factual answer / expected solution" }
                         },
-                        required: ["question", "concept", "hint_1", "hint_2"]
+                        required: ["question", "concept", "hint_1", "hint_2", "expected_answer"]
                     }
                 }
             },
@@ -85,9 +86,10 @@ const schemas = {
                                 question: { type: "string" },
                                 concept: { type: "string" },
                                 hint_1: { type: "string" },
-                                hint_2: { type: "string" }
+                                hint_2: { type: "string" },
+                                expected_answer: { type: "string" }
                             },
-                            required: ["question", "concept", "hint_1", "hint_2"],
+                            required: ["question", "concept", "hint_1", "hint_2", "expected_answer"],
                             additionalProperties: false
                         }
                     }
@@ -137,6 +139,66 @@ const schemas = {
                     message: { type: "string" }
                 },
                 required: ["evaluation", "message"],
+                additionalProperties: false
+            }
+        }
+    },
+    "SUGGEST_GRADE": {
+        gemini: {
+            type: SchemaType.OBJECT,
+            properties: {
+                suggested_grade: { type: SchemaType.NUMBER, description: "Numeric grade score between 0 and 100" },
+                feedback: { type: SchemaType.STRING, description: "Actionable, constructive feedback for the student" },
+                strengths: {
+                    type: SchemaType.ARRAY,
+                    items: { type: SchemaType.STRING },
+                    description: "Key strengths identified in the student's submission"
+                },
+                areas_for_improvement: {
+                    type: SchemaType.ARRAY,
+                    items: { type: SchemaType.STRING },
+                    description: "Specific areas where the student can improve"
+                }
+            },
+            required: ["suggested_grade", "feedback"]
+        },
+        jsonSchema: {
+            name: "suggest_grade_response",
+            schema: {
+                type: "object",
+                properties: {
+                    suggested_grade: { type: "number", description: "Numeric grade score between 0 and 100" },
+                    feedback: { type: "string", description: "Constructive feedback text" },
+                    strengths: {
+                        type: "array",
+                        items: { type: "string" }
+                    },
+                    areas_for_improvement: {
+                        type: "array",
+                        items: { type: "string" }
+                    }
+                },
+                required: ["suggested_grade", "feedback"],
+                additionalProperties: false
+            }
+        }
+    },
+    "TEACHER_COPILOT": {
+        gemini: {
+            type: SchemaType.OBJECT,
+            properties: {
+                answer: { type: SchemaType.STRING, description: "Conversational answer strictly grounded in data under 100 words." }
+            },
+            required: ["answer"]
+        },
+        jsonSchema: {
+            name: "teacher_copilot_response",
+            schema: {
+                type: "object",
+                properties: {
+                    answer: { type: "string", description: "Conversational answer strictly grounded in data under 100 words." }
+                },
+                required: ["answer"],
                 additionalProperties: false
             }
         }
