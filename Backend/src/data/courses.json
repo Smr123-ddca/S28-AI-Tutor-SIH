@@ -44,18 +44,5 @@
     "chunks": "test_mock_chunks.json",
     "prerequisites": "test_mock_prerequisites.json",
     "status": "pending_review"
-  },
-  {
-    "name": "DSA_Code_Reference",
-    "pdf": "DSA_Code_Reference.pdf",
-    "chunks": "DSA_Code_Reference_chunks.json",
-    "prerequisites": "DSA_Code_Reference_prerequisites.json",
-    "status": "published",
-    "audit": {
-      "approvedAt": "2026-09-04T07:17:16.453Z",
-      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
-      "publishedAt": "2026-09-04T07:17:22.083Z",
-      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
-    }
   }
 ]

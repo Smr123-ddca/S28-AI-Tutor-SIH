@@ -259,7 +259,7 @@ function runChunking(pdfPath) {
             // CHECK PYTHON
             // ----------------------------------------------------
 
-            if (PYTHON_PATH !== 'python' && false) {
+            if (PYTHON_PATH !== 'python') {
                 return reject(
                     new Error(
                         `Python executable not found: ${PYTHON_PATH}`

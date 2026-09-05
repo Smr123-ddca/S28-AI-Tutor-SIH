@@ -311,7 +311,7 @@ async function explain(req, res) {
 
         if (classificationResult.classification === "concept_question" && student_id && results && results.length > 0) {
             const topChunkId = results[0].id;
-            const likelyGaps = await getLikelyGaps(student_id, topChunkId);
+            const likelyGaps = await getLikelyGaps(student_id, topChunkId, subject);
 
             if (likelyGaps.length > 0) {
                 const firstGap = likelyGaps[0];

@@ -1,11 +1,38 @@
+const path = require('path');
+const fs = require('fs');
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
-let prerequisites = {};
-try {
-    prerequisites = require('../data/prerequisites.json');
-} catch (error) {
-    console.warn("Legacy prerequisites.json not found, falling back to empty prerequisites mapping.");
-}
 const { getChunks } = require('../data/store');
+
+const DATA_DIR = path.join(__dirname, '../data');
+
+/**
+ * Build a prerequisite lookup map from a per-course prerequisites file.
+ * The file schema is: { course, relationships: [{ concept_id, prerequisite_id, ... }] }
+ * Returns: { [concept_id]: [prerequisite_id, ...] }
+ */
+function loadPrerequisites(courseName) {
+    if (!courseName) return {};
+    const prereqPath = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
+    try {
+        if (!fs.existsSync(prereqPath)) return {};
+        const data = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
+        const relationships = data.relationships || [];
+        const map = {};
+        for (const rel of relationships) {
+            const concept = rel.concept_id;
+            const prereq = rel.prerequisite_id;
+            if (!concept || !prereq) continue;
+            if (!map[concept]) map[concept] = [];
+            if (!map[concept].includes(prereq)) {
+                map[concept].push(prereq);
+            }
+        }
+        return map;
+    } catch (err) {
+        console.warn(`[gap] Failed to load prerequisites for course "${courseName}":`, err.message);
+        return {};
+    }
+}
 
 async function recordSessionEvent(req, res) {
     const { chunk_id, correct } = req.body;
@@ -29,7 +56,8 @@ async function recordSessionEvent(req, res) {
     return res.json({ success: true, recorded: event });
 }
 
-async function getLikelyGaps(student_id, chunk_id) {
+async function getLikelyGaps(student_id, chunk_id, courseName) {
+    const prerequisites = loadPrerequisites(courseName);
     const prereqs = prerequisites[chunk_id] || [];
     if (prereqs.length === 0) return [];
 
@@ -80,14 +108,14 @@ async function getLikelyGaps(student_id, chunk_id) {
 }
 
 async function detectGap(req, res) {
-    const { chunk_id } = req.body;
+    const { chunk_id, course } = req.body;
     const student_id = req.user?.id;
 
     if (!student_id || !chunk_id) {
         return res.status(400).json({ error: "Missing required fields: student_id, chunk_id" });
     }
 
-    const likely_gaps = await getLikelyGaps(student_id, chunk_id);
+    const likely_gaps = await getLikelyGaps(student_id, chunk_id, course);
 
     return res.json({
         target_chunk_id: chunk_id,

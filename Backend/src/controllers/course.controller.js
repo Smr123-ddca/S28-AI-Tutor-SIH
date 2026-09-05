@@ -228,7 +228,8 @@ function deleteCourse(req, res) {
         const legacyArtifacts = [
             course.pdf,
             course.chunks,
-            course.prerequisites
+            course.prerequisites,
+            `${courseName}.pdf`   // synthesized fallback in case stored pdf field differs from name pattern
         ];
 
         legacyArtifacts.filter(Boolean).forEach(artifact => {
