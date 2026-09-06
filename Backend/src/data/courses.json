@@ -32,17 +32,17 @@
     "prerequisites": "DSA_Code_Reference_Annotated_prerequisites.json",
     "status": "published",
     "audit": {
-      "approvedAt": "2026-09-02T01:35:56.768Z",
-      "approvedBy": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4",
-      "publishedAt": "2026-09-02T01:36:01.761Z",
-      "publishedBy": "fb0f7bf4-9313-4fe9-a162-b1321b667ad4"
+      "approvedAt": "2026-09-05T04:28:40.204Z",
+      "approvedBy": "9ab265e9-a934-477c-8fc4-9a922e120183",
+      "publishedAt": "2026-09-05T04:28:48.794Z",
+      "publishedBy": "9ab265e9-a934-477c-8fc4-9a922e120183"
     }
   },
   {
-    "name": "test_mock",
-    "pdf": "test_mock.pdf",
-    "chunks": "test_mock_chunks.json",
-    "prerequisites": "test_mock_prerequisites.json",
+    "name": "Economics_Chunking_Reference",
+    "pdf": "Economics_Chunking_Reference.pdf",
+    "chunks": "Economics_Chunking_Reference_chunks.json",
+    "prerequisites": "Economics_Chunking_Reference_prerequisites.json",
     "status": "pending_review"
   }
 ]

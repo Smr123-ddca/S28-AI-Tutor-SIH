@@ -205,7 +205,7 @@ else:
     try:
         import google.generativeai as genai
         genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash") # Added model initialization since it was missing
+        model = genai.GenerativeModel("gemini-3.6-flash") # Added model initialization since it was missing
         response = model.generate_content(prompt)
         raw_response = response.text
         # Strip markdown formatting from the response

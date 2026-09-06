@@ -284,10 +284,63 @@ async function explain(req, res) {
         }
 
         // ════════════════════════════════════════════════════════════════
+        // STEP 4.5: Demo Mode Matcher 
+        // ════════════════════════════════════════════════════════════════
+        let isDemoBypass = false;
+        let demoMatchingChunk = null;
+        let demoMatch = null;
+
+        if (process.env.DEMO_MODE === 'true') {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const mockAnsPath = path.join(__dirname, '../data/demo_answers.json');
+                if (fs.existsSync(mockAnsPath)) {
+                    const mockAnswers = JSON.parse(fs.readFileSync(mockAnsPath, 'utf8'));
+
+                    const normalizeQuestion = (q) =>
+                        q.toLowerCase()
+                            .trim()
+                            .replace(/[?!.]+$/g, '')
+                            .replace(/\s+/g, ' ');
+
+                    const normalizedQuestion = normalizeQuestion(questionToProcess);
+
+                    demoMatch = mockAnswers.find(m => {
+                        if (normalizeQuestion(m.question) === normalizedQuestion) return true;
+                        if (m.aliases && m.aliases.some(a => normalizeQuestion(a) === normalizedQuestion)) return true;
+                        return false;
+                    });
+
+                    if (demoMatch) {
+                        demoMatchingChunk = results && results.length > 0 ? results.find(chunk =>
+                            chunk.section_label?.toLowerCase().includes(demoMatch.source_hint.toLowerCase()) ||
+                            chunk.topic?.toLowerCase().includes(demoMatch.source_hint.toLowerCase())
+                        ) : null;
+
+                        if (!demoMatchingChunk) {
+                            console.log("[DEMO MOCK] No matching evidence chunk for source_hint:", demoMatch.source_hint);
+                            demoMatch = null;
+                        } else {
+                            isDemoBypass = true;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Demo mock logic failed:", e);
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════════
         // STEP 5: Evidence gate (unchanged at 0.30)
         // ════════════════════════════════════════════════════════════════
         let eStart = performance.now();
-        const hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
+        let hasGoodEvidence = results && results.length > 0 && results[0].score >= 0.30;
+
+        if (isDemoBypass) {
+            hasGoodEvidence = true; // Exemption for verified demo answers
+        }
+
         if (process.env.DEBUG_TIMING === 'true') recordT('EvidenceGate', eStart);
 
         const isGuidedMode = classificationResult.classification === "graded_work_request";
@@ -297,7 +350,7 @@ async function explain(req, res) {
         if (!hasGoodEvidence && !transcript && !shouldCoach) {
             return await respondAndLog({
                 status: "insufficient_evidence",
-                message: "I don't have approved course material covering this.",
+                message: "I don't have approved course material covering this. To ensure academic rigor and avoid hallucinations, I can only explain concepts within your official curriculum.",
                 results: results,
                 diagnostics: queryResult.diagnostics
             });
@@ -386,35 +439,53 @@ Generate exactly 2 short practice questions based on the factual material.
         // STEP 8: Call Gemini (Single Attempt, Fast Fail)
         // ════════════════════════════════════════════════════════════════
         let parsedResult = null;
+        let useMock = false;
 
-        try {
-            let gStart = performance.now();
-            const rawResponse = await generateWithFallback(prompt, "EXPLAIN");
-            if (process.env.DEBUG_TIMING === 'true') recordT('GeminiNetworkWait', gStart);
+        if (isDemoBypass && demoMatch && demoMatchingChunk) {
+            console.log("[DEMO MOCK] Bypassing LLM for:", demoMatch.question);
+            parsedResult = JSON.parse(JSON.stringify(demoMatch.response)); // Deep clone
 
-            metaGeminiStatus = "success";
-
-            let parseStart = performance.now();
-            parsedResult = JSON.parse(rawResponse);
-            if (process.env.DEBUG_TIMING === 'true') recordT('GeminiParse', parseStart);
-        } catch (err) {
-            metaGeminiStatus = "failure_aborted";
-            console.error("Gemini call or parse failed:", err);
-
-            const errStr = err.toString() + (err.message || "");
-            let safeMsg = "The AI service is temporarily unavailable.";
-            if (errStr.includes("429")) {
-                safeMsg = "The AI service is temporarily busy. Please try again in a moment.";
-            } else if (errStr.includes("Timeout") || errStr.includes("timeout") || errStr.includes("504")) {
-                safeMsg = "The AI took too long to respond. Please try again.";
+            if (parsedResult.explanation_segments) {
+                parsedResult.explanation_segments.forEach(seg => {
+                    if (seg.source_chunk_id === "DYNAMIC") {
+                        seg.source_chunk_id = demoMatchingChunk.id;
+                    }
+                });
             }
+            metaGeminiStatus = "mocked";
+            useMock = true;
+        }
 
-            const errorObj = {
-                status: "error",
-                message: safeMsg,
-                results: contextChunks
-            };
-            return await respondAndLog(errorObj);
+        if (!useMock) {
+            try {
+                let gStart = performance.now();
+                const rawResponse = await generateWithFallback(prompt, "EXPLAIN");
+                if (process.env.DEBUG_TIMING === 'true') recordT('GeminiNetworkWait', gStart);
+
+                metaGeminiStatus = "success";
+
+                let parseStart = performance.now();
+                parsedResult = JSON.parse(rawResponse);
+                if (process.env.DEBUG_TIMING === 'true') recordT('GeminiParse', parseStart);
+            } catch (err) {
+                metaGeminiStatus = "failure_aborted";
+                console.error("Gemini call or parse failed:", err);
+
+                const errStr = err.toString() + (err.message || "");
+                let safeMsg = "The AI service is temporarily unavailable.";
+                if (errStr.includes("429")) {
+                    safeMsg = "The AI service is temporarily busy. Please try again in a moment.";
+                } else if (errStr.includes("Timeout") || errStr.includes("timeout") || errStr.includes("504")) {
+                    safeMsg = "The AI took too long to respond. Please try again.";
+                }
+
+                const errorObj = {
+                    status: "error",
+                    message: safeMsg,
+                    results: contextChunks
+                };
+                return await respondAndLog(errorObj);
+            }
         }
 
         // ════════════════════════════════════════════════════════════════

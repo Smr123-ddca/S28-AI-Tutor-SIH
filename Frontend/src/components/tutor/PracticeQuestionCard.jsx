@@ -24,7 +24,6 @@ export function PracticeQuestionCard({
   const [studentAnswer, setStudentAnswer] = useState('');
   const [evalResult, setEvalResult] = useState(null); // { evaluation: 'correct'|'partial'|'incorrect', reason: string }
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showHint, setShowHint] = useState(0); // 0 = none, 1 = hint1, 2 = hint2
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -76,7 +75,7 @@ export function PracticeQuestionCard({
           chunk_id: chunkId || 'chunk-untracked',
           correct: isCorrect,
           token: session?.access_token
-        }).catch(() => {});
+        }).catch(() => { });
       }
     } catch (err) {
       console.error('Answer evaluation error:', err);
@@ -140,59 +139,6 @@ export function PracticeQuestionCard({
         </div>
       </div>
 
-      {/* Hints (if available) */}
-      {(hint1 || hint2) && !evalResult && (
-        <div style={{ fontSize: '0.82rem' }}>
-          {showHint === 0 && (
-            <button
-              type="button"
-              onClick={() => setShowHint(1)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-orange)',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                padding: 0
-              }}
-            >
-              <HelpCircle size={14} /> Need a hint?
-            </button>
-          )}
-          {showHint >= 1 && hint1 && (
-            <div style={{ padding: '0.5rem 0.75rem', backgroundColor: '#fef3c7', borderRadius: '6px', color: '#92400e', marginBottom: '0.4rem' }}>
-              💡 <b>Hint 1:</b> {hint1}
-            </div>
-          )}
-          {showHint === 1 && hint2 && (
-            <button
-              type="button"
-              onClick={() => setShowHint(2)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-orange)',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                padding: 0
-              }}
-            >
-              <HelpCircle size={14} /> Need another hint?
-            </button>
-          )}
-          {showHint >= 2 && hint2 && (
-            <div style={{ padding: '0.5rem 0.75rem', backgroundColor: '#fef3c7', borderRadius: '6px', color: '#92400e' }}>
-              💡 <b>Hint 2:</b> {hint2}
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Answer Input or Result Display */}
       {!evalResult ? (
@@ -255,15 +201,14 @@ export function PracticeQuestionCard({
                 evalResult.evaluation === 'correct'
                   ? 'var(--color-green-light, #dcfce7)'
                   : evalResult.evaluation === 'partial'
-                  ? '#fef3c7'
-                  : 'var(--color-red-light, #fee2e2)',
-              border: `1.5px solid ${
-                evalResult.evaluation === 'correct'
-                  ? '#86efac'
-                  : evalResult.evaluation === 'partial'
+                    ? '#fef3c7'
+                    : 'var(--color-red-light, #fee2e2)',
+              border: `1.5px solid ${evalResult.evaluation === 'correct'
+                ? '#86efac'
+                : evalResult.evaluation === 'partial'
                   ? '#fcd34d'
                   : '#fca5a5'
-              }`,
+                }`,
               display: 'flex',
               flexDirection: 'column',
               gap: '0.35rem'
@@ -278,8 +223,8 @@ export function PracticeQuestionCard({
                   {evalResult.evaluation === 'correct'
                     ? 'Correct! (+10 XP)'
                     : evalResult.evaluation === 'partial'
-                    ? 'Partially Correct'
-                    : 'Incorrect'}
+                      ? 'Partially Correct'
+                      : 'Incorrect'}
                 </span>
               </div>
               {evalResult.evaluation !== 'correct' && (

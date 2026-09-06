@@ -277,13 +277,13 @@
       "student_name": "Alex Rivers",
       "submission_text": "Student solution explaining Express auth middleware.",
       "submitted_at": "2026-09-02T10:30:56.407Z",
-      "grade": null,
-      "feedback": null,
+      "grade": 78,
+      "feedback": "",
       "ai_suggested_grade": null,
       "ai_suggested_feedback": null,
-      "status": "ungraded",
-      "graded_at": null,
-      "graded_by": null
+      "status": "graded",
+      "graded_at": "2026-09-05T07:07:30.929Z",
+      "graded_by": "9ab265e9-a934-477c-8fc4-9a922e120183"
     },
     {
       "id": "sub-1788317597471",

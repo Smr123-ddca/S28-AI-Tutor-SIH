@@ -8,8 +8,6 @@ import {
   Trash2
 } from 'lucide-react';
 import { MessageBubble } from '../components/tutor/MessageBubble';
-import { ModeSelector } from '../components/tutor/ModeSelector';
-import { HintSystem } from '../components/tutor/HintSystem';
 import { Button } from '../components/common/Button';
 import { useChatStream } from '../context/ChatStreamContext';
 
@@ -33,7 +31,6 @@ export function ChatPage() {
   } = useChatStream();
 
   const [inputQuery, setInputQuery] = useState('');
-  const [activeMode, setActiveMode] = useState('ask_doubt'); // 'ask_doubt' | 'practice_test' | 'study_plan'
   const messagesEndRef = useRef(null);
 
   // Handle URL deep links (?session_id=... or ?q=...)
@@ -231,15 +228,6 @@ export function ChatPage() {
             overflow: 'hidden'
           }}
         >
-          {/* Top Mode Selector Bar */}
-          <div style={{ padding: '1.25rem 2rem 0.75rem', borderBottom: '1px solid var(--color-border)' }}>
-            <ModeSelector
-              activeMode={activeMode}
-              onSelectMode={(mode) => setActiveMode(mode)}
-              hidePracticeTest={activeMessages.length === 0}
-            />
-          </div>
-
           {/* Mode Viewport */}
           <div
             className="smooth-scroll"
@@ -251,173 +239,161 @@ export function ChatPage() {
               scrollBehavior: 'smooth'
             }}
           >
-            {/* MODE 2: PRACTICE TEST */}
-            {activeMode === 'practice_test' && (
-              <HintSystem onComplete={() => setActiveMode('ask_doubt')} sessionId={currentSessionId} />
-            )}
+            {activeMessages.length === 0 && !isCurrentGenerating && (
+              <div
+                style={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  color: 'var(--color-text-muted)',
+                  padding: '2rem'
+                }}
+              >
+                <div
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '20px',
+                    backgroundColor: 'var(--color-orange-subtle)',
+                    color: 'var(--color-orange)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem'
+                  }}
+                >
+                  <Sparkles size={32} />
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
+                  What do you want to learn today?
+                </h3>
+                <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
+                  Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
+                </p>
 
-            {/* MODE 1: ASK A DOUBT */}
-            {activeMode === 'ask_doubt' && (
-              <>
-                {activeMessages.length === 0 && !isCurrentGenerating && (
-                  <div
+                <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-ink)' }}>Query Subject Context:</label>
+                  <select
+                    value={currentSubject || ''}
+                    onChange={(e) => setCurrentSubject(e.target.value)}
                     style={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      color: 'var(--color-text-muted)',
-                      padding: '2rem'
+                      padding: '0.5rem 1rem',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1.5px solid var(--color-border)',
+                      backgroundColor: 'var(--color-white)',
+                      outline: 'none',
+                      fontSize: '0.9rem',
+                      fontWeight: 500,
+                      cursor: 'pointer'
                     }}
                   >
-                    <div
-                      style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '20px',
-                        backgroundColor: 'var(--color-orange-subtle)',
-                        color: 'var(--color-orange)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '1rem'
-                      }}
-                    >
-                      <Sparkles size={32} />
-                    </div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
-                      What do you want to learn today?
-                    </h3>
-                    <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
-                      Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
-                    </p>
-
-                    <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-ink)' }}>Query Subject Context:</label>
-                      <select
-                        value={currentSubject || ''}
-                        onChange={(e) => setCurrentSubject(e.target.value)}
-                        style={{
-                          padding: '0.5rem 1rem',
-                          borderRadius: 'var(--radius-sm)',
-                          border: '1.5px solid var(--color-border)',
-                          backgroundColor: 'var(--color-white)',
-                          outline: 'none',
-                          fontSize: '0.9rem',
-                          fontWeight: 500,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {subjects.length === 0 && <option value="">Loading subjects...</option>}
-                        {subjects.map((c) => (
-                          <option key={c} value={c}>{c}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {activeMessages.map((msg, idx) => (
-                  <MessageBubble
-                    key={idx}
-                    message={msg}
-                    msgIndex={idx}
-                    studentId={studentId}
-                    onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
-                    onSelectOption={(option) => {
-                      const originalQ = activeMessages[idx - 1]?.text || activeMessages[idx - 1]?.content;
-                      handleSend(option, originalQ);
-                    }}
-                  />
-                ))}
-
-                {isCurrentGenerating && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
-                    <div
-                      style={{
-                        width: '28px',
-                        height: '28px',
-                        borderRadius: '50%',
-                        backgroundColor: 'var(--color-purple-light)',
-                        color: 'var(--color-purple)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <Sparkles size={16} className="animate-float" />
-                    </div>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
-                      Tutor is retrieving syllabus material and generating grounded explanation...
-                    </span>
-                  </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </>
+                    {subjects.length === 0 && <option value="">Loading subjects...</option>}
+                    {subjects.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             )}
+
+            {activeMessages.map((msg, idx) => (
+              <MessageBubble
+                key={idx}
+                message={msg}
+                msgIndex={idx}
+                studentId={studentId}
+                onAcceptWalkthrough={() => handleSend('Yes, please walk me through the concept step by step.')}
+                onSelectOption={(option) => {
+                  const originalQ = activeMessages[idx - 1]?.text || activeMessages[idx - 1]?.content;
+                  handleSend(option, originalQ);
+                }}
+              />
+            ))}
+
+            {isCurrentGenerating && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 0' }}>
+                <div
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--color-purple-light)',
+                    color: 'var(--color-purple)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <Sparkles size={16} className="animate-float" />
+                </div>
+                <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                  Tutor is retrieving syllabus material and generating grounded explanation...
+                </span>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Bottom Chat Input Bar */}
-          {activeMode === 'ask_doubt' && (
-            <div
+          <div
+            style={{
+              padding: '1.25rem 2rem',
+              borderTop: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-white)'
+            }}
+          >
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
               style={{
-                padding: '1.25rem 2rem',
-                borderTop: '1px solid var(--color-border)',
-                backgroundColor: 'var(--color-white)'
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                position: 'relative'
               }}
             >
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSend();
-                }}
+              <input
+                type="text"
+                value={inputQuery}
+                onChange={(e) => setInputQuery(e.target.value)}
+                placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
+                disabled={isCurrentGenerating}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  position: 'relative'
+                  flex: 1,
+                  padding: '0.9rem 3.5rem 0.9rem 1.4rem',
+                  borderRadius: 'var(--radius-full)',
+                  border: '1.5px solid var(--color-border)',
+                  outline: 'none',
+                  fontSize: '0.95rem',
+                  backgroundColor: 'var(--color-offwhite)',
+                  transition: 'border-color var(--transition-fast)'
                 }}
+              />
+              <button
+                type="submit"
+                disabled={isCurrentGenerating || !inputQuery.trim() || !currentSubject}
+                className="btn-orange btn-icon"
+                style={{
+                  position: 'absolute',
+                  right: '6px',
+                  width: '40px',
+                  height: '40px',
+                  opacity: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 0.4 : 1,
+                  cursor: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 'not-allowed' : 'pointer'
+                }}
+                title={!currentSubject ? 'Please select a subject context in the new session screen.' : 'Send Doubt'}
+                aria-label="Send Doubt"
               >
-                <input
-                  type="text"
-                  value={inputQuery}
-                  onChange={(e) => setInputQuery(e.target.value)}
-                  placeholder="Ask a doubt (e.g., 'Why does BST worst-case become O(n)?')..."
-                  disabled={isCurrentGenerating}
-                  style={{
-                    flex: 1,
-                    padding: '0.9rem 3.5rem 0.9rem 1.4rem',
-                    borderRadius: 'var(--radius-full)',
-                    border: '1.5px solid var(--color-border)',
-                    outline: 'none',
-                    fontSize: '0.95rem',
-                    backgroundColor: 'var(--color-offwhite)',
-                    transition: 'border-color var(--transition-fast)'
-                  }}
-                />
-                <button
-                  type="submit"
-                  disabled={isCurrentGenerating || !inputQuery.trim() || !currentSubject}
-                  className="btn-orange btn-icon"
-                  style={{
-                    position: 'absolute',
-                    right: '6px',
-                    width: '40px',
-                    height: '40px',
-                    opacity: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 0.4 : 1,
-                    cursor: isCurrentGenerating || !inputQuery.trim() || !currentSubject ? 'not-allowed' : 'pointer'
-                  }}
-                  title={!currentSubject ? 'Please select a subject context in the new session screen.' : 'Send Doubt'}
-                  aria-label="Send Doubt"
-                >
-                  <Send size={18} />
-                </button>
-              </form>
-            </div>
-          )}
+                <Send size={18} />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

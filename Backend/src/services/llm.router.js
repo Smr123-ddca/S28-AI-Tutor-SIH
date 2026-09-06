@@ -261,7 +261,7 @@ const schemas = {
 async function callGeminiPrimary(prompt, schemaName) {
     const start = Date.now();
 
-    const modelString = 'gemini-2.5-flash';
+    const modelString = 'gemini-3.6-flash';
 
     const config = schemas[schemaName].gemini;
     const model = genAI.getGenerativeModel({

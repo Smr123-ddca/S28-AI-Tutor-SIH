@@ -551,12 +551,24 @@ async function runDemoMockPrerequisites(courseName) {
     await new Promise(r => setTimeout(r, 800));
     sendProgress(courseName, 'C4', 'Mapping prerequisite topological edges... (Demo Mock)');
 
+    // Load concepts if available so mock edges use canonical concept_id values (not chunk IDs).
+    // The TeacherPrerequisites UI filters relationships by concept_id, not chunk ID.
+    let mockIds = chunks.map(c => c.id); // fallback: chunk IDs (for first-run before C2 runs)
+    const conceptsPath = path.join(DATA_DIR, `${courseName}_concepts.json`);
+    if (fs.existsSync(conceptsPath)) {
+        try {
+            const conceptData = JSON.parse(fs.readFileSync(conceptsPath, 'utf8'));
+            const ids = (conceptData.concepts || []).map(c => c.concept_id).filter(Boolean);
+            if (ids.length >= 4) mockIds = ids;
+        } catch (_) { /* keep chunk ID fallback */ }
+    }
+
     const relationships = [];
-    if (chunks.length > 5) {
-        relationships.push({ concept_id: chunks[3].id, prerequisite_id: chunks[0].id, reason: 'Foundational dependency', confidence: 0.95 });
-        relationships.push({ concept_id: chunks[4].id, prerequisite_id: chunks[1].id, reason: 'Logical progression', confidence: 0.88 });
-        relationships.push({ concept_id: chunks[5].id, prerequisite_id: chunks[2].id, reason: 'Advanced topic requirement', confidence: 0.91 });
-        relationships.push({ concept_id: chunks[5].id, prerequisite_id: chunks[3].id, reason: 'Synthesized knowledge requirement', confidence: 0.85 });
+    if (mockIds.length > 5) {
+        relationships.push({ concept_id: mockIds[3], prerequisite_id: mockIds[0], relationship: 'REQUIRED', reason: 'Foundational dependency', confidence: 0.95, evidence: [] });
+        relationships.push({ concept_id: mockIds[4], prerequisite_id: mockIds[1], relationship: 'SUPPORTING', reason: 'Logical progression', confidence: 0.88, evidence: [] });
+        relationships.push({ concept_id: mockIds[5], prerequisite_id: mockIds[2], relationship: 'REQUIRED', reason: 'Advanced topic requirement', confidence: 0.91, evidence: [] });
+        relationships.push({ concept_id: mockIds[5], prerequisite_id: mockIds[3], relationship: 'SUPPORTING', reason: 'Synthesized knowledge requirement', confidence: 0.85, evidence: [] });
     }
 
     fs.writeFileSync(c4Path, JSON.stringify({ course: courseName, relationships }, null, 2), 'utf8');
@@ -1061,7 +1073,10 @@ const handleUpload = async (
 
 
             // =================================================
-            // 4. DO NOT GENERATE PREREQUISITES HERE
+            // 4. RECORD — full V2 pipeline runs asynchronously
+            // (C1 → C2 → C3 → C4) after the HTTP response is sent
+            // so the upload never times out on large documents.
+            // SSE progress events are streamed via sendProgress().
             // =================================================
 
             processedCourses.push({
@@ -1072,7 +1087,7 @@ const handleUpload = async (
                     chunks.length,
 
                 prerequisite_status:
-                    'pending'
+                    'running'
 
             });
 
@@ -1146,12 +1161,26 @@ const handleUpload = async (
 
         }
 
+        // ====================================================
+        // SEND RESPONSE — then start the background pipeline
+        // ====================================================
 
+        res.status(200).json(responsePayload);
 
-        return res.status(200).json(
-            responsePayload
-        );
+        // Fire-and-forget: run C1→C4 for every course that was
+        // just uploaded. The SSE channel delivers real-time
+        // progress to the teacher UI without blocking this request.
+        for (const pc of processedCourses) {
+            console.log(`\n🚀 Launching background pipeline for: ${pc.name}`);
+            runPrerequisites(pc.name).then(result => {
+                console.log(`✅ Background pipeline done for ${pc.name}: ${result.relationship_count} edges.`);
+            }).catch(err => {
+                console.error(`❌ Background pipeline failed for ${pc.name}:`, err.message);
+                sendProgress(pc.name, 'ERROR', `Pipeline failed: ${err.message}`);
+            });
+        }
 
+        return; // response already sent above
 
     } catch (
     error

@@ -1,0 +1,581 @@
+{
+  "course": "Economics_Chunking_Reference",
+  "source_chunks": 56,
+  "evaluated_chunks": 56,
+  "included_chunks": 39,
+  "excluded_chunks": 17,
+  "chunks": [
+    {
+      "chunk_id": "chunk_1",
+      "classification": "METADATA",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.95,
+      "include_for_concept_extraction": false,
+      "reason": "Header text and page marker with no educational content."
+    },
+    {
+      "chunk_id": "chunk_2",
+      "classification": "METADATA",
+      "educational_value": 0.1,
+      "conceptual_density": 0.05,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.85,
+      "include_for_concept_extraction": false,
+      "reason": "Describes the structural purpose of the document for AI retrieval systems rather than teaching economics."
+    },
+    {
+      "chunk_id": "chunk_3",
+      "classification": "NAVIGATION",
+      "educational_value": 0.2,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.2,
+      "noise_score": 0.4,
+      "include_for_concept_extraction": false,
+      "reason": "Table of contents outlining chapter titles; useful for structure but contains no detailed concepts."
+    },
+    {
+      "chunk_id": "chunk_4",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text describing chapter focus and retrieval unit layout."
+    },
+    {
+      "chunk_id": "chunk_5",
+      "classification": "DEFINITION",
+      "educational_value": 0.95,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines foundational terms including Economics, Scarcity, Microeconomics, and Macroeconomics."
+    },
+    {
+      "chunk_id": "chunk_6",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Elaborates on scarcity and defines Opportunity Cost with illustrative examples."
+    },
+    {
+      "chunk_id": "chunk_7",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains and distinguishes Positive Economics from Normative Economics."
+    },
+    {
+      "chunk_id": "chunk_8",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines and explains the Production Possibility Frontier (PPF) model, trade-offs, and slope."
+    },
+    {
+      "chunk_id": "chunk_9",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Repetitive meta-text describing chapter segments."
+    },
+    {
+      "chunk_id": "chunk_10",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Demand, Law of Demand, shifts vs. movements along the curve, and normal/inferior goods."
+    },
+    {
+      "chunk_id": "chunk_11",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Supply, Law of Supply, movements along supply curves, and determinants of supply shifts."
+    },
+    {
+      "chunk_id": "chunk_12",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Market Equilibrium, surplus, shortage, and equilibrium price dynamics."
+    },
+    {
+      "chunk_id": "chunk_13",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Illustrates equilibrium shifts caused by supply and demand changes and supply shocks."
+    },
+    {
+      "chunk_id": "chunk_14",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text describing chapter theory segments."
+    },
+    {
+      "chunk_id": "chunk_15",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Price Elasticity of Demand, its calculation, and classification (elastic/inelastic/unit elastic)."
+    },
+    {
+      "chunk_id": "chunk_16",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains the relationship between Total Revenue and Price Elasticity of Demand."
+    },
+    {
+      "chunk_id": "chunk_17",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Income Elasticity and Cross-Price Elasticity of demand along with substitutes and complements."
+    },
+    {
+      "chunk_id": "chunk_18",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text detailing chapter segment breakdown."
+    },
+    {
+      "chunk_id": "chunk_19",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Introduces Utility theory, budget constraints, budget lines, and consumer equilibrium."
+    },
+    {
+      "chunk_id": "chunk_20",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Marginal Utility and the law/principle of Diminishing Marginal Utility."
+    },
+    {
+      "chunk_id": "chunk_21",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Indifference Curves, budget lines, and consumer optimal choice conditions."
+    },
+    {
+      "chunk_id": "chunk_22",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text structural overview of chapter segments."
+    },
+    {
+      "chunk_id": "chunk_23",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.75,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Describes factors of production (land, labour, capital, entrepreneurship) and defines productivity."
+    },
+    {
+      "chunk_id": "chunk_24",
+      "classification": "DEFINITION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Distinguishes short run vs long run in production and introduces diminishing marginal product."
+    },
+    {
+      "chunk_id": "chunk_25",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Fixed Costs, Variable Costs, Total Cost, Average Total Cost, Marginal Cost, and their relationships."
+    },
+    {
+      "chunk_id": "chunk_26",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text structural overview."
+    },
+    {
+      "chunk_id": "chunk_27",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Perfect Competition, profit-maximization rule (MR=MC), and long-run equilibrium."
+    },
+    {
+      "chunk_id": "chunk_28",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Monopoly, sources of monopoly power, profit maximisation, and economic efficiency impacts."
+    },
+    {
+      "chunk_id": "chunk_29",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Monopolistic Competition and Oligopoly, noting strategic interaction and game theory."
+    },
+    {
+      "chunk_id": "chunk_30",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text structural overview."
+    },
+    {
+      "chunk_id": "chunk_31",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.95,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Gross Domestic Product (GDP), expenditure approach components, and Real vs Nominal GDP."
+    },
+    {
+      "chunk_id": "chunk_32",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains the Circular Flow Model including leakages (taxes, saving, imports) and injections."
+    },
+    {
+      "chunk_id": "chunk_33",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Economic Growth, real GDP per capita, and drivers of long-run productive capacity."
+    },
+    {
+      "chunk_id": "chunk_34",
+      "classification": "METADATA",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.85,
+      "include_for_concept_extraction": false,
+      "reason": "Document header and meta-text segment description."
+    },
+    {
+      "chunk_id": "chunk_35",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Money and its three traditional functions: medium of exchange, unit of account, store of value."
+    },
+    {
+      "chunk_id": "chunk_36",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.75,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains the role of commercial banks, deposit creation through lending, and financial risks."
+    },
+    {
+      "chunk_id": "chunk_37",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Monetary Policy, central bank interest rate mechanisms, and aggregate demand impacts."
+    },
+    {
+      "chunk_id": "chunk_38",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text overview."
+    },
+    {
+      "chunk_id": "chunk_39",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Inflation and categorises demand-pull vs cost-push inflation mechanisms."
+    },
+    {
+      "chunk_id": "chunk_40",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Unemployment, unemployment rate, and types: frictional, structural, cyclical."
+    },
+    {
+      "chunk_id": "chunk_41",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains the Phillips Curve framework and short-run vs long-run inflation-unemployment trade-offs."
+    },
+    {
+      "chunk_id": "chunk_42",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text overview."
+    },
+    {
+      "chunk_id": "chunk_43",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Fiscal Policy, discretionary spending/taxes, and automatic stabilisers."
+    },
+    {
+      "chunk_id": "chunk_44",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Fiscal Multiplier, marginal propensity to consume, and leakage effects."
+    },
+    {
+      "chunk_id": "chunk_45",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Public Debt and parameters affecting debt sustainability analysis."
+    },
+    {
+      "chunk_id": "chunk_46",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text overview."
+    },
+    {
+      "chunk_id": "chunk_47",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Comparative Advantage vs absolute productivity and opportunity cost basis for trade."
+    },
+    {
+      "chunk_id": "chunk_48",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Balance of Payments and current account deficit components."
+    },
+    {
+      "chunk_id": "chunk_49",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.85,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines Exchange Rate, currency depreciation dynamics, and market determinants."
+    },
+    {
+      "chunk_id": "chunk_50",
+      "classification": "NAVIGATION",
+      "educational_value": 0.05,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text overview."
+    },
+    {
+      "chunk_id": "chunk_51",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Provides a clear conceptual distinction between economic development and economic growth, highlighting human capital and structural constraints."
+    },
+    {
+      "chunk_id": "chunk_52",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.75,
+      "noise_score": 0.15,
+      "include_for_concept_extraction": true,
+      "reason": "Differentiates income inequality from poverty and outlines causes and policy responses, despite a brief internal metadata artifact."
+    },
+    {
+      "chunk_id": "chunk_53",
+      "classification": "EXPLANATION",
+      "educational_value": 0.85,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Explains sustainable growth, externalities, and environmental policy instruments thoroughly."
+    },
+    {
+      "chunk_id": "chunk_54",
+      "classification": "DEFINITION",
+      "educational_value": 0.95,
+      "conceptual_density": 0.95,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "A highly dense glossary table defining key foundational economic concepts succinctly."
+    },
+    {
+      "chunk_id": "chunk_55",
+      "classification": "EXERCISE",
+      "educational_value": 0.5,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.4,
+      "include_for_concept_extraction": false,
+      "reason": "Contains sample retrieval and benchmarking queries rather than direct domain concept definitions or explanations."
+    },
+    {
+      "chunk_id": "chunk_56",
+      "classification": "METADATA",
+      "educational_value": 0.1,
+      "conceptual_density": 0.1,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.9,
+      "include_for_concept_extraction": false,
+      "reason": "Meta-text describing the document structure and ingestion pipeline test goals rather than subject educational content."
+    }
+  ],
+  "classification_distribution": {
+    "METADATA": 4,
+    "NAVIGATION": 12,
+    "DEFINITION": 3,
+    "CORE_CONCEPT": 30,
+    "EXPLANATION": 6,
+    "EXERCISE": 1
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": []
+  }
+}

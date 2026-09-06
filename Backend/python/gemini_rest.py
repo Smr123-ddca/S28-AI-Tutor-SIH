@@ -69,6 +69,7 @@ def generate_content(prompt):
     if env_models:
         candidate_models.extend([m.strip() for m in env_models.split(",") if m.strip()])
     candidate_models.extend([
+        "gemini-3.6-flash",
         "gemini-2.5-flash",
         "gemini-2.0-flash",
         "gemini-1.5-flash",
