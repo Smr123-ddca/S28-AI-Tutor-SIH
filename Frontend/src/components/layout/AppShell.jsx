@@ -4,6 +4,7 @@ import { IconRail } from './IconRail';
 import { TopNav } from './TopNav';
 import { useAuth } from '../../context/AuthContext';
 import { Sparkles } from 'lucide-react';
+import { TeacherIngestionStatus } from './TeacherIngestionStatus';
 
 export function AppShell({ children }) {
   const navigate = useNavigate();
@@ -27,6 +28,9 @@ export function AppShell({ children }) {
           {children || <Outlet />}
         </main>
       </div>
+
+      {/* Ingestion progress (Teacher only) */}
+      {role === 'teacher' && <TeacherIngestionStatus />}
 
       {/* Dev Mode Switcher Pill */}
       {isMockAuth && (

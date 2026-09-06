@@ -1,0 +1,88 @@
+{
+  "course": "DSA_Code_Reference_Annotated",
+  "source_concepts": 6,
+  "hierarchy": {
+    "node_id": "root_01",
+    "type": "ROOT",
+    "name": "DSA_Code_Reference_Annotated",
+    "children": [
+      {
+        "node_id": "domain_01",
+        "type": "DOMAIN",
+        "name": "Recursion & Backtracking",
+        "children": [
+          {
+            "node_id": "concept_0001",
+            "type": "CONCEPT",
+            "name": "Backtracking for Permutations",
+            "concept_id": "concept_0001",
+            "children": []
+          },
+          {
+            "node_id": "concept_0002",
+            "type": "CONCEPT",
+            "name": "N-Queens Problem",
+            "concept_id": "concept_0002",
+            "children": []
+          },
+          {
+            "node_id": "concept_0003",
+            "type": "CONCEPT",
+            "name": "Power Set Generation",
+            "concept_id": "concept_0003",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_02",
+        "type": "DOMAIN",
+        "name": "Tree Data Structures",
+        "children": [
+          {
+            "node_id": "concept_0004",
+            "type": "CONCEPT",
+            "name": "Trie (Prefix Tree)",
+            "concept_id": "concept_0004",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_03",
+        "type": "DOMAIN",
+        "name": "Graph Theory & Algorithms",
+        "children": [
+          {
+            "node_id": "concept_0005",
+            "type": "CONCEPT",
+            "name": "Union-Find (Disjoint Set Union)",
+            "concept_id": "concept_0005",
+            "children": []
+          },
+          {
+            "node_id": "concept_0006",
+            "type": "CONCEPT",
+            "name": "Kruskal's Algorithm",
+            "concept_id": "concept_0006",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": {
+    "placed_concepts": 6,
+    "unplaced_concepts": 0,
+    "coverage_ratio": 1
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": [],
+    "metrics": {
+      "max_depth": 3,
+      "domain_count": 3,
+      "cross_reference_count": 0
+    }
+  }
+}

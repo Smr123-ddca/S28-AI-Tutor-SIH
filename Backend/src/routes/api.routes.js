@@ -5,7 +5,7 @@ const { recordSessionEvent, detectGap } = require('../controllers/gap.controller
 const { getMisconceptions } = require('../controllers/misconception.controller');
 const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
-const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch, subscribeProgress } = require('../controllers/ingest.controller');
+const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch, subscribeProgress, getIngestStatus } = require('../controllers/ingest.controller');
 const { getCourses, approveCourse, reviseCourse, publishCourse, getArtifacts, deleteCourse } = require('../controllers/course.controller');
 const { getClassAnalytics, getClassGrading } = require('../controllers/analytics.controller');
 const {
@@ -70,6 +70,7 @@ router.post('/ingest/generate-prerequisites', requireRole('teacher'), generatePr
 
 // Debug route for Accessing Batch
 router.get('/ingest/progress/:courseName', requireRole('teacher'), subscribeProgress);
+router.get('/ingest/status', requireRole('teacher'), getIngestStatus);
 router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
     const batch = getBatch(req.params.batchId);
     if (!batch) return res.status(404).json({ error: 'Batch not found' });

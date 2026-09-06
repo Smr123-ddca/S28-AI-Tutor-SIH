@@ -1,9 +1,9 @@
 {
-  "course": "Economics_Chunking_Reference",
-  "source_chunks": 56,
-  "evaluated_chunks": 56,
-  "included_chunks": 4,
-  "excluded_chunks": 52,
+  "course": "DBMS_Code_Reference_Annotated",
+  "source_chunks": 52,
+  "evaluated_chunks": 52,
+  "included_chunks": 2,
+  "excluded_chunks": 50,
   "chunks": [
     {
       "chunk_id": "chunk_1",
@@ -508,77 +508,42 @@
     {
       "chunk_id": "chunk_51",
       "classification": "EXPLANATION",
-      "educational_value": 0.85,
-      "conceptual_density": 0.8,
-      "prerequisite_relevance": 0.8,
+      "educational_value": 0.75,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.75,
       "noise_score": 0.05,
       "include_for_concept_extraction": true,
-      "reason": "Explains the distinction between economic development and economic growth, defining key factors such as human capital and infrastructure."
+      "reason": "Provides a concise explanation of the mechanism and benefit of database checkpoints in log recovery."
     },
     {
       "chunk_id": "chunk_52",
-      "classification": "EXPLANATION",
-      "educational_value": 0.8,
-      "conceptual_density": 0.8,
-      "prerequisite_relevance": 0.75,
-      "noise_score": 0.15,
-      "include_for_concept_extraction": true,
-      "reason": "Differentiates income inequality from poverty and discusses measures like the Gini coefficient, despite containing a minor page metadata artifact."
-    },
-    {
-      "chunk_id": "chunk_53",
       "classification": "EXPLANATION",
       "educational_value": 0.85,
       "conceptual_density": 0.85,
       "prerequisite_relevance": 0.8,
       "noise_score": 0.05,
       "include_for_concept_extraction": true,
-      "reason": "Provides a clear conceptual explanation of sustainable growth, environmental externalities, and policy tools."
-    },
-    {
-      "chunk_id": "chunk_54",
-      "classification": "DEFINITION",
-      "educational_value": 0.95,
-      "conceptual_density": 0.95,
-      "prerequisite_relevance": 0.9,
-      "noise_score": 0.05,
-      "include_for_concept_extraction": true,
-      "reason": "High-density glossary format defining fundamental economic concepts like scarcity, opportunity cost, supply, demand, and GDP."
-    },
-    {
-      "chunk_id": "chunk_55",
-      "classification": "EXERCISE",
-      "educational_value": 0.4,
-      "conceptual_density": 0.5,
-      "prerequisite_relevance": 0.4,
-      "noise_score": 0.5,
-      "include_for_concept_extraction": false,
-      "reason": "Contains sample retrieval prompts and exercise queries rather than direct instructional content or conceptual definitions."
-    },
-    {
-      "chunk_id": "chunk_56",
-      "classification": "METADATA",
-      "educational_value": 0.1,
-      "conceptual_density": 0.1,
-      "prerequisite_relevance": 0,
-      "noise_score": 0.9,
-      "include_for_concept_extraction": false,
-      "reason": "Meta-text describing the document structure and demonstration setup, lacking educational economic content."
+      "reason": "High conceptual density outlining the formula for a recovery strategy and explaining why backups differ from transaction rollbacks."
     }
   ],
   "classification_distribution": {
     "NOISE": 50,
-    "EXPLANATION": 3,
-    "DEFINITION": 1,
-    "EXERCISE": 1,
-    "METADATA": 1
+    "EXPLANATION": 2
   },
   "quality": {
     "status": "warning",
     "warnings": [
       {
+        "code": "CLASSIFICATION_COLLAPSE",
+        "message": "96.2% of chunks received the same classification."
+      },
+      {
         "code": "EXCESSIVE_NOISE",
         "message": "More than 50% of chunks are classified as NOISE."
+      },
+      {
+        "code": "LOW_CONCEPTUAL_COVERAGE",
+        "message": "Very few chunks were classified as concepts or explanations."
       }
     ]
   }

@@ -1,325 +1,53 @@
 {
   "course": "Economics_Chunking_Reference",
-  "relationship_count": 40,
+  "relationship_count": 6,
   "relationships": [
     {
-      "concept_id": "concept_0004",
-      "prerequisite_id": "concept_0002",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "The PPF model directly illustrates scarcity and opportunity cost as its slope.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0007",
-      "prerequisite_id": "concept_0005",
-      "relationship": "REQUIRED",
-      "confidence": 0.98,
-      "reason": "Market equilibrium is defined as the intersection of demand and supply curves.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0007",
-      "prerequisite_id": "concept_0006",
-      "relationship": "REQUIRED",
-      "confidence": 0.98,
-      "reason": "Market equilibrium is defined as the intersection of demand and supply curves.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0008",
-      "prerequisite_id": "concept_0005",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Price elasticity measures the responsiveness of quantity demanded to price changes.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0009",
-      "prerequisite_id": "concept_0008",
-      "relationship": "SUPPORTING",
-      "confidence": 0.9,
-      "reason": "Income and cross-price elasticities extend the concept of elasticity introduced with price elasticity.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0012",
-      "prerequisite_id": "concept_0011",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Production costs are derived from the inputs of factors of production.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0013",
-      "prerequisite_id": "concept_0007",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Perfect competition is a market structure where equilibrium price and quantity are determined by demand and supply.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0013",
-      "prerequisite_id": "concept_0012",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Firm behavior in perfect competition relies on cost structures to determine output.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0013",
-      "prerequisite_id": "concept_0008",
-      "relationship": "SUPPORTING",
-      "confidence": 0.8,
-      "reason": "Perfectly competitive firms face perfectly elastic demand, requiring an understanding of elasticity.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0014",
-      "prerequisite_id": "concept_0005",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Monopoly pricing requires understanding the market demand curve to set price and quantity.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0014",
-      "prerequisite_id": "concept_0012",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Monopoly output determination uses marginal cost concepts from cost structures.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0014",
-      "prerequisite_id": "concept_0008",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Monopolists use price elasticity of demand to inform pricing decisions.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0015",
-      "prerequisite_id": "concept_0013",
-      "relationship": "SUPPORTING",
-      "confidence": 0.9,
-      "reason": "Monopolistic competition builds on the concepts of perfect competition and product differentiation.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0015",
-      "prerequisite_id": "concept_0014",
-      "relationship": "SUPPORTING",
-      "confidence": 0.9,
-      "reason": "Oligopoly analysis extends monopoly concepts to a small number of interdependent firms.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0017",
-      "prerequisite_id": "concept_0016",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "The circular flow model illustrates the real and monetary flows that constitute GDP.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0018",
-      "prerequisite_id": "concept_0016",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Economic growth is typically measured by changes in real GDP per capita.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0018",
-      "prerequisite_id": "concept_0011",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Growth is driven by increases in factor inputs and productivity.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0018",
+      "concept_id": "concept_0005",
       "prerequisite_id": "concept_0004",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "The PPF model shows economic growth as an outward shift of the frontier.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0020",
-      "prerequisite_id": "concept_0019",
       "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Commercial banks create credit and money based on the established functions of money.",
+      "confidence": 0.92,
+      "reason": "Understanding supply and demand choices requires foundational knowledge of scarcity and opportunity cost.",
       "evidence": []
     },
     {
-      "concept_id": "concept_0021",
-      "prerequisite_id": "concept_0020",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Monetary policy actions are transmitted through the commercial banking system.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0021",
-      "prerequisite_id": "concept_0019",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Monetary policy directly influences the money supply.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0022",
-      "prerequisite_id": "concept_0019",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Inflation is often driven by excessive growth in the money supply.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0024",
-      "prerequisite_id": "concept_0022",
-      "relationship": "REQUIRED",
-      "confidence": 0.98,
-      "reason": "The Phillips Curve framework describes the trade-off between inflation and unemployment.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0024",
-      "prerequisite_id": "concept_0023",
-      "relationship": "REQUIRED",
-      "confidence": 0.98,
-      "reason": "The Phillips Curve framework describes the trade-off between inflation and unemployment.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0025",
-      "prerequisite_id": "concept_0016",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Fiscal policy aims to influence aggregate demand, which is measured by GDP.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0025",
-      "prerequisite_id": "concept_0017",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Fiscal policy involves government spending and taxation within the circular flow model.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0026",
-      "prerequisite_id": "concept_0025",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "The fiscal multiplier measures the effect of changes in autonomous spending under fiscal policy.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0027",
-      "prerequisite_id": "concept_0025",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Public debt accumulates from government borrowing to finance fiscal deficits.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0028",
-      "prerequisite_id": "concept_0002",
-      "relationship": "REQUIRED",
-      "confidence": 0.98,
-      "reason": "Comparative advantage is based on the relative opportunity cost of producing goods.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0030",
-      "prerequisite_id": "concept_0019",
-      "relationship": "SUPPORTING",
-      "confidence": 0.85,
-      "reason": "Exchange rates are the prices of currencies, which serve as money in international transactions.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0031",
-      "prerequisite_id": "concept_0018",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Economic development builds on economic growth but includes broader measures of well-being.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0033",
-      "prerequisite_id": "concept_0007",
-      "relationship": "SUPPORTING",
-      "confidence": 0.9,
-      "reason": "Environmental externalities are a form of market failure that prevents efficient equilibrium.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
-      "prerequisite_id": "concept_0002",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include scarcity and opportunity cost.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
+      "concept_id": "concept_0006",
       "prerequisite_id": "concept_0005",
       "relationship": "REQUIRED",
       "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include the theory of demand.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
-      "prerequisite_id": "concept_0006",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include the theory of supply.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
-      "prerequisite_id": "concept_0007",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include market equilibrium.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
-      "prerequisite_id": "concept_0008",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include price elasticity of demand.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0034",
-      "prerequisite_id": "concept_0016",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Fundamental economic principles explicitly include Gross Domestic Product (GDP).",
+      "reason": "Elasticity measures the responsiveness of quantity demanded or supplied to price changes, requiring a prior grasp of market supply and demand.",
       "evidence": []
     },
     {
       "concept_id": "concept_0003",
-      "prerequisite_id": "concept_0001",
-      "relationship": "SUPPORTING",
-      "confidence": 0.8,
-      "reason": "Distinguishing positive and normative economics requires an understanding of the scope and methodology of economics.",
+      "prerequisite_id": "concept_0005",
+      "relationship": "REQUIRED",
+      "confidence": 0.88,
+      "reason": "Understanding externalities requires knowledge of standard market equilibrium to evaluate market failure and uncompensated social costs.",
       "evidence": []
     },
     {
-      "concept_id": "concept_0019",
-      "prerequisite_id": "concept_0017",
+      "concept_id": "concept_0001",
+      "prerequisite_id": "concept_0007",
       "relationship": "SUPPORTING",
-      "confidence": 0.8,
-      "reason": "The circular flow model demonstrates the role of money as a medium of exchange in the economy.",
+      "confidence": 0.89,
+      "reason": "Economic development is defined in contrast to and broader than national aggregate measures like Gross Domestic Product.",
+      "evidence": []
+    },
+    {
+      "concept_id": "concept_0009",
+      "prerequisite_id": "concept_0007",
+      "relationship": "REQUIRED",
+      "confidence": 0.91,
+      "reason": "Fiscal policy aims to influence aggregate economic activity, which is quantified by metrics like GDP.",
+      "evidence": []
+    },
+    {
+      "concept_id": "concept_0010",
+      "prerequisite_id": "concept_0008",
+      "relationship": "REQUIRED",
+      "confidence": 0.93,
+      "reason": "Monetary policy regulates financial conditions primarily to control inflation and maintain price stability.",
       "evidence": []
     }
   ],
@@ -330,14 +58,14 @@
     "cycles_detected": 0,
     "cycles_removed": 0,
     "removed_cycles_log": [],
-    "isolated_concepts": 3,
+    "isolated_concepts": 1,
     "warnings": []
   },
   "statistics": {
-    "root_concepts": 10,
-    "leaf_concepts": 15,
-    "average_prerequisites": 1.18,
-    "max_prerequisites": 6,
-    "max_depth": 5
+    "root_concepts": 4,
+    "leaf_concepts": 6,
+    "average_prerequisites": 0.6,
+    "max_prerequisites": 1,
+    "max_depth": 3
   }
 }

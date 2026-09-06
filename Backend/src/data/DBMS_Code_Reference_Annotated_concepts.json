@@ -1,0 +1,38 @@
+{
+  "course": "DBMS_Code_Reference_Annotated",
+  "source_chunks": 52,
+  "eligible_chunks": 2,
+  "concept_count": 2,
+  "concepts": [
+    {
+      "concept_id": "concept_0001",
+      "name": "Database Checkpoints",
+      "description": "Mechanism that provides recovery points in database management, reducing the amount of log history that needs to be processed during recovery.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_51",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0002",
+      "name": "Database Backups and Recovery Strategy",
+      "description": "A comprehensive recovery approach combining periodic incremental or differential backups with archived transaction logs to protect against severe failures and destructive operations that cannot be undone by transaction rollbacks alone.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_52",
+          "classification": "EXPLANATION"
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "status": "healthy",
+    "warnings": []
+  }
+}

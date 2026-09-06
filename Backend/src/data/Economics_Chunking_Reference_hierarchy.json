@@ -1,6 +1,6 @@
 {
   "course": "Economics_Chunking_Reference",
-  "source_concepts": 34,
+  "source_concepts": 10,
   "hierarchy": {
     "node_id": "root_01",
     "type": "ROOT",
@@ -9,41 +9,27 @@
       {
         "node_id": "domain_01",
         "type": "DOMAIN",
-        "name": "Foundations of Economics",
+        "name": "Microeconomic Principles",
         "children": [
-          {
-            "node_id": "concept_node_0001",
-            "type": "CONCEPT",
-            "name": "Scope and Methodology of Economics",
-            "concept_id": "concept_0001",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0002",
-            "type": "CONCEPT",
-            "name": "Scarcity and Opportunity Cost",
-            "concept_id": "concept_0002",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0003",
-            "type": "CONCEPT",
-            "name": "Positive vs. Normative Economics",
-            "concept_id": "concept_0003",
-            "children": []
-          },
           {
             "node_id": "concept_node_0004",
             "type": "CONCEPT",
-            "name": "Production Possibility Frontier (PPF)",
+            "name": "Scarcity and Opportunity Cost",
             "concept_id": "concept_0004",
             "children": []
           },
           {
-            "node_id": "concept_node_0034",
+            "node_id": "concept_node_0005",
             "type": "CONCEPT",
-            "name": "Fundamental Economic Principles",
-            "concept_id": "concept_0034",
+            "name": "Supply, Demand, and Market Equilibrium",
+            "concept_id": "concept_0005",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_0006",
+            "type": "CONCEPT",
+            "name": "Elasticity",
+            "concept_id": "concept_0006",
             "children": []
           }
         ]
@@ -51,47 +37,33 @@
       {
         "node_id": "domain_02",
         "type": "DOMAIN",
-        "name": "Microeconomics: Markets and Consumer Behavior",
+        "name": "Macroeconomics and Policy",
         "children": [
-          {
-            "node_id": "concept_node_0005",
-            "type": "CONCEPT",
-            "name": "Theory of Demand",
-            "concept_id": "concept_0005",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0006",
-            "type": "CONCEPT",
-            "name": "Theory of Supply",
-            "concept_id": "concept_0006",
-            "children": []
-          },
           {
             "node_id": "concept_node_0007",
             "type": "CONCEPT",
-            "name": "Market Equilibrium and Price Dynamics",
+            "name": "Gross Domestic Product (GDP)",
             "concept_id": "concept_0007",
             "children": []
           },
           {
             "node_id": "concept_node_0008",
             "type": "CONCEPT",
-            "name": "Price Elasticity of Demand and Total Revenue",
+            "name": "Inflation",
             "concept_id": "concept_0008",
             "children": []
           },
           {
             "node_id": "concept_node_0009",
             "type": "CONCEPT",
-            "name": "Income and Cross-Price Elasticities of Demand",
+            "name": "Fiscal Policy",
             "concept_id": "concept_0009",
             "children": []
           },
           {
             "node_id": "concept_node_0010",
             "type": "CONCEPT",
-            "name": "Consumer Choice and Utility Theory",
+            "name": "Monetary Policy",
             "concept_id": "concept_0010",
             "children": []
           }
@@ -100,188 +72,27 @@
       {
         "node_id": "domain_03",
         "type": "DOMAIN",
-        "name": "Microeconomics: Production and Market Structures",
+        "name": "Economic Development and Sustainability",
         "children": [
           {
-            "node_id": "concept_node_0011",
-            "type": "CONCEPT",
-            "name": "Factors of Production and Productivity",
-            "concept_id": "concept_0011",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0012",
-            "type": "CONCEPT",
-            "name": "Production Horizons and Cost Structures",
-            "concept_id": "concept_0012",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0013",
-            "type": "CONCEPT",
-            "name": "Perfect Competition",
-            "concept_id": "concept_0013",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0014",
-            "type": "CONCEPT",
-            "name": "Monopoly",
-            "concept_id": "concept_0014",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0015",
-            "type": "CONCEPT",
-            "name": "Monopolistic Competition and Oligopoly",
-            "concept_id": "concept_0015",
-            "children": []
-          }
-        ]
-      },
-      {
-        "node_id": "domain_04",
-        "type": "DOMAIN",
-        "name": "Macroeconomics: Aggregates and Indicators",
-        "children": [
-          {
-            "node_id": "concept_node_0016",
-            "type": "CONCEPT",
-            "name": "Gross Domestic Product (GDP)",
-            "concept_id": "concept_0016",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0017",
-            "type": "CONCEPT",
-            "name": "Circular Flow Model",
-            "concept_id": "concept_0017",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0018",
-            "type": "CONCEPT",
-            "name": "Economic Growth",
-            "concept_id": "concept_0018",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0022",
-            "type": "CONCEPT",
-            "name": "Inflation",
-            "concept_id": "concept_0022",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0023",
-            "type": "CONCEPT",
-            "name": "Unemployment",
-            "concept_id": "concept_0023",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0024",
-            "type": "CONCEPT",
-            "name": "Phillips Curve Framework",
-            "concept_id": "concept_0024",
-            "children": []
-          }
-        ]
-      },
-      {
-        "node_id": "domain_05",
-        "type": "DOMAIN",
-        "name": "Macroeconomic Policy and Financial Systems",
-        "children": [
-          {
-            "node_id": "concept_node_0019",
-            "type": "CONCEPT",
-            "name": "Functions and Characteristics of Money",
-            "concept_id": "concept_0019",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0020",
-            "type": "CONCEPT",
-            "name": "Commercial Banking and Credit Creation",
-            "concept_id": "concept_0020",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0021",
-            "type": "CONCEPT",
-            "name": "Monetary Policy",
-            "concept_id": "concept_0021",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0025",
-            "type": "CONCEPT",
-            "name": "Fiscal Policy",
-            "concept_id": "concept_0025",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0026",
-            "type": "CONCEPT",
-            "name": "Fiscal Multiplier",
-            "concept_id": "concept_0026",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0027",
-            "type": "CONCEPT",
-            "name": "Public Debt and Sustainability",
-            "concept_id": "concept_0027",
-            "children": []
-          }
-        ]
-      },
-      {
-        "node_id": "domain_06",
-        "type": "DOMAIN",
-        "name": "International, Development, and Environmental Economics",
-        "children": [
-          {
-            "node_id": "concept_node_0028",
-            "type": "CONCEPT",
-            "name": "Comparative Advantage",
-            "concept_id": "concept_0028",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0029",
-            "type": "CONCEPT",
-            "name": "Balance of Payments",
-            "concept_id": "concept_0029",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0030",
-            "type": "CONCEPT",
-            "name": "Exchange Rates",
-            "concept_id": "concept_0030",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0031",
+            "node_id": "concept_node_0001",
             "type": "CONCEPT",
             "name": "Economic Development",
-            "concept_id": "concept_0031",
+            "concept_id": "concept_0001",
             "children": []
           },
           {
-            "node_id": "concept_node_0032",
+            "node_id": "concept_node_0002",
             "type": "CONCEPT",
             "name": "Income Inequality",
-            "concept_id": "concept_0032",
+            "concept_id": "concept_0002",
             "children": []
           },
           {
-            "node_id": "concept_node_0033",
+            "node_id": "concept_node_0003",
             "type": "CONCEPT",
             "name": "Environmental Externalities and Sustainable Growth",
-            "concept_id": "concept_0033",
+            "concept_id": "concept_0003",
             "children": []
           }
         ]
@@ -289,7 +100,7 @@
     ]
   },
   "coverage": {
-    "placed_concepts": 34,
+    "placed_concepts": 10,
     "unplaced_concepts": 0,
     "coverage_ratio": 1
   },
@@ -298,8 +109,8 @@
     "warnings": [],
     "metrics": {
       "max_depth": 3,
-      "domain_count": 6,
-      "cross_reference_count": 4
+      "domain_count": 3,
+      "cross_reference_count": 2
     }
   }
 }

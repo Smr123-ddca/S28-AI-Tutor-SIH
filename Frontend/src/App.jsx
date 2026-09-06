@@ -11,9 +11,11 @@ import { ChatPage } from './pages/ChatPage';
 import { LibraryPage } from './pages/LibraryPage';
 import { TeacherHome } from './pages/TeacherHome';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
+import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
 import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 import { TeacherAnalytics } from './pages/TeacherAnalytics';
 import { TeacherGrading } from './pages/TeacherGrading';
+import { IngestionProvider } from './context/IngestionContext';
 
 // Shell layout wrapper with session check
 function ProtectedLayout() {
@@ -46,7 +48,6 @@ function ProtectedLayout() {
   return <AppShell />;
 }
 
-import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
 
 function RoleBasedHome() {
   const { role } = useAuth();
@@ -60,7 +61,7 @@ export function App() {
       <Route path="/login" element={<Login />} />
 
       {/* Authenticated App Routes with Shell & Strict Role Guards */}
-      <Route element={<ProtectedLayout />}>
+      <Route element={<IngestionProvider><ProtectedLayout /></IngestionProvider>}>
         {/* Dynamic Entry Base */}
         <Route path="/" element={<RoleBasedHome />} />
 

@@ -1,0 +1,225 @@
+/* =====================================================================
+   BODH TWO-BOX PROCESSING TRAIL CSS
+   ===================================================================== */
+
+.bodh-tracker-container {
+    position: fixed;
+    bottom: 2rem;
+    left: 85px;
+    /* Avoiding 72px rail */
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    /* Let clicks pass through empty space */
+}
+
+.bodh-tracker-container>* {
+    pointer-events: auto;
+    /* Re-enable clicks on actual cards */
+}
+
+/* Base Card structure for processing items */
+.card-process-base {
+    width: 250px;
+    padding: 0.85rem 1.15rem;
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* ❄ FROZEN COMPLETED CARD */
+.card-frost {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px) contrast(1.1);
+    -webkit-backdrop-filter: blur(12px) contrast(1.1);
+    border: 1px solid rgba(220, 240, 255, 0.9);
+    border-top: 2px solid rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 16px rgba(180, 215, 235, 0.15), inset 0 2px 20px rgba(255, 255, 255, 0.7);
+    color: var(--color-ink);
+    opacity: 0.95;
+    /* Static, frozen feel */
+}
+
+.card-frost::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 15px;
+    background: url('data:image/svg+xml;utf8,<svg width="100%" height="15" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="ice" width="20" height="15" patternUnits="userSpaceOnUse"><path d="M0,0 L10,10 L20,0" fill="none" stroke="rgba(200,230,250,0.5)" stroke-width="1.5"/></pattern></defs><rect width="100%" height="100%" fill="url(%23ice)"/></svg>');
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* ⚙ ACTIVE CURRENT CARD */
+.card-active {
+    background: rgba(255, 248, 235, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 180, 100, 0.4);
+    box-shadow: 0 8px 24px rgba(255, 160, 50, 0.12), inset 0 0 12px rgba(255, 250, 240, 0.8);
+    transform-origin: center bottom;
+    animation: active-breathe 4s ease-in-out infinite;
+}
+
+@keyframes active-breathe {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        box-shadow: 0 8px 24px rgba(255, 160, 50, 0.12), inset 0 0 12px rgba(255, 250, 240, 0.8);
+    }
+
+    50% {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(255, 160, 50, 0.2), inset 0 0 20px rgba(255, 250, 240, 1);
+    }
+}
+
+/* 🐜 THE ANT TRAIL */
+.ant-trail-container {
+    height: 35px;
+    width: 2px;
+    margin: 0.25rem 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.ant-trail-line {
+    width: 2px;
+    height: 100%;
+    /* Dotted dash implementation using background gradient shift */
+    background-image: linear-gradient(to bottom, rgba(200, 150, 230, 0.8) 50%, transparent 50%);
+    background-size: 2px 10px;
+    animation: march-ants 1s linear infinite;
+}
+
+@keyframes march-ants {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 10px;
+        /* Moves exactly one cycle downwards */
+    }
+}
+
+/* ✦ CELEBRATION / DONE CARD */
+.card-celebration {
+    background: linear-gradient(135deg, rgba(230, 255, 240, 0.95) 0%, rgba(200, 255, 225, 0.85) 100%);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(130, 230, 180, 0.6);
+    box-shadow: 0 8px 24px rgba(40, 200, 100, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transform: translateY(0);
+    animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.card-celebration:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(40, 200, 100, 0.25);
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Typography styles explicitly for the tracker */
+.tracker-status-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.label-frost {
+    color: #5ea4d1;
+}
+
+.label-active {
+    color: #e67d22;
+}
+
+.label-done {
+    color: #16a34a;
+}
+
+.tracker-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1.3;
+}
+
+/* Subtle particle shimmer overlay for Active state */
+.card-active::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0;
+    top: 20%;
+    left: 10%;
+    animation: float-sparkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes float-sparkle {
+    0% {
+        transform: translate(0, 0) scale(0.8);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.6;
+    }
+
+    80% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(15px, -10px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .card-active {
+        animation: none !important;
+    }
+
+    .ant-trail-line {
+        animation: none !important;
+    }
+
+    .card-active::after {
+        display: none !important;
+    }
+
+    .card-celebration {
+        animation: none !important;
+    }
+}

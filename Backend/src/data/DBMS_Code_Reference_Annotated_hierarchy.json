@@ -1,0 +1,46 @@
+{
+  "course": "DBMS_Code_Reference_Annotated",
+  "source_concepts": 2,
+  "hierarchy": {
+    "node_id": "root_01",
+    "type": "ROOT",
+    "name": "DBMS_Code_Reference_Annotated",
+    "children": [
+      {
+        "node_id": "domain_01",
+        "type": "DOMAIN",
+        "name": "Backup and Recovery",
+        "children": [
+          {
+            "node_id": "concept_node_1",
+            "type": "CONCEPT",
+            "name": "Database Checkpoints",
+            "concept_id": "concept_0001",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_2",
+            "type": "CONCEPT",
+            "name": "Database Backups and Recovery Strategy",
+            "concept_id": "concept_0002",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": {
+    "placed_concepts": 2,
+    "unplaced_concepts": 0,
+    "coverage_ratio": 1
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": [],
+    "metrics": {
+      "max_depth": 3,
+      "domain_count": 1,
+      "cross_reference_count": 0
+    }
+  }
+}

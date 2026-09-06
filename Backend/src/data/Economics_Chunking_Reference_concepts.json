@@ -1,439 +1,13 @@
 {
   "course": "Economics_Chunking_Reference",
   "source_chunks": 56,
-  "eligible_chunks": 39,
-  "concept_count": 34,
+  "eligible_chunks": 4,
+  "concept_count": 10,
   "concepts": [
     {
       "concept_id": "concept_0001",
-      "name": "Scope and Methodology of Economics",
-      "description": "Economics is the study of choice under scarcity, divided into microeconomics (focusing on individual consumers, firms, and markets) and macroeconomics (focusing on aggregate national outcomes).",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_5",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0002",
-      "name": "Scarcity and Opportunity Cost",
-      "description": "Scarcity implies limited resources relative to unlimited wants, requiring choices that involve trade-offs. Opportunity cost is the value of the single best alternative forgone when making a decision.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_5",
-          "classification": "DEFINITION"
-        },
-        {
-          "chunk_id": "chunk_6",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0003",
-      "name": "Positive vs. Normative Economics",
-      "description": "Positive economics deals with objective, testable factual statements, whereas normative economics involves value judgments about economic policy and societal choices.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_7",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0004",
-      "name": "Production Possibility Frontier (PPF)",
-      "description": "A graphical model showing maximum output combinations of two goods using available resources and technology efficiently. The PPF illustrates productive efficiency, opportunity cost via its slope, and economic growth through shifts.",
-      "confidence": 0.98,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_8",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0005",
-      "name": "Theory of Demand",
-      "description": "Demand represents the quantities of a good consumers are willing and able to buy at various prices. The law of demand establishes an inverse price-quantity relationship, creating a downward-sloping curve that shifts due to non-price determinants.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_10",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0006",
-      "name": "Theory of Supply",
-      "description": "Supply describes the quantities producers are willing and able to sell at various prices. The law of supply states that quantity supplied varies directly with price, while changes in production factors cause the supply curve to shift.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_11",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0007",
-      "name": "Market Equilibrium and Price Dynamics",
-      "description": "Market equilibrium occurs where quantity demanded equals quantity supplied. Shocks shifting demand or supply curves alter equilibrium price and quantity, restoring balance from temporary shortages or surpluses.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_12",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_13",
-          "classification": "EXPLANATION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0008",
-      "name": "Price Elasticity of Demand and Total Revenue",
-      "description": "Measures the percentage change in quantity demanded relative to a percentage change in price. Its magnitude determines whether price adjustments increase or decrease total firm revenue.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_15",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_16",
-          "classification": "EXPLANATION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0009",
-      "name": "Income and Cross-Price Elasticities of Demand",
-      "description": "Income elasticity measures responsiveness to changes in income (identifying normal vs. inferior goods), while cross-price elasticity measures responsiveness to changes in related goods' prices (identifying substitutes vs. complements).",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_17",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0010",
-      "name": "Consumer Choice and Utility Theory",
-      "description": "Models how consumers maximize satisfaction subject to budget constraints, incorporating total utility, diminishing marginal utility, and indifference curve analysis to determine optimal consumption bundles.",
-      "confidence": 0.98,
-      "evidence_count": 3,
-      "evidence": [
-        {
-          "chunk_id": "chunk_19",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_20",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_21",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0011",
-      "name": "Factors of Production and Productivity",
-      "description": "Production utilizes land, labour, capital, and entrepreneurship. Productivity measures output per unit of input, driving firm production costs, factor returns, and standard of living growth.",
-      "confidence": 0.92,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_23",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0012",
-      "name": "Production Horizons and Cost Structures",
-      "description": "Distinguishes between short-run production (with fixed inputs and diminishing marginal product) and long-run production (all inputs variable), establishing total, average, and marginal cost relationships.",
-      "confidence": 0.95,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_24",
-          "classification": "DEFINITION"
-        },
-        {
-          "chunk_id": "chunk_25",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0013",
-      "name": "Perfect Competition",
-      "description": "An ideal market structure with many buyers and price-taking sellers of homogeneous products, easy entry and exit, and output determination where marginal revenue equals marginal cost, leading to zero long-run economic profit.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_27",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0014",
-      "name": "Monopoly",
-      "description": "A market structure dominated by a single seller protected by barriers to entry. Monopolists set price and quantity by equating marginal revenue with marginal cost, resulting in potential efficiency losses.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_28",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0015",
-      "name": "Monopolistic Competition and Oligopoly",
-      "description": "Imperfectly competitive market structures: monopolistic competition features many firms selling differentiated products, whereas oligopoly features a small number of mutually interdependent firms often analyzed using game theory.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_29",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0016",
-      "name": "Gross Domestic Product (GDP)",
-      "description": "The monetary value of final goods and services produced within a nation over a time period, measured via spending, income, or production, with real GDP adjusting nominal values for inflation.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_31",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0017",
-      "name": "Circular Flow Model",
-      "description": "A macro model illustrating exchanges of goods, services, factors of production, and money between households and firms, incorporating financial, government, and foreign leakages and injections.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_32",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0018",
-      "name": "Economic Growth",
-      "description": "A long-run increase in an economy's capacity to produce goods and services, typically measured by growth in real GDP per capita and driven by technology, capital accumulation, and human capital.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_33",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0019",
-      "name": "Functions and Characteristics of Money",
-      "description": "Money serves as a medium of exchange, unit of account, and store of value. Modern monetary systems rely on legal framework and public trust to facilitate economic transactions.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_35",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0020",
-      "name": "Commercial Banking and Credit Creation",
-      "description": "Commercial banks act as financial intermediaries that accept deposits and create credit through lending, balancing returns against credit, liquidity, and systemic risks under regulatory frameworks.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_36",
-          "classification": "EXPLANATION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0021",
-      "name": "Monetary Policy",
-      "description": "Actions undertaken by a central bank or monetary authority to adjust policy interest rates, open-market operations, and liquidity to influence financial conditions, aggregate demand, borrowing costs, and macroeconomic outcomes.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_37",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0022",
-      "name": "Inflation",
-      "description": "A sustained increase in the general price level of goods and services over time, measured via price indices, which reduces purchasing power and can be driven by demand-pull or cost-push pressures.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_39",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0023",
-      "name": "Unemployment",
-      "description": "The condition of individuals who are without work, available for work, and actively seeking employment relative to the total labor force. Classified into frictional, structural, and cyclical types.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_40",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0024",
-      "name": "Phillips Curve Framework",
-      "description": "A framework describing the short-run trade-off between inflation and unemployment, where stronger demand reduces unemployment while raising inflationary pressures, though long-run relationships depend on expectations and structural labor market factors.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_41",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0025",
-      "name": "Fiscal Policy",
-      "description": "Government decisions regarding spending, taxation, and borrowing designed to influence macroeconomic activity, manage aggregate demand, and provide automatic stabilization during economic fluctuations.",
-      "confidence": 0.98,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_43",
-          "classification": "CORE_CONCEPT"
-        },
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0026",
-      "name": "Fiscal Multiplier",
-      "description": "The measure of change in aggregate output resulting from a change in autonomous spending, influenced by marginal propensity to consume, leakages like saving and taxes, and economic conditions.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_44",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0027",
-      "name": "Public Debt and Sustainability",
-      "description": "The accumulated stock of outstanding government borrowing used to finance investment, smooth taxation, or support downturns, assessed by comparing interest costs, growth rates, primary balance, and revenue capacity.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_45",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0028",
-      "name": "Comparative Advantage",
-      "description": "An economic principle explaining mutually beneficial trade when a country can produce a good at a lower relative opportunity cost than another, regardless of absolute productivity levels.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_47",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0029",
-      "name": "Balance of Payments",
-      "description": "A record of a country's economic transactions with the rest of the world, including current-account trade and income flows as well as financial and capital transfers.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_48",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0030",
-      "name": "Exchange Rates",
-      "description": "The price of one currency in terms of another, determined by market forces or managed interventions, which affects import prices, export competitiveness, inflation, and trade flows.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_49",
-          "classification": "CORE_CONCEPT"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0031",
       "name": "Economic Development",
-      "description": "A broad measure of economic well-being and structural change that encompasses living standards, health, education, choices, human capital, and institutions beyond simple GDP growth.",
+      "description": "A process broader than economic growth that encompasses improvements in living standards, health, education, institutional capability, and human capital rather than relying solely on GDP output.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
@@ -444,9 +18,9 @@
       ]
     },
     {
-      "concept_id": "concept_0032",
+      "concept_id": "concept_0002",
       "name": "Income Inequality",
-      "description": "The dispersion of income across individuals or households, distinct from poverty, measured by metrics such as the Gini coefficient and influenced by skills, returns to capital, access to education, and institutional factors.",
+      "description": "The distribution of income across individuals or households, measured using tools such as the Gini coefficient, and distinct from poverty which concerns resource thresholds.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
@@ -457,9 +31,9 @@
       ]
     },
     {
-      "concept_id": "concept_0033",
+      "concept_id": "concept_0003",
       "name": "Environmental Externalities and Sustainable Growth",
-      "description": "Economic growth strategies aimed at enhancing well-being while addressing unpriced environmental costs and resource depletion through policy tools like corrective taxes, permits, and regulations.",
+      "description": "Economic activities that impose uncompensated social costs or benefits, such as pollution or resource depletion, requiring policy interventions like taxes, permits, or regulation to ensure sustainable growth.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
@@ -470,10 +44,92 @@
       ]
     },
     {
-      "concept_id": "concept_0034",
-      "name": "Fundamental Economic Principles",
-      "description": "Core foundation concepts in economics, including scarcity, opportunity cost, supply, demand, market equilibrium, price elasticity, and Gross Domestic Product (GDP).",
+      "concept_id": "concept_0004",
+      "name": "Scarcity and Opportunity Cost",
+      "description": "Scarcity is the condition of limited resources relative to unlimited wants, while opportunity cost is the value of the next best alternative forgone when a choice is made.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0005",
+      "name": "Supply, Demand, and Market Equilibrium",
+      "description": "Demand and supply represent consumer and producer willingness and ability to trade at various prices, reaching equilibrium when quantity demanded equals quantity supplied.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0006",
+      "name": "Elasticity",
+      "description": "A measure of the responsiveness of one economic variable to a percentage change in another variable.",
       "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0007",
+      "name": "Gross Domestic Product (GDP)",
+      "description": "The market value of final goods and services produced within a country's borders during a specified period.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_51",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0008",
+      "name": "Inflation",
+      "description": "A sustained increase in the general price level of goods and services over time.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0009",
+      "name": "Fiscal Policy",
+      "description": "Government decisions concerning spending, taxation, and borrowing designed to influence aggregate economic activity.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_54",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0010",
+      "name": "Monetary Policy",
+      "description": "Actions undertaken by a central monetary authority to regulate financial conditions and achieve macroeconomic goals.",
+      "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
         {
@@ -484,7 +140,12 @@
     }
   ],
   "quality": {
-    "status": "healthy",
-    "warnings": []
+    "status": "warning",
+    "warnings": [
+      {
+        "code": "OVER_SPLITTING",
+        "message": "Detected more concepts generated than valid input chunks."
+      }
+    ]
   }
 }

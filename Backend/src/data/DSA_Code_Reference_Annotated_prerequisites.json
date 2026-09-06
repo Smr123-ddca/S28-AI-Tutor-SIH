@@ -1,0 +1,47 @@
+{
+  "course": "DSA_Code_Reference_Annotated",
+  "relationship_count": 3,
+  "relationships": [
+    {
+      "concept_id": "concept_0002",
+      "prerequisite_id": "concept_0001",
+      "relationship": "REQUIRED",
+      "confidence": 0.95,
+      "reason": "The N-Queens problem is solved using backtracking, which is introduced in the permutations concept.",
+      "evidence": []
+    },
+    {
+      "concept_id": "concept_0003",
+      "prerequisite_id": "concept_0001",
+      "relationship": "REQUIRED",
+      "confidence": 0.95,
+      "reason": "Power set generation employs a backtracking approach described in the permutations concept.",
+      "evidence": []
+    },
+    {
+      "concept_id": "concept_0006",
+      "prerequisite_id": "concept_0005",
+      "relationship": "REQUIRED",
+      "confidence": 0.96,
+      "reason": "Kruskal's algorithm uses Union-Find to detect cycles, which is covered in the Union-Find concept.",
+      "evidence": []
+    }
+  ],
+  "quality": {
+    "status": "healthy",
+    "model_status": "MODEL_VALID_OUTPUT",
+    "model_failure_reason": null,
+    "cycles_detected": 0,
+    "cycles_removed": 0,
+    "removed_cycles_log": [],
+    "isolated_concepts": 1,
+    "warnings": []
+  },
+  "statistics": {
+    "root_concepts": 3,
+    "leaf_concepts": 4,
+    "average_prerequisites": 0.5,
+    "max_prerequisites": 1,
+    "max_depth": 2
+  }
+}

@@ -1,0 +1,998 @@
+{
+  "course": "DSA_Code_Reference_Annotated",
+  "source_chunks": 97,
+  "evaluated_chunks": 97,
+  "included_chunks": 33,
+  "excluded_chunks": 64,
+  "chunks": [
+    {
+      "chunk_id": "chunk_1",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_2",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_3",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_4",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_5",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_6",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_7",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_8",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_9",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_10",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_11",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_12",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_13",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_14",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_15",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_16",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_17",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_18",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_19",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_20",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_21",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_22",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_23",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_24",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_25",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_26",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_27",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_28",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_29",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_30",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_31",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_32",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_33",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_34",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_35",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_36",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_37",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_38",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_39",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_40",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_41",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_42",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_43",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_44",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_45",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_46",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_47",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_48",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_49",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_50",
+      "classification": "NOISE",
+      "educational_value": 0,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 1,
+      "include_for_concept_extraction": false,
+      "reason": "Fallback/Missing output"
+    },
+    {
+      "chunk_id": "chunk_51",
+      "classification": "PROCEDURE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Explains a critical BST validation technique with code and complexity analysis. High educational value for algorithm accuracy and common pitfalls."
+    },
+    {
+      "chunk_id": "chunk_52",
+      "classification": "PROCEDURE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Describes an efficient LCA method with code and analysis. Practical algorithm for BST problems."
+    },
+    {
+      "chunk_id": "chunk_53",
+      "classification": "EXPLANATION",
+      "educational_value": 0.8,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.3,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Explains heap structure and its O(log n) operation benefits, bridging abstract concepts to implementation."
+    },
+    {
+      "chunk_id": "chunk_54",
+      "classification": "CODE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Provides concrete code examples for heap operations, essential for implementation understanding."
+    },
+    {
+      "chunk_id": "chunk_55",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Demonstrates efficient k-th largest element finding via capping heap size, with clear complexity rationale."
+    },
+    {
+      "chunk_id": "chunk_56",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.3,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Algorithm for merging k sorted sequences using min-heap, showing multi-way merging efficiency."
+    },
+    {
+      "chunk_id": "chunk_57",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Establishes graphs as a general structure with key properties and traversal methods, foundational for advanced algorithms."
+    },
+    {
+      "chunk_id": "chunk_58",
+      "classification": "DEFINITION",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.2,
+      "include_for_concept_extraction": true,
+      "reason": "Defines adjacency list representation with code, crucial for graph implementation understanding."
+    },
+    {
+      "chunk_id": "chunk_59",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Presents BFS algorithm for graphs with code and ensures finite traversal through visited tracking."
+    },
+    {
+      "chunk_id": "chunk_60",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Details DFS traversal for graphs, complementing BFS with a different exploration strategy."
+    },
+    {
+      "chunk_id": "chunk_61",
+      "classification": "PROCEDURE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Algorithm for cycle detection in directed graphs using DFS and stack tracking."
+    },
+    {
+      "chunk_id": "chunk_62",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Topological sort using Kahn's algorithm, essential for dependency ordering tasks."
+    },
+    {
+      "chunk_id": "chunk_63",
+      "classification": "NOISE",
+      "educational_value": 0.2,
+      "conceptual_density": 0,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Incomplete sentence fragment unrelated to the main content without context."
+    },
+    {
+      "chunk_id": "chunk_64",
+      "classification": "PROCEDURE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Dijkstra's algorithm with proper heap usage, a cornerstone for weighted graph shortest paths."
+    },
+    {
+      "chunk_id": "chunk_65",
+      "classification": "PROCEDURE",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Algorithm for counting connected components via DFS, demonstrating graph traversal application."
+    },
+    {
+      "chunk_id": "chunk_66",
+      "classification": "CORE_CONCEPT",
+      "educational_value": 0.9,
+      "conceptual_density": 0.8,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Introduces DP principles and properties, critical for solving overlapping subproblems efficiently."
+    },
+    {
+      "chunk_id": "chunk_67",
+      "classification": "EXAMPLE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Demonstrates recursive memoization technique for Fibonacci, illustrating DP application."
+    },
+    {
+      "chunk_id": "chunk_68",
+      "classification": "EXAMPLE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Shows tabulation (iterative DP) method for Fibonacci, contrasting with memoization."
+    },
+    {
+      "chunk_id": "chunk_69",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Knapsack implementation via dynamic programming, a classic optimization problem."
+    },
+    {
+      "chunk_id": "chunk_70",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "String-based LCS DP approach, fundamental for sequence alignment problems."
+    },
+    {
+      "chunk_id": "chunk_71",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Patience sorting method for LIS, optimizing from O(n²) to O(n log n)."
+    },
+    {
+      "chunk_id": "chunk_72",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Coin change problem via DP, illustrating greedy vs. optimal trade-offs."
+    },
+    {
+      "chunk_id": "chunk_73",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Edit distance calculation using DP table, foundational for string processing."
+    },
+    {
+      "chunk_id": "chunk_74",
+      "classification": "EXPLANATION",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.2,
+      "include_for_concept_extraction": true,
+      "reason": "Contrasts greedy and backtracking approaches, enhancing algorithmic thinking."
+    },
+    {
+      "chunk_id": "chunk_75",
+      "classification": "EXPLANATION",
+      "educational_value": 0.7,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.2,
+      "include_for_concept_extraction": true,
+      "reason": "Expands on greedy-choice property and backtracking mechanics, clarifying their design principles."
+    },
+    {
+      "chunk_id": "chunk_76",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.4,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Activity selection using greedy earliest finish strategy, demonstrating greedy optimality."
+    },
+    {
+      "chunk_id": "chunk_77",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Permutation generation via backtracking with swap-and-undo, illustrating combinatorial search."
+    },
+    {
+      "chunk_id": "chunk_78",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "N-Queens solution via backtracking with conflict tracking, a classic constraint problem."
+    },
+    {
+      "chunk_id": "chunk_79",
+      "classification": "PROCEDURE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.5,
+      "prerequisite_relevance": 0.4,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Power set generation via backtracking with inclusion/exclusion, showing recursive subset enumeration."
+    },
+    {
+      "chunk_id": "chunk_80",
+      "classification": "EXPLANATION",
+      "educational_value": 0.7,
+      "conceptual_density": 0.6,
+      "prerequisite_relevance": 0.3,
+      "noise_score": 0.2,
+      "include_for_concept_extraction": true,
+      "reason": "Introduces trie and Union-Find structures, highlighting their niche applications for efficiency."
+    },
+    {
+      "chunk_id": "chunk_81",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Concretes trie implementation with insert and search methods, essential for string prefix operations."
+    },
+    {
+      "chunk_id": "chunk_82",
+      "classification": "CODE",
+      "educational_value": 0.8,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Union-Find with path compression and union by rank, demonstrating near-constant time operations."
+    },
+    {
+      "chunk_id": "chunk_83",
+      "classification": "PROCEDURE",
+      "educational_value": 0.9,
+      "conceptual_density": 0.7,
+      "prerequisite_relevance": 0.5,
+      "noise_score": 0.1,
+      "include_for_concept_extraction": true,
+      "reason": "Implements Kruskal's MST algorithm using Union-Find, combining greedy strategy with specialized DS."
+    },
+    {
+      "chunk_id": "chunk_84",
+      "classification": "REFERENCE",
+      "educational_value": 0.4,
+      "conceptual_density": 0.3,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.2,
+      "include_for_concept_extraction": true,
+      "reason": "Dependency table mapping topics, useful for curriculum navigation but not a standalone concept."
+    },
+    {
+      "chunk_id": "chunk_85",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Bare dependency list lacks explanation, serving as navigation aid rather than educational content."
+    },
+    {
+      "chunk_id": "chunk_86",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Fragmented dependency description, insufficient for standalone concept extraction."
+    },
+    {
+      "chunk_id": "chunk_87",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Incomplete dependency reference without contextual explanation."
+    },
+    {
+      "chunk_id": "chunk_88",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Dependency list with key concepts but lacks elaboration for educational value."
+    },
+    {
+      "chunk_id": "chunk_89",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Dependency entry without explanation, serving as navigation tool."
+    },
+    {
+      "chunk_id": "chunk_90",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Fragmented reference note lacking educational substance."
+    },
+    {
+      "chunk_id": "chunk_91",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Dependency note without explanatory context."
+    },
+    {
+      "chunk_id": "chunk_92",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Dependency entry insufficient for concept-level understanding."
+    },
+    {
+      "chunk_id": "chunk_93",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Lack of explanation limits its conceptual utility."
+    },
+    {
+      "chunk_id": "chunk_94",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.8,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Brief dependency note, not a self-contained educational unit."
+    },
+    {
+      "chunk_id": "chunk_95",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Dependency reference entry without elaboration."
+    },
+    {
+      "chunk_id": "chunk_96",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Minimal dependency note insufficient for educational extraction."
+    },
+    {
+      "chunk_id": "chunk_97",
+      "classification": "REFERENCE",
+      "educational_value": 0.3,
+      "conceptual_density": 0.2,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0.3,
+      "include_for_concept_extraction": false,
+      "reason": "Table closure note, not a standalone concept."
+    }
+  ],
+  "classification_distribution": {
+    "NOISE": 51,
+    "PROCEDURE": 20,
+    "EXPLANATION": 4,
+    "CODE": 3,
+    "CORE_CONCEPT": 2,
+    "DEFINITION": 1,
+    "EXAMPLE": 2,
+    "REFERENCE": 14
+  },
+  "quality": {
+    "status": "warning",
+    "warnings": [
+      {
+        "code": "EXCESSIVE_NOISE",
+        "message": "More than 50% of chunks are classified as NOISE."
+      }
+    ]
+  }
+}

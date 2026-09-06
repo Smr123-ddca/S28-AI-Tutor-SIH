@@ -89,7 +89,37 @@ const subscribeProgress = (req, res) => {
     });
 };
 
+const activeIngestions = {};
+
+const getIngestStatus = (req, res) => {
+    res.json(Object.values(activeIngestions));
+};
+
 function sendProgress(courseName, step, message) {
+    if (!activeIngestions[courseName]) {
+        activeIngestions[courseName] = { courseName, stage: 'Starting...', status: 'processing' };
+    }
+
+    // Determine user friendly stage from step code
+    let stage = message;
+    if (step === 'C1') stage = 'Chunk quality evaluation';
+    if (step === 'C2') stage = 'Extracting concepts';
+    if (step === 'C3') stage = 'Structuring hierarchy';
+    if (step === 'C4') stage = 'Mapping prerequisite edges';
+    if (step === 'DONE') stage = 'Ready for review';
+    if (step === 'ERROR') stage = 'Processing failed';
+
+    const status = step === 'ERROR' ? 'error' : (step === 'DONE' ? 'completed' : 'processing');
+
+    activeIngestions[courseName] = {
+        ...activeIngestions[courseName],
+        step,
+        message,
+        stage,
+        status,
+        updatedAt: new Date().toISOString()
+    };
+
     const client = progressClients[courseName];
     if (client) {
         client.write(`data: ${JSON.stringify({ step, message })}\n\n`);
@@ -1020,6 +1050,13 @@ const handleUpload = async (
 
 
             // =================================================
+            // 0. INIT TRACKER
+            // =================================================
+            if (!activeIngestions[courseName]) {
+                activeIngestions[courseName] = { courseName, stage: 'Extracting content...', status: 'processing', step: 'UPLOAD', updatedAt: new Date().toISOString() };
+            }
+
+            // =================================================
             // 1. RUN CHUNKING
             // =================================================
 
@@ -1452,6 +1489,8 @@ module.exports = {
 
     getBatch,
 
-    subscribeProgress
+    subscribeProgress,
+
+    getIngestStatus
 
 };

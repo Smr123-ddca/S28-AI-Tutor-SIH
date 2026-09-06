@@ -59,47 +59,16 @@ export function TeacherHome() {
                     ? res.courses[0].name
                     : res.course || uploadFile.name.split('.')[0];
 
-            // Set up stream listener concurrently with pipeline launch
-            setUploadStage('C1: Starting Pipeline... (Waiting for backend)');
-            const progressRes = await fetch(`/api/ingest/progress/${encodeURIComponent(courseName)}`, {
-                headers: session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}
-            });
-            const reader = progressRes.body.getReader();
-            const decoder = new TextDecoder();
-
             // Trigger C1-C6 Prerequisite Pipeline Generation natively (fire-and-forget in UI)
+            // The global Persistent Ingestion Tracker (TeacherIngestionStatus) now handles visualization
             generatePrerequisites(courseName, session?.access_token).catch(() => { });
 
-            // Read SSE chunks
-            try {
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    const chunkText = decoder.decode(value);
-                    const lines = chunkText.split('\n');
-                    for (const line of lines) {
-                        if (line.startsWith('data: ')) {
-                            try {
-                                const data = JSON.parse(line.replace('data: ', ''));
-                                if (data.step === 'DONE') {
-                                    setUploadStage('');
-                                    reader.cancel();
-                                } else {
-                                    setUploadStage(data.message);
-                                }
-                            } catch (e) { }
-                        }
-                    }
-                }
-            } catch (e) { }
-
+            // Immediately reset the interface so the teacher can keep working. 
+            // The background global Two-Box tracker handles the pipeline visibility.
             setUploadSuccess(true);
             setUploadFile(null);
+            setTimeout(() => setUploadSuccess(false), 4000);
 
-            // Auto-redirect to Review page
-            setTimeout(() => {
-                navigate(`/teacher/review?course=${encodeURIComponent(courseName)}`);
-            }, 1000);
         } catch (err) {
             alert('Upload failed: ' + err.message);
         } finally {
@@ -216,9 +185,9 @@ export function TeacherHome() {
 
                         {uploadSuccess ? (
                             <div style={{ padding: '1.5rem', backgroundColor: 'var(--color-green-subtle)', border: '1.5px dashed var(--color-green)', borderRadius: 'var(--radius-md)' }}>
-                                <h4 style={{ color: '#166534', fontWeight: 700, marginBottom: '0.5rem' }}>Successfully Ingested!</h4>
+                                <h4 style={{ color: '#166534', fontWeight: 700, marginBottom: '0.5rem' }}>Successfully Added!</h4>
                                 <p style={{ fontSize: '0.85rem', color: '#15803d' }}>
-                                    Redirecting to the course review dashboard...
+                                    BODH is generating the prerequisite map in the background. You can monitor the progress on the bottom left.
                                 </p>
                             </div>
                         ) : (

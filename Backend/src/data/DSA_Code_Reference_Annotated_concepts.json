@@ -1,0 +1,106 @@
+{
+  "course": "DSA_Code_Reference_Annotated",
+  "source_chunks": 97,
+  "eligible_chunks": 33,
+  "concept_count": 6,
+  "concepts": [
+    {
+      "concept_id": "concept_0001",
+      "name": "Backtracking for Permutations",
+      "description": "A recursive algorithm that generates all n! permutations of a list by fixing one position at a time, swapping elements into place, recursing on the remainder, and undoing the swap (backtracking) to restore state before trying the next candidate.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_77",
+          "classification": "PROCEDURE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0002",
+      "name": "N-Queens Problem",
+      "description": "The N-Queens puzzle places N queens on an N×N chessboard so no two share a row, column, or diagonal. Backtracking places exactly one queen per row, using sets to track column and diagonal conflicts in O(1) time, enabling pruning of invalid subtrees.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_78",
+          "classification": "PROCEDURE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0003",
+      "name": "Power Set Generation",
+      "description": "The power set of n elements contains all 2^n subsets. A backtracking approach records a valid subset at every recursive call (since every partial path is valid), then extends it by including each remaining element before backtracking to try alternatives.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_79",
+          "classification": "PROCEDURE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0004",
+      "name": "Trie (Prefix Tree)",
+      "description": "A tree data structure where each edge represents one character, allowing root-to-node paths to spell prefixes. Supports O(k) insertion and lookup for strings of length k, enabling efficient prefix-based queries used in autocomplete and spell-check.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_80",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_81",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0005",
+      "name": "Union-Find (Disjoint Set Union)",
+      "description": "A data structure that tracks a partition of n elements into disjoint groups. It supports 'find' and 'union' operations in near-O(1) amortized time using two optimizations: path compression (rewiring nodes directly to root) and union by rank (attaching shallower trees under deeper ones).",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_80",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_82",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_83",
+          "classification": "PROCEDURE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0006",
+      "name": "Kruskal's Algorithm",
+      "description": "A greedy algorithm for finding a Minimum Spanning Tree (MST) of a weighted graph. It sorts all edges by weight and iteratively adds the cheapest edge that does not create a cycle, using Union-Find to efficiently check connectivity between components.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_80",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_83",
+          "classification": "PROCEDURE"
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "status": "healthy",
+    "warnings": []
+  }
+}
