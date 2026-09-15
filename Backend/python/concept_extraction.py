@@ -63,27 +63,29 @@ except Exception as e:
 # ============================================================
 # PREPROCESSING MAPS
 # ============================================================
-chunk_text_map = {}
+chunk_data_map = {}
 for c in chunks:
     if "id" in c:
-        chunk_text_map[c["id"]] = c.get("text", "")
+        chunk_data_map[c["id"]] = c
 
 quality_chunks = quality.get("chunks", [])
 eligible_chunks = []
 
 for q in quality_chunks:
     cid = q.get("chunk_id")
-    if not cid or cid not in chunk_text_map:
+    if not cid or cid not in chunk_data_map:
         continue
     
     inc_raw = q.get("include_for_concept_extraction", False)
     inc = bool(inc_raw) if isinstance(inc_raw, bool) else (str(inc_raw).lower() == "true")
     
     if inc:
+        c_data = chunk_data_map[cid]
         eligible_chunks.append({
             "chunk_id": cid,
             "classification": q.get("classification", "UNKNOWN"),
-            "text": chunk_text_map[cid]
+            "text": c_data.get("text", ""),
+            "metadata": c_data.get("metadata", {})
         })
 
 course_name = quality.get("course", "Unknown_Course")
@@ -105,36 +107,41 @@ all_candidates = []
 # ============================================================
 def process_batch(batch):
     # Formulate inputs strictly constraining text length
-    inputs = [{"id": c["chunk_id"], "type": c["classification"], "text": str(c.get("text", ""))[:1200]} for c in batch]
+    inputs = [{
+        "chunk_id": c["chunk_id"], 
+        "metadata": c.get("metadata", {}), 
+        "text": str(c.get("text", ""))[:1200]
+    } for c in batch]
     
     prompt = f"""
 You are an expert AI educational concepts extractor.
-Below is a list of text chunks from an educational course which have been predetermined to be educationally valid.
+Below is a list of sequential text chunks from a course curriculum.
 
-Your task is to identify the overarching CANONICAL CONCEPTS discussed in these chunks.
-- A chunk can contain ZERO, ONE, OR MULTIPLE concepts. Group concepts naturally.
-- A concept should represent a meaningful, teachable unit of knowledge (e.g. "Binary Search", "Process Scheduling").
-- Do not create enormous umbrella concepts (e.g. "Computer Science"), but also do not over-split into extreme minutiae unless independently meaningful.
-- A concept MUST be strictly supported by one or more provided chunks. Do NOT invent concepts that are not in the text.
-- If multiple chunks discuss the EXACT SAME concept, merge them under one concept grouping here in your output.
+IMPORTANT DISTINCTION:
+- A CHUNK is just a random split of text.
+- A CONCEPT is a meaningful, reusable, pedagogical learning unit (something a student studies or a teacher assesses).
 
-For each concept, provide:
-- "name": The canonical name of the core concept.
-- "description": A concise, factual educational description derived strictly from the chunks.
-- "confidence": Float between 0.0 and 1.0 assessing your certainty this is a standalone concept supported by the text.
-- "evidence_chunk_ids": An array of chunk IDs that support this concept.
+YOUR TASK: Identify the CANONICAL CONCEPTS taught across these chunks.
 
-Output strictly as a valid JSON array matching this schema:
+RULES FOR EXTRACTION:
+1. MULTIPLE CONCEPTS PER CHUNK ALLOWED: Do not force "1 concept per chunk". A single chunk might explain 3 distinct concepts, or 0 concepts. Group naturally.
+2. CONTINUATIONS: If Chunk 15 continues explaining the same concept from Chunk 14, attach Chunk 15 as additional evidence to the existing concept! Do not invent a new concept called "More on Concept".
+3. WHAT A CONCEPT IS: "Binary Search Tree", "Opportunity Cost", "Thread Synchronization".
+4. WHAT A CONCEPT IS NOT: "Introduction to chapter 5", "An example of a tree", "Summary paragraph", "Implementation detail (line 14)", or an enormous umbrella ("Computer Science").
+5. DO NOT OVER-MERGE: "Binary Tree" and "Binary Search Tree" are distinct concepts. Do not flatten them into one unless the text uses them perfectly interchangeably.
+6. EVIDENCE: You MUST only cite chunk_ids that actually contain evidence for the concept.
+
+Provide output as a strict JSON array of objects:
 [
   {{
     "name": "Concept Name",
-    "description": "Short factual description.",
-    "confidence": 0.95,
+    "description": "Concise, factual pedagogical summary derived strictly from the text. DO NOT copy massive blocks of verbatim text.",
+    "confidence": 0.95, // Your certainty this is a standalone distinct concept (NOT topic significance)
     "evidence_chunk_ids": ["chunk_ABC", "chunk_DEF"]
   }}
 ]
 
-Chunks:
+Chunks to process:
 {json.dumps(inputs, ensure_ascii=False)}
 """
     raw_response = ""
@@ -157,6 +164,9 @@ Chunks:
         res = []
         for x in inputs:
             txt = x["text"].lower()
+            if "heading" in str(x.get("metadata", {})).lower() and "empty" in txt:
+                continue # Header test drop
+                
             if "no concepts" in txt:
                 continue
             
@@ -166,13 +176,13 @@ Chunks:
             elif "linked list" in txt: name = "Linked List"
             elif "duplicate" in txt: name = "Duplicate Concept"
             elif mock_val == "COLLAPSE": name = "Everything Concept"
-            else: name = f"Concept from {x['id']}"
+            else: name = f"Concept from {x['chunk_id']}"
 
             # Create or Merge
             found = False
             for r in res:
                 if r["name"] == name:
-                    r["evidence_chunk_ids"].append(x["id"])
+                    r["evidence_chunk_ids"].append(x["chunk_id"])
                     found = True
                     break
             
@@ -181,7 +191,7 @@ Chunks:
                     "name": name,
                     "description": "Mock description.",
                     "confidence": 0.99,
-                    "evidence_chunk_ids": [x["id"]]
+                    "evidence_chunk_ids": [x["chunk_id"]]
                 })
         raw_response = json.dumps(res)
     else:
@@ -219,65 +229,114 @@ if eligible_chunks:
 # ============================================================
 # PASS B: DETERMINISTIC CANONICALIZATION (PYTHON)
 # ============================================================
-# Normalizer to catch variations like "Binary Search Algorithm" vs "binary search"
-def normalize_name(name):
-    # lowercase, alphanumeric
-    words = re.findall(r'[a-z0-9]+', str(name).lower())
-    ignore = {"algorithm", "the", "a", "an", "of", "and", "in", "concept", "technique"}
-    filtered = [w for w in words if w not in ignore]
+
+def safe_depluralize(word):
+    if len(word) <= 3: return word
+    if word.endswith("ies"): return word[:-3] + "y"
+    if word.endswith("s") and not word.endswith("ss") and not word.endswith("us") and not word.endswith("is"):
+        return word[:-1]
+    return word
+
+def extract_aliases_from_name(raw_name):
+    """Detect 'Name (Alias)' patterns commonly outputted by LLMs."""
+    match = re.search(r'^(.*?)\s*\((.*?)\)$', str(raw_name).strip())
+    if match:
+        return match.group(1).strip(), [match.group(2).strip()]
+    return str(raw_name).strip(), []
+
+def compute_normalization_key(name):
+    """Deterministic string-based equivalence key."""
+    words = re.findall(r'[a-z0-9]+', name.lower())
+    ignore = {"the", "a", "an", "of", "and", "in"}
+    filtered = [safe_depluralize(w) for w in words if w not in ignore]
     if not filtered:
-        return re.sub(r'[^a-zA-Z0-9]+', '', str(name).lower())
-    # returning sorted token string prevents "Search Binary" != "Binary Search" 
-    # but we will just return order-preserved string to prioritize semantic reading natively.
+        return re.sub(r'[^a-zA-Z0-9]+', '', name.lower())
+    # Preserving order and dropping the aggressive token sorting!
     return " ".join(filtered)
 
 # Global map containing canonical elements
-canonical_map = {}
+canonical_concepts = []
 concept_counter = 1
 
 # Maintain lookup for C1 classes
 class_map = {c["chunk_id"]: c["classification"] for c in eligible_chunks}
 
-# Filter out dead evidence IDs and perform deduplication
+class Canonicalizer:
+    def __init__(self):
+        self.concepts = []
+        
+    def merge_candidate(self, candidate, class_map):
+        raw_name = str(candidate.get("name", "")).strip()
+        if not raw_name: return
+        
+        core_name, aliases = extract_aliases_from_name(raw_name)
+        norm_key = compute_normalization_key(core_name)
+        
+        if not norm_key: return
+        
+        ev_ids = [str(eid) for eid in candidate.get("evidence_chunk_ids", []) if str(eid) in class_map]
+        if not ev_ids: return
+            
+        conf = float_clamp(candidate.get("confidence", 0.0))
+        desc = str(candidate.get("description", raw_name)).strip()
+        
+        # Semantic Matcher Hook (Pluggable for future Embedding Layers)
+        # 1. Deterministic Match
+        matched_idx = -1
+        for i, c in enumerate(self.concepts):
+            if c["norm_key"] == norm_key:
+                matched_idx = i
+                break
+            # Alias match check (e.g. candidate is 'BST', existing concept has alias 'BST')
+            if norm_key in c["alias_norms"]:
+                matched_idx = i
+                break
+            
+            # 2. Semantic matching hook (if embeddings logic existed, it would compare here against c['description'])
+            # similarity = get_semantic_similarity(desc, c["description"])
+            # if similarity > 0.92: matched_idx = i
+                
+        if matched_idx >= 0:
+            # Aggregate softly
+            existing = self.concepts[matched_idx]
+            existing["confidence"] = max(existing["confidence"], conf)
+            if len(desc) > len(existing["description"]): 
+                existing["description"] = desc 
+            existing["evidence_pool"].update(ev_ids)
+            
+            # Merge Aliases
+            for a in aliases:
+                a_norm = compute_normalization_key(a)
+                if a not in existing["aliases"]:
+                    existing["aliases"].append(a)
+                if a_norm:
+                    existing["alias_norms"].add(a_norm)
+                    
+            # If the candidate was a short alias but the existing was full name, we might swap, but keep it stable.
+        else:
+            global concept_counter
+            concept_id = f"concept_{concept_counter:04d}"
+            concept_counter += 1
+            
+            alias_norms = set()
+            for a in aliases:
+                an = compute_normalization_key(a)
+                if an: alias_norms.add(an)
+                
+            self.concepts.append({
+                "concept_id": concept_id,
+                "name": core_name,
+                "norm_key": norm_key,
+                "aliases": aliases,
+                "alias_norms": alias_norms,
+                "description": desc,
+                "confidence": conf,
+                "evidence_pool": set(ev_ids)
+            })
+
+canonicalizer = Canonicalizer()
 for candidate in all_candidates:
-    raw_name = str(candidate.get("name", "")).strip()
-    if not raw_name:
-        continue
-        
-    norm = normalize_name(raw_name)
-    if not norm:
-        continue
-
-    # Clean evidence IDs
-    ev_ids = [str(eid) for eid in candidate.get("evidence_chunk_ids", []) if str(eid) in class_map]
-    if not ev_ids:
-        continue # If zero valid evidence survives, reject concept entirely dynamically per instructions
-        
-    conf = float_clamp(candidate.get("confidence", 0.0))
-    desc = str(candidate.get("description", raw_name)).strip()
-
-    if norm in canonical_map:
-        # Merge
-        existing = canonical_map[norm]
-        existing["confidence"] = max(existing["confidence"], conf) # take highest confidence
-        if len(desc) > len(existing["description"]): 
-            # take longest/most descriptive
-            existing["description"] = desc 
-        
-        # Merge evidence preserving deduplication
-        existing["evidence_pool"].update(ev_ids)
-    else:
-        # Create new
-        concept_id = f"concept_{concept_counter:04d}"
-        concept_counter += 1
-        
-        canonical_map[norm] = {
-            "concept_id": concept_id,
-            "name": raw_name, # Keep original capitilization styling
-            "description": desc,
-            "confidence": conf,
-            "evidence_pool": set(ev_ids)
-        }
+    canonicalizer.merge_candidate(candidate, class_map)
 
 
 # ============================================================
@@ -287,7 +346,7 @@ final_concepts = []
 duplicate_ids_removed = 0
 invalid_evidence_dropped = 0 # Handled in map filtering naturally
 
-for norm, data in canonical_map.items():
+for data in canonicalizer.concepts:
     evidence_list = []
     # Build strict evidence structured array
     for eid in sorted(list(data["evidence_pool"])):
@@ -299,6 +358,7 @@ for norm, data in canonical_map.items():
     final_concepts.append({
         "concept_id": data["concept_id"],
         "name": data["name"],
+        "aliases": data["aliases"],
         "description": data["description"],
         "confidence": data["confidence"],
         "evidence_count": len(evidence_list),

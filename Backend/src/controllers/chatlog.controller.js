@@ -131,15 +131,8 @@ async function createSession(req, res) {
         return res.status(400).json({ error: "course is required to create a session" });
     }
 
-    // Verify the course exists and is published 
-    const fs = require('fs');
-    const path = require('path');
-    const coursesPath = process.env.NODE_ENV === 'test' ? path.join(__dirname, '../../data/courses.json') : path.join(__dirname, '../data/courses.json');
-    let coursesList = [];
-    if (fs.existsSync(coursesPath)) {
-        coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
-    }
-    const targetCourse = coursesList.find(c => c.name === course && c.status === 'published');
+    const { supabaseAdmin } = require('../lib/supabaseAdmin');
+    const { data: targetCourse } = await supabaseAdmin.from('courses').select('name').eq('name', course).eq('status', 'published').single();
 
     if (!targetCourse) {
         return res.status(403).json({ error: "Cannot create session for an unpublished or non-existent course." });

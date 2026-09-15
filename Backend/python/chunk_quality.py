@@ -92,13 +92,17 @@ if demo_limit and demo_limit.isdigit():
 
 CLASSES = [
     "CORE_CONCEPT", "DEFINITION", "EXPLANATION", "PROCEDURE", "EXAMPLE", 
-    "CODE", "EXERCISE", "SUMMARY", "REFERENCE", "NAVIGATION", "METADATA", "NOISE"
+    "CODE", "EXERCISE", "SUMMARY", "REFERENCE", "NAVIGATION", "METADATA", "NOISE", "UNKNOWN"
 ]
 
-ELIGIBLE = ["CORE_CONCEPT", "DEFINITION", "EXPLANATION", "PROCEDURE", "CODE"]
+ELIGIBLE = ["CORE_CONCEPT", "DEFINITION", "EXPLANATION", "PROCEDURE", "CODE", "UNKNOWN"]
 
 BATCH_SIZE = 50
 results = []
+classifier_failures = 0
+fallback_included = 0
+educational_classified = 0
+noise_classified = 0
 
 def float_clamp(val):
     try:
@@ -223,25 +227,46 @@ for i in range(0, len(valid_chunks), BATCH_SIZE):
 
     for c in batch:
         cid = c["id"]
-        llm_item = llm_map.get(cid, {})
+        
+        if cid not in llm_map:
+            # Single-chunk classifier failure (either batch failed entirely, or model lost chunk ID)
+            classifier_failures += 1
+            fallback_included += 1
+            results.append({
+                "chunk_id": cid,
+                "classification": "UNKNOWN",
+                "educational_value": 0.5,
+                "conceptual_density": 0.5,
+                "prerequisite_relevance": 0.5,
+                "noise_score": 0.5,
+                "include_for_concept_extraction": True,
+                "reason": "Classifier failure/missing output; failing open to preserve content."
+            })
+        else:
+            llm_item = llm_map[cid]
 
-        classification = llm_item.get("classification", "NOISE")
-        if classification not in CLASSES:
-            classification = "NOISE"
+            classification = llm_item.get("classification", "NOISE")
+            if classification not in CLASSES:
+                classification = "NOISE"
 
-        inc_raw = llm_item.get("include_for_concept_extraction", False)
-        inc = bool(inc_raw) if isinstance(inc_raw, bool) else (str(inc_raw).lower() == "true")
+            inc_raw = llm_item.get("include_for_concept_extraction", False)
+            inc = bool(inc_raw) if isinstance(inc_raw, bool) else (str(inc_raw).lower() == "true")
+            
+            if inc:
+                educational_classified += 1
+            else:
+                noise_classified += 1
 
-        results.append({
-            "chunk_id": cid,
-            "classification": classification,
-            "educational_value": float_clamp(llm_item.get("educational_value", 0.0)),
-            "conceptual_density": float_clamp(llm_item.get("conceptual_density", 0.0)),
-            "prerequisite_relevance": float_clamp(llm_item.get("prerequisite_relevance", 0.0)),
-            "noise_score": float_clamp(llm_item.get("noise_score", 1.0)),
-            "include_for_concept_extraction": inc,
-            "reason": str(llm_item.get("reason", "Fallback/Missing output"))
-        })
+            results.append({
+                "chunk_id": cid,
+                "classification": classification,
+                "educational_value": float_clamp(llm_item.get("educational_value", 0.0)),
+                "conceptual_density": float_clamp(llm_item.get("conceptual_density", 0.0)),
+                "prerequisite_relevance": float_clamp(llm_item.get("prerequisite_relevance", 0.0)),
+                "noise_score": float_clamp(llm_item.get("noise_score", 1.0)),
+                "include_for_concept_extraction": inc,
+                "reason": str(llm_item.get("reason", ""))
+            })
 
 # Statistics and Quality Warnings
 classification_dist = defaultdict(int)
@@ -297,6 +322,14 @@ artifact = {
     "excluded_chunks": excluded_chunks,
     "chunks": results,
     "classification_distribution": dict(classification_dist),
+    "telemetry": {
+        "total_chunks": len(valid_chunks),
+        "successfully_classified": len(valid_chunks) - classifier_failures,
+        "educational_classified": educational_classified,
+        "noise_classified": noise_classified,
+        "classifier_failures": classifier_failures,
+        "fallback_included_chunks": fallback_included
+    },
     "quality": {
         "status": status,
         "warnings": warnings

@@ -20,23 +20,7 @@ function resolveStudentName(id, profileName) {
     return id ? `Student (${id.substring(0, 8)})` : 'Student';
 }
 
-function getLocalTeacherCourses(teacherId) {
-    try {
-        if (fs.existsSync(STORE_PATH)) {
-            const store = JSON.parse(fs.readFileSync(STORE_PATH, 'utf8'));
-            const assignments = store.assignments || [];
-            return [...new Set(
-                assignments
-                    .filter(a => a.created_by === teacherId)
-                    .map(a => a.course_name)
-                    .filter(Boolean)
-            )];
-        }
-    } catch (e) {
-        console.warn('[copilot] Could not read local grading store:', e.message);
-    }
-    return [];
-}
+// getLocalTeacherCourses removed since assignments are natively tracked in Supabase.
 
 async function getTeacherCourses(teacherId) {
     let courses = [];
@@ -53,10 +37,7 @@ async function getTeacherCourses(teacherId) {
         // Fallback to local store
     }
 
-    if (courses.length === 0) {
-        courses = getLocalTeacherCourses(teacherId);
-    }
-
+    // Local grading store fallback removed: Supabase represents the unified truth.
     return courses;
 }
 

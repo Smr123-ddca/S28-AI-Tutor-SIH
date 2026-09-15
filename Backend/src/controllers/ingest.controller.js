@@ -68,6 +68,7 @@ if (!fs.existsSync(DATA_DIR)) {
 // ============================================================
 
 const batchRegistry = {};
+const { registerUploadRecord, updateIngestionStatus, savePipelineArtifactsToSupabase } = require('../services/persist.service');
 
 const getBatch = (batchId) => {
     return batchRegistry[batchId];
@@ -119,6 +120,8 @@ function sendProgress(courseName, step, message) {
         status,
         updatedAt: new Date().toISOString()
     };
+
+    updateIngestionStatus(courseName, status, stage, step === 'ERROR' ? message : null);
 
     const client = progressClients[courseName];
     if (client) {
@@ -680,7 +683,7 @@ async function runPrerequisites(courseName) {
     console.log('▶ C4: prerequisite_graph.py');
     let prereqResult;
     try {
-        prereqResult = await runPythonScript('prerequisite_graph.py', [conceptsPath, hierarchyPath]);
+        prereqResult = await runPythonScript('prerequisite_graph.py', [conceptsPath, hierarchyPath, chunksPath]);
     } catch (err) {
         console.error('❌ C4 prerequisite_graph failed:', err.message);
         sendProgress(courseName, 'ERROR', `C4 failed: ${err.message}`);
@@ -1108,6 +1111,12 @@ const handleUpload = async (
                     file.filename
                 );
 
+            let pgIds = null;
+            try {
+                pgIds = await registerUploadRecord(courseName, file.filename, req.user?.id || null);
+            } catch (e) {
+                console.error("Failed to register DB upload:", e);
+            }
 
             // =================================================
             // 4. RECORD — full V2 pipeline runs asynchronously
@@ -1117,15 +1126,11 @@ const handleUpload = async (
             // =================================================
 
             processedCourses.push({
-
                 ...courseEntry,
-
-                total_chunks:
-                    chunks.length,
-
-                prerequisite_status:
-                    'running'
-
+                total_chunks: chunks.length,
+                prerequisite_status: 'running',
+                pg_course_id: pgIds ? pgIds.courseId : null,
+                pg_doc_id: pgIds ? pgIds.documentId : null
             });
 
         }
@@ -1209,11 +1214,18 @@ const handleUpload = async (
         // progress to the teacher UI without blocking this request.
         for (const pc of processedCourses) {
             console.log(`\n🚀 Launching background pipeline for: ${pc.name}`);
-            runPrerequisites(pc.name).then(result => {
+            runPrerequisites(pc.name).then(async result => {
+                try {
+                    if (pc.pg_course_id && pc.pg_doc_id) {
+                        await savePipelineArtifactsToSupabase(pc.name, pc.pg_course_id, pc.pg_doc_id);
+                        await updateIngestionStatus(pc.name, 'completed', 'Ready for review');
+                    }
+                } catch (e) { }
                 console.log(`✅ Background pipeline done for ${pc.name}: ${result.relationship_count} edges.`);
             }).catch(err => {
                 console.error(`❌ Background pipeline failed for ${pc.name}:`, err.message);
                 sendProgress(pc.name, 'ERROR', `Pipeline failed: ${err.message}`);
+                updateIngestionStatus(pc.name, 'failed', 'Pipeline Failed', err.message);
             });
         }
 

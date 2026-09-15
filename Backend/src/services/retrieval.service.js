@@ -1,34 +1,40 @@
 const { tokenize, getTermFrequencies, cosineSimilarity } = require('../utils/nlp');
-const { getChunks } = require('../data/store');
+const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 /**
- * Retrieve the top-K most relevant course chunks for a query.
- *
- * @param {string} question - the query text (used for tokenization if tokens not provided)
- * @param {{ tokens?: string[], subject?: string, topK?: number }} [options]
- *   - tokens: pre-computed retrieval tokens (skip internal tokenization)
- *   - subject: filter chunks by topic before scoring
- *   - course: filter chunks by isolated published course namespace
- *   - topK: number of results to return (default 5)
- * @returns {Array<{ id: string, topic: string, section_label: string, text: string, score: number }>}
+ * Retrieve the top-K most relevant course chunks for a query using Supabase.
  */
-function retrieve(question, options = {}) {
+async function retrieve(question, options = {}) {
     const { tokens: precomputedTokens, subject, course, topK = 5 } = options;
 
-    let courseContentChunks = getChunks();
+    let query = supabaseAdmin.from('chunks').select('chunk_alias, topic, chapter, section, text_content, courses!inner(name)');
 
-    // ── Course isolation filtering ──
     if (course) {
-        courseContentChunks = courseContentChunks.filter(c => c.source_course === course);
+        query = query.eq('courses.name', course);
     }
 
-    // ── Subject filtering ──
+    // We only fetch chunks for the provided subject/course for performance
+    if (subject && !course) {
+        query = query.eq('courses.name', subject);
+        // or by topic matching subject
+        // query = query.or(`topic.ilike.${subject},courses.name.ilike.${subject}`);
+    }
+
+    const { data: chunksData, error } = await query;
+    if (error) {
+        console.error('Failed to fetch chunks for RAG:', error);
+        return [];
+    }
+
+    let courseContentChunks = chunksData || [];
+
+    // The legacy retrieval logic matched exactly on lowercase topic if subject was passed.
+    // For safety, we replicate the precise legacy code filter.
     if (subject) {
         const subjectLower = subject.toLowerCase();
         const filtered = courseContentChunks.filter(
             chunk => chunk.topic && chunk.topic.toLowerCase() === subjectLower
         );
-        // Only apply filter if it yields results; fall back to all chunks otherwise
         if (filtered.length > 0) {
             courseContentChunks = filtered;
         }
@@ -39,18 +45,18 @@ function retrieve(question, options = {}) {
     const questionTF = getTermFrequencies(questionTokens);
 
     const scoredChunks = courseContentChunks.map(chunk => {
-        // Build searchable text from chunk metadata + content
-        const chunkContent = `${chunk.topic} ${chunk.section_label} ${chunk.text}`;
+        // Build searchable text
+        const chunkContent = `${chunk.topic || ''} ${chunk.section || ''} ${chunk.text_content || ''}`;
         const chunkTokens = tokenize(chunkContent);
         const chunkTF = getTermFrequencies(chunkTokens);
 
         const score = cosineSimilarity(questionTF, chunkTF);
 
         return {
-            id: chunk.id,
+            id: chunk.chunk_alias,
             topic: chunk.topic,
-            section_label: chunk.section_label,
-            text: chunk.text,
+            section_label: chunk.section,
+            text: chunk.text_content,
             score: score
         };
     });

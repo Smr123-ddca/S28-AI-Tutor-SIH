@@ -34,12 +34,13 @@ if not mock_val:
 # ============================================================
 # ARGUMENT CHECK
 # ============================================================
-if len(sys.argv) < 2:
-    print(json.dumps({"error": "Usage: python prerequisite_graph.py <concepts.json> [hierarchy.json]"}, ensure_ascii=False))
+if len(sys.argv) < 3:
+    print(json.dumps({"error": "Usage: python prerequisite_graph.py <concepts.json> <hierarchy.json> <chunks.json>"}, ensure_ascii=False))
     sys.exit(1)
 
 concepts_path = sys.argv[1].strip()
-hierarchy_path = sys.argv[2].strip() if len(sys.argv) > 2 else None
+hierarchy_path = sys.argv[2].strip()
+chunks_path = sys.argv[3].strip() if len(sys.argv) > 3 else None
 
 # ============================================================
 # LOAD INPUTS
@@ -64,48 +65,77 @@ if hierarchy_path and os.path.exists(hierarchy_path):
     except Exception:
         pass
 
+chunks_data = []
+if chunks_path and os.path.exists(chunks_path):
+    try:
+        with open(chunks_path, "r", encoding="utf-8") as f:
+            chunks_data = json.load(f)
+    except Exception as e:
+        print(f"Failed to load chunks: {e}", file=sys.stderr)
+        
+class ContextAssembler:
+    @staticmethod
+    def assemble(chunks, concepts):
+        chunk_map = {c["id"]: c for c in chunks if "id" in c}
+        enriched_concepts = []
+        for c in concepts:
+            best_chunk_index = 999999
+            first_context = ""
+            for ev in c.get("evidence", []):
+                cid = ev.get("chunk_id")
+                if cid and cid in chunk_map:
+                    ck = chunk_map[cid]
+                    idx = ck.get("chunk_index", 999999)
+                    if idx < best_chunk_index:
+                        best_chunk_index = idx
+                        first_context = ck.get("text", "")[:400]
+            enriched = {
+                "id": c.get("concept_id"),
+                "name": c.get("name"),
+                "desc": c.get("description", "")[:200],
+                "first_introduced_chunk_index": best_chunk_index if best_chunk_index != 999999 else -1,
+                "first_introduced_context": first_context
+            }
+            enriched_concepts.append(enriched)
+        enriched_concepts.sort(key=lambda x: x["first_introduced_chunk_index"] if x["first_introduced_chunk_index"] >= 0 else 999999)
+        return enriched_concepts
+
 # ============================================================
 # PASS A: CANDIDATE DEPENDENCY EXTRACTION
 # ============================================================
-inputs = []
-for c in c2_concepts:
-    inputs.append({
-        "id": c.get("concept_id"),
-        "name": c.get("name"),
-        "desc": str(c.get("description", ""))[:200]
-    })
+# Assemble chronological chunk context bounds
+inputs = ContextAssembler.assemble(chunks_data, c2_concepts)
 
 prompt = f"""
 You are an expert curriculum-design assistant.
 Analyze the following canonical concepts for "{course_name}".
-Your task is to identify only genuinely grounded learning dependencies.
+Your task is to identify logically grounded learning dependencies based exclusively on the provided Chronological Sequence context bounds.
 
-Strict rules:
-1. Output ONLY a JSON array of prerequisite relationship objects.
+Strict rules for extraction:
+1. Output ONLY a chronological JSON array of prerequisite relationships.
 2. A relationship means the learner must understand `prerequisite_id` BEFORE learning `concept_id`.
-3. Use `concept_id` and `prerequisite_id` values copied EXACTLY from the supplied `id` fields in the source concepts.
-4. Never output concept names, never invent IDs, never use placeholders like `concept_A`, `concept_B`, `topic_1`, or `prereq_x`.
-5. Only use IDs that appear in the provided source concepts array.
-6. Only include a relationship when the course material supports it as a true learning dependency.
-7. Do not create edges just because concepts share a domain, keywords, or close semantic similarity.
-8. `relationship` must be one of: "REQUIRED", "SUPPORTING", or "RELATED".
-9. `confidence` must be a number between 0.0 and 1.0. Prefer very strong edges; avoid weak inferences.
-10. `reason` must explain the actual learning dependency in one sentence.
-11. `evidence` should be a compact list of supporting chunk IDs if available; otherwise use an empty array.
+3. READ THE `first_introduced_chunk_index` AND THE CONTEXT TEXT: Concepts appearing earlier chronologically are extremely likely to be prerequisites for later concepts natively. Use this structural chronology to guarantee direction (No backward guessing!).
+4. Use `concept_id` and `prerequisite_id` values copied EXACTLY from the supplied `id` fields. Do not use placeholders.
+5. Only include a relationship when the course material structurally supports it. Do not map everything linearly mechanically, map semantically based on actual required knowledge.
+6. Do not create edges just because concepts share a domain, keywords, or close semantic similarity.
+7. `relationship` must be one of: "REQUIRED", "SUPPORTING", or "RELATED".
+8. `confidence` must be a number between 0.0 and 1.0. Prefer very strong edges logically linking the chunks.
+9. `reason` must explicitly state *why* based on the context text.
+10. `evidence` array is left empty (managed natively upstream).
 
-Example of the required format:
+Example of format:
 [
   {{
    "concept_id": "concept_0007",
    "prerequisite_id": "concept_0003",
    "relationship": "REQUIRED",
    "confidence": 0.87,
-   "reason": "The course introduces X before students can apply Y in practice.",
-   "evidence": ["chunk_101"]
+   "reason": "Concept 3's definition is natively applied in Concept 7's sequence context.",
+   "evidence": []
   }}
 ]
 
-Source Concepts:
+Chronologically Ordered Course Concept Sequence Context:
 {json.dumps(inputs, ensure_ascii=False)}
 """
 

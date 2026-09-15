@@ -1,0 +1,112 @@
+[
+  {
+    "id": "chunk_1",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "Course Material",
+    "section_label": "Course Material",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 1,
+    "text": "Economics Reference \u00e2\u20ac\u201d structured for retrieval/chunking demos\nPage 1"
+  },
+  {
+    "id": "chunk_2",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "ECONOMICS",
+    "section_label": "ECONOMICS",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 1,
+    "text": "A structured theory reference for AI-tutor ingestion, retrieval and presentation demos\nPurpose. This document is deliberately organized into chapters, sections, subsections, definitions,\nexplanations, examples, and comparison points. The structure makes it useful as realistic\nteacher-uploaded material for demonstrating semantic/TF-IDF retrieval and source-grounded\nexplanations.\nSuggested chunking target: preserve subsection boundaries where possible; merge short adjacent\nunits and split only at paragraph boundaries when a section becomes too large."
+  },
+  {
+    "id": "chunk_3",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "Contents",
+    "section_label": "Contents",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 2,
+    "text": "\u00e2\u20ac\u00a2 1. Foundations of Economics\n\u00e2\u20ac\u00a2 2. Demand, Supply and Market Equilibrium\n\u00e2\u20ac\u00a2 3. Elasticity\n\u00e2\u20ac\u00a2 4. Consumer Behaviour and Utility\n\u00e2\u20ac\u00a2 5. Production and Costs\n\u00e2\u20ac\u00a2 6. Market Structures\n\u00e2\u20ac\u00a2 7. National Income and Macroeconomic Indicators\n\u00e2\u20ac\u00a2 8. Money, Banking and Monetary Policy\n\u00e2\u20ac\u00a2 9. Inflation and Unemployment\n\u00e2\u20ac\u00a2 10. Fiscal Policy and Economic Stabilisation\n\u00e2\u20ac\u00a2 11. International Trade and Exchange Rates\n\u00e2\u20ac\u00a2 12. Development, Inequality and Sustainable Growth\nEconomics Reference \u00e2\u20ac\u201d structured for retrieval/chunking demos\nPage 2"
+  },
+  {
+    "id": "chunk_4",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "1. Foundations of Economics",
+    "section_label": "1. Foundations of Economics",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Chapter focus. This chapter contains 4 theory segments. Each segment is self-contained enough to\nserve as a retrieval unit while remaining connected to the broader chapter."
+  },
+  {
+    "id": "chunk_5",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "1.1 What is Economics?",
+    "section_label": "1.1 What is Economics?",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Economics is the study of how individuals, firms, governments and societies make choices when\nresources are limited and human wants are numerous. The central problem is scarcity: land, labour,\ncapital, time, information and natural resources cannot satisfy every possible use at the same time.\nBecause resources are scarce, choosing one option usually means giving up another. Economics\ntherefore studies both the choices themselves and the incentives that shape those choices.\nMicroeconomics examines decisions made by individual consumers, firms and markets. It asks\nquestions such as why a household buys one product rather than another, how a firm decides its\noutput, and how prices coordinate buyers and sellers. Macroeconomics studies the economy as a\nwhole, including national income, inflation, unemployment, economic growth and stabilisation\npolicy. The two perspectives are connected: millions of individual decisions collectively influence\naggregate outcomes."
+  },
+  {
+    "id": "chunk_6",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "1.2 Scarcity, Choice and Opportunity Cost",
+    "section_label": "1.2 Scarcity, Choice and Opportunity Cost",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Scarcity means that resources have alternative uses and cannot satisfy all wants simultaneously. A\nstudent who spends an evening preparing a presentation cannot use the same hours for another\nactivity. A government that allocates money to public transport has fewer funds available for\nanother programme. Scarcity does not mean that something is absolutely rare; it means that\nobtaining more of one use requires a trade-off with another use.\nOpportunity cost is the value of the next best alternative forgone when a choice is made. It is a\nforward-looking concept: the relevant comparison is not every possible alternative, but the best\nalternative that must be sacrificed. Opportunity cost helps explain why apparently free choices can\nstill be costly. For example, using an empty classroom for a meeting may have a low monetary cost\nbut a real opportunity cost if another valuable use of the room is displaced."
+  },
+  {
+    "id": "chunk_7",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "1.3 Positive and Normative Economics",
+    "section_label": "1.3 Positive and Normative Economics",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Positive economics describes statements that can, in principle, be tested using evidence. Examples\ninclude claims about how a tax changes the quantity demanded or how unemployment changes\nduring a recession. Normative economics involves judgments about what ought to happen and\ntherefore depends partly on values. A statement that a government should raise taxes on a\nparticular group is normative because it contains a judgment about fairness or policy goals.\nThe distinction is useful because economic policy debates often combine facts and value\njudgments. Evidence can help determine whether a proposed policy is likely to achieve its stated\nobjective, but evidence alone cannot decide how society should rank competing objectives. A policy\nmay increase efficiency while also changing the distribution of income. Economists can analyse the\ntrade-off, while the final normative choice may depend on social priorities."
+  },
+  {
+    "id": "chunk_8",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "1.4 The Production Possibility Frontier",
+    "section_label": "1.4 The Production Possibility Frontier",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 3,
+    "text": "A production possibility frontier (PPF) represents the maximum combinations of two goods or\nservices that an economy can produce with its available resources and technology, assuming\nresources are used efficiently. Points on the frontier represent productive efficiency, points inside it\nindicate underutilisation or inefficiency, and points outside it are unattainable with the current\nEconomics Reference \u00e2\u20ac\u201d structured for retrieval/chunking demos\nPage 3\nresources and technology. The PPF makes scarcity and trade-offs visible in a simple model.\nThe slope of the PPF reflects the opportunity cost of producing more of one good in terms of the\nother. If resources are specialised, the opportunity cost may rise as production shifts toward one\ngood, producing a bowed-out frontier. Economic growth can shift the frontier outward when\nproductive capacity increases through better technology, more resources or improvements in\nhuman capital. A movement along the frontier represents a change in allocation, while a shift\nrepresents a change in productive capacity."
+  },
+  {
+    "id": "chunk_9",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "2. Demand, Supply and Market Equilibrium",
+    "section_label": "2. Demand, Supply and Market Equilibrium",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Chapter focus. This chapter contains 4 theory segments. Each segment is self-contained enough to\nserve as a retrieval unit while remaining connected to the broader chapter."
+  },
+  {
+    "id": "chunk_10",
+    "topic": "Economics_Chunking_Reference",
+    "chapter": "General",
+    "section": "2.1 Demand and the Law of Demand",
+    "section_label": "2.1 Demand and the Law of Demand",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Demand refers to the quantities of a good or service that consumers are willing and able to\npurchase at different prices during a given period, holding other relevant factors constant. The law\nof demand states that, other things equal, quantity demanded generally falls when price rises and\nrises when price falls. This creates a downward-sloping demand curve in the standard\nprice-quantity diagram.\nA change in the good's own price causes a movement along the demand curve. A change in\nanother determinant of demand shifts the entire curve. Important determinants include income,\nprices of related goods, tastes and preferences, expectations and the number of buyers. For a\nnormal good, higher income tends to increase demand, whereas for an inferior good, higher income\nmay reduce demand. Substitutes and complements also affect how consumers respond to changes\nin related prices."
+  }
+]

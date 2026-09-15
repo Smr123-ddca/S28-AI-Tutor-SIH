@@ -33,17 +33,7 @@ function getMasteryStatus(masteryPct, totalActivity) {
     return 'needs_attention';
 }
 
-function readLocalGradingStore() {
-    try {
-        const storePath = path.join(__dirname, '../data/grading_store.json');
-        if (fs.existsSync(storePath)) {
-            return JSON.parse(fs.readFileSync(storePath, 'utf8'));
-        }
-    } catch (e) {
-        console.warn('[analytics] Local grading store read error:', e.message);
-    }
-    return { assignments: [], submissions: [] };
-}
+// readLocalGradingStore removed: Supabase provides grading data.
 
 function loadPrerequisites(subject) {
     try {
@@ -100,38 +90,7 @@ async function getClassAnalytics(req, res) {
             // fallback to store
         }
 
-        // Merge local store submissions if Supabase has zero or for local mode
-        const localStore = readLocalGradingStore();
-        const localAssignmentsMap = (localStore.assignments || []).reduce((acc, a) => {
-            acc[a.id] = a;
-            return acc;
-        }, {});
-
-        const localSubs = (localStore.submissions || [])
-            .map(s => {
-                const asg = localAssignmentsMap[s.assignment_id] || {};
-                return {
-                    id: s.id,
-                    assignment_id: s.assignment_id,
-                    concept: asg.title || 'Assignment Concept',
-                    course_name: asg.course_name || '',
-                    max_score: asg.max_score || 100,
-                    grade: s.grade,
-                    student_id: s.student_id,
-                    student_name: resolveStudentName(s.student_id, null, s.student_name),
-                    status: s.status || (s.grade !== null ? 'graded' : 'ungraded'),
-                    submitted_at: s.submitted_at
-                };
-            })
-            .filter(s => !subject || s.course_name.toLowerCase() === subject.toLowerCase());
-
-        // Merge submissions avoiding duplicates by id
-        const existingIds = new Set(submissionsList.map(s => s.id));
-        localSubs.forEach(s => {
-            if (!existingIds.has(s.id)) {
-                submissionsList.push(s);
-            }
-        });
+        // Local store fallback removed: Supabase is now the single source of truth for grading.
 
         // ── 2. Fetch Practice Question Attempts ─────────────────────────
         let practiceAttempts = [];
@@ -163,19 +122,8 @@ async function getClassAnalytics(req, res) {
         // Collect all distinct concepts for this subject
         const conceptsMap = {}; // conceptName -> { submissions: [], practice: [], students: Set }
 
-        // Seed concepts from assignments
-        (localStore.assignments || [])
-            .filter(a => !subject || a.course_name.toLowerCase() === subject.toLowerCase())
-            .forEach(a => {
-                if (a.title && !conceptsMap[a.title]) {
-                    conceptsMap[a.title] = {
-                        concept: a.title,
-                        submissions: [],
-                        practice: [],
-                        students: new Set()
-                    };
-                }
-            });
+        // Local mode assignment concept seeding removed.
+        // Concept seeds are now entirely reliant on submissionsList and practiceAttempts logic.
 
         // Add submissions into conceptsMap
         submissionsList.forEach(sub => {

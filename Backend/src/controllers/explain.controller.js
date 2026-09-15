@@ -80,13 +80,8 @@ async function explain(req, res) {
         return res.status(400).json({ error: "Missing required field: subject. A valid published subject selection is mandatory." });
     }
 
-    const path = require('path');
-    const coursesPath = path.join(__dirname, '../data/courses.json');
-    let coursesList = [];
-    if (fs.existsSync(coursesPath)) {
-        coursesList = JSON.parse(fs.readFileSync(coursesPath, 'utf8'));
-    }
-    const targetCourse = coursesList.find(c => (c.metadata?.domain === subject || c.name === subject) && c.status === 'published');
+    const { supabaseAdmin } = require('../lib/supabaseAdmin');
+    const { data: targetCourse } = await supabaseAdmin.from('courses').select('name').eq('status', 'published').or(`name.eq.${subject},domain.eq.${subject}`).single();
 
     if (!targetCourse) {
         return res.status(403).json({ error: "Cannot query an unpublished or non-existent subject." });
@@ -256,7 +251,7 @@ async function explain(req, res) {
         // STEP 3: Retrieval with expanded tokens
         // ════════════════════════════════════════════════════════════════
         let rStart = performance.now();
-        const results = retrievalService.retrieve(question, {
+        const results = await retrievalService.retrieve(question, {
             tokens: queryResult.expandedTokens,
             subject: subject
         });
@@ -368,24 +363,33 @@ async function explain(req, res) {
 
             if (likelyGaps.length > 0) {
                 const firstGap = likelyGaps[0];
-                const allChunks = getChunks();
-                const gapChunk = allChunks.find(c => c.id === firstGap.chunk_id);
+                const { supabaseAdmin } = require('../lib/supabaseAdmin');
+                const courseRecord = await supabaseAdmin.from('courses').select('id').eq('name', subject).single();
 
-                if (gapChunk) {
-                    contextChunks = [{
-                        id: gapChunk.id,
-                        topic: gapChunk.topic,
-                        section_label: gapChunk.section_label,
-                        text: gapChunk.text,
-                        score: 1.0
-                    }];
+                if (courseRecord.data) {
+                    const { data: gapChunk } = await supabaseAdmin
+                        .from('chunks')
+                        .select('chunk_alias, topic, section, text_content')
+                        .eq('course_id', courseRecord.data.id)
+                        .eq('chunk_alias', firstGap.chunk_id)
+                        .single();
 
-                    gapData = {
-                        addressed_gap: true,
-                        gap_chunk_id: gapChunk.id,
-                        gap_section_label: gapChunk.section_label,
-                        original_target_chunk_id: topChunkId
-                    };
+                    if (gapChunk) {
+                        contextChunks = [{
+                            id: gapChunk.chunk_alias,
+                            topic: gapChunk.topic,
+                            section_label: gapChunk.section,
+                            text: gapChunk.text_content,
+                            score: 1.0
+                        }];
+
+                        gapData = {
+                            addressed_gap: true,
+                            gap_chunk_id: gapChunk.chunk_alias,
+                            gap_section_label: gapChunk.section,
+                            original_target_chunk_id: topChunkId
+                        };
+                    }
                 }
             }
         }

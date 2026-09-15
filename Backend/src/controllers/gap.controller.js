@@ -1,38 +1,5 @@
 const path = require('path');
-const fs = require('fs');
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
-const { getChunks } = require('../data/store');
-
-const DATA_DIR = path.join(__dirname, '../data');
-
-/**
- * Build a prerequisite lookup map from a per-course prerequisites file.
- * The file schema is: { course, relationships: [{ concept_id, prerequisite_id, ... }] }
- * Returns: { [concept_id]: [prerequisite_id, ...] }
- */
-function loadPrerequisites(courseName) {
-    if (!courseName) return {};
-    const prereqPath = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
-    try {
-        if (!fs.existsSync(prereqPath)) return {};
-        const data = JSON.parse(fs.readFileSync(prereqPath, 'utf8'));
-        const relationships = data.relationships || [];
-        const map = {};
-        for (const rel of relationships) {
-            const concept = rel.concept_id;
-            const prereq = rel.prerequisite_id;
-            if (!concept || !prereq) continue;
-            if (!map[concept]) map[concept] = [];
-            if (!map[concept].includes(prereq)) {
-                map[concept].push(prereq);
-            }
-        }
-        return map;
-    } catch (err) {
-        console.warn(`[gap] Failed to load prerequisites for course "${courseName}":`, err.message);
-        return {};
-    }
-}
 
 async function recordSessionEvent(req, res) {
     const { chunk_id, correct } = req.body;
@@ -44,7 +11,7 @@ async function recordSessionEvent(req, res) {
 
     const { data: event, error } = await supabaseAdmin.from('session_events').insert({
         student_id,
-        chunk_id,
+        chunk_id, // we retain string chunk_id for backwards compat tables
         correct
     }).select().single();
 
@@ -56,12 +23,27 @@ async function recordSessionEvent(req, res) {
     return res.json({ success: true, recorded: event });
 }
 
-async function getLikelyGaps(student_id, chunk_id, courseName) {
-    const prerequisites = loadPrerequisites(courseName);
-    const prereqs = prerequisites[chunk_id] || [];
+async function getLikelyGaps(student_id, target_chunk_alias, courseName) {
+    if (!courseName) return [];
+
+    // Lookup course ID
+    const { data: course } = await supabaseAdmin.from('courses').select('id').eq('name', courseName).single();
+    if (!course) return [];
+
+    // Find prerequisites where target concept matches target_chunk_alias
+    const { data: prereqsData } = await supabaseAdmin
+        .from('prerequisite_relationships')
+        .select(`target:target_concept_id(concept_alias), prereq:prerequisite_concept_id(concept_alias)`)
+        .eq('course_id', course.id);
+
+    const prereqs = (prereqsData || [])
+        .filter(p => p.target?.concept_alias === target_chunk_alias)
+        .map(p => p.prereq?.concept_alias)
+        .filter(Boolean);
+
     if (prereqs.length === 0) return [];
 
-    // Fetch from Supabase instead of sessionEvents array
+    // Fetch student history from Supabase
     const { data: studentHistory, error } = await supabaseAdmin
         .from('session_events')
         .select('chunk_id, correct, created_at')
@@ -94,12 +76,21 @@ async function getLikelyGaps(student_id, chunk_id, courseName) {
         }
     }
 
-    const chunks = getChunks();
+    if (likely_gaps.length === 0) return [];
+
+    // Enqueue chunks matching gaps to provide section labels
+    const gapAliases = likely_gaps.map(g => g.chunk_id);
+    const { data: gapChunksData } = await supabaseAdmin
+        .from('chunks')
+        .select('chunk_alias, section')
+        .eq('course_id', course.id)
+        .in('chunk_alias', gapAliases);
+
     const enrichedGaps = likely_gaps.map(gap => {
-        const chunkMatch = chunks.find(c => c.id === gap.chunk_id);
+        const chunkMatch = (gapChunksData || []).find(c => c.chunk_alias === gap.chunk_id);
         return {
             chunk_id: gap.chunk_id,
-            section_label: chunkMatch ? chunkMatch.section_label : "Unknown Concept",
+            section_label: chunkMatch ? (chunkMatch.section || "Unknown Concept") : "Unknown Concept",
             reason: gap.reason
         };
     });

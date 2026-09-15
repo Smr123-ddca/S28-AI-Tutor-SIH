@@ -82,8 +82,10 @@ def generate_content(prompt):
             seen_models.add(model)
             ordered_models.append(model)
 
+    import time
+    import random
+
     last_error = None
-    response = None
     for model in ordered_models:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
         payload = {
@@ -91,34 +93,65 @@ def generate_content(prompt):
             "generationConfig": {"response_mime_type": "application/json"},
         }
 
-        try:
-            response = requests.post(url, json=payload, timeout=60)
-            if response.status_code == 404:
-                last_error = RuntimeError(f"Gemini model '{model}' unavailable (HTTP 404).")
-                print(f"Gemini model '{model}' unavailable (HTTP 404). Trying next provider/model...", file=sys.stderr)
-                continue
-            response.raise_for_status()
-            data = response.json()
+        max_attempts = 8
+        for attempt in range(max_attempts):
             try:
-                text = data["candidates"][0]["content"]["parts"][0]["text"]
-            except (KeyError, IndexError, TypeError):
-                msg = json.dumps(data, ensure_ascii=True)[:400]
-                raise RuntimeError(f"Unexpected Gemini response structure: {msg}")
+                response = requests.post(url, json=payload, timeout=90)
+                status = response.status_code
+                
+                if status == 404:
+                    print(f"Gemini model '{model}' unavailable (HTTP 404). Trying next provider/model...", file=sys.stderr)
+                    last_error = RuntimeError(f"HTTP 404 on '{model}'")
+                    break # Go to next model in fallback list
+                
+                if status == 429:
+                    retry_after = response.headers.get("Retry-After")
+                    if retry_after and retry_after.isdigit():
+                        wait_time = int(retry_after)
+                    else:
+                        wait_time = (2 ** attempt) + random.uniform(1, 4)
+                        
+                    print(f"HTTP 429 Quota Exhaustion on '{model}'. Waiting {wait_time:.2f}s (Attempt {attempt+1}/{max_attempts})...", file=sys.stderr)
+                    time.sleep(wait_time)
+                    last_error = RuntimeError("429 rate limit exceeded")
+                    continue # Retry this model
 
-            if text is None or str(text).strip() == "":
-                raise RuntimeError(f"Gemini model '{model}' returned empty content.")
+                response.raise_for_status()
+                data = response.json()
+                try:
+                    text = data["candidates"][0]["content"]["parts"][0]["text"]
+                except (KeyError, IndexError, TypeError):
+                    msg = json.dumps(data, ensure_ascii=True)[:400]
+                    raise RuntimeError(f"Unexpected Gemini response structure: {msg}")
 
-            print(f"Gemini model '{model}' succeeded.", file=sys.stderr)
-            return text
-        except Exception as e:
-            cleaned = _redact_api_key(e)
-            last_error = e
-            status = getattr(response, "status_code", None) if response is not None else None
-            if status == 429:
-                print(f"Gemini quota failure on '{model}'.", file=sys.stderr)
-            else:
-                print(f"Direct REST request failed for '{model}': {cleaned}", file=sys.stderr)
+                if text is None or str(text).strip() == "":
+                    raise RuntimeError(f"Gemini model '{model}' returned empty content.")
+
+                print(f"Gemini model '{model}' succeeded on attempt {attempt+1}.", file=sys.stderr)
+                return text
+                
+            except requests.exceptions.RequestException as e:
+                status = getattr(e.response, "status_code", None) if hasattr(e, "response") else None
+                if status == 429:
+                    retry_after = e.response.headers.get("Retry-After") if e.response else None
+                    if retry_after and retry_after.isdigit():
+                        wait_time = int(retry_after)
+                    else:
+                        wait_time = (2 ** attempt) + random.uniform(1, 4)
+                        
+                    print(f"Network exception with HTTP 429 on '{model}'. Waiting {wait_time:.2f}s...", file=sys.stderr)
+                    time.sleep(wait_time)
+                    last_error = e
+                    continue
+                else:
+                    print(f"Direct REST request failed for '{model}': {_redact_api_key(e)}", file=sys.stderr)
+                    last_error = e
+                    break
+            except Exception as e:
+                print(f"Execution failed for '{model}': {_redact_api_key(e)}", file=sys.stderr)
+                last_error = e
+                break
 
     if last_error is not None:
-        print("Attempting OpenRouter fallback...", file=sys.stderr)
+        print(f"All Gemini models exhausted. Last error: {_redact_api_key(last_error)}. Attempting OpenRouter fallback...", file=sys.stderr)
     return generate_content_openrouter(prompt)
