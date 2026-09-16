@@ -89,6 +89,8 @@ router.post('/courses/:courseName/approve', requireRole('teacher'), approveCours
 router.post('/courses/:courseName/revision', requireRole('teacher'), reviseCourse);
 router.post('/courses/:courseName/publish', requireRole('teacher'), publishCourse);
 router.get('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').getPrerequisites);
+router.post('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').addPrerequisite);
+router.delete('/courses/:courseName/prerequisites/:relationshipId', requireRole('teacher'), require('../controllers/course.controller').deletePrerequisite);
 router.get('/courses/:courseName/artifacts', requireRole('teacher'), getArtifacts);
 router.get('/courses/:courseName/download', require('../controllers/course.controller').downloadCourseFile);
 router.delete('/courses/:courseName', requireRole('teacher'), deleteCourse);

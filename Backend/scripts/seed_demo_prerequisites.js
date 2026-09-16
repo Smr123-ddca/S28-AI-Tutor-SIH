@@ -67,11 +67,11 @@ async function seedPrereqs() {
                             relationship_type: rel.relationship_type,
                             confidence: rel.confidence_score,
                             reason: rel.reasoning,
-                            source: rel.source || "demo_seed",
                             status: 'candidate'
                         }, { onConflict: 'target_concept_id, prerequisite_concept_id' });
 
                         if (error) {
+                            fs.writeFileSync('true_error.txt', JSON.stringify(error, null, 2));
                             console.error(`Error upserting edge: ${error.message}`);
                             rejected++;
                         } else {

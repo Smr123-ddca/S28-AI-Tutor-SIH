@@ -1,0 +1,33 @@
+
+DSA_Code_Reference_Annotated:
+- concepts: 81
+- chunks: 97
+- evidence links: 100
+- prerequisite relationships: 3
+
+DBMS_Code_Reference_Annotated:
+- concepts: 19
+- chunks: 52
+- evidence links: 44
+- prerequisite relationships: 3
+
+Economics_Chunking_Reference:
+- concepts: 55
+- chunks: 56
+- evidence links: 67
+- prerequisite relationships: 3
+
+IES_Demo_Course_Structured:
+- concepts: 80
+- chunks: 12
+- evidence links: 84
+- prerequisite relationships: 3
+
+Also report:
+- REQUIRED edges: 0
+- SUPPORTING edges: 0
+- RELATED edges: 0
+- invalid/rejected edges: 0
+- orphan relationships: 0
+- duplicate relationships: 0
+- cycle count: 0

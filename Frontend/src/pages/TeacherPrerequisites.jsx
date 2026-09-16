@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { LayoutDashboard, AlertCircle, Edit3, Settings, BookOpen, Layers, Link as LinkIcon, Network, ArrowDown, Info, ChevronDown, ChevronRight } from 'lucide-react';
 import { Pill } from '../components/common/Pill';
 import { StatCard } from '../components/cards/StatCard';
-import { getCourseArtifacts, fetchLibraryDocuments, approveCourse, reviseCourse, publishCourse } from '../services/api';
+import { getCourseArtifacts, fetchLibraryDocuments, approveCourse, reviseCourse, publishCourse, addCoursePrerequisite, deleteCoursePrerequisite } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -24,6 +24,15 @@ export function TeacherPrerequisites() {
 
     // generalized selection state: { type: 'chunk' | 'concept' | 'relationship', data?: any, id?: string }
     const [selectedItem, setSelectedItem] = useState(null);
+    const [forceRefetch, setForceRefetch] = useState(0);
+
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [addForm, setAddForm] = useState({
+        prerequisite_concept_id: '',
+        target_concept_id: '',
+        relationship_type: 'REQUIRED',
+        reason: ''
+    });
 
     // UI states for expanding chapters
     const [expandedChapters, setExpandedChapters] = useState({});
@@ -99,7 +108,7 @@ export function TeacherPrerequisites() {
             }
         }
         fetchArtifacts();
-    }, [selectedCourse, session?.access_token]);
+    }, [selectedCourse, session?.access_token, forceRefetch]);
 
     const handleApprove = async () => {
         if (!window.confirm("Approve these extracted concepts for publication?")) return;
@@ -145,6 +154,35 @@ export function TeacherPrerequisites() {
 
     const activeDoc = documents.find(d => (d.subject === selectedCourse || d.id === selectedCourse));
 
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        setActionLoading(true);
+        try {
+            await addCoursePrerequisite(selectedCourse, addForm, session?.access_token);
+            setIsAddModalOpen(false);
+            setForceRefetch(f => f + 1);
+            setAddForm({ prerequisite_concept_id: '', target_concept_id: '', relationship_type: 'REQUIRED', reason: '' });
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const handleRemove = async (relationshipId) => {
+        if (!window.confirm("Are you sure you want to remove this prerequisite relationship?")) return;
+        setActionLoading(true);
+        try {
+            await deleteCoursePrerequisite(selectedCourse, relationshipId, session?.access_token);
+            setForceRefetch(f => f + 1);
+            setSelectedItem(null);
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
     // ==========================================
     // 3. CORE MANY-TO-MANY DATA TRANSFORMATIONS
     // ==========================================
@@ -155,7 +193,7 @@ export function TeacherPrerequisites() {
 
         // Register all concepts
         concepts.forEach(c => {
-            if (c.concept_id) cById.set(c.concept_id, c);
+            if (c.id) cById.set(c.id, c);
         });
 
         // Initialize helper map for chunks to grab objects quickly
@@ -164,7 +202,7 @@ export function TeacherPrerequisites() {
 
         // Safely project N:M mapping (Concepts -> Chunks -> Concepts)
         concepts.forEach(concept => {
-            chByConcept.set(concept.concept_id, []);
+            chByConcept.set(concept.id, []);
             if (concept.evidence && Array.isArray(concept.evidence)) {
                 concept.evidence.forEach(ev => {
                     const chunkId = ev.chunk_id;
@@ -172,15 +210,15 @@ export function TeacherPrerequisites() {
 
                     // Add concept to chunk map
                     if (!cByChunk.has(chunkId)) cByChunk.set(chunkId, []);
-                    if (!cByChunk.get(chunkId).some(c => c.concept_id === concept.concept_id)) {
+                    if (!cByChunk.get(chunkId).some(c => c.id === concept.id)) {
                         cByChunk.get(chunkId).push(concept);
                     }
 
                     // Add chunk to concept map
                     if (chunkMap.has(chunkId)) {
                         const chunkObj = chunkMap.get(chunkId);
-                        if (!chByConcept.get(concept.concept_id).some(c => c.id === chunkId)) {
-                            chByConcept.get(concept.concept_id).push(chunkObj);
+                        if (!chByConcept.get(concept.id).some(c => c.id === chunkId)) {
+                            chByConcept.get(concept.id).push(chunkObj);
                         }
                     }
                 });
@@ -243,20 +281,22 @@ export function TeacherPrerequisites() {
     // 5. PREREQUISITE SUMMARIES & GROUPING
     // ==========================================
     const prereqSummary = useMemo(() => {
-        let req = 0; let sup = 0;
+        let req = 0; let sup = 0; let rel = 0;
         relationships.forEach(r => {
-            if (r.relationship?.toUpperCase() === 'REQUIRED') req++;
+            const type = r.relationship_type?.toUpperCase();
+            if (type === 'REQUIRED') req++;
+            else if (type === 'RELATED') rel++;
             else sup++;
         });
-        return { total: relationships.length, required: req, supporting: sup };
+        return { total: relationships.length, required: req, supporting: sup, related: rel };
     }, [relationships]);
 
     // Group dependencies cleanly (concept C requires A, B)
     const prerequisitesByDependent = useMemo(() => {
         const map = new Map();
         relationships.forEach(r => {
-            if (!map.has(r.concept_id)) map.set(r.concept_id, []);
-            map.get(r.concept_id).push(r);
+            if (!map.has(r.target_concept_id)) map.set(r.target_concept_id, []);
+            map.get(r.target_concept_id).push(r);
         });
         return map;
     }, [relationships]);
@@ -278,11 +318,11 @@ export function TeacherPrerequisites() {
             const concept = conceptById.get(selectedItem.id);
             if (!concept) return <div style={{ color: 'red' }}>Unknown concept.</div>;
 
-            const relatedChunks = chunksByConceptId.get(concept.concept_id) || [];
+            const relatedChunks = chunksByConceptId.get(concept.id) || [];
 
             // Find its structural Prereqs & Dependents globally
-            const conceptPrereqs = relationships.filter(r => r.concept_id === concept.concept_id);
-            const conceptDependents = relationships.filter(r => r.prerequisite_id === concept.concept_id);
+            const conceptPrereqs = relationships.filter(r => r.target_concept_id === concept.id);
+            const conceptDependents = relationships.filter(r => r.prerequisite_concept_id === concept.id);
 
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -318,8 +358,8 @@ export function TeacherPrerequisites() {
                             <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Prerequisites</h4>
                             {conceptPrereqs.length === 0 ? <div style={{ fontSize: '0.8rem', color: 'gray' }}>None</div> : null}
                             {conceptPrereqs.map((r, i) => (
-                                <div key={i} onClick={() => setSelectedItem({ type: 'concept', id: r.prerequisite_id })} style={{ cursor: 'pointer', fontSize: '0.85rem', color: 'var(--color-purple)', textDecoration: 'underline', marginBottom: '0.25rem' }}>
-                                    {conceptById.get(r.prerequisite_id)?.name || r.prerequisite_id}
+                                <div key={i} onClick={() => setSelectedItem({ type: 'concept', id: r.prerequisite_concept_id })} style={{ cursor: 'pointer', fontSize: '0.85rem', color: 'var(--color-purple)', textDecoration: 'underline', marginBottom: '0.25rem' }}>
+                                    {conceptById.get(r.prerequisite_concept_id)?.name || r.prerequisite_concept_id}
                                 </div>
                             ))}
                         </div>
@@ -327,8 +367,8 @@ export function TeacherPrerequisites() {
                             <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Dependents</h4>
                             {conceptDependents.length === 0 ? <div style={{ fontSize: '0.8rem', color: 'gray' }}>None</div> : null}
                             {conceptDependents.map((r, i) => (
-                                <div key={i} onClick={() => setSelectedItem({ type: 'concept', id: r.concept_id })} style={{ cursor: 'pointer', fontSize: '0.85rem', color: '#0ea5e9', textDecoration: 'underline', marginBottom: '0.25rem' }}>
-                                    {conceptById.get(r.concept_id)?.name || r.concept_id}
+                                <div key={i} onClick={() => setSelectedItem({ type: 'concept', id: r.target_concept_id })} style={{ cursor: 'pointer', fontSize: '0.85rem', color: '#0ea5e9', textDecoration: 'underline', marginBottom: '0.25rem' }}>
+                                    {conceptById.get(r.target_concept_id)?.name || r.target_concept_id}
                                 </div>
                             ))}
                         </div>
@@ -339,25 +379,25 @@ export function TeacherPrerequisites() {
 
         if (selectedItem.type === 'relationship') {
             const rel = selectedItem.data;
-            const prereq = conceptById.get(rel.prerequisite_id);
-            const dependent = conceptById.get(rel.concept_id);
+            const prereq = conceptById.get(rel.prerequisite_concept_id);
+            const dependent = conceptById.get(rel.target_concept_id);
 
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <Pill size="sm" color={rel.relationship?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship}</Pill>
+                        <Pill size="sm" color={rel.relationship_type?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
                         <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Dependency</span>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1rem', backgroundColor: 'var(--color-offwhite)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
-                        <div onClick={() => prereq && setSelectedItem({ type: 'concept', id: prereq.concept_id })} style={{ cursor: prereq ? 'pointer' : 'default', fontWeight: 700, color: 'var(--color-ink)' }}>
-                            {prereq?.name || `[Unknown: ${rel.prerequisite_id}]`}
+                        <div onClick={() => prereq && setSelectedItem({ type: 'concept', id: prereq.id })} style={{ cursor: prereq ? 'pointer' : 'default', fontWeight: 700, color: 'var(--color-ink)' }}>
+                            {prereq?.name || `[Unknown: ${rel.prerequisite_concept_id}]`}
                         </div>
                         <div style={{ paddingLeft: '1rem', color: 'var(--color-text-muted)' }}>
                             <ArrowDown size={14} />
                         </div>
-                        <div onClick={() => dependent && setSelectedItem({ type: 'concept', id: dependent.concept_id })} style={{ cursor: dependent ? 'pointer' : 'default', fontWeight: 700, color: 'var(--color-purple)' }}>
-                            {dependent?.name || `[Unknown: ${rel.concept_id}]`}
+                        <div onClick={() => dependent && setSelectedItem({ type: 'concept', id: dependent.id })} style={{ cursor: dependent ? 'pointer' : 'default', fontWeight: 700, color: 'var(--color-purple)' }}>
+                            {dependent?.name || `[Unknown: ${rel.target_concept_id}]`}
                         </div>
                     </div>
 
@@ -382,6 +422,12 @@ export function TeacherPrerequisites() {
                             </div>
                         </div>
                     )}
+
+                    <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
+                        <button onClick={() => handleRemove(rel.id)} style={{ width: '100%', padding: '0.6rem', backgroundColor: '#fee2e2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600 }}>
+                            Remove Relationship
+                        </button>
+                    </div>
                 </div>
             );
         }
@@ -530,7 +576,8 @@ export function TeacherPrerequisites() {
                             </p>
                         </div>
                         {prereqSummary.total > 0 && (
-                            <div style={{ display: 'flex', gap: '1.5rem' }}>
+                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                                <button onClick={() => setIsAddModalOpen(true)} className="btn btn-purple" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem', marginRight: '1rem' }}>+ Add Prerequisite</button>
                                 <div style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-orange)' }}>{prereqSummary.required}</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Required</div>
@@ -539,6 +586,11 @@ export function TeacherPrerequisites() {
                                 <div style={{ textAlign: 'center' }}>
                                     <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-sky)' }}>{prereqSummary.supporting}</div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Supporting</div>
+                                </div>
+                                <div style={{ width: '1px', backgroundColor: 'var(--color-border)' }}></div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-purple)' }}>{prereqSummary.related}</div>
+                                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase' }}>Related</div>
                                 </div>
                             </div>
                         )}
@@ -641,7 +693,7 @@ export function TeacherPrerequisites() {
 
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingLeft: '1rem', borderLeft: '2px solid var(--color-purple-subtle)' }}>
                                                     {rels.map((rel, idx) => {
-                                                        const prereqConcept = conceptById.get(rel.prerequisite_id);
+                                                        const prereqConcept = conceptById.get(rel.prerequisite_concept_id);
                                                         const prereqName = prereqConcept ? prereqConcept.name : `[Unknown Concept]`;
 
                                                         const isSelectedEdge = selectedItem?.type === 'relationship' && selectedItem?.data === rel;
@@ -662,7 +714,7 @@ export function TeacherPrerequisites() {
                                                                     {prereqName}
                                                                 </div>
                                                                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', fontSize: '0.75rem' }}>
-                                                                    <Pill size="sm" color={rel.relationship?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship}</Pill>
+                                                                    <Pill size="sm" color={rel.relationship_type?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
                                                                     <span style={{ color: 'var(--color-text-muted)', fontWeight: 600 }}>Confidence: {(rel.confidence * 100).toFixed(0)}%</span>
                                                                 </div>
                                                             </div>
@@ -688,6 +740,43 @@ export function TeacherPrerequisites() {
                     </div>
                 </div>
             )))}
+
+            {/* ADD PREREQUISITE MODAL */}
+            {isAddModalOpen && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+                    <div style={{ width: '450px', backgroundColor: '#fff', padding: '1.5rem', borderRadius: 'var(--radius-md)', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--color-ink)' }}>Add Prerequisite</h3>
+                        <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--color-ink)' }}>Prerequisite Concept</label>
+                                <select required value={addForm.prerequisite_concept_id} onChange={e => setAddForm({ ...addForm, prerequisite_concept_id: e.target.value })} style={{ width: '100%', padding: '0.65rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', outline: 'none' }}>
+                                    <option value="">-- Select Prerequisite --</option>
+                                    {concepts.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--color-ink)' }}>Dependent Target Concept</label>
+                                <select required value={addForm.target_concept_id} onChange={e => setAddForm({ ...addForm, target_concept_id: e.target.value })} style={{ width: '100%', padding: '0.65rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', outline: 'none' }}>
+                                    <option value="">-- Select Target --</option>
+                                    {concepts.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--color-ink)' }}>Relationship Type</label>
+                                <select required value={addForm.relationship_type} onChange={e => setAddForm({ ...addForm, relationship_type: e.target.value })} style={{ width: '100%', padding: '0.65rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', outline: 'none' }}>
+                                    <option value="REQUIRED">REQUIRED</option>
+                                    <option value="SUPPORTING">SUPPORTING</option>
+                                    <option value="RELATED">RELATED</option>
+                                </select>
+                            </div>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn btn-outline" style={{ flex: 1, padding: '0.65rem' }}>Cancel</button>
+                                <button type="submit" disabled={actionLoading} className="btn btn-purple" style={{ flex: 1, padding: '0.65rem' }}>{actionLoading ? 'Saving...' : 'Add Relationship'}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

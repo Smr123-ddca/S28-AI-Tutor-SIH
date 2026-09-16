@@ -333,12 +333,140 @@ async function downloadCourseFile(req, res) {
     }
 }
 
+async function addPrerequisite(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const { prerequisite_concept_id, target_concept_id, relationship_type, reason } = req.body;
+
+        if (!prerequisite_concept_id || !target_concept_id || !relationship_type) {
+            return res.status(400).json({ error: 'Missing required prerequisite fields' });
+        }
+
+        if (!['REQUIRED', 'SUPPORTING', 'RELATED'].includes(relationship_type.toUpperCase())) {
+            return res.status(400).json({ error: 'Invalid relationship_type' });
+        }
+
+        if (prerequisite_concept_id === target_concept_id) {
+            return res.status(400).json({ error: 'Self-loops are not allowed' });
+        }
+
+        const courseId = await getCourseIdByName(courseName);
+        if (!courseId) return res.status(404).json({ error: 'Course not found' });
+
+        const { data: concepts, error: conceptsErr } = await supabaseAdmin
+            .from('concepts')
+            .select('id, course_id')
+            .in('id', [prerequisite_concept_id, target_concept_id]);
+
+        if (conceptsErr || !concepts || concepts.length !== 2) {
+            return res.status(400).json({ error: 'One or both concepts do not exist or are invalid.' });
+        }
+
+        if (concepts.some(c => c.course_id !== courseId)) {
+            return res.status(403).json({ error: 'Concepts do not belong to the specified course.' });
+        }
+
+        const { data: existing } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .select('id')
+            .eq('course_id', courseId)
+            .eq('prerequisite_concept_id', prerequisite_concept_id)
+            .eq('target_concept_id', target_concept_id)
+            .single();
+
+        if (existing) return res.status(400).json({ error: 'Duplicate relationship already exists.' });
+
+        const { data: allRels } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .select('prerequisite_concept_id, target_concept_id')
+            .eq('course_id', courseId);
+
+        if (allRels) {
+            const graph = new Map();
+            allRels.forEach(r => {
+                if (!graph.has(r.prerequisite_concept_id)) graph.set(r.prerequisite_concept_id, []);
+                graph.get(r.prerequisite_concept_id).push(r.target_concept_id);
+            });
+            let q = [target_concept_id];
+            let visited = new Set();
+            let cycleFound = false;
+            while (q.length > 0) {
+                let curr = q.shift();
+                if (curr === prerequisite_concept_id) { cycleFound = true; break; }
+                if (!visited.has(curr)) {
+                    visited.add(curr);
+                    const neighbors = graph.get(curr) || [];
+                    for (let n of neighbors) q.push(n);
+                }
+            }
+            if (cycleFound) return res.status(400).json({ error: 'Relationship creates a topological cycle.' });
+        }
+
+        const { data: newRel, error: insertErr } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .insert({
+                course_id: courseId,
+                prerequisite_concept_id,
+                target_concept_id,
+                relationship_type: relationship_type.toUpperCase(),
+                reason: reason || 'Teacher manual mapping',
+                confidence: 1.0,
+                status: 'candidate',
+                source: 'teacher'
+            })
+            .select()
+            .single();
+
+        if (insertErr) throw new Error(insertErr.message);
+
+        return res.status(201).json(newRel);
+    } catch (error) {
+        console.error('Failed to add prerequisite:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while adding prerequisite.' });
+    }
+}
+
+async function deletePrerequisite(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const relationshipId = req.params.relationshipId;
+
+        const courseId = await getCourseIdByName(courseName);
+        if (!courseId) return res.status(404).json({ error: 'Course not found' });
+
+        const { data: existing, error: existingErr } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .select('id')
+            .eq('id', relationshipId)
+            .eq('course_id', courseId)
+            .single();
+
+        if (existingErr || !existing) {
+            return res.status(404).json({ error: 'Relationship not found or does not belong to this course' });
+        }
+
+        const { error: deleteErr } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .delete()
+            .eq('id', relationshipId);
+
+        if (deleteErr) throw new Error(deleteErr.message);
+
+        return res.status(200).json({ status: 'success', message: 'Relationship deleted successfully' });
+    } catch (error) {
+        console.error('Failed to delete prerequisite:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while deleting prerequisite.' });
+    }
+}
+
 module.exports = {
     getCourses,
     approveCourse,
     reviseCourse,
     publishCourse,
     getPrerequisites,
+    addPrerequisite,
+    deletePrerequisite,
     updatePrerequisites,
     getArtifacts,
     deleteCourse,

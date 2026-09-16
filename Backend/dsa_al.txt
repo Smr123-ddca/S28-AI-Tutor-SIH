@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Backtracking for Permutations",
+    "concept_alias": "concept_0001"
+  },
+  {
+    "name": "N-Queens Problem",
+    "concept_alias": "concept_0002"
+  },
+  {
+    "name": "Power Set Generation",
+    "concept_alias": "concept_0003"
+  },
+  {
+    "name": "Trie (Prefix Tree)",
+    "concept_alias": "concept_0004"
+  },
+  {
+    "name": "Union-Find (Disjoint Set Union)",
+    "concept_alias": "concept_0005"
+  },
+  {
+    "name": "Kruskal's Algorithm",
+    "concept_alias": "concept_0006"
+  },
+  {
+    "name": "Palindrome check",
+    "concept_alias": "concept_0007"
+  },
+  {
+    "name": "Linked list",
+    "concept_alias": "concept_0008"
+  },
+  {
+    "name": "Insert at head",
+    "concept_alias": "concept_0009"
+  },
+  {
+    "name": "Reverse linked list",
+    "concept_alias": "concept_0010"
+  }
+]

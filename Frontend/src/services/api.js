@@ -124,6 +124,34 @@ export async function getCourseArtifacts(courseName, token) {
   return await res.json();
 }
 
+export async function addCoursePrerequisite(courseName, payload, token) {
+  const res = await fetch(`/api/courses/${courseName}/prerequisites`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Failed to add prerequisite');
+  }
+  return await res.json();
+}
+
+export async function deleteCoursePrerequisite(courseName, relationshipId, token) {
+  const res = await fetch(`/api/courses/${courseName}/prerequisites/${relationshipId}`, {
+    method: 'DELETE',
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Failed to delete prerequisite');
+  }
+  return await res.json();
+}
+
 export async function uploadCourseDoc(formData, token) {
   const res = await fetch('/api/ingest/upload', {
     method: 'POST',
