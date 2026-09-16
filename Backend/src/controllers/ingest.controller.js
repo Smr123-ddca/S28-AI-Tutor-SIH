@@ -539,15 +539,22 @@ function runPythonScript(scriptName, args) {
     return new Promise((resolve, reject) => {
         const scriptPath = path.join(__dirname, `../../python/${scriptName}`);
 
+        // Max timeout constrained to 600s (10 minutes) for heavy pipelines
         execFile(PYTHON_PATH, [scriptPath, ...args], {
             cwd: path.join(__dirname, '../..'),
             encoding: 'utf8',
             maxBuffer: 50 * 1024 * 1024,
             windowsHide: true,
+            timeout: 600000,
             env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
         }, (error, stdout, stderr) => {
             if (stderr) console.log(`[${scriptName} stderr]:`, stderr);
-            if (error) return reject(new Error(stderr || error.message));
+
+            if (error) {
+                const isTimeout = error.killed || error.code === 'ETIMEDOUT';
+                const errMsg = isTimeout ? 'Python Process Terminated: Exceeded 10 minute execution threshold' : (stderr || error.message);
+                return reject(new Error(errMsg));
+            }
             if (!stdout || !stdout.trim()) return reject(new Error(`${scriptName} returned empty output.`));
 
             try {
@@ -713,134 +720,6 @@ async function runPrerequisites(courseName) {
         output: prereqPath
     };
 }
-
-// ============================================================
-// UPDATE COURSES REGISTRY
-// ============================================================
-
-function updateCoursesRegistry(
-    courseName,
-    pdfFilename
-) {
-
-    const coursesPath =
-        path.join(
-            DATA_DIR,
-            'courses.json'
-        );
-
-
-    let courses = [];
-
-
-    // ------------------------------------------------
-    // READ EXISTING COURSES
-    // ------------------------------------------------
-
-    if (
-        fs.existsSync(
-            coursesPath
-        )
-    ) {
-
-        try {
-
-            courses =
-                JSON.parse(
-                    fs.readFileSync(
-                        coursesPath,
-                        'utf8'
-                    )
-                );
-
-        } catch (
-        error
-        ) {
-
-            console.error(
-                '❌ Failed to read courses.json'
-            );
-
-            throw error;
-
-        }
-
-    }
-
-
-    // ------------------------------------------------
-    // COURSE NAME
-    // ------------------------------------------------
-
-    const existingIndex =
-        courses.findIndex(
-            course =>
-                course.name ===
-                courseName
-        );
-
-
-    // ------------------------------------------------
-    // ENTRY
-    // ------------------------------------------------
-
-    const courseEntry = {
-        name: courseName,
-        pdf: pdfFilename,
-        chunks: `${courseName}_chunks.json`,
-        prerequisites: `${courseName}_prerequisites.json`,
-        status: 'pending_review'
-    };
-
-    // ------------------------------------------------
-    // UPDATE OR ADD
-    // ------------------------------------------------
-
-    if (
-        existingIndex >= 0
-    ) {
-
-        courses[
-            existingIndex
-        ] = courseEntry;
-
-    } else {
-
-        courses.push(
-            courseEntry
-        );
-
-    }
-
-
-    // ------------------------------------------------
-    // SAVE
-    // ------------------------------------------------
-
-    fs.writeFileSync(
-
-        coursesPath,
-
-        JSON.stringify(
-            courses,
-            null,
-            2
-        ),
-
-        'utf8'
-
-    );
-
-
-    console.log(
-        '✅ courses.json updated'
-    );
-
-
-    return courseEntry;
-
-}
-
 
 // ============================================================
 // HANDLE UPLOAD
@@ -1102,20 +981,24 @@ const handleUpload = async (
 
 
             // =================================================
-            // 3. UPDATE COURSES REGISTRY
+            // 3. REGISTER IN POSTGRES
             // =================================================
 
-            const courseEntry =
-                updateCoursesRegistry(
-                    courseName,
-                    file.filename
-                );
+            const courseEntry = {
+                name: courseName,
+                pdf: file.filename,
+                chunks: `${courseName}_chunks.json`,
+                prerequisites: `${courseName}_prerequisites.json`,
+                status: 'pending_review'
+            };
 
             let pgIds = null;
             try {
                 pgIds = await registerUploadRecord(courseName, file.filename, req.user?.id || null);
             } catch (e) {
-                console.error("Failed to register DB upload:", e);
+                console.error(`[Ingest Controller] Failed to register DB upload for ${courseName}:`, e.message);
+                sendProgress(courseName, 'ERROR', `Database registration failed: ${e.message}`);
+                throw new Error(`Database registration failed: ${e.message}`);
             }
 
             // =================================================
@@ -1220,39 +1103,39 @@ const handleUpload = async (
                         await savePipelineArtifactsToSupabase(pc.name, pc.pg_course_id, pc.pg_doc_id);
                         await updateIngestionStatus(pc.name, 'completed', 'Ready for review');
                     }
-                } catch (e) { }
+                } catch (e) {
+                    console.error(`❌ Background artifact persistence failed for ${pc.name}:`, e.message);
+                    sendProgress(pc.name, 'ERROR', `Artifact persistence failed: ${e.message}`);
+                    await updateIngestionStatus(pc.name, 'error', 'Artifact Persistence Failed', e.message).catch(() => { });
+                }
                 console.log(`✅ Background pipeline done for ${pc.name}: ${result.relationship_count} edges.`);
-            }).catch(err => {
+            }).catch(async err => {
                 console.error(`❌ Background pipeline failed for ${pc.name}:`, err.message);
                 sendProgress(pc.name, 'ERROR', `Pipeline failed: ${err.message}`);
-                updateIngestionStatus(pc.name, 'failed', 'Pipeline Failed', err.message);
+                await updateIngestionStatus(pc.name, 'error', 'Pipeline Failed', err.message).catch(() => { });
             });
         }
 
         return; // response already sent above
 
-    } catch (
-    error
-    ) {
+    } catch (error) {
+        console.error('\n❌ INGESTION UPLOAD ERROR');
+        console.error(error);
 
-        console.error(
-            '\n❌ INGESTION UPLOAD ERROR'
-        );
-
-        console.error(
-            error
-        );
+        // Ensure failed synchronous uploads correctly transition any dangling memory statuses to ERROR
+        if (storedFilesMeta && storedFilesMeta.length > 0) {
+            for (const file of storedFilesMeta) {
+                const courseName = path.basename(file.filename, path.extname(file.filename)).trim();
+                if (activeIngestions[courseName] && activeIngestions[courseName].status === 'processing') {
+                    sendProgress(courseName, 'ERROR', `Initialization aborted: ${error.message || 'Processing failed'}`);
+                }
+            }
+        }
 
         return res.status(500).json({
-
-            error:
-                'Internal server error during document processing',
-
-            details:
-                error.message || 'Processing failed'
-
+            error: 'Internal server error during document processing',
+            details: error.message || 'Processing failed'
         });
-
     } finally {
 
         // ====================================================

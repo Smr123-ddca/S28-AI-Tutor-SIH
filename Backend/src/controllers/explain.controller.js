@@ -1,7 +1,7 @@
 const { generateWithFallback } = require('../services/llm.router');
 const retrievalService = require('../services/retrieval.service');
 const { getLikelyGaps } = require('./gap.controller');
-const { getChunks } = require('../data/store');
+
 const { recordChatLog } = require('./chatlog.controller');
 const { normalizeForRetrieval } = require('../utils/nlp');
 const { analyzeQuery } = require('../utils/queryAnalyzer');

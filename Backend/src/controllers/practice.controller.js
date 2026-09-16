@@ -1,5 +1,5 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
-const { getChunks } = require('../data/store');
+// removed getChunks import
 const retrievalService = require('../services/retrieval.service');
 const { generateWithFallback } = require('../services/llm.router');
 
@@ -252,10 +252,9 @@ async function createAttempt(req, res) {
     // Retrieve Source Material for Ground-Truth Verification
     let evidenceText = "No matching source material found.";
     if (question.chunk_id) {
-        const allChunks = getChunks();
-        const chunk = allChunks.find(c => c.id === question.chunk_id);
-        if (chunk) {
-            evidenceText = chunk.text;
+        const { data: chunkData } = await supabaseAdmin.from('chunks').select('text_content').eq('id', question.chunk_id).single();
+        if (chunkData) {
+            evidenceText = chunkData.text_content;
         } else {
             const results = retrievalService.retrieve(question.question, { subject: question.subject, topK: 1 });
             if (results && results.length > 0) evidenceText = results[0].text;
@@ -441,8 +440,8 @@ async function socraticAttempt(req, res) {
 
     let evidenceText = "No matching source material found.";
     if (question.chunk_id) {
-        const chunk = getChunks().find(c => c.id === question.chunk_id);
-        if (chunk) evidenceText = chunk.text;
+        const { data: chunkData } = await supabaseAdmin.from('chunks').select('text_content').eq('id', question.chunk_id).single();
+        if (chunkData) evidenceText = chunkData.text_content;
     }
 
     let historyStr = (pastAttempts || []).map(a => {
@@ -518,8 +517,8 @@ async function revealAnswer(req, res) {
 
     let evidenceText = "No matching source material found.";
     if (question.chunk_id) {
-        const chunk = getChunks().find(c => c.id === question.chunk_id);
-        if (chunk) evidenceText = chunk.text;
+        const { data: chunkData } = await supabaseAdmin.from('chunks').select('text_content').eq('id', question.chunk_id).single();
+        if (chunkData) evidenceText = chunkData.text_content;
     }
 
     let answerText = question.expected_answer || "";

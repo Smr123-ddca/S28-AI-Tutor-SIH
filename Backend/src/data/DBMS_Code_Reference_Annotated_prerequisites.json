@@ -1,31 +1,35 @@
-{
-  "course": "DBMS_Code_Reference_Annotated",
-  "relationship_count": 1,
-  "relationships": [
-    {
-      "concept_id": "concept_0002",
-      "prerequisite_id": "concept_0001",
-      "relationship": "SUPPORTING",
-      "confidence": 0.78,
-      "reason": "Understanding database checkpoints helps explain how a comprehensive backup and recovery strategy can minimize recovery time by reducing the volume of log history that must be replayed.",
-      "evidence": []
-    }
-  ],
-  "quality": {
-    "status": "healthy",
-    "model_status": "MODEL_VALID_OUTPUT",
-    "model_failure_reason": null,
-    "cycles_detected": 0,
-    "cycles_removed": 0,
-    "removed_cycles_log": [],
-    "isolated_concepts": 0,
-    "warnings": []
+[
+  {
+    "prerequisite_concept": "concept_0001",
+    "target_concept": "concept_0002",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.98,
+    "reasoning": "The fundamental concept of the Relational Model is required to define schemas strictly via DDL constraints.",
+    "evidence_chunks": [
+      "chunk_2"
+    ],
+    "source": "demo_seed"
   },
-  "statistics": {
-    "root_concepts": 1,
-    "leaf_concepts": 1,
-    "average_prerequisites": 0.5,
-    "max_prerequisites": 1,
-    "max_depth": 2
+  {
+    "prerequisite_concept": "concept_0002",
+    "target_concept": "concept_0003",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.94,
+    "reasoning": "Understanding table constraints allows for structured projection modeling and basic queries.",
+    "evidence_chunks": [
+      "chunk_5"
+    ],
+    "source": "demo_seed"
+  },
+  {
+    "prerequisite_concept": "concept_0001",
+    "target_concept": "concept_0004",
+    "relationship_type": "SUPPORTING",
+    "confidence_score": 0.91,
+    "reasoning": "The relational overview supports context for deeper referential integrity bindings.",
+    "evidence_chunks": [
+      "chunk_8"
+    ],
+    "source": "demo_seed"
   }
-}
+]

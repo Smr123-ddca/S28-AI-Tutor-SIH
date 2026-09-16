@@ -99,7 +99,7 @@ export function TeacherHome() {
     // Grouping
     const published = documents.filter(d => d.status === 'published');
     const approved = documents.filter(d => d.status === 'approved');
-    const pending = documents.filter(d => d.status === 'pending_review' || d.status === 'needs_revision');
+    const pending = documents.filter(d => d.status === 'pending_review' || d.status === 'needs_revision' || d.status === 'draft' || d.status === 'processing');
 
     const renderCourseCard = (doc, idx, showReviewAction = false) => {
         const isHighlighted = searchQuery && doc.subject.toLowerCase().includes(searchQuery.toLowerCase());
@@ -134,7 +134,7 @@ export function TeacherHome() {
                                 <Settings size={14} /> Manage
                             </button>
                         )}
-                        {(doc.status === 'pending_review' || doc.status === 'needs_revision' || doc.status === 'approved') && (
+                        {(doc.status === 'pending_review' || doc.status === 'needs_revision' || doc.status === 'approved' || doc.status === 'draft' || doc.status === 'processing') && (
                             <button onClick={() => navigate(`/teacher/review?course=${encodeURIComponent(doc.id)}`)} className="btn btn-purple" style={{ padding: '0.5rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                                 <Edit3 size={14} /> Review & Approve
                             </button>

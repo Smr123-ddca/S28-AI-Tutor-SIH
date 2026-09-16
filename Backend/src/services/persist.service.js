@@ -17,7 +17,7 @@ async function registerUploadRecord(courseName, filename, userId) {
         courseId = existingCourse.id;
     } else {
         const { data: newCourse, error } = await supabaseAdmin.from('courses')
-            .insert({ name: courseName, status: 'draft', created_by: userId })
+            .insert({ name: courseName, status: 'pending_review', created_by: userId })
             .select('id').single();
         if (error) throw error;
         courseId = newCourse.id;
@@ -61,14 +61,15 @@ async function updateIngestionStatus(courseName, status, stage, errorLog = null)
             .update({ status, stage, error_log: errorLog, updated_at: new Date().toISOString() })
             .eq('course_id', course.id);
     } catch (e) {
-        console.error("Failed to update ingestion status:", e);
+        console.error(`[Persist Service] Failed to update ingestion status for ${courseName}:`, e);
+        throw e;
     }
 }
 
 /**
  * Parses C6 pipeline artifacts and uploads securely to PG
  */
-async function savePipelineArtifactsToSupabase(courseName, courseId, documentId) {
+async function savePipelineArtifactsToSupabase(courseName, courseId, documentId, options = {}) {
     try {
         // Chunks
         const chunksPath = path.join(DATA_DIR, `${courseName}_chunks.json`);
@@ -83,12 +84,15 @@ async function savePipelineArtifactsToSupabase(courseName, courseId, documentId)
 
                 let dbChunkId;
                 if (!existing) {
-                    const { data: inserted } = await supabaseAdmin.from('chunks').insert({
+                    const { data: inserted, error } = await supabaseAdmin.from('chunks').insert({
                         course_id: courseId, document_id: documentId,
                         chunk_alias: chunkIdRaw, topic: chunk.topic || null, chapter: chunk.chapter || null,
-                        section: chunk.section || null, page_start: chunk.page_start || null, page_end: chunk.page_end || null,
+                        section: chunk.section || null, section_label: chunk.section_label || null,
+                        chunk_index: chunk.chunk_index !== undefined ? chunk.chunk_index : null,
+                        page_start: chunk.page_start || null, page_end: chunk.page_end || null,
                         text_content: chunk.text || ''
                     }).select('id').single();
+                    if (error) throw error;
                     if (inserted) dbChunkId = inserted.id;
                 } else {
                     dbChunkId = existing.id;
@@ -122,9 +126,10 @@ async function savePipelineArtifactsToSupabase(courseName, courseId, documentId)
                         for (const ev of concept.evidence) {
                             const mappedChunk = chunkAliasToId[ev.chunk_id];
                             if (mappedChunk) {
-                                await supabaseAdmin.from('concept_evidence').upsert({
+                                const { error: evErr } = await supabaseAdmin.from('concept_evidence').upsert({
                                     concept_id: dbConceptId, chunk_id: mappedChunk, classification: ev.classification || null
-                                }, { onConflict: 'concept_id, chunk_id' }).catch(() => null);
+                                }, { onConflict: 'concept_id, chunk_id' });
+                                if (evErr) throw new Error(`Failed to persist concept evidence: ${evErr.message}`);
                             }
                         }
                     }
@@ -133,30 +138,33 @@ async function savePipelineArtifactsToSupabase(courseName, courseId, documentId)
         }
 
         // Prerequisites
-        const prereqsPath = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
-        if (fs.existsSync(prereqsPath)) {
-            const prereqsData = JSON.parse(fs.readFileSync(prereqsPath, 'utf8'));
-            const relationshipsToProcess = Array.isArray(prereqsData) ? prereqsData : (prereqsData.relationships || []);
+        if (!options.skipPrerequisites) {
+            const prereqsPath = path.join(DATA_DIR, `${courseName}_prerequisites.json`);
+            if (fs.existsSync(prereqsPath)) {
+                const prereqsData = JSON.parse(fs.readFileSync(prereqsPath, 'utf8'));
+                const relationshipsToProcess = Array.isArray(prereqsData) ? prereqsData : (prereqsData.relationships || []);
 
-            for (const rel of relationshipsToProcess) {
-                const sourceId = conceptAliasToId[rel.concept_id || rel.target_concept];
-                const prereqId = conceptAliasToId[rel.prerequisite_id || rel.prerequisite_concept];
-                if (sourceId && prereqId && sourceId !== prereqId) {
-                    await supabaseAdmin.from('prerequisite_relationships').upsert({
-                        course_id: courseId,
-                        target_concept_id: sourceId,
-                        prerequisite_concept_id: prereqId,
-                        relationship_type: rel.relationship || rel.relationship_type || null,
-                        confidence: rel.confidence || null,
-                        reason: rel.reason || null,
-                        status: 'candidate'
-                    }, { onConflict: 'target_concept_id, prerequisite_concept_id' }).catch(() => null);
+                for (const rel of relationshipsToProcess) {
+                    const sourceId = conceptAliasToId[rel.concept_id || rel.target_concept];
+                    const prereqId = conceptAliasToId[rel.prerequisite_id || rel.prerequisite_concept];
+                    if (sourceId && prereqId && sourceId !== prereqId) {
+                        const { error: relErr } = await supabaseAdmin.from('prerequisite_relationships').upsert({
+                            course_id: courseId,
+                            target_concept_id: sourceId,
+                            prerequisite_concept_id: prereqId,
+                            relationship_type: rel.relationship || rel.relationship_type || null,
+                            confidence: rel.confidence || null,
+                            reason: rel.reason || null,
+                            status: 'candidate'
+                        }, { onConflict: 'target_concept_id, prerequisite_concept_id' });
+                    }
                 }
             }
-        }
 
+        }
     } catch (e) {
-        console.error(`PG Persistence Error for ${courseName}:`, e);
+        console.error(`[Persist Service] CRITICAL PG Persistence Error for ${courseName}:`, e);
+        throw e;
     }
 }
 

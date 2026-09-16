@@ -1,0 +1,147 @@
+{
+  "course": "IES_Demo_Course_Structured",
+  "source_chunks": 12,
+  "evaluated_chunks": 12,
+  "included_chunks": 10,
+  "excluded_chunks": 2,
+  "chunks": [
+    {
+      "chunk_id": "chunk_1",
+      "classification": "METADATA",
+      "educational_value": 0.2,
+      "conceptual_density": 0.1,
+      "prerequisite_relevance": 0,
+      "noise_score": 0.8,
+      "include_for_concept_extraction": false,
+      "reason": "Contains introductory metadata and course objectives for testing pipeline functionality, without domain concept content."
+    },
+    {
+      "chunk_id": "chunk_2",
+      "classification": "DEFINITION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.7,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Provides core definitions for embedded systems and real-time behavior along with explicit conceptual tags."
+    },
+    {
+      "chunk_id": "chunk_3",
+      "classification": "DEFINITION",
+      "educational_value": 0.95,
+      "conceptual_density": 0.95,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines microcontrollers and CPU/Memory/Peripheral relationships with explicit prerequisite statements."
+    },
+    {
+      "chunk_id": "chunk_4",
+      "classification": "EXPLANATION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains GPIO fundamentals and resistor configurations with clear prerequisite dependencies."
+    },
+    {
+      "chunk_id": "chunk_5",
+      "classification": "DEFINITION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines sensors, physical signals, and ADC mapping alongside explicit prerequisite context."
+    },
+    {
+      "chunk_id": "chunk_6",
+      "classification": "EXPLANATION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Explains interrupts and compares polling vs interrupt-driven design with explicitly declared prerequisites."
+    },
+    {
+      "chunk_id": "chunk_7",
+      "classification": "DEFINITION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Defines UART and I2C communication protocols with explicit prerequisite requirements."
+    },
+    {
+      "chunk_id": "chunk_8",
+      "classification": "EXPLANATION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Explains RTOS necessity, tasks, and scheduling mechanisms with strict prerequisite declarations."
+    },
+    {
+      "chunk_id": "chunk_9",
+      "classification": "EXPLANATION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.9,
+      "prerequisite_relevance": 0.95,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Explains concurrency issues, shared resources, mutexes, and semaphores with prerequisite context."
+    },
+    {
+      "chunk_id": "chunk_10",
+      "classification": "DEFINITION",
+      "educational_value": 0.9,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0,
+      "include_for_concept_extraction": true,
+      "reason": "Outlines IoT architecture and telemetry pipelines with explicit prerequisites."
+    },
+    {
+      "chunk_id": "chunk_11",
+      "classification": "EXAMPLE",
+      "educational_value": 0.85,
+      "conceptual_density": 0.85,
+      "prerequisite_relevance": 0.9,
+      "noise_score": 0.05,
+      "include_for_concept_extraction": true,
+      "reason": "Illustrates real-world application through a system design case study integrating multiple prior concepts."
+    },
+    {
+      "chunk_id": "chunk_12",
+      "classification": "METADATA",
+      "educational_value": 0.3,
+      "conceptual_density": 0.4,
+      "prerequisite_relevance": 0.6,
+      "noise_score": 0.6,
+      "include_for_concept_extraction": false,
+      "reason": "Meta summary table listing demo test case prerequisite mappings and success criteria."
+    }
+  ],
+  "classification_distribution": {
+    "METADATA": 2,
+    "DEFINITION": 5,
+    "EXPLANATION": 4,
+    "EXAMPLE": 1
+  },
+  "telemetry": {
+    "total_chunks": 12,
+    "successfully_classified": 12,
+    "educational_classified": 10,
+    "noise_classified": 2,
+    "classifier_failures": 0,
+    "fallback_included_chunks": 0
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": []
+  }
+}

@@ -86,7 +86,8 @@ export function AuthProvider({ children }) {
         console.warn('Role fetch warning:', error);
         setRole('student');
       } else {
-        setRole(data?.role || 'student');
+        const mappedRole = data?.role === 'instructor' ? 'teacher' : data?.role;
+        setRole(mappedRole || 'student');
       }
     } catch (err) {
       console.error(err);

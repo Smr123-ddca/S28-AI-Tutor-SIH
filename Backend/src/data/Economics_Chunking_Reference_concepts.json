@@ -1,13 +1,756 @@
 {
   "course": "Economics_Chunking_Reference",
   "source_chunks": 56,
-  "eligible_chunks": 4,
-  "concept_count": 10,
+  "eligible_chunks": 39,
+  "concept_count": 55,
   "concepts": [
     {
       "concept_id": "concept_0001",
+      "name": "Scarcity",
+      "aliases": [],
+      "description": "Resources are limited while human wants are unlimited, forcing individuals, firms, governments and societies to make choices and incur trade‑offs.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        },
+        {
+          "chunk_id": "chunk_6",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0002",
+      "name": "Opportunity Cost",
+      "aliases": [],
+      "description": "The value of the next best alternative forgone when a choice is made; it reflects the forward‑looking cost of sacrificing one option for another.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_47",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        },
+        {
+          "chunk_id": "chunk_6",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0003",
+      "name": "Positive Economics",
+      "aliases": [],
+      "description": "Economic statements that can be tested and verified with empirical evidence, describing how the economy actually works.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0004",
+      "name": "Normative Economics",
+      "aliases": [],
+      "description": "Economic statements that involve value judgments about what ought to happen, reflecting policy goals and ethical considerations.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0005",
+      "name": "Production Possibility Frontier",
+      "aliases": [
+        "PPF"
+      ],
+      "description": "A graphical model showing the maximum feasible combinations of two goods an economy can produce given its resources and technology; it illustrates scarcity and trade‑offs.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0006",
+      "name": "Economic Growth",
+      "aliases": [],
+      "description": "An increase in an economy’s capacity to produce goods and services over time, shifting the PPF outward through better technology, resources, or institutions.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_33",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_8",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0007",
+      "name": "Demand",
+      "aliases": [],
+      "description": "The quantity of a good or service that consumers are willing and able to purchase at various prices during a given period, holding other factors constant.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0008",
+      "name": "Supply",
+      "aliases": [],
+      "description": "The quantity of a good or service that producers are willing and able to sell at various prices during a given period, holding other factors constant.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0009",
+      "name": "Market Equilibrium",
+      "aliases": [],
+      "description": "The price and quantity at which the amount consumers want to buy equals the amount producers want to sell; deviations create surplus or shortage pressures.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_12",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0010",
+      "name": "Demand Shift",
+      "aliases": [],
+      "description": "A change in demand caused by a determinant other than the good’s own price (e.g., income, preferences, number of buyers), moving the entire demand curve.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_13",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0011",
+      "name": "Supply Shift",
+      "aliases": [],
+      "description": "A change in supply caused by a determinant other than the good’s own price (e.g., input costs, technology, taxes), moving the entire supply curve.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_13",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0012",
+      "name": "Price Elasticity of Demand",
+      "aliases": [],
+      "description": "A measure of how responsive quantity demanded is to a percentage change in price; classified as elastic, inelastic, or unit elastic.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_15",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0013",
+      "name": "Total Revenue",
+      "aliases": [],
+      "description": "The total amount received by sellers from sales (price multiplied by quantity sold); its movement depends on the price elasticity of demand.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_16",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0014",
+      "name": "Income Elasticity of Demand",
+      "aliases": [],
+      "description": "A measure of how quantity demanded responds to changes in consumer income; positive values indicate normal goods, negative values inferior goods.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_17",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0015",
+      "name": "Cross‑Price Elasticity of Demand",
+      "aliases": [],
+      "description": "A measure of how the quantity demanded of one good responds to a change in the price of another good; positive values indicate substitutes, negative values complements.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_17",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0016",
+      "name": "Utility",
+      "aliases": [],
+      "description": "A representation of the satisfaction or benefit a consumer derives from consuming goods and services; underlies consumer choice analysis.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_19",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0017",
+      "name": "Budget Constraint",
+      "aliases": [],
+      "description": "The set of consumption bundles a consumer can afford given income and prices; changes in income or a price pivot the constraint.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_19",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_21",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0018",
+      "name": "Consumer Equilibrium",
+      "aliases": [],
+      "description": "The point at which a consumer selects the affordable bundle that maximizes total utility, typically where an indifference curve is tangent to the budget line.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_19",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_21",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0019",
+      "name": "Indifference Curve",
+      "aliases": [],
+      "description": "A curve showing all combinations of two goods that give the consumer the same level of satisfaction; downward sloping, reflecting trade‑offs.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_21",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0020",
+      "name": "Marginal Rate of Substitution",
+      "aliases": [
+        "MRS"
+      ],
+      "description": "The rate at which a consumer is willing to give up one good for another while remaining equally satisfied; equal to the slope of the indifference curve.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_21",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0021",
+      "name": "Substitution and Income Effects",
+      "aliases": [],
+      "description": "The decomposition of a price change’s impact on consumption into a substitution effect (relative price change) and an income effect (purchasing‑power change).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_21",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0022",
+      "name": "Marginal Utility",
+      "aliases": [],
+      "description": "The additional utility obtained from consuming one more unit of a good; the principle of diminishing marginal utility states this typically declines after a point.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_20",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0023",
+      "name": "Factors of Production",
+      "aliases": [],
+      "description": "The resources used to produce goods and services: land (natural resources), labor (human effort), capital (machinery, buildings), and entrepreneurship (organizing and bearing risk).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_23",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0024",
+      "name": "Productivity",
+      "aliases": [],
+      "description": "The amount of output generated per unit of input; it can rise through better technology, skills, management, or capital.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_23",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0025",
+      "name": "Short Run",
+      "aliases": [],
+      "description": "A time period in which at least one input (typically capital) is fixed while others can be varied.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_24",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0026",
+      "name": "Long Run",
+      "aliases": [],
+      "description": "A time period in which all inputs can be adjusted; firms can change plant size, technology, and all other factors.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_24",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0027",
+      "name": "Fixed Costs",
+      "aliases": [],
+      "description": "Costs that do not vary with the level of output in the short run (e.g., rent, salaries).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0028",
+      "name": "Variable Costs",
+      "aliases": [],
+      "description": "Costs that change directly with the level of output (e.g., raw materials, labor hours).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0029",
+      "name": "Total Cost",
+      "aliases": [],
+      "description": "The sum of fixed and variable costs for a given level of production.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0030",
+      "name": "Average Total Cost",
+      "aliases": [],
+      "description": "Total cost divided by the quantity of output; indicates per‑unit cost.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0031",
+      "name": "Marginal Cost",
+      "aliases": [],
+      "description": "The additional cost incurred by producing one more unit of output; often U‑shaped due to productivity changes.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0032",
+      "name": "Perfect Competition",
+      "aliases": [],
+      "description": "A market structure with many buyers and sellers, homogeneous products, free entry/exit, and firms that are price takers.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_27",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0033",
+      "name": "Monopoly",
+      "aliases": [],
+      "description": "A market structure where a single firm supplies a product with no close substitutes and faces significant barriers to entry, allowing it to set price.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_28",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0034",
+      "name": "Monopolistic Competition",
+      "aliases": [],
+      "description": "A market with many sellers offering differentiated products, some market power, and relatively free entry and exit.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_29",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0035",
+      "name": "Oligopoly",
+      "aliases": [],
+      "description": "A market dominated by a few large firms; strategic interactions among them can lead to competition, collusion, or other game‑theoretic outcomes.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_29",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0036",
+      "name": "Gross Domestic Product",
+      "aliases": [
+        "GDP"
+      ],
+      "description": "The market value of all final goods and services produced within a country’s borders during a specific period, measured via expenditure, income, or production approaches.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_31",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0037",
+      "name": "Circular Flow Model",
+      "aliases": [],
+      "description": "A visual representation of the interactions between households (providing factors of production and consuming goods) and firms (producing goods and providing factor income).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_32",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0038",
+      "name": "Money",
+      "aliases": [],
+      "description": "An asset widely accepted for transactions, serving as a medium of exchange, unit of account, and store of value.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_35",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0039",
+      "name": "Banking System",
+      "aliases": [
+        "Commercial Banking"
+      ],
+      "description": "Financial intermediaries that accept deposits, provide loans and other services, create deposits through lending, and manage credit, liquidity, and regulatory risks.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_36",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0040",
+      "name": "Monetary Policy",
+      "aliases": [],
+      "description": "Actions by a central bank to influence financial conditions and macroeconomic outcomes, including adjusting policy interest rates, open-market operations, and managing liquidity, borrowing costs, and expectations.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_37",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0041",
+      "name": "Inflation",
+      "aliases": [],
+      "description": "A sustained increase in the general price level, measured by a price index, which reduces purchasing power. Can arise from demand-pull pressures, cost-push factors, or expectations.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_39",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0042",
+      "name": "Unemployment",
+      "aliases": [],
+      "description": "People without work, available for work, and actively seeking employment. Classified into frictional, structural, and cyclical types; measured against the labour force.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_40",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0043",
+      "name": "Phillips Curve",
+      "aliases": [],
+      "description": "Framework describing the short-run trade-off between inflation and unemployment, where stronger demand reduces unemployment but increases inflationary pressure; long-run relationship is not a permanent trade-off due to expectations adjustment.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_41",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0044",
+      "name": "Fiscal Policy",
+      "aliases": [],
+      "description": "Government decisions about spending, taxation, and borrowing to influence economic activity, including discretionary measures and automatic stabilisers like progressive taxes and unemployment transfers.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_43",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "REFERENCE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0045",
+      "name": "Fiscal Multiplier",
+      "aliases": [],
+      "description": "The change in aggregate output resulting from a change in autonomous spending; size depends on leakages (saving, taxation, imports), marginal propensity to consume, supply constraints, and expectations.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_44",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0046",
+      "name": "Public Debt",
+      "aliases": [],
+      "description": "Accumulated stock of government borrowing not yet repaid; sustainability depends on the relationship between interest rates, economic growth rate, primary fiscal balance, and existing debt stock.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_45",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0047",
+      "name": "Comparative Advantage",
+      "aliases": [],
+      "description": "A country has comparative advantage in a product when it can produce it at a lower opportunity cost than another country; specialisation based on comparative advantage allows mutually beneficial trade.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_47",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0048",
+      "name": "Balance of Payments",
+      "aliases": [],
+      "description": "Records of a country's economic transactions with the rest of the world, including current-account transactions (trade, income flows) and financial/capital transactions; a current-account deficit means spending exceeds receipts.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_48",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0049",
+      "name": "Exchange Rate",
+      "aliases": [],
+      "description": "The price of one currency expressed in terms of another; influences import/export competitiveness, determined by supply and demand, interest-rate differences, inflation expectations, and capital movements.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_49",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0050",
       "name": "Economic Development",
-      "description": "A process broader than economic growth that encompasses improvements in living standards, health, education, institutional capability, and human capital rather than relying solely on GDP output.",
+      "aliases": [],
+      "description": "Broader than economic growth; includes improvements in living standards, health, education, institutions, and participation. Measured by multiple indicators; human capital, infrastructure, and institutions are central.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
@@ -18,9 +761,10 @@
       ]
     },
     {
-      "concept_id": "concept_0002",
+      "concept_id": "concept_0051",
       "name": "Income Inequality",
-      "description": "The distribution of income across individuals or households, measured using tools such as the Gini coefficient, and distinct from poverty which concerns resource thresholds.",
+      "aliases": [],
+      "description": "Differences in income across individuals or households, measured by shares and summary measures like the Gini coefficient; distinct from poverty; caused by skills, discrimination, inherited wealth, market power, or institutions.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
@@ -31,10 +775,11 @@
       ]
     },
     {
-      "concept_id": "concept_0003",
-      "name": "Environmental Externalities and Sustainable Growth",
-      "description": "Economic activities that impose uncompensated social costs or benefits, such as pollution or resource depletion, requiring policy interventions like taxes, permits, or regulation to ensure sustainable growth.",
-      "confidence": 0.95,
+      "concept_id": "concept_0052",
+      "name": "Sustainable Economic Growth",
+      "aliases": [],
+      "description": "Growth that increases wellbeing without undermining environmental and resource conditions for future generations; requires balancing current objectives with long-term environmental resilience.",
+      "confidence": 0.85,
       "evidence_count": 1,
       "evidence": [
         {
@@ -44,97 +789,44 @@
       ]
     },
     {
-      "concept_id": "concept_0004",
-      "name": "Scarcity and Opportunity Cost",
-      "description": "Scarcity is the condition of limited resources relative to unlimited wants, while opportunity cost is the value of the next best alternative forgone when a choice is made.",
-      "confidence": 0.95,
+      "concept_id": "concept_0053",
+      "name": "Externalities",
+      "aliases": [],
+      "description": "Costs or benefits that fall on people not directly involved in a transaction; examples include pollution and greenhouse-gas emissions from economic activity; addressed by taxes, tradable permits, regulation, and public investment.",
+      "confidence": 0.85,
       "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0005",
-      "name": "Supply, Demand, and Market Equilibrium",
-      "description": "Demand and supply represent consumer and producer willingness and ability to trade at various prices, reaching equilibrium when quantity demanded equals quantity supplied.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0006",
-      "name": "Elasticity",
-      "description": "A measure of the responsiveness of one economic variable to a percentage change in another variable.",
-      "confidence": 0.9,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0007",
-      "name": "Gross Domestic Product (GDP)",
-      "description": "The market value of final goods and services produced within a country's borders during a specified period.",
-      "confidence": 0.95,
-      "evidence_count": 2,
-      "evidence": [
-        {
-          "chunk_id": "chunk_51",
+          "chunk_id": "chunk_53",
           "classification": "EXPLANATION"
-        },
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
         }
       ]
     },
     {
-      "concept_id": "concept_0008",
-      "name": "Inflation",
-      "description": "A sustained increase in the general price level of goods and services over time.",
+      "concept_id": "concept_0054",
+      "name": "Equilibrium",
+      "aliases": [],
+      "description": "A market condition in which quantity demanded equals quantity supplied.",
       "confidence": 0.9,
       "evidence_count": 1,
       "evidence": [
         {
           "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
+          "classification": "REFERENCE"
         }
       ]
     },
     {
-      "concept_id": "concept_0009",
-      "name": "Fiscal Policy",
-      "description": "Government decisions concerning spending, taxation, and borrowing designed to influence aggregate economic activity.",
-      "confidence": 0.95,
+      "concept_id": "concept_0055",
+      "name": "Elasticity",
+      "aliases": [],
+      "description": "A measure of the responsiveness of one variable to a percentage change in another variable.",
+      "confidence": 0.9,
       "evidence_count": 1,
       "evidence": [
         {
           "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
-        }
-      ]
-    },
-    {
-      "concept_id": "concept_0010",
-      "name": "Monetary Policy",
-      "description": "Actions undertaken by a central monetary authority to regulate financial conditions and achieve macroeconomic goals.",
-      "confidence": 0.95,
-      "evidence_count": 1,
-      "evidence": [
-        {
-          "chunk_id": "chunk_54",
-          "classification": "DEFINITION"
+          "classification": "REFERENCE"
         }
       ]
     }

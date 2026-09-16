@@ -1,0 +1,37 @@
+﻿Γùç injected env (6) from ..\.env // tip: Γùê secrets for agents [www.dotenvx.com]
+Γùç injected env (0) from .env // tip: Γîÿ suppress logs { quiet: true }
+=== STARTING P2C-5 LEGACY IMPORT ===
+
+Importing DSA_Code_Reference_Annotated...
+Failed on DSA_Code_Reference_Annotated: TypeError: Cannot read properties of null (reading 'length')
+    at verifySubject (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:54:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async runImport (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:76:27)
+
+Importing Economics_Chunking_Reference...
+Failed on Economics_Chunking_Reference: TypeError: Cannot read properties of null (reading 'length')
+    at verifySubject (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:54:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async runImport (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:76:27)
+
+Importing DBMS_Code_Reference_Annotated...
+Failed on DBMS_Code_Reference_Annotated: TypeError: Cannot read properties of null (reading 'length')
+    at verifySubject (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:54:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async runImport (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\scripts\seed_legacy_data.js:76:27)
+
+=== FINAL REPORT ===
+[
+  {
+    "name": "DSA_Code_Reference_Annotated",
+    "error": "Cannot read properties of null (reading 'length')"
+  },
+  {
+    "name": "Economics_Chunking_Reference",
+    "error": "Cannot read properties of null (reading 'length')"
+  },
+  {
+    "name": "DBMS_Code_Reference_Annotated",
+    "error": "Cannot read properties of null (reading 'length')"
+  }
+]

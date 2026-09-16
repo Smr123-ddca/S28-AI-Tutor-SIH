@@ -1,98 +1,399 @@
 {
   "course": "Economics_Chunking_Reference",
-  "source_concepts": 10,
+  "source_concepts": 55,
   "hierarchy": {
-    "node_id": "root_01",
+    "node_id": "root_fallback",
     "type": "ROOT",
     "name": "Economics_Chunking_Reference",
     "children": [
       {
-        "node_id": "domain_01",
+        "node_id": "dom_unclassified_fallback",
         "type": "DOMAIN",
-        "name": "Microeconomic Principles",
+        "name": "Other / Unclassified",
         "children": [
           {
-            "node_id": "concept_node_0004",
+            "node_id": "concept_fallback_concept_0009",
             "type": "CONCEPT",
-            "name": "Scarcity and Opportunity Cost",
-            "concept_id": "concept_0004",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0005",
-            "type": "CONCEPT",
-            "name": "Supply, Demand, and Market Equilibrium",
-            "concept_id": "concept_0005",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0006",
-            "type": "CONCEPT",
-            "name": "Elasticity",
-            "concept_id": "concept_0006",
-            "children": []
-          }
-        ]
-      },
-      {
-        "node_id": "domain_02",
-        "type": "DOMAIN",
-        "name": "Macroeconomics and Policy",
-        "children": [
-          {
-            "node_id": "concept_node_0007",
-            "type": "CONCEPT",
-            "name": "Gross Domestic Product (GDP)",
-            "concept_id": "concept_0007",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0008",
-            "type": "CONCEPT",
-            "name": "Inflation",
-            "concept_id": "concept_0008",
-            "children": []
-          },
-          {
-            "node_id": "concept_node_0009",
-            "type": "CONCEPT",
-            "name": "Fiscal Policy",
+            "name": "Market Equilibrium",
             "concept_id": "concept_0009",
             "children": []
           },
           {
-            "node_id": "concept_node_0010",
+            "node_id": "concept_fallback_concept_0020",
             "type": "CONCEPT",
-            "name": "Monetary Policy",
-            "concept_id": "concept_0010",
-            "children": []
-          }
-        ]
-      },
-      {
-        "node_id": "domain_03",
-        "type": "DOMAIN",
-        "name": "Economic Development and Sustainability",
-        "children": [
-          {
-            "node_id": "concept_node_0001",
-            "type": "CONCEPT",
-            "name": "Economic Development",
-            "concept_id": "concept_0001",
+            "name": "Marginal Rate of Substitution",
+            "concept_id": "concept_0020",
             "children": []
           },
           {
-            "node_id": "concept_node_0002",
+            "node_id": "concept_fallback_concept_0021",
             "type": "CONCEPT",
-            "name": "Income Inequality",
+            "name": "Substitution and Income Effects",
+            "concept_id": "concept_0021",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0040",
+            "type": "CONCEPT",
+            "name": "Monetary Policy",
+            "concept_id": "concept_0040",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0042",
+            "type": "CONCEPT",
+            "name": "Unemployment",
+            "concept_id": "concept_0042",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0055",
+            "type": "CONCEPT",
+            "name": "Elasticity",
+            "concept_id": "concept_0055",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0033",
+            "type": "CONCEPT",
+            "name": "Monopoly",
+            "concept_id": "concept_0033",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0054",
+            "type": "CONCEPT",
+            "name": "Equilibrium",
+            "concept_id": "concept_0054",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0005",
+            "type": "CONCEPT",
+            "name": "Production Possibility Frontier",
+            "concept_id": "concept_0005",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0045",
+            "type": "CONCEPT",
+            "name": "Fiscal Multiplier",
+            "concept_id": "concept_0045",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0006",
+            "type": "CONCEPT",
+            "name": "Economic Growth",
+            "concept_id": "concept_0006",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0007",
+            "type": "CONCEPT",
+            "name": "Demand",
+            "concept_id": "concept_0007",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0015",
+            "type": "CONCEPT",
+            "name": "Cross‑Price Elasticity of Demand",
+            "concept_id": "concept_0015",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0022",
+            "type": "CONCEPT",
+            "name": "Marginal Utility",
+            "concept_id": "concept_0022",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0036",
+            "type": "CONCEPT",
+            "name": "Gross Domestic Product",
+            "concept_id": "concept_0036",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0027",
+            "type": "CONCEPT",
+            "name": "Fixed Costs",
+            "concept_id": "concept_0027",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0050",
+            "type": "CONCEPT",
+            "name": "Economic Development",
+            "concept_id": "concept_0050",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0024",
+            "type": "CONCEPT",
+            "name": "Productivity",
+            "concept_id": "concept_0024",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0029",
+            "type": "CONCEPT",
+            "name": "Total Cost",
+            "concept_id": "concept_0029",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0031",
+            "type": "CONCEPT",
+            "name": "Marginal Cost",
+            "concept_id": "concept_0031",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0017",
+            "type": "CONCEPT",
+            "name": "Budget Constraint",
+            "concept_id": "concept_0017",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0008",
+            "type": "CONCEPT",
+            "name": "Supply",
+            "concept_id": "concept_0008",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0039",
+            "type": "CONCEPT",
+            "name": "Banking System",
+            "concept_id": "concept_0039",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0002",
+            "type": "CONCEPT",
+            "name": "Opportunity Cost",
             "concept_id": "concept_0002",
             "children": []
           },
           {
-            "node_id": "concept_node_0003",
+            "node_id": "concept_fallback_concept_0012",
             "type": "CONCEPT",
-            "name": "Environmental Externalities and Sustainable Growth",
+            "name": "Price Elasticity of Demand",
+            "concept_id": "concept_0012",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0034",
+            "type": "CONCEPT",
+            "name": "Monopolistic Competition",
+            "concept_id": "concept_0034",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0053",
+            "type": "CONCEPT",
+            "name": "Externalities",
+            "concept_id": "concept_0053",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0032",
+            "type": "CONCEPT",
+            "name": "Perfect Competition",
+            "concept_id": "concept_0032",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0049",
+            "type": "CONCEPT",
+            "name": "Exchange Rate",
+            "concept_id": "concept_0049",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0028",
+            "type": "CONCEPT",
+            "name": "Variable Costs",
+            "concept_id": "concept_0028",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0004",
+            "type": "CONCEPT",
+            "name": "Normative Economics",
+            "concept_id": "concept_0004",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0016",
+            "type": "CONCEPT",
+            "name": "Utility",
+            "concept_id": "concept_0016",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0037",
+            "type": "CONCEPT",
+            "name": "Circular Flow Model",
+            "concept_id": "concept_0037",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0048",
+            "type": "CONCEPT",
+            "name": "Balance of Payments",
+            "concept_id": "concept_0048",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0035",
+            "type": "CONCEPT",
+            "name": "Oligopoly",
+            "concept_id": "concept_0035",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0001",
+            "type": "CONCEPT",
+            "name": "Scarcity",
+            "concept_id": "concept_0001",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0026",
+            "type": "CONCEPT",
+            "name": "Long Run",
+            "concept_id": "concept_0026",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0044",
+            "type": "CONCEPT",
+            "name": "Fiscal Policy",
+            "concept_id": "concept_0044",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0038",
+            "type": "CONCEPT",
+            "name": "Money",
+            "concept_id": "concept_0038",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0014",
+            "type": "CONCEPT",
+            "name": "Income Elasticity of Demand",
+            "concept_id": "concept_0014",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0030",
+            "type": "CONCEPT",
+            "name": "Average Total Cost",
+            "concept_id": "concept_0030",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0003",
+            "type": "CONCEPT",
+            "name": "Positive Economics",
             "concept_id": "concept_0003",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0013",
+            "type": "CONCEPT",
+            "name": "Total Revenue",
+            "concept_id": "concept_0013",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0011",
+            "type": "CONCEPT",
+            "name": "Supply Shift",
+            "concept_id": "concept_0011",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0047",
+            "type": "CONCEPT",
+            "name": "Comparative Advantage",
+            "concept_id": "concept_0047",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0010",
+            "type": "CONCEPT",
+            "name": "Demand Shift",
+            "concept_id": "concept_0010",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0051",
+            "type": "CONCEPT",
+            "name": "Income Inequality",
+            "concept_id": "concept_0051",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0018",
+            "type": "CONCEPT",
+            "name": "Consumer Equilibrium",
+            "concept_id": "concept_0018",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0046",
+            "type": "CONCEPT",
+            "name": "Public Debt",
+            "concept_id": "concept_0046",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0023",
+            "type": "CONCEPT",
+            "name": "Factors of Production",
+            "concept_id": "concept_0023",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0019",
+            "type": "CONCEPT",
+            "name": "Indifference Curve",
+            "concept_id": "concept_0019",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0041",
+            "type": "CONCEPT",
+            "name": "Inflation",
+            "concept_id": "concept_0041",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0025",
+            "type": "CONCEPT",
+            "name": "Short Run",
+            "concept_id": "concept_0025",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0052",
+            "type": "CONCEPT",
+            "name": "Sustainable Economic Growth",
+            "concept_id": "concept_0052",
+            "children": []
+          },
+          {
+            "node_id": "concept_fallback_concept_0043",
+            "type": "CONCEPT",
+            "name": "Phillips Curve",
+            "concept_id": "concept_0043",
             "children": []
           }
         ]
@@ -100,17 +401,22 @@
     ]
   },
   "coverage": {
-    "placed_concepts": 10,
+    "placed_concepts": 55,
     "unplaced_concepts": 0,
     "coverage_ratio": 1
   },
   "quality": {
-    "status": "healthy",
-    "warnings": [],
+    "status": "warning",
+    "warnings": [
+      {
+        "code": "MISSING_CONCEPTS",
+        "message": "55 unplaced concepts defaulted to Unclassified pool."
+      }
+    ],
     "metrics": {
       "max_depth": 3,
-      "domain_count": 3,
-      "cross_reference_count": 2
+      "domain_count": 1,
+      "cross_reference_count": 0
     }
   }
 }

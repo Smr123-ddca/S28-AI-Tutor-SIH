@@ -1,0 +1,35 @@
+[
+  {
+    "prerequisite_concept": "concept_0001",
+    "target_concept": "concept_0003",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.99,
+    "reasoning": "Embedded Systems fundamentally require understanding the interface boundaries of Hardware-Software integration natively.",
+    "evidence_chunks": [
+      "chunk_3"
+    ],
+    "source": "demo_seed"
+  },
+  {
+    "prerequisite_concept": "concept_0005",
+    "target_concept": "concept_0006",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.95,
+    "reasoning": "Real-Time systems strictly depend on deterministic Deadline bounds chronologically.",
+    "evidence_chunks": [
+      "chunk_6"
+    ],
+    "source": "demo_seed"
+  },
+  {
+    "prerequisite_concept": "concept_0001",
+    "target_concept": "concept_0002",
+    "relationship_type": "SUPPORTING",
+    "confidence_score": 0.85,
+    "reasoning": "Embedded systems are generally constrained by dedicated operational functions natively.",
+    "evidence_chunks": [
+      "chunk_2"
+    ],
+    "source": "demo_seed"
+  }
+]

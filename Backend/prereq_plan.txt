@@ -1,0 +1,32 @@
+
+--- DSA_Code_Reference_Annotated ---
+concept_0001: Array
+concept_0002: Rotate left array
+concept_0003: Reverse array
+concept_0004: Kadane's algorithm
+concept_0005: Two-pointer pair sum
+concept_0006: Sliding window for longest unique substring
+
+--- DBMS_Code_Reference_Annotated ---
+concept_0001: Relational Model and SQL Overview
+concept_0002: Data Definition Language: CREATE TABLE with Constraints
+concept_0003: Basic Querying: Filtering, Projection, and Ordering
+concept_0004: Integrity Constraints: Primary Key, Foreign Key, Check, and Referential Integrity
+concept_0005: Join Operations: Inner, Left, and Self Joins
+concept_0006: Aggregation and Grouping: Aggregate Functions, GROUP BY, and HAVING
+
+--- Economics_Chunking_Reference ---
+concept_0001: Scarcity
+concept_0002: Opportunity Cost
+concept_0003: Positive Economics
+concept_0004: Normative Economics
+concept_0005: Production Possibility Frontier
+concept_0006: Economic Growth
+
+--- IES_Demo_Course_Structured ---
+concept_0001: Embedded System
+concept_0002: Dedicated Function
+concept_0003: Hardware–Software Integration
+concept_0004: Resource Constraints
+concept_0005: Real-Time System
+concept_0006: Deadline

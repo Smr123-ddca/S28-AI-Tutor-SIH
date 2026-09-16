@@ -75,28 +75,85 @@ if chunks_path and os.path.exists(chunks_path):
         
 class ContextAssembler:
     @staticmethod
+    def _bound_text(text, limit=1500):
+        if not text:
+            return ""
+        if len(text) <= limit:
+            return text.strip()
+        half = limit // 2
+        return text[:half].strip() + "\n\n... [TRUNCATED] ...\n\n" + text[-half:].strip()
+
+    @staticmethod
     def assemble(chunks, concepts):
         chunk_map = {c["id"]: c for c in chunks if "id" in c}
+        
+        # Sort all chunks by explicit chunk_index (or fallback) to allow safe adjacent lookups
+        valid_chunks_sorted = []
+        for c in chunks:
+            idx = int(c.get("chunk_index", 999999))
+            valid_chunks_sorted.append((idx, c))
+        valid_chunks_sorted.sort(key=lambda x: x[0])
+
         enriched_concepts = []
         for c in concepts:
             best_chunk_index = 999999
-            first_context = ""
+            target_chunk_id = None
+            
+            # 1. Identify FIRST_INTRODUCTION
             for ev in c.get("evidence", []):
                 cid = ev.get("chunk_id")
                 if cid and cid in chunk_map:
-                    ck = chunk_map[cid]
-                    idx = ck.get("chunk_index", 999999)
+                    idx = int(chunk_map[cid].get("chunk_index", 999999))
                     if idx < best_chunk_index:
                         best_chunk_index = idx
-                        first_context = ck.get("text", "")[:400]
+                        target_chunk_id = cid
+
+            local_context = []
+            
+            # 2. Extract preceding, current, following if we found a valid injection point
+            if target_chunk_id and best_chunk_index != 999999:
+                target_pos = -1
+                for idx_pos, (ck_idx, ck) in enumerate(valid_chunks_sorted):
+                    if ck["id"] == target_chunk_id:
+                        target_pos = idx_pos
+                        break
+                        
+                if target_pos != -1:
+                    def _format_context(ck, role):
+                        return {
+                            "role": role,
+                            "chunk_id": ck.get("id"),
+                            "chunk_index": ck.get("chunk_index"),
+                            "chapter": ck.get("chapter", ""),
+                            "section": ck.get("section", ""),
+                            "page_start": ck.get("page_start"),
+                            "page_end": ck.get("page_end"),
+                            "text": ContextAssembler._bound_text(ck.get("text", ""), 1500)
+                        }
+
+                    # Preceding
+                    if target_pos > 0:
+                        prev_ck = valid_chunks_sorted[target_pos - 1][1]
+                        local_context.append(_format_context(prev_ck, "PRECEDING"))
+                    
+                    # Current / First Introduction
+                    curr_ck = valid_chunks_sorted[target_pos][1]
+                    local_context.append(_format_context(curr_ck, "FIRST_INTRODUCTION"))
+                    
+                    # Following
+                    if target_pos < len(valid_chunks_sorted) - 1:
+                        next_ck = valid_chunks_sorted[target_pos + 1][1]
+                        local_context.append(_format_context(next_ck, "FOLLOWING"))
+
             enriched = {
                 "id": c.get("concept_id"),
                 "name": c.get("name"),
                 "desc": c.get("description", "")[:200],
                 "first_introduced_chunk_index": best_chunk_index if best_chunk_index != 999999 else -1,
-                "first_introduced_context": first_context
+                "local_context": local_context
             }
             enriched_concepts.append(enriched)
+            
         enriched_concepts.sort(key=lambda x: x["first_introduced_chunk_index"] if x["first_introduced_chunk_index"] >= 0 else 999999)
         return enriched_concepts
 
@@ -114,7 +171,7 @@ Your task is to identify logically grounded learning dependencies based exclusiv
 Strict rules for extraction:
 1. Output ONLY a chronological JSON array of prerequisite relationships.
 2. A relationship means the learner must understand `prerequisite_id` BEFORE learning `concept_id`.
-3. READ THE `first_introduced_chunk_index` AND THE CONTEXT TEXT: Concepts appearing earlier chronologically are extremely likely to be prerequisites for later concepts natively. Use this structural chronology to guarantee direction (No backward guessing!).
+3. READ THE `first_introduced_chunk_index` AND THE LOCAL CONTEXT: Evaluate the PRECEDING, FIRST_INTRODUCTION, and FOLLOWING text natively mapped around its structural chronology to guarantee dependencies (No backward guessing!).
 4. Use `concept_id` and `prerequisite_id` values copied EXACTLY from the supplied `id` fields. Do not use placeholders.
 5. Only include a relationship when the course material structurally supports it. Do not map everything linearly mechanically, map semantically based on actual required knowledge.
 6. Do not create edges just because concepts share a domain, keywords, or close semantic similarity.
@@ -227,6 +284,8 @@ status = "healthy"
 cycles_removed = []
 isolated_count = 0
 
+valid_chunk_map = {str(c["id"]): c for c in chunks_data if "id" in c}
+
 diagnostic_counts = {
     "concepts_supplied": len(c2_concepts),
     "llm_candidates_returned": len(relations),
@@ -234,6 +293,7 @@ diagnostic_counts = {
     "unknown_id_candidates": 0,
     "self_loop_candidates": 0,
     "low_confidence_candidates": 0,
+    "unsupported_evidence_rejected": 0,
     "cycle_rejected_candidates": 0,
     "final_valid_relationships": 0,
 }
@@ -275,13 +335,26 @@ for r in relations:
         diagnostic_counts["low_confidence_candidates"] += 1
         continue
 
-    if rel not in ["REQUIRED", "SUPPORTING", "RELATED"]:
+    if rel not in ["REQUIRED", "SUPPORTING", "RELATED", "INSUFFICIENT_EVIDENCE"]:
         rel = "SUPPORTING"
+
+    raw_ev = r.get("evidence", [])
+    ev_list = raw_ev if isinstance(raw_ev, list) else []
+    verified_evidence = [str(eid) for eid in ev_list if str(eid) in valid_chunk_map]
+
+    if rel in ["REQUIRED", "SUPPORTING"] and len(verified_evidence) == 0:
+        rel = "INSUFFICIENT_EVIDENCE"
+
+    if rel == "INSUFFICIENT_EVIDENCE":
+        diagnostic_counts["unsupported_evidence_rejected"] += 1
+        continue
 
     edge_key = f"{pid}->{cid}"
     if edge_key in seen_edges:
         if conf > seen_edges[edge_key]["confidence"]:
             seen_edges[edge_key] = r
+            seen_edges[edge_key]["evidence"] = verified_evidence
+            seen_edges[edge_key]["relationship"] = rel
     else:
         seen_edges[edge_key] = {
             "concept_id": cid,
@@ -289,7 +362,7 @@ for r in relations:
             "relationship": rel,
             "confidence": conf,
             "reason": reason,
-            "evidence": r.get("evidence", [])[:5]
+            "evidence": verified_evidence
         }
 
 final_edges = list(seen_edges.values())

@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS public.chunks (
     topic TEXT,
     chapter TEXT,
     section TEXT,
+    section_label TEXT,
+    chunk_index INT,
     page_start INT,
     page_end INT,
     text_content TEXT NOT NULL,

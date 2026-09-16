@@ -1,71 +1,35 @@
-{
-  "course": "Economics_Chunking_Reference",
-  "relationship_count": 6,
-  "relationships": [
-    {
-      "concept_id": "concept_0005",
-      "prerequisite_id": "concept_0004",
-      "relationship": "REQUIRED",
-      "confidence": 0.92,
-      "reason": "Understanding supply and demand choices requires foundational knowledge of scarcity and opportunity cost.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0006",
-      "prerequisite_id": "concept_0005",
-      "relationship": "REQUIRED",
-      "confidence": 0.95,
-      "reason": "Elasticity measures the responsiveness of quantity demanded or supplied to price changes, requiring a prior grasp of market supply and demand.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0003",
-      "prerequisite_id": "concept_0005",
-      "relationship": "REQUIRED",
-      "confidence": 0.88,
-      "reason": "Understanding externalities requires knowledge of standard market equilibrium to evaluate market failure and uncompensated social costs.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0001",
-      "prerequisite_id": "concept_0007",
-      "relationship": "SUPPORTING",
-      "confidence": 0.89,
-      "reason": "Economic development is defined in contrast to and broader than national aggregate measures like Gross Domestic Product.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0009",
-      "prerequisite_id": "concept_0007",
-      "relationship": "REQUIRED",
-      "confidence": 0.91,
-      "reason": "Fiscal policy aims to influence aggregate economic activity, which is quantified by metrics like GDP.",
-      "evidence": []
-    },
-    {
-      "concept_id": "concept_0010",
-      "prerequisite_id": "concept_0008",
-      "relationship": "REQUIRED",
-      "confidence": 0.93,
-      "reason": "Monetary policy regulates financial conditions primarily to control inflation and maintain price stability.",
-      "evidence": []
-    }
-  ],
-  "quality": {
-    "status": "healthy",
-    "model_status": "MODEL_VALID_OUTPUT",
-    "model_failure_reason": null,
-    "cycles_detected": 0,
-    "cycles_removed": 0,
-    "removed_cycles_log": [],
-    "isolated_concepts": 1,
-    "warnings": []
+[
+  {
+    "prerequisite_concept": "concept_0001",
+    "target_concept": "concept_0002",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.95,
+    "reasoning": "Scarcity directly defines the limiting rules governing Opportunity Cost trade-offs natively.",
+    "evidence_chunks": [
+      "chunk_3"
+    ],
+    "source": "demo_seed"
   },
-  "statistics": {
-    "root_concepts": 4,
-    "leaf_concepts": 6,
-    "average_prerequisites": 0.6,
-    "max_prerequisites": 1,
-    "max_depth": 3
+  {
+    "prerequisite_concept": "concept_0003",
+    "target_concept": "concept_0004",
+    "relationship_type": "SUPPORTING",
+    "confidence_score": 0.88,
+    "reasoning": "Positive economic theory provides factual grounding useful when progressing to Normative judgments.",
+    "evidence_chunks": [
+      "chunk_6"
+    ],
+    "source": "demo_seed"
+  },
+  {
+    "prerequisite_concept": "concept_0005",
+    "target_concept": "concept_0006",
+    "relationship_type": "REQUIRED",
+    "confidence_score": 0.96,
+    "reasoning": "The Production Possibility Frontier algorithm establishes the visual foundation for mapping Economic Growth limits.",
+    "evidence_chunks": [
+      "chunk_9"
+    ],
+    "source": "demo_seed"
   }
-}
+]

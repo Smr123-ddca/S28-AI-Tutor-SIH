@@ -1,0 +1,134 @@
+[
+  {
+    "id": "chunk_1",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "General",
+    "section": "IES — Intelligent Embedded Systems",
+    "section_label": "IES — Intelligent Embedded Systems",
+    "chunk_index": 1,
+    "page_start": 1,
+    "page_end": 2,
+    "text": "Learnify demo course • structured for chunking, concept extraction, evidence mapping and prerequisite\ngeneration\nDemo objective: clear chapter → section → chunk boundaries, focused concepts, and explicit prerequisite statements\nmake this document suitable for testing Learnify's Knowledge Map pipeline.\nIES Demo Material • Page 2"
+  },
+  {
+    "id": "chunk_2",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 1 — Embedded Systems Foundations",
+    "section": "1.1 Embedded Systems",
+    "section_label": "1.1 Embedded Systems",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 2,
+    "text": "Chunk 1 — What Is an Embedded System?\nAn embedded system is a computing system designed to perform a dedicated function inside a larger product. It\ncombines hardware and software and operates under constraints such as timing, memory, power, cost and reliability.\nConcepts: Embedded System; Dedicated Function; Hardware–Software Integration; Resource Constraints.\nChunk 2 — Real-Time Behavior\nA real-time system must respond to events within defined timing constraints. Hard real-time systems have deadlines\nwhose violation can cause failure, while soft real-time systems tolerate occasional deadline misses.\nConcepts: Real-Time System; Deadline; Hard Real-Time; Soft Real-Time."
+  },
+  {
+    "id": "chunk_3",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 1 — Embedded Systems Foundations",
+    "section": "1.2 Microcontrollers",
+    "section_label": "1.2 Microcontrollers",
+    "chunk_index": 1,
+    "page_start": 2,
+    "page_end": 3,
+    "text": "Chunk 3 — Microcontroller Basics\nA microcontroller integrates a processor core, memory, timers and peripheral interfaces on one chip. It is optimized for\ncontrolling physical devices and interacting with sensors and actuators.\nConcepts: Microcontroller; Processor Core; Memory; Peripheral.\nPREREQUISITE: Understanding embedded systems is required before studying microcontroller architecture.\nChunk 4 — CPU, Memory and Peripherals\nThe CPU executes instructions, memory stores program code and data, and peripherals provide specialized functions\nsuch as timers, serial communication, analog conversion and digital input/output.\nConcepts: CPU; Program Memory; Data Memory; Peripheral Interface.\nPREREQUISITE: Microcontroller basics are required before studying CPU, memory and peripheral relationships.\nIES Demo Material • Page 3"
+  },
+  {
+    "id": "chunk_4",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 2 — GPIO, Sensors and Interrupts",
+    "section": "2.1 Digital Input and Output",
+    "section_label": "2.1 Digital Input and Output",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Chunk 5 — GPIO Fundamentals\nGPIO pins allow a microcontroller to read digital signals and control external devices. A pin can be configured as an\ninput to read a switch or as an output to drive an LED.\nConcepts: GPIO; Digital Input; Digital Output; Pin Configuration.\nChunk 6 — Pull-Up and Pull-Down Resistors\nA floating digital input can produce unpredictable readings. Pull-up and pull-down resistors establish a default logic\nlevel until an external device changes the state.\nConcepts: Floating Input; Pull-Up; Pull-Down; Logic Level.\nPREREQUISITE: GPIO fundamentals are required before understanding pull-up and pull-down configuration."
+  },
+  {
+    "id": "chunk_5",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 2 — GPIO, Sensors and Interrupts",
+    "section": "2.2 Sensors and Data Acquisition",
+    "section_label": "2.2 Sensors and Data Acquisition",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 3,
+    "text": "Chunk 7 — Sensors and Physical Signals\nA sensor converts a physical quantity such as temperature, light, pressure or motion into an electrical signal that a\ncontroller can measure.\nConcepts: Sensor; Physical Quantity; Electrical Signal; Measurement.\nChunk 8 — Analog-to-Digital Conversion\nAn ADC maps a continuous electrical signal to a discrete numerical representation. Resolution determines how finely\nthe input range can be represented.\nConcepts: ADC; Analog Signal; Digital Representation; Resolution.\nPREREQUISITE: Sensors and electrical signals are required before studying ADC-based measurement."
+  },
+  {
+    "id": "chunk_6",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 2 — GPIO, Sensors and Interrupts",
+    "section": "2.3 Interrupts",
+    "section_label": "2.3 Interrupts",
+    "chunk_index": 1,
+    "page_start": 3,
+    "page_end": 4,
+    "text": "Chunk 9 — Interrupt Concept\nAn interrupt temporarily transfers processor control to an interrupt service routine when an event requires immediate\nattention. Normal execution resumes after the routine completes.\nConcepts: Interrupt; Interrupt Service Routine; Event; Processor Context.\nPREREQUISITE: Basic processor execution is required before understanding interrupt handling.\nChunk 10 — Polling Versus Interrupts\nPolling repeatedly checks whether an event has occurred. Interrupt-driven design allows hardware to notify the\nprocessor when an event occurs, improving responsiveness.\nConcepts: Polling; Interrupt-Driven Design; Responsiveness; Event Handling.\nPREREQUISITE: GPIO event handling provides a foundation for comparing polling with interrupts.\nIES Demo Material • Page 4"
+  },
+  {
+    "id": "chunk_7",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 3 — Communication and RTOS",
+    "section": "3.1 Serial Communication",
+    "section_label": "3.1 Serial Communication",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "Chunk 11 — UART Communication\nUART provides asynchronous serial communication using transmit and receive lines. Data is commonly framed with\nstart and stop bits and transferred at a configured baud rate.\nConcepts: UART; Serial Communication; Baud Rate; Data Frame.\nPREREQUISITE: GPIO and digital signaling provide the foundation for UART.\nChunk 12 — I2C Communication\nI2C is a synchronous bus using clock and data lines and supporting multiple addressed devices. A controller can\ncommunicate with sensors and other peripherals over the shared bus.\nConcepts: I2C; Synchronous Bus; Addressing; Controller; Peripheral.\nPREREQUISITE: Digital signaling and addressing are required before studying I2C."
+  },
+  {
+    "id": "chunk_8",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 3 — Communication and RTOS",
+    "section": "3.2 Real-Time Operating Systems",
+    "section_label": "3.2 Real-Time Operating Systems",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 4,
+    "text": "Chunk 13 — Why Use an RTOS?\nA real-time operating system provides scheduling and synchronization mechanisms for applications with multiple\nconcurrent activities and timing requirements.\nConcepts: RTOS; Scheduling; Concurrency; Timing Requirement.\nPREREQUISITE: Real-time behavior and timing constraints are required before studying RTOS.\nChunk 14 — Tasks and Scheduling\nAn RTOS divides application behavior into tasks. A scheduler decides which task executes, often according to priority\nand timing requirements.\nConcepts: Task; Scheduler; Priority; Context Switch.\nPREREQUISITE: RTOS fundamentals are required before studying task scheduling."
+  },
+  {
+    "id": "chunk_9",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 3 — Communication and RTOS",
+    "section": "3.3 Synchronization",
+    "section_label": "3.3 Synchronization",
+    "chunk_index": 1,
+    "page_start": 4,
+    "page_end": 5,
+    "text": "Chunk 15 — Shared Resources\nConcurrent tasks may access the same data or hardware resource. Without coordination, interleaving operations can\ncreate inconsistent results and race conditions.\nConcepts: Shared Resource; Concurrency; Race Condition.\nPREREQUISITE: Tasks and concurrency are required before analyzing shared-resource problems.\nChunk 16 — Mutexes and Semaphores\nA mutex provides controlled exclusive access to a shared resource. A semaphore can coordinate events or control\naccess to a limited number of resources.\nConcepts: Mutex; Semaphore; Mutual Exclusion; Synchronization.\nPREREQUISITE: Shared-resource problems must be understood before selecting mutexes or semaphores.\nIES Demo Material • Page 5"
+  },
+  {
+    "id": "chunk_10",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 4 — IoT System Integration",
+    "section": "4.1 Device-to-Cloud Systems",
+    "section_label": "4.1 Device-to-Cloud Systems",
+    "chunk_index": 1,
+    "page_start": 5,
+    "page_end": 5,
+    "text": "Chunk 17 — IoT Architecture\nAn IoT system connects physical devices to networks and software services. A typical architecture contains sensing,\nlocal processing, communication, data storage and application layers.\nConcepts: IoT; Edge Device; Network; Cloud Service; Data Pipeline.\nPREREQUISITE: Embedded sensing and communication are required before designing an IoT architecture.\nChunk 18 — Telemetry Pipeline\nTelemetry is the collection and transmission of measurements from an embedded device. A reliable pipeline validates\nreadings, attaches timestamps, transmits data and stores measurements.\nConcepts: Telemetry; Timestamp; Data Validation; Data Transmission; Storage.\nPREREQUISITE: Sensors, ADC and communication interfaces are required before designing a telemetry pipeline."
+  },
+  {
+    "id": "chunk_11",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 4 — IoT System Integration",
+    "section": "4.2 Integrated Design",
+    "section_label": "4.2 Integrated Design",
+    "chunk_index": 1,
+    "page_start": 5,
+    "page_end": 6,
+    "text": "Chunk 19 — Smart Temperature Monitor\nA smart temperature monitor reads a sensor through an ADC, periodically samples the value using a scheduled task,\ntransmits measurements using a communication interface and stores telemetry for later analysis.\nConcepts: Temperature Monitoring; Sampling; ADC; Scheduled Task; Communication; Telemetry.\nPREREQUISITE: Sensor measurement, ADC, task scheduling, communication and telemetry are required for the\nintegrated design.\nChunk 20 — System Design Review\nA complete embedded solution connects requirements, hardware interfaces, software tasks, timing behavior and data\nflow. Designers verify each dependency before integrating the system.\nConcepts: System Integration; Requirements; Hardware Interface; Software Task; Data Flow.\nPREREQUISITE: The integrated design depends on foundations from Chapters 1–4.\nIES Demo Material • Page 6"
+  },
+  {
+    "id": "chunk_12",
+    "topic": "IES_Demo_Course_Structured",
+    "chapter": "Chapter 4 — IoT System Integration",
+    "section": "Prerequisite Map — Expected Directed Dependencies",
+    "section_label": "Prerequisite Map — Expected Directed Dependencies",
+    "chunk_index": 1,
+    "page_start": 6,
+    "page_end": 6,
+    "text": "The relationships below are deliberately supported by prerequisite statements in the chunks. They provide a strong\ntest case for Learnify's prerequisite candidate generation and teacher review.\nPrerequisite\nDependent concept\nEmbedded System\nMicrocontroller\nMicrocontroller\nCPU / Memory / Peripherals\nGPIO\nPull-Up / Pull-Down\nSensor\nADC\nGPIO / Digital Signaling\nUART\nDigital Signaling / Addressing\nI2C\nReal-Time System\nRTOS\nRTOS\nTask Scheduling\nTasks + Concurrency\nShared Resources\nShared Resources\nMutex / Semaphore\nSensor + ADC\nTelemetry\nCommunication\nTelemetry Pipeline\nADC + Scheduling + Communication\nSmart Temperature Monitor\nDemo success criteria: ingestion should preserve chapter/section hierarchy, create concept evidence linking\nconcepts to chunks, and produce a non-empty directed prerequisite graph for teacher review."
+  }
+]

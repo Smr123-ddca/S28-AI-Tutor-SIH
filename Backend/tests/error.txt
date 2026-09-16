@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\test_canonicalization.py", line 19, in <module>
-    from concept_extraction import Canonicalizer, compute_normalization_key, extract_aliases_from_name
-  File "C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\python\concept_extraction.py", line 71, in <module>
-    quality_chunks = quality.get("chunks", [])
-                     ^^^^^^^^^^^
-AttributeError: 'list' object has no attribute 'get'

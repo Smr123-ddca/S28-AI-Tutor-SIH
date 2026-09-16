@@ -1,6 +1,6 @@
 {
   "course": "DBMS_Code_Reference_Annotated",
-  "source_concepts": 2,
+  "source_concepts": 19,
   "hierarchy": {
     "node_id": "root_01",
     "type": "ROOT",
@@ -9,20 +9,216 @@
       {
         "node_id": "domain_01",
         "type": "DOMAIN",
-        "name": "Backup and Recovery",
+        "name": "Foundations",
         "children": [
           {
-            "node_id": "concept_node_1",
+            "node_id": "concept_node_001",
             "type": "CONCEPT",
-            "name": "Database Checkpoints",
+            "name": "Relational Model and SQL Overview",
             "concept_id": "concept_0001",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_02",
+        "type": "DOMAIN",
+        "name": "Data Definition and Constraints",
+        "children": [
+          {
+            "node_id": "concept_node_002",
+            "type": "CONCEPT",
+            "name": "Data Definition Language: CREATE TABLE with Constraints",
+            "concept_id": "concept_0002",
             "children": []
           },
           {
-            "node_id": "concept_node_2",
+            "node_id": "concept_node_004",
             "type": "CONCEPT",
-            "name": "Database Backups and Recovery Strategy",
-            "concept_id": "concept_0002",
+            "name": "Integrity Constraints: Primary Key, Foreign Key, Check, and Referential Integrity",
+            "concept_id": "concept_0004",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_03",
+        "type": "DOMAIN",
+        "name": "Querying Basics",
+        "children": [
+          {
+            "node_id": "concept_node_003",
+            "type": "CONCEPT",
+            "name": "Basic Querying: Filtering, Projection, and Ordering",
+            "concept_id": "concept_0003",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_04",
+        "type": "DOMAIN",
+        "name": "Join Operations",
+        "children": [
+          {
+            "node_id": "concept_node_005",
+            "type": "CONCEPT",
+            "name": "Join Operations: Inner, Left, and Self Joins",
+            "concept_id": "concept_0005",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_05",
+        "type": "DOMAIN",
+        "name": "Aggregation and Grouping",
+        "children": [
+          {
+            "node_id": "concept_node_006",
+            "type": "CONCEPT",
+            "name": "Aggregation and Grouping: Aggregate Functions, GROUP BY, and HAVING",
+            "concept_id": "concept_0006",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_06",
+        "type": "DOMAIN",
+        "name": "Subqueries and Set Operations",
+        "children": [
+          {
+            "node_id": "concept_node_007",
+            "type": "CONCEPT",
+            "name": "Subqueries: Scalar, Correlated, EXISTS, and UNION",
+            "concept_id": "concept_0007",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_07",
+        "type": "DOMAIN",
+        "name": "Database Design",
+        "children": [
+          {
+            "node_id": "concept_node_008",
+            "type": "CONCEPT",
+            "name": "Normalization: Functional Dependencies and Normal Forms",
+            "concept_id": "concept_0008",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_018",
+            "type": "CONCEPT",
+            "name": "Entity-Relationship Modeling & Cardinality",
+            "concept_id": "concept_0018",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_08",
+        "type": "DOMAIN",
+        "name": "Transaction Management",
+        "children": [
+          {
+            "node_id": "concept_node_009",
+            "type": "CONCEPT",
+            "name": "Transaction Management: ACID Properties, COMMIT, and ROLLBACK",
+            "concept_id": "concept_0009",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_011",
+            "type": "CONCEPT",
+            "name": "Transaction Savepoints",
+            "concept_id": "concept_0011",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_012",
+            "type": "CONCEPT",
+            "name": "Database Savepoints",
+            "concept_id": "concept_0012",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_09",
+        "type": "DOMAIN",
+        "name": "Concurrency Control",
+        "children": [
+          {
+            "node_id": "concept_node_010",
+            "type": "CONCEPT",
+            "name": "Concurrency Control: Isolation Levels, Locking, and Two-Phase Locking",
+            "concept_id": "concept_0010",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_10",
+        "type": "DOMAIN",
+        "name": "Physical Design and Optimization",
+        "children": [
+          {
+            "node_id": "concept_node_013",
+            "type": "CONCEPT",
+            "name": "Database Indexes",
+            "concept_id": "concept_0013",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_11",
+        "type": "DOMAIN",
+        "name": "Programmability Objects",
+        "children": [
+          {
+            "node_id": "concept_node_014",
+            "type": "CONCEPT",
+            "name": "Database Views",
+            "concept_id": "concept_0014",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_015",
+            "type": "CONCEPT",
+            "name": "Common Table Expressions",
+            "concept_id": "concept_0015",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_016",
+            "type": "CONCEPT",
+            "name": "Database Triggers",
+            "concept_id": "concept_0016",
+            "children": []
+          },
+          {
+            "node_id": "concept_node_017",
+            "type": "CONCEPT",
+            "name": "Stored Procedures",
+            "concept_id": "concept_0017",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_12",
+        "type": "DOMAIN",
+        "name": "Recovery Mechanisms",
+        "children": [
+          {
+            "node_id": "concept_node_019",
+            "type": "CONCEPT",
+            "name": "Database Recovery Mechanisms",
+            "concept_id": "concept_0019",
             "children": []
           }
         ]
@@ -30,7 +226,7 @@
     ]
   },
   "coverage": {
-    "placed_concepts": 2,
+    "placed_concepts": 19,
     "unplaced_concepts": 0,
     "coverage_ratio": 1
   },
@@ -39,7 +235,7 @@
     "warnings": [],
     "metrics": {
       "max_depth": 3,
-      "domain_count": 1,
+      "domain_count": 12,
       "cross_reference_count": 0
     }
   }

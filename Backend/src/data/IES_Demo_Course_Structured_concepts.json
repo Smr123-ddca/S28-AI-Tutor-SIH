@@ -1,0 +1,1153 @@
+{
+  "course": "IES_Demo_Course_Structured",
+  "source_chunks": 12,
+  "eligible_chunks": 10,
+  "concept_count": 80,
+  "concepts": [
+    {
+      "concept_id": "concept_0001",
+      "name": "Embedded System",
+      "aliases": [],
+      "description": "A computing system designed to perform a dedicated function inside a larger product, combining hardware and software while operating under constraints such as timing, memory, power, cost, and reliability.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0002",
+      "name": "Dedicated Function",
+      "aliases": [],
+      "description": "A specific, single purpose that an embedded system is built to carry out within a larger product.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0003",
+      "name": "Hardware–Software Integration",
+      "aliases": [],
+      "description": "The combination of hardware and software components that work together within an embedded system.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0004",
+      "name": "Resource Constraints",
+      "aliases": [],
+      "description": "Limitations on timing, memory, power, cost, and reliability that govern the design and operation of embedded systems.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0005",
+      "name": "Real-Time System",
+      "aliases": [],
+      "description": "A system that must respond to events within defined timing constraints.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0006",
+      "name": "Deadline",
+      "aliases": [],
+      "description": "A timing constraint in a real-time system that must be met to avoid failure or degradation.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0007",
+      "name": "Hard Real-Time",
+      "aliases": [],
+      "description": "A real-time system where missing a deadline can cause system failure.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0008",
+      "name": "Soft Real-Time",
+      "aliases": [],
+      "description": "A real-time system that tolerates occasional deadline misses without catastrophic consequences.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_2",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0009",
+      "name": "Microcontroller",
+      "aliases": [],
+      "description": "An integrated chip containing a processor core, memory, timers, and peripheral interfaces, optimized for controlling physical devices and interacting with sensors and actuators.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_3",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0010",
+      "name": "Processor Core",
+      "aliases": [],
+      "description": "The central execution unit within a microcontroller that processes instructions.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_3",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0011",
+      "name": "Memory",
+      "aliases": [],
+      "description": "On-chip storage within a microcontroller used to hold program code and data.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_3",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0012",
+      "name": "Peripheral",
+      "aliases": [],
+      "description": "A device or interface connected to a controlling processor that provides specialized functions such as timing, communication, or data conversion.",
+      "confidence": 0.9,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_3",
+          "classification": "DEFINITION"
+        },
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0013",
+      "name": "CPU",
+      "aliases": [],
+      "description": "The central processing unit that executes instructions in a computing system.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0014",
+      "name": "Program Memory",
+      "aliases": [],
+      "description": "Memory that stores the program code executed by the CPU.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0015",
+      "name": "Data Memory",
+      "aliases": [],
+      "description": "Memory that stores runtime data used by the CPU during program execution.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0016",
+      "name": "Peripheral Interface",
+      "aliases": [],
+      "description": "An interface providing specialized functions such as timers, serial communication, analog conversion, and digital input/output.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0017",
+      "name": "GPIO",
+      "aliases": [],
+      "description": "General-Purpose Input/Output pins that allow a microcontroller to read digital signals and control external devices.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0018",
+      "name": "Digital Input",
+      "aliases": [],
+      "description": "A GPIO pin configuration that reads a digital signal from an external device such as a switch.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0019",
+      "name": "Digital Output",
+      "aliases": [],
+      "description": "A GPIO pin configuration that drives an external device such as an LED.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0020",
+      "name": "Pin Configuration",
+      "aliases": [],
+      "description": "The setup of a GPIO pin as either an input or an output to interact with external devices.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0021",
+      "name": "Floating Input",
+      "aliases": [],
+      "description": "An unconfigured digital input that can produce unpredictable signal readings.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0022",
+      "name": "Pull-Up",
+      "aliases": [],
+      "description": "A resistor configuration that establishes a default high logic level on a digital input line until an external device changes the state.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0023",
+      "name": "Pull-Down",
+      "aliases": [],
+      "description": "A resistor configuration that establishes a default low logic level on a digital input line until an external device changes the state.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0024",
+      "name": "Logic Level",
+      "aliases": [],
+      "description": "The default voltage state (high or low) established on a digital input line by a pull-up or pull-down resistor.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0025",
+      "name": "Sensor",
+      "aliases": [],
+      "description": "A device that converts a physical quantity such as temperature, light, pressure, or motion into an electrical signal that a controller can measure.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0026",
+      "name": "Physical Quantity",
+      "aliases": [],
+      "description": "A measurable property of the physical world, such as temperature, light, pressure, or motion, that sensors detect and convert.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0027",
+      "name": "Electrical Signal",
+      "aliases": [],
+      "description": "The voltage or current representation produced by a sensor that corresponds to a measured physical quantity.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0028",
+      "name": "Measurement",
+      "aliases": [],
+      "description": "The process of determining the value of a physical quantity through sensor and signal conversion.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0029",
+      "name": "ADC",
+      "aliases": [],
+      "description": "An Analog-to-Digital Converter that maps a continuous electrical signal to a discrete numerical representation.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0030",
+      "name": "Analog Signal",
+      "aliases": [],
+      "description": "A continuous electrical signal that represents a physical quantity and requires conversion for digital processing.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0031",
+      "name": "Digital Representation",
+      "aliases": [],
+      "description": "A discrete numerical value produced by an ADC to represent a sampled analog input.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0032",
+      "name": "Resolution",
+      "aliases": [],
+      "description": "The granularity of an ADC's output, determining how finely the input range can be represented as a discrete value.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_5",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0033",
+      "name": "Interrupt",
+      "aliases": [],
+      "description": "A mechanism that temporarily transfers processor control to an interrupt service routine when an event requires immediate attention, resuming normal execution afterward.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0034",
+      "name": "Interrupt Service Routine",
+      "aliases": [],
+      "description": "The routine executed by the processor in response to an interrupt, which handles the event and then returns control to the normal program flow.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0035",
+      "name": "Event",
+      "aliases": [],
+      "description": "An occurrence detected by hardware or software that may require immediate processor attention.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0036",
+      "name": "Processor Context",
+      "aliases": [],
+      "description": "The current state of the processor that must be saved and restored during an interrupt transition.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0037",
+      "name": "Polling",
+      "aliases": [],
+      "description": "A method of repeatedly checking whether an event has occurred, as opposed to being notified by hardware.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0038",
+      "name": "Interrupt-Driven Design",
+      "aliases": [],
+      "description": "A design approach where hardware notifies the processor when an event occurs, improving responsiveness compared to polling.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0039",
+      "name": "Responsiveness",
+      "aliases": [],
+      "description": "The ability of a system to react promptly to events, improved by interrupt-driven design over polling.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0040",
+      "name": "Event Handling",
+      "aliases": [],
+      "description": "The overall mechanism for detecting and responding to events through polling or interrupt-driven approaches.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_6",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0041",
+      "name": "UART",
+      "aliases": [],
+      "description": "An asynchronous serial communication protocol using transmit and receive lines, with data framed by start and stop bits at a configured baud rate.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0042",
+      "name": "Serial Communication",
+      "aliases": [],
+      "description": "Data transfer between devices one bit at a time over a single communication line, as used by UART.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0043",
+      "name": "Baud Rate",
+      "aliases": [],
+      "description": "The configured speed at which UART serial data is transferred, measured in bits per second.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0044",
+      "name": "Data Frame",
+      "aliases": [],
+      "description": "The structure of a UART transmission, including start and stop bits framing the data.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0045",
+      "name": "I2C",
+      "aliases": [],
+      "description": "A synchronous serial bus using clock and data lines that supports multiple addressed devices communicating with a controller.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0046",
+      "name": "Synchronous Bus",
+      "aliases": [],
+      "description": "A communication bus that uses a shared clock signal to coordinate data transfer between devices, as in I2C.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0047",
+      "name": "Addressing",
+      "aliases": [],
+      "description": "The method by which individual devices on a shared bus are identified and selectively communicated with.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0048",
+      "name": "Controller",
+      "aliases": [],
+      "description": "The device on a bus (e.g., I2C master) that initiates and manages communication with addressed peripheral devices.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0049",
+      "name": "RTOS",
+      "aliases": [],
+      "description": "A real-time operating system that provides scheduling and synchronization mechanisms for applications with multiple concurrent activities and timing requirements.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0050",
+      "name": "Scheduling",
+      "aliases": [],
+      "description": "The process by which an RTOS determines which task executes, often based on priority and timing requirements.",
+      "confidence": 0.9,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0051",
+      "name": "Concurrency",
+      "aliases": [],
+      "description": "The condition where multiple tasks or activities execute or overlap in time, requiring coordination when accessing shared resources.",
+      "confidence": 0.9,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        },
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0052",
+      "name": "Timing Requirement",
+      "aliases": [],
+      "description": "A constraint defining when an action must be completed, motivating the need for a real-time operating system.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0053",
+      "name": "Task",
+      "aliases": [],
+      "description": "A discrete unit of application behavior managed by an RTOS scheduler, which decides execution order based on priority and timing.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0054",
+      "name": "Scheduler",
+      "aliases": [],
+      "description": "The RTOS component that determines which task executes at any given time, typically based on priority and timing constraints.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0055",
+      "name": "Priority",
+      "aliases": [],
+      "description": "A value assigned to a task that influences the scheduler's decision of which task to execute first.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0056",
+      "name": "Context Switch",
+      "aliases": [],
+      "description": "The process of saving the state of one task and restoring the state of another to transfer processor execution between tasks.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0057",
+      "name": "Shared Resource",
+      "aliases": [],
+      "description": "A data or hardware resource accessed by multiple concurrent tasks, requiring coordination to avoid inconsistent results.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0058",
+      "name": "Race Condition",
+      "aliases": [],
+      "description": "An inconsistency that arises when concurrent operations on a shared resource interleave without proper coordination.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0059",
+      "name": "Mutex",
+      "aliases": [],
+      "description": "A synchronization mechanism providing controlled exclusive access to a shared resource.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0060",
+      "name": "Semaphore",
+      "aliases": [],
+      "description": "A synchronization primitive that can coordinate events or control access to a limited number of shared resources.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0061",
+      "name": "Mutual Exclusion",
+      "aliases": [],
+      "description": "The principle of ensuring only one task accesses a shared resource at a time, enforced by mechanisms such as mutexes.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0062",
+      "name": "Synchronization",
+      "aliases": [],
+      "description": "Coordination of concurrent tasks or events using mechanisms such as mutexes and semaphores.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "DEFINITION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0063",
+      "name": "IoT",
+      "aliases": [],
+      "description": "A system architecture that connects physical devices to networks and software services, spanning sensing, local processing, communication, data storage, and application layers.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0064",
+      "name": "Edge Device",
+      "aliases": [],
+      "description": "A physical device at the edge of an IoT system that performs sensing and local processing before communicating with network services.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0065",
+      "name": "Network",
+      "aliases": [],
+      "description": "A communication infrastructure connecting IoT edge devices to cloud services and software platforms.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0066",
+      "name": "Cloud Service",
+      "aliases": [],
+      "description": "A remote software platform in an IoT architecture that receives, processes, and stores data transmitted from edge devices.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0067",
+      "name": "Data Pipeline",
+      "aliases": [],
+      "description": "The end-to-end flow of data through an IoT system from sensing through local processing, communication, storage, and application layers.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0068",
+      "name": "Telemetry",
+      "aliases": [],
+      "description": "The collection and transmission of measurements from an embedded device, involving validation, timestamping, transmission, and storage of data.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0069",
+      "name": "Timestamp",
+      "aliases": [],
+      "description": "A time marker attached to a measurement to record when it was taken, used in telemetry pipelines.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0070",
+      "name": "Data Validation",
+      "aliases": [],
+      "description": "The process of verifying that sensor readings are correct and reliable before further processing in a telemetry pipeline.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0071",
+      "name": "Data Transmission",
+      "aliases": [],
+      "description": "The transfer of measured data from an embedded device to a storage or processing destination over a communication interface.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0072",
+      "name": "Storage",
+      "aliases": [],
+      "description": "The retention of collected and transmitted measurements for later analysis in a telemetry pipeline.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0073",
+      "name": "Temperature Monitoring",
+      "aliases": [],
+      "description": "An embedded application that reads a sensor through an ADC, periodically samples the value using a scheduled task, transmits measurements via a communication interface, and stores telemetry for analysis.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0074",
+      "name": "Sampling",
+      "aliases": [],
+      "description": "The periodic acquisition of sensor values at regular intervals using a scheduled task for monitoring purposes.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0075",
+      "name": "Scheduled Task",
+      "aliases": [],
+      "description": "A task in an RTOS that executes at regular intervals to perform periodic operations such as sensor sampling.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0076",
+      "name": "System Integration",
+      "aliases": [],
+      "description": "The process of combining requirements, hardware interfaces, software tasks, timing behavior, and data flow into a complete embedded solution, verifying each dependency before integration.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0077",
+      "name": "Requirements",
+      "aliases": [],
+      "description": "The specifications and dependencies that must be verified before integrating an embedded system.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0078",
+      "name": "Hardware Interface",
+      "aliases": [],
+      "description": "The physical and electrical interfaces (e.g., GPIO, ADC, UART, I2C) that connect an embedded system's components.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0079",
+      "name": "Software Task",
+      "aliases": [],
+      "description": "A discrete unit of software behavior in a complete embedded solution that must be verified in the context of system integration.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0080",
+      "name": "Data Flow",
+      "aliases": [],
+      "description": "The movement of data through an embedded system from sensing and input through processing to output and storage.",
+      "confidence": 0.85,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    }
+  ],
+  "quality": {
+    "status": "warning",
+    "warnings": [
+      {
+        "code": "OVER_SPLITTING",
+        "message": "Detected more concepts generated than valid input chunks."
+      }
+    ]
+  }
+}

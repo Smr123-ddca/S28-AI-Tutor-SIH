@@ -1,5 +1,5 @@
 const { getAllSessionEvents, getLikelyGaps } = require('./gap.controller');
-const { getChunks } = require('../data/store');
+const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 async function getMisconceptions(req, res) {
     const { data: events, error } = await getAllSessionEvents();
@@ -8,7 +8,8 @@ async function getMisconceptions(req, res) {
         return res.status(500).json({ error: "Failed to fetch session events", details: error });
     }
 
-    const chunks = getChunks();
+    const { data: chunksData } = await supabaseAdmin.from('chunks').select('id, section_label');
+    const chunks = chunksData || [];
     const chunkStats = {};
 
     // Group events by chunk_id

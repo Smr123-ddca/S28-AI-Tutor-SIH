@@ -1,0 +1,655 @@
+{
+  "course": "IES_Demo_Course_Structured",
+  "source_concepts": 80,
+  "hierarchy": {
+    "node_id": "root_01",
+    "type": "ROOT",
+    "name": "IES_Demo_Course_Structured",
+    "children": [
+      {
+        "node_id": "domain_01",
+        "type": "DOMAIN",
+        "name": "Embedded Systems Fundamentals",
+        "children": [
+          {
+            "node_id": "c_0001",
+            "type": "CONCEPT",
+            "name": "Embedded System",
+            "concept_id": "concept_0001",
+            "children": []
+          },
+          {
+            "node_id": "c_0002",
+            "type": "CONCEPT",
+            "name": "Dedicated Function",
+            "concept_id": "concept_0002",
+            "children": []
+          },
+          {
+            "node_id": "c_0003",
+            "type": "CONCEPT",
+            "name": "Hardware–Software Integration",
+            "concept_id": "concept_0003",
+            "children": []
+          },
+          {
+            "node_id": "c_0004",
+            "type": "CONCEPT",
+            "name": "Resource Constraints",
+            "concept_id": "concept_0004",
+            "children": []
+          },
+          {
+            "node_id": "c_0005",
+            "type": "CONCEPT",
+            "name": "Real-Time System",
+            "concept_id": "concept_0005",
+            "children": []
+          },
+          {
+            "node_id": "c_0006",
+            "type": "CONCEPT",
+            "name": "Deadline",
+            "concept_id": "concept_0006",
+            "children": []
+          },
+          {
+            "node_id": "c_0007",
+            "type": "CONCEPT",
+            "name": "Hard Real-Time",
+            "concept_id": "concept_0007",
+            "children": []
+          },
+          {
+            "node_id": "c_0008",
+            "type": "CONCEPT",
+            "name": "Soft Real-Time",
+            "concept_id": "concept_0008",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_02",
+        "type": "DOMAIN",
+        "name": "Microcontroller Architecture",
+        "children": [
+          {
+            "node_id": "c_0009",
+            "type": "CONCEPT",
+            "name": "Microcontroller",
+            "concept_id": "concept_0009",
+            "children": []
+          },
+          {
+            "node_id": "c_0010",
+            "type": "CONCEPT",
+            "name": "Processor Core",
+            "concept_id": "concept_0010",
+            "children": []
+          },
+          {
+            "node_id": "c_0011",
+            "type": "CONCEPT",
+            "name": "Memory",
+            "concept_id": "concept_0011",
+            "children": []
+          },
+          {
+            "node_id": "c_0012",
+            "type": "CONCEPT",
+            "name": "Peripheral",
+            "concept_id": "concept_0012",
+            "children": []
+          },
+          {
+            "node_id": "c_0013",
+            "type": "CONCEPT",
+            "name": "CPU",
+            "concept_id": "concept_0013",
+            "children": []
+          },
+          {
+            "node_id": "c_0014",
+            "type": "CONCEPT",
+            "name": "Program Memory",
+            "concept_id": "concept_0014",
+            "children": []
+          },
+          {
+            "node_id": "c_0015",
+            "type": "CONCEPT",
+            "name": "Data Memory",
+            "concept_id": "concept_0015",
+            "children": []
+          },
+          {
+            "node_id": "c_0016",
+            "type": "CONCEPT",
+            "name": "Peripheral Interface",
+            "concept_id": "concept_0016",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_03",
+        "type": "DOMAIN",
+        "name": "Digital I/O and GPIO",
+        "children": [
+          {
+            "node_id": "c_0017",
+            "type": "CONCEPT",
+            "name": "GPIO",
+            "concept_id": "concept_0017",
+            "children": []
+          },
+          {
+            "node_id": "c_0018",
+            "type": "CONCEPT",
+            "name": "Digital Input",
+            "concept_id": "concept_0018",
+            "children": []
+          },
+          {
+            "node_id": "c_0019",
+            "type": "CONCEPT",
+            "name": "Digital Output",
+            "concept_id": "concept_0019",
+            "children": []
+          },
+          {
+            "node_id": "c_0020",
+            "type": "CONCEPT",
+            "name": "Pin Configuration",
+            "concept_id": "concept_0020",
+            "children": []
+          },
+          {
+            "node_id": "c_0021",
+            "type": "CONCEPT",
+            "name": "Floating Input",
+            "concept_id": "concept_0021",
+            "children": []
+          },
+          {
+            "node_id": "c_0022",
+            "type": "CONCEPT",
+            "name": "Pull-Up",
+            "concept_id": "concept_0022",
+            "children": []
+          },
+          {
+            "node_id": "c_0023",
+            "type": "CONCEPT",
+            "name": "Pull-Down",
+            "concept_id": "concept_0023",
+            "children": []
+          },
+          {
+            "node_id": "c_0024",
+            "type": "CONCEPT",
+            "name": "Logic Level",
+            "concept_id": "concept_0024",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_04",
+        "type": "DOMAIN",
+        "name": "Sensors and Analog-to-Digital Conversion",
+        "children": [
+          {
+            "node_id": "c_0025",
+            "type": "CONCEPT",
+            "name": "Sensor",
+            "concept_id": "concept_0025",
+            "children": []
+          },
+          {
+            "node_id": "c_0026",
+            "type": "CONCEPT",
+            "name": "Physical Quantity",
+            "concept_id": "concept_0026",
+            "children": []
+          },
+          {
+            "node_id": "c_0027",
+            "type": "CONCEPT",
+            "name": "Electrical Signal",
+            "concept_id": "concept_0027",
+            "children": []
+          },
+          {
+            "node_id": "c_0028",
+            "type": "CONCEPT",
+            "name": "Measurement",
+            "concept_id": "concept_0028",
+            "children": []
+          },
+          {
+            "node_id": "c_0029",
+            "type": "CONCEPT",
+            "name": "ADC",
+            "concept_id": "concept_0029",
+            "children": []
+          },
+          {
+            "node_id": "c_0030",
+            "type": "CONCEPT",
+            "name": "Analog Signal",
+            "concept_id": "concept_0030",
+            "children": []
+          },
+          {
+            "node_id": "c_0031",
+            "type": "CONCEPT",
+            "name": "Digital Representation",
+            "concept_id": "concept_0031",
+            "children": []
+          },
+          {
+            "node_id": "c_0032",
+            "type": "CONCEPT",
+            "name": "Resolution",
+            "concept_id": "concept_0032",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_05",
+        "type": "DOMAIN",
+        "name": "Interrupts and Event Handling",
+        "children": [
+          {
+            "node_id": "c_0033",
+            "type": "CONCEPT",
+            "name": "Interrupt",
+            "concept_id": "concept_0033",
+            "children": []
+          },
+          {
+            "node_id": "c_0034",
+            "type": "CONCEPT",
+            "name": "Interrupt Service Routine",
+            "concept_id": "concept_0034",
+            "children": []
+          },
+          {
+            "node_id": "c_0035",
+            "type": "CONCEPT",
+            "name": "Event",
+            "concept_id": "concept_0035",
+            "children": []
+          },
+          {
+            "node_id": "c_0036",
+            "type": "CONCEPT",
+            "name": "Processor Context",
+            "concept_id": "concept_0036",
+            "children": []
+          },
+          {
+            "node_id": "c_0037",
+            "type": "CONCEPT",
+            "name": "Polling",
+            "concept_id": "concept_0037",
+            "children": []
+          },
+          {
+            "node_id": "c_0038",
+            "type": "CONCEPT",
+            "name": "Interrupt-Driven Design",
+            "concept_id": "concept_0038",
+            "children": []
+          },
+          {
+            "node_id": "c_0039",
+            "type": "CONCEPT",
+            "name": "Responsiveness",
+            "concept_id": "concept_0039",
+            "children": []
+          },
+          {
+            "node_id": "c_0040",
+            "type": "CONCEPT",
+            "name": "Event Handling",
+            "concept_id": "concept_0040",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_06",
+        "type": "DOMAIN",
+        "name": "Serial Communication Protocols",
+        "children": [
+          {
+            "node_id": "c_0041",
+            "type": "CONCEPT",
+            "name": "UART",
+            "concept_id": "concept_0041",
+            "children": []
+          },
+          {
+            "node_id": "c_0042",
+            "type": "CONCEPT",
+            "name": "Serial Communication",
+            "concept_id": "concept_0042",
+            "children": []
+          },
+          {
+            "node_id": "c_0043",
+            "type": "CONCEPT",
+            "name": "Baud Rate",
+            "concept_id": "concept_0043",
+            "children": []
+          },
+          {
+            "node_id": "c_0044",
+            "type": "CONCEPT",
+            "name": "Data Frame",
+            "concept_id": "concept_0044",
+            "children": []
+          },
+          {
+            "node_id": "c_0045",
+            "type": "CONCEPT",
+            "name": "I2C",
+            "concept_id": "concept_0045",
+            "children": []
+          },
+          {
+            "node_id": "c_0046",
+            "type": "CONCEPT",
+            "name": "Synchronous Bus",
+            "concept_id": "concept_0046",
+            "children": []
+          },
+          {
+            "node_id": "c_0047",
+            "type": "CONCEPT",
+            "name": "Addressing",
+            "concept_id": "concept_0047",
+            "children": []
+          },
+          {
+            "node_id": "c_0048",
+            "type": "CONCEPT",
+            "name": "Controller",
+            "concept_id": "concept_0048",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_07",
+        "type": "DOMAIN",
+        "name": "Real-Time Operating Systems (RTOS)",
+        "children": [
+          {
+            "node_id": "c_0049",
+            "type": "CONCEPT",
+            "name": "RTOS",
+            "concept_id": "concept_0049",
+            "children": []
+          },
+          {
+            "node_id": "c_0050",
+            "type": "CONCEPT",
+            "name": "Scheduling",
+            "concept_id": "concept_0050",
+            "children": []
+          },
+          {
+            "node_id": "c_0051",
+            "type": "CONCEPT",
+            "name": "Concurrency",
+            "concept_id": "concept_0051",
+            "children": []
+          },
+          {
+            "node_id": "c_0052",
+            "type": "CONCEPT",
+            "name": "Timing Requirement",
+            "concept_id": "concept_0052",
+            "children": []
+          },
+          {
+            "node_id": "c_0053",
+            "type": "CONCEPT",
+            "name": "Task",
+            "concept_id": "concept_0053",
+            "children": []
+          },
+          {
+            "node_id": "c_0054",
+            "type": "CONCEPT",
+            "name": "Scheduler",
+            "concept_id": "concept_0054",
+            "children": []
+          },
+          {
+            "node_id": "c_0055",
+            "type": "CONCEPT",
+            "name": "Priority",
+            "concept_id": "concept_0055",
+            "children": []
+          },
+          {
+            "node_id": "c_0056",
+            "type": "CONCEPT",
+            "name": "Context Switch",
+            "concept_id": "concept_0056",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_08",
+        "type": "DOMAIN",
+        "name": "Concurrency and Synchronization",
+        "children": [
+          {
+            "node_id": "c_0057",
+            "type": "CONCEPT",
+            "name": "Shared Resource",
+            "concept_id": "concept_0057",
+            "children": []
+          },
+          {
+            "node_id": "c_0058",
+            "type": "CONCEPT",
+            "name": "Race Condition",
+            "concept_id": "concept_0058",
+            "children": []
+          },
+          {
+            "node_id": "c_0059",
+            "type": "CONCEPT",
+            "name": "Mutex",
+            "concept_id": "concept_0059",
+            "children": []
+          },
+          {
+            "node_id": "c_0060",
+            "type": "CONCEPT",
+            "name": "Semaphore",
+            "concept_id": "concept_0060",
+            "children": []
+          },
+          {
+            "node_id": "c_0061",
+            "type": "CONCEPT",
+            "name": "Mutual Exclusion",
+            "concept_id": "concept_0061",
+            "children": []
+          },
+          {
+            "node_id": "c_0062",
+            "type": "CONCEPT",
+            "name": "Synchronization",
+            "concept_id": "concept_0062",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_09",
+        "type": "DOMAIN",
+        "name": "IoT Architecture and Telemetry",
+        "children": [
+          {
+            "node_id": "c_0063",
+            "type": "CONCEPT",
+            "name": "IoT",
+            "concept_id": "concept_0063",
+            "children": []
+          },
+          {
+            "node_id": "c_0064",
+            "type": "CONCEPT",
+            "name": "Edge Device",
+            "concept_id": "concept_0064",
+            "children": []
+          },
+          {
+            "node_id": "c_0065",
+            "type": "CONCEPT",
+            "name": "Network",
+            "concept_id": "concept_0065",
+            "children": []
+          },
+          {
+            "node_id": "c_0066",
+            "type": "CONCEPT",
+            "name": "Cloud Service",
+            "concept_id": "concept_0066",
+            "children": []
+          },
+          {
+            "node_id": "c_0067",
+            "type": "CONCEPT",
+            "name": "Data Pipeline",
+            "concept_id": "concept_0067",
+            "children": []
+          },
+          {
+            "node_id": "c_0068",
+            "type": "CONCEPT",
+            "name": "Telemetry",
+            "concept_id": "concept_0068",
+            "children": []
+          },
+          {
+            "node_id": "c_0069",
+            "type": "CONCEPT",
+            "name": "Timestamp",
+            "concept_id": "concept_0069",
+            "children": []
+          },
+          {
+            "node_id": "c_0070",
+            "type": "CONCEPT",
+            "name": "Data Validation",
+            "concept_id": "concept_0070",
+            "children": []
+          },
+          {
+            "node_id": "c_0071",
+            "type": "CONCEPT",
+            "name": "Data Transmission",
+            "concept_id": "concept_0071",
+            "children": []
+          },
+          {
+            "node_id": "c_0072",
+            "type": "CONCEPT",
+            "name": "Storage",
+            "concept_id": "concept_0072",
+            "children": []
+          }
+        ]
+      },
+      {
+        "node_id": "domain_10",
+        "type": "DOMAIN",
+        "name": "System Integration and Applications",
+        "children": [
+          {
+            "node_id": "c_0073",
+            "type": "CONCEPT",
+            "name": "Temperature Monitoring",
+            "concept_id": "concept_0073",
+            "children": []
+          },
+          {
+            "node_id": "c_0074",
+            "type": "CONCEPT",
+            "name": "Sampling",
+            "concept_id": "concept_0074",
+            "children": []
+          },
+          {
+            "node_id": "c_0075",
+            "type": "CONCEPT",
+            "name": "Scheduled Task",
+            "concept_id": "concept_0075",
+            "children": []
+          },
+          {
+            "node_id": "c_0076",
+            "type": "CONCEPT",
+            "name": "System Integration",
+            "concept_id": "concept_0076",
+            "children": []
+          },
+          {
+            "node_id": "c_0077",
+            "type": "CONCEPT",
+            "name": "Requirements",
+            "concept_id": "concept_0077",
+            "children": []
+          },
+          {
+            "node_id": "c_0078",
+            "type": "CONCEPT",
+            "name": "Hardware Interface",
+            "concept_id": "concept_0078",
+            "children": []
+          },
+          {
+            "node_id": "c_0079",
+            "type": "CONCEPT",
+            "name": "Software Task",
+            "concept_id": "concept_0079",
+            "children": []
+          },
+          {
+            "node_id": "c_0080",
+            "type": "CONCEPT",
+            "name": "Data Flow",
+            "concept_id": "concept_0080",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "coverage": {
+    "placed_concepts": 80,
+    "unplaced_concepts": 0,
+    "coverage_ratio": 1
+  },
+  "quality": {
+    "status": "healthy",
+    "warnings": [],
+    "metrics": {
+      "max_depth": 3,
+      "domain_count": 10,
+      "cross_reference_count": 16
+    }
+  }
+}

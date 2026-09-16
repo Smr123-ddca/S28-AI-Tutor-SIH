@@ -77,12 +77,20 @@ export function TeacherPrerequisites() {
                 if (artifacts && artifacts.chunks) {
                     setChunks(artifacts.chunks);
                 }
-                if (artifacts && artifacts.concepts && artifacts.concepts.concepts) {
-                    setConcepts(artifacts.concepts.concepts);
-                }
-                if (artifacts && artifacts.prerequisites && artifacts.prerequisites.relationships) {
-                    setRelationships(artifacts.prerequisites.relationships);
-                }
+                const fetchedConcepts =
+                    Array.isArray(artifacts?.concepts?.concepts)
+                        ? artifacts.concepts.concepts
+                        : Array.isArray(artifacts?.concepts)
+                            ? artifacts.concepts
+                            : [];
+                setConcepts(fetchedConcepts);
+                const fetchedRelationships =
+                    Array.isArray(artifacts?.prerequisites?.relationships)
+                        ? artifacts.prerequisites.relationships
+                        : Array.isArray(artifacts?.prerequisites)
+                            ? artifacts.prerequisites
+                            : [];
+                setRelationships(fetchedRelationships);
             } catch (err) {
                 console.error('Error fetching artifacts:', err);
                 setError("Unable to load the course knowledge map.");

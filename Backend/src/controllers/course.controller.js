@@ -1,5 +1,5 @@
 const path = require('path');
-const supabaseAdmin = require('../lib/supabaseAdmin');
+const { supabaseAdmin } = require('../lib/supabaseAdmin');
 const fs = require('fs');
 
 async function getCourseIdByName(courseName) {
@@ -138,8 +138,7 @@ async function publishCourse(req, res) {
 
         if (updateErr) throw updateErr;
 
-        const store = require('../data/store');
-        store.loadData(); // Potentially deprecate later if memory store is fully replaced
+        // Store loadData is obsolete in Supabase. removed.
 
         res.json({ status: 'success', course: { ...course, status: 'published' } });
     } catch (error) {
@@ -244,10 +243,11 @@ async function getArtifacts(req, res) {
             supabaseAdmin.from('prerequisite_relationships').select('*').eq('course_id', courseId)
         ]);
 
-        // Emulate backward compatible chunk formatting
+        // Map native chunks backward consistently. We must use c.id (UUID) so that concept_evidence joins match accurately on the frontend!
         const legacyChunks = (chunksRes.data || []).map(c => ({
-            id: c.chunk_alias,
-            chunk_id: c.chunk_alias,
+            id: c.id,
+            chunk_id: c.id,
+            chunk_alias: c.chunk_alias,
             text: c.text_content,
             chapter: c.chapter,
             section: c.section,
@@ -291,8 +291,7 @@ async function deleteCourse(req, res) {
             });
         }
 
-        const store = require('../data/store');
-        store.loadData();
+        // Store loadData is obsolete
 
         res.json({
             status: 'success',

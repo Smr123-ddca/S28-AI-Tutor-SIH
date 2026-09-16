@@ -1,29 +1,373 @@
 {
   "course": "DBMS_Code_Reference_Annotated",
   "source_chunks": 52,
-  "eligible_chunks": 2,
-  "concept_count": 2,
+  "eligible_chunks": 44,
+  "concept_count": 19,
   "concepts": [
     {
       "concept_id": "concept_0001",
-      "name": "Database Checkpoints",
-      "description": "Mechanism that provides recovery points in database management, reducing the amount of log history that needs to be processed during recovery.",
+      "name": "Relational Model and SQL Overview",
+      "aliases": [],
+      "description": "Introduces the relational model where data is represented as tables (relations) with rows and columns, SQL as a declarative language, and key concepts: primary keys uniquely identify rows, foreign keys represent relationships.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_51",
-          "classification": "EXPLANATION"
+          "chunk_id": "chunk_3",
+          "classification": "DEFINITION"
         }
       ]
     },
     {
       "concept_id": "concept_0002",
-      "name": "Database Backups and Recovery Strategy",
-      "description": "A comprehensive recovery approach combining periodic incremental or differential backups with archived transaction logs to protect against severe failures and destructive operations that cannot be undone by transaction rollbacks alone.",
+      "name": "Data Definition Language: CREATE TABLE with Constraints",
+      "aliases": [],
+      "description": "Demonstrates CREATE TABLE syntax for defining schema, including column data types and integrity constraints such as PRIMARY KEY and NOT NULL.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
+        {
+          "chunk_id": "chunk_4",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0003",
+      "name": "Basic Querying: Filtering, Projection, and Ordering",
+      "aliases": [],
+      "description": "Covers fundamental SELECT query clauses: WHERE for row filtering, SELECT list for column projection, and ORDER BY for result sorting.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0004",
+      "name": "Integrity Constraints: Primary Key, Foreign Key, Check, and Referential Integrity",
+      "aliases": [],
+      "description": "Explains constraint types (primary, candidate, unique, foreign key, NOT NULL, CHECK) that prevent invalid database states, with emphasis on referential integrity requiring foreign-key values to match referenced keys.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_8",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_9",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0005",
+      "name": "Join Operations: Inner, Left, and Self Joins",
+      "aliases": [],
+      "description": "Describes how joins combine rows from multiple tables: INNER JOIN retains only matching rows, LEFT JOIN preserves unmatched left-table rows, and self-joins compare rows within the same table using aliases.",
+      "confidence": 0.95,
+      "evidence_count": 4,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_12",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_13",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_14",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0006",
+      "name": "Aggregation and Grouping: Aggregate Functions, GROUP BY, and HAVING",
+      "aliases": [],
+      "description": "Introduces aggregate functions (COUNT, SUM, AVG, MIN, MAX), GROUP BY for partitioning rows into groups, and HAVING for filtering groups after aggregation, distinguishing it from WHERE which filters input rows.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_15",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_16",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_17",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0007",
+      "name": "Subqueries: Scalar, Correlated, EXISTS, and UNION",
+      "aliases": [],
+      "description": "Covers nesting queries: scalar subqueries returning single values, correlated subqueries referencing outer query rows, EXISTS for existence checks, and UNION for combining compatible result sets.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_18",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_19",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0008",
+      "name": "Normalization: Functional Dependencies and Normal Forms",
+      "aliases": [
+        "1NF, 2NF, 3NF, BCNF"
+      ],
+      "description": "Explains normalization to reduce redundancy and update anomalies: 1NF requires atomic values, 2NF removes partial dependencies, 3NF addresses transitive dependencies, BCNF requires determinants to be superkeys, using functional dependency notation X → Y.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_22",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_23",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_24",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0009",
+      "name": "Transaction Management: ACID Properties, COMMIT, and ROLLBACK",
+      "aliases": [],
+      "description": "Defines transactions as logical units of work with ACID properties (atomicity, consistency, isolation, durability), and shows COMMIT to make changes durable and ROLLBACK to discard uncommitted changes.",
+      "confidence": 0.95,
+      "evidence_count": 4,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_26",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_27",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_29",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0010",
+      "name": "Concurrency Control: Isolation Levels, Locking, and Two-Phase Locking",
+      "aliases": [],
+      "description": "Describes concurrency anomalies (dirty reads, non-repeatable reads, phantom reads), isolation levels, and two-phase locking protocol with growing and shrinking phases; includes explicit row locking via FOR UPDATE.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_30",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_32",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0011",
+      "name": "Transaction Savepoints",
+      "aliases": [],
+      "description": "Illustrates savepoints within a transaction allowing partial rollback to a named point (SAVEPOINT, ROLLBACK TO) without aborting the entire transaction.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_33",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0012",
+      "name": "Database Savepoints",
+      "aliases": [],
+      "description": "A savepoint allows partial rollback within a transaction, enabling later work to be undone without discarding earlier operations, providing granular transaction control.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_34",
+          "classification": "EXPLANATION"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0013",
+      "name": "Database Indexes",
+      "aliases": [],
+      "description": "An index is an auxiliary structure that speeds row location and query reads, but consumes storage and adds maintenance overhead to writes; column order in multi-column indexes is critical, with leading columns being especially important for query optimization, and EXPLAIN can inspect index choices.",
+      "confidence": 0.95,
+      "evidence_count": 4,
+      "evidence": [
+        {
+          "chunk_id": "chunk_35",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_36",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_37",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_38",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0014",
+      "name": "Database Views",
+      "aliases": [],
+      "description": "A view is a named query definition stored in the database, referenced like a relation; it encapsulates filtering logic and provides reusable query abstractions for improved readability and encapsulation of filtering logic.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_39",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_40",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0015",
+      "name": "Common Table Expressions",
+      "aliases": [
+        "CTEs"
+      ],
+      "description": "A CTE names an intermediate result set within a larger query, improving readability and enabling multi-stage query construction; recursive CTEs can express hierarchical traversals where supported.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_41",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0016",
+      "name": "Database Triggers",
+      "aliases": [],
+      "description": "A trigger automatically executes configured logic in response to database events such as INSERT, UPDATE, or DELETE; it can enforce auditing or business rules using DBMS-specific NEW/OLD row references.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_42",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_45",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_46",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0017",
+      "name": "Stored Procedures",
+      "aliases": [],
+      "description": "A stored procedure is an encapsulated set of SQL statements with parameters, stored at the database level for reuse; it encapsulates reusable database operations and syntax varies across DBMS platforms.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_43",
+          "classification": "CODE"
+        },
+        {
+          "chunk_id": "chunk_44",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0018",
+      "name": "Entity-Relationship Modeling & Cardinality",
+      "aliases": [],
+      "description": "ER modeling identifies entities, attributes, relationships, and cardinalities before database implementation; cardinality defines the numeric participation of entities in relationships, and many-to-many relationships are resolved using associative tables.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_47",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_48",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_49",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0019",
+      "name": "Database Recovery Mechanisms",
+      "aliases": [],
+      "description": "Recovery mechanisms restore database consistency after failures using write-ahead logging, checkpoints, and backups; write-ahead logging records changes before data pages are written, checkpoints reduce recovery log processing scope, and backups protect against irreversible data loss.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_50",
+          "classification": "EXPLANATION"
+        },
+        {
+          "chunk_id": "chunk_51",
+          "classification": "EXPLANATION"
+        },
         {
           "chunk_id": "chunk_52",
           "classification": "EXPLANATION"

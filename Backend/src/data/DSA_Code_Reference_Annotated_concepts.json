@@ -1,100 +1,1286 @@
 {
   "course": "DSA_Code_Reference_Annotated",
   "source_chunks": 97,
-  "eligible_chunks": 33,
-  "concept_count": 6,
+  "eligible_chunks": 96,
+  "concept_count": 81,
   "concepts": [
     {
       "concept_id": "concept_0001",
-      "name": "Backtracking for Permutations",
-      "description": "A recursive algorithm that generates all n! permutations of a list by fixing one position at a time, swapping elements into place, recursing on the remainder, and undoing the swap (backtracking) to restore state before trying the next candidate.",
+      "name": "Array",
+      "aliases": [
+        "definition"
+      ],
+      "description": "Fixed-size, ordered, indexable collection of same-typed elements stored contiguously in memory, supporting O(1) random access by index.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_77",
-          "classification": "PROCEDURE"
+          "chunk_id": "chunk_2",
+          "classification": "CORE_CONCEPT"
         }
       ]
     },
     {
       "concept_id": "concept_0002",
-      "name": "N-Queens Problem",
-      "description": "The N-Queens puzzle places N queens on an N×N chessboard so no two share a row, column, or diagonal. Backtracking places exactly one queen per row, using sets to track column and diagonal conflicts in O(1) time, enabling pruning of invalid subtrees.",
+      "name": "Rotate left array",
+      "aliases": [
+        "slicing"
+      ],
+      "description": "Rotating an array left by k positions by concatenating slices arr[k:] + arr[:k] in O(n) time and O(n) space.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_78",
-          "classification": "PROCEDURE"
+          "chunk_id": "chunk_3",
+          "classification": "EXAMPLE"
         }
       ]
     },
     {
       "concept_id": "concept_0003",
-      "name": "Power Set Generation",
-      "description": "The power set of n elements contains all 2^n subsets. A backtracking approach records a valid subset at every recursive call (since every partial path is valid), then extends it by including each remaining element before backtracking to try alternatives.",
+      "name": "Reverse array",
+      "aliases": [
+        "in-place two-pointer"
+      ],
+      "description": "Reversing an array by swapping symmetric elements using two pointers moving toward the center, O(n) time, O(1) space.",
       "confidence": 0.95,
       "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_79",
-          "classification": "PROCEDURE"
+          "chunk_id": "chunk_4",
+          "classification": "EXAMPLE"
         }
       ]
     },
     {
       "concept_id": "concept_0004",
-      "name": "Trie (Prefix Tree)",
-      "description": "A tree data structure where each edge represents one character, allowing root-to-node paths to spell prefixes. Supports O(k) insertion and lookup for strings of length k, enabling efficient prefix-based queries used in autocomplete and spell-check.",
+      "name": "Kadane's algorithm",
+      "aliases": [
+        "maximum subarray"
+      ],
+      "description": "Finding the contiguous subarray with the largest sum by maintaining the best sum ending at each position, O(n) time, O(1) space.",
       "confidence": 0.95,
-      "evidence_count": 2,
+      "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_80",
-          "classification": "EXPLANATION"
-        },
-        {
-          "chunk_id": "chunk_81",
-          "classification": "CODE"
+          "chunk_id": "chunk_5",
+          "classification": "EXAMPLE"
         }
       ]
     },
     {
       "concept_id": "concept_0005",
-      "name": "Union-Find (Disjoint Set Union)",
-      "description": "A data structure that tracks a partition of n elements into disjoint groups. It supports 'find' and 'union' operations in near-O(1) amortized time using two optimizations: path compression (rewiring nodes directly to root) and union by rank (attaching shallower trees under deeper ones).",
+      "name": "Two-pointer pair sum",
+      "aliases": [
+        "sorted array"
+      ],
+      "description": "Finding two numbers in a sorted array that sum to a target by moving left and right pointers based on comparison to target, O(n) time, O(1) space.",
       "confidence": 0.95,
-      "evidence_count": 3,
+      "evidence_count": 1,
       "evidence": [
         {
-          "chunk_id": "chunk_80",
-          "classification": "EXPLANATION"
-        },
-        {
-          "chunk_id": "chunk_82",
-          "classification": "CODE"
-        },
-        {
-          "chunk_id": "chunk_83",
-          "classification": "PROCEDURE"
+          "chunk_id": "chunk_6",
+          "classification": "EXAMPLE"
         }
       ]
     },
     {
       "concept_id": "concept_0006",
-      "name": "Kruskal's Algorithm",
-      "description": "A greedy algorithm for finding a Minimum Spanning Tree (MST) of a weighted graph. It sorts all edges by weight and iteratively adds the cheapest edge that does not create a cycle, using Union-Find to efficiently check connectivity between components.",
+      "name": "Sliding window for longest unique substring",
+      "aliases": [],
+      "description": "Finding the longest substring without repeating characters by maintaining a hash map of last seen indices and adjusting the window start, O(n) time, O(min(n, alphabet)) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_7",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0007",
+      "name": "Palindrome check",
+      "aliases": [
+        "two-pointer"
+      ],
+      "description": "Checking whether a string reads the same forwards and backwards by comparing characters from both ends inward, O(n) time, O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_8",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0008",
+      "name": "Linked list",
+      "aliases": [
+        "definition"
+      ],
+      "description": "A linear data structure composed of nodes, each holding data and a pointer to the next node (and previous node if doubly linked).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_9",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0009",
+      "name": "Insert at head",
+      "aliases": [
+        "linked list"
+      ],
+      "description": "Adding a new node at the head of a singly linked list by updating the node's next pointer and the list's head reference, O(1) time.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_10",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0010",
+      "name": "Reverse linked list",
+      "aliases": [
+        "iterative"
+      ],
+      "description": "Reversing a singly linked list by iteratively rewiring each node's next pointer to point to its predecessor, O(n) time, O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_11",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0011",
+      "name": "Floyd's cycle detection",
+      "aliases": [
+        "tortoise and hare"
+      ],
+      "description": "Detecting a cycle in a linked list using two pointers moving at speeds of one and two steps per iteration; meeting indicates a cycle, O(n) time, O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_12",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0012",
+      "name": "Merge sorted linked lists",
+      "aliases": [],
+      "description": "Merging two already sorted linked lists into one sorted list by repeatedly taking the smaller head node, O(n+m) time, O(1) extra space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_13",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0013",
+      "name": "Doubly linked list",
+      "aliases": [
+        "definition & O(1) append"
+      ],
+      "description": "A linked list where each node has both next and previous pointers, enabling traversal in both directions and O(1) removal given a node reference, and O(1) appends using a tail pointer.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_14",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0014",
+      "name": "Stack (LIFO) definition",
+      "aliases": [],
+      "description": "A collection supporting push (add to top) and pop (remove from top) in O(1), modeling a last-in-first-out discipline.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_15",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0015",
+      "name": "Queue (FIFO) definition",
+      "aliases": [],
+      "description": "A collection supporting enqueue (add to back) and dequeue (remove from front) in O(1), modeling a first-in-first-out discipline.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_15",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0016",
+      "name": "Stack implementation using Python list",
+      "aliases": [],
+      "description": "Implementing a stack by wrapping Python's list to provide push/pop from the end with O(1) amortized time.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_16",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0017",
+      "name": "Bracket matching using stack",
+      "aliases": [],
+      "description": "Checking balanced brackets in an expression by pushing opening brackets and popping to match closings, O(n) time, O(n) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_17",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0018",
+      "name": "Postfix expression evaluation using stack",
+      "aliases": [],
+      "description": "Evaluating postfix (Reverse Polish) notation by pushing operands and applying operators to the top two stack values, O(n) time, O(n) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_18",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0019",
+      "name": "Queue implementation using collections.deque",
+      "aliases": [],
+      "description": "Implementing a queue with O(1) enqueue/dequeue using Python's collections.deque, which provides efficient operations at both ends.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_19",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0020",
+      "name": "Circular queue implementation",
+      "aliases": [],
+      "description": "A fixed-size queue that reuses an array as a ring buffer using modulo arithmetic for O(1) enqueue and dequeue, O(k) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_20",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0021",
+      "name": "MinStack",
+      "aliases": [
+        "auxiliary stack"
+      ],
+      "description": "A stack variant that maintains a parallel min stack to provide O(1) access to the minimum element, at the cost of doubled space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_21",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0022",
+      "name": "Recursion",
+      "aliases": [
+        "definition",
+        "Self-Similar Reduction"
+      ],
+      "description": "Problem-solving pattern of reducing a problem to a smaller instance of itself with a base case termination condition; underpins sorting, tree/graph traversals, and divide-and-conquer algorithms.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_22",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_88",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0023",
+      "name": "Factorial recursion",
+      "aliases": [],
+      "description": "Computing n! via recursive definition n! = n * (n-1)! with base case 0! = 1, O(n) time, O(n) call‑stack space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_23",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0024",
+      "name": "Naive Fibonacci recursion",
+      "aliases": [],
+      "description": "Computing Fibonacci numbers by recursively calling fib(n‑1) and fib(n‑2) without memoization, resulting in O(2ⁿ) time and O(n) call‑stack space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_24",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0025",
+      "name": "Exponentiation by squaring",
+      "aliases": [
+        "recursive"
+      ],
+      "description": "Computing baseⁿ in O(log n) time by recursively halving the exponent and squaring the intermediate result.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_25",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0026",
+      "name": "Tower of Hanoi recursion",
+      "aliases": [],
+      "description": "Solving the Tower of Hanoi puzzle by recursively moving n‑1 disks to an auxiliary peg, moving the largest disk, then moving the n‑1 disks onto the target, requiring 2ⁿ‑1 moves (O(2ⁿ) time) and O(n) call‑stack space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_26",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0027",
+      "name": "Linear Search",
+      "aliases": [],
+      "description": "A search algorithm that checks each element in order until a match is found or the end is reached; works on unsorted data with O(n) time and O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_27",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_28",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0028",
+      "name": "Binary Search",
+      "aliases": [],
+      "description": "A search algorithm on a sorted array that repeatedly compares the target to the middle element and discards half the remaining space, achieving O(log n) time and O(1) space (iterative) or O(log n) space (recursive).",
+      "confidence": 0.95,
+      "evidence_count": 4,
+      "evidence": [
+        {
+          "chunk_id": "chunk_27",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_29",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_30",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_89",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0029",
+      "name": "Search Range",
+      "aliases": [
+        "First/Last Occurrence"
+      ],
+      "description": "A technique to find the first and last occurrence of a target value in a sorted array with duplicates by performing two modified binary searches that continue searching after a match; each runs in O(log n) time and O(1) space.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_31",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0030",
+      "name": "Sorting",
+      "aliases": [],
+      "description": "The process of rearranging a collection into a defined order (e.g., ascending) to enable efficient use by other algorithms; includes comparison‑based and non‑comparison‑based methods.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_32",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0031",
+      "name": "Comparison Sort",
+      "aliases": [],
+      "description": "A sorting algorithm that determines order solely by comparing pairs of elements; no comparison sort can beat O(n log n) worst‑case time without extra structural knowledge.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_32",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0032",
+      "name": "Bubble Sort",
+      "aliases": [],
+      "description": "Repeatedly scans the array, swapping adjacent out‑of‑order pairs; the largest unsorted element ‘bubbles’ to its correct position each pass, with O(n²) time and O(1) space (improved to O(n) best case with early‑exit).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_33",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0033",
+      "name": "Selection Sort",
+      "aliases": [],
+      "description": "Divides the array into a sorted prefix and unsorted suffix; each pass selects the minimum of the suffix and swaps it into the next prefix position, guaranteeing O(n²) time and O(1) space with at most n swaps.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_34",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0034",
+      "name": "Insertion Sort",
+      "aliases": [],
+      "description": "Builds a sorted prefix one element at a time by inserting each new element into its correct position among previously sorted elements; O(n²) worst case, O(n) best case (already sorted), O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_35",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0035",
+      "name": "Merge Sort",
+      "aliases": [],
+      "description": "A divide‑and‑conquer sort that splits the array in half, recursively sorts each half, and merges the two sorted halves in linear time; O(n log n) time in all cases, O(n) auxiliary space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_36",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0036",
+      "name": "Quick Sort",
+      "aliases": [],
+      "description": "Selects a pivot, partitions the array so elements ≤ pivot are left and > pivot are right, then recursively sorts the partitions; average O(n log n) time, worst‑case O(n²), O(log n) space (stack).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_37",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0037",
+      "name": "Heap Sort",
+      "aliases": [],
+      "description": "First builds a max‑heap from the array, then repeatedly extracts the maximum (root) and restores the heap property; O(n log n) time, O(1) extra space (in‑place).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_38",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0038",
+      "name": "Counting Sort",
+      "aliases": [],
+      "description": "Counts occurrences of each integer in a known range [0, k] and reconstructs the output from those counts; runs in O(n + k) time and O(k) space, beating comparison‑sort limits when k is small.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_39",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0039",
+      "name": "Hash Table",
+      "aliases": [],
+      "description": "Maps keys to values via a hash function that computes an array index; provides average‑case O(1) lookup, insertion, deletion using separate chaining (or open addressing) to resolve collisions, with O(n) worst‑case when many keys collide.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_40",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_41",
+          "classification": "CODE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0040",
+      "name": "Two Sum",
+      "aliases": [
+        "hash map",
+        "Hash Table"
+      ],
+      "description": "Finds two numbers in an unsorted array that add to a target by storing each seen number in a hash map and looking for its complement; runs in O(n) time and O(n) space.",
+      "confidence": 0.9,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_42",
+          "classification": "EXAMPLE"
+        },
+        {
+          "chunk_id": "chunk_91",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0041",
+      "name": "Group Anagrams",
+      "aliases": [],
+      "description": "Groups words that are anagrams by using the sorted letters of each word as a hash‑map key; runs in O(n * k log k) time and O(n * k) space for words of length up to k.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_43",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0042",
+      "name": "First Unique Character",
+      "aliases": [],
+      "description": "Returns the index of the first character that appears exactly once in a string by building a frequency map then scanning the string in order; O(n) time and O(1) space for a bounded alphabet.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_44",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0043",
+      "name": "Tree",
+      "aliases": [
+        "Hierarchy with Ordering Invariant"
+      ],
+      "description": "Hierarchical data structure with an ordering invariant; heaps are a specialized tree variant, and graphs generalize trees by relaxing structural constraints.",
+      "confidence": 0.9,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_45",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_92",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0044",
+      "name": "Binary Tree",
+      "aliases": [],
+      "description": "A tree in which each node has at most two children, designated left and right.",
+      "confidence": 0.9,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_45",
+          "classification": "CORE_CONCEPT"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0045",
+      "name": "Binary Search Tree",
+      "aliases": [
+        "BST"
+      ],
+      "description": "A binary tree that maintains the ordering invariant: every value in a node’s left subtree is smaller and every value in its right subtree is larger, enabling O(h) search, insertion, and deletion where h is the tree height.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_45",
+          "classification": "CORE_CONCEPT"
+        },
+        {
+          "chunk_id": "chunk_46",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0046",
+      "name": "Depth‑First Tree Traversals",
+      "aliases": [],
+      "description": "Visits nodes by fully exploring one subtree before another; inorder (left, node, right) yields BST nodes in ascending order, preorder (node, left, right) visits parents before children, postorder (left, right, node) visits children before parents; each runs in O(n) time and O(h) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_47",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0047",
+      "name": "Breadth‑First Tree Traversal",
+      "aliases": [
+        "Level Order"
+      ],
+      "description": "Visits nodes level by level from top to bottom using a queue; each node is enqueued and dequeued once, giving O(n) time and O(n) worst‑case space (when a level holds Θ(n) nodes).",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_48",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0048",
+      "name": "Tree Height",
+      "aliases": [],
+      "description": "The number of edges on the longest root‑to‑leaf path; computed recursively as 1 + max(height(left), height(right)) with O(n) time and O(h) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_50",
+          "classification": "EXAMPLE"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0049",
+      "name": "Validate Binary Search Tree",
+      "aliases": [],
+      "description": "Checks that a binary tree satisfies the BST ordering invariant by propagating an allowed (low, high) range down the tree; each node must lie strictly within its inherited range, yielding O(n) time and O(h) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_51",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0050",
+      "name": "Lowest Common Ancestor (LCA) in BST",
+      "aliases": [],
+      "description": "Finds the deepest common ancestor of two nodes in a binary search tree by descending left or right based on BST ordering, achieving O(h) time and O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_52",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0051",
+      "name": "Heap",
+      "aliases": [
+        "Min‑Heap/Max‑Heap"
+      ],
+      "description": "A complete binary tree stored in an array where each parent satisfies the heap property (≤ children for min‑heap, ≥ for max‑heap), giving O(1) access to the extreme element and O(log n) insertion/deletion.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_53",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_54",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0052",
+      "name": "k‑th Largest Element via Min‑Heap",
+      "aliases": [],
+      "description": "Maintains a min‑heap of size k while scanning numbers; the heap root after processing is the k‑th largest, running in O(n log k) time and O(k) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_55",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0053",
+      "name": "Merge k Sorted Lists",
+      "aliases": [],
+      "description": "Repeatedly extracts the smallest current element from a min‑heap containing the front of each list, then pushes the next element from that list, merging in O(N log k) time and O(k) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_56",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0054",
+      "name": "Graph Definition and Adjacency List Representation",
+      "aliases": [],
+      "description": "A graph consists of vertices connected by edges; an adjacency list maps each vertex to its neighbor list, using O(V+E) space and supporting directed/undirected, weighted/unweighted graphs.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_57",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_58",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0055",
+      "name": "Breadth‑First Search",
+      "aliases": [
+        "BFS"
+      ],
+      "description": "Explores a graph layer by layer using a queue, marking visited vertices to avoid cycles; each vertex and edge processed once, yielding O(V+E) time and O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_59",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0056",
+      "name": "Depth‑First Search",
+      "aliases": [
+        "DFS"
+      ],
+      "description": "Recursively follows a single path before backtracking, using a visited set to prevent infinite loops in cyclic graphs; runs in O(V+E) time and O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_60",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0057",
+      "name": "Cycle Detection in Directed Graphs",
+      "aliases": [],
+      "description": "Detects a cycle by checking during DFS whether a neighbor is already on the current recursion stack (in_stack), with O(V+E) time and O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_61",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0058",
+      "name": "Topological Sort",
+      "aliases": [
+        "Kahn’s Algorithm"
+      ],
+      "description": "Repeatedly removes vertices with zero in‑degree, updating neighbors’ in‑degrees, to produce a linear ordering of a DAG; runs in O(V+E) time and O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_62",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0059",
+      "name": "Dijkstra’s Shortest Path Algorithm",
+      "aliases": [],
+      "description": "Finds shortest paths from a source in a weighted graph with non‑negative edges by repeatedly extracting the minimum‑distance vertex via a min‑heap and relaxing edges; O((V+E) log V) time, O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_64",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0060",
+      "name": "Connected Components in Undirected Graphs",
+      "aliases": [],
+      "description": "Counts components by launching a DFS/BFS from each unvisited vertex and marking all reachable vertices; each launch discovers one component, total O(V+E) time and O(V) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_65",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0061",
+      "name": "Dynamic Programming",
+      "aliases": [
+        "DP"
+      ],
+      "description": "Solves problems with optimal substructure and overlapping subproblems by solving each distinct subproblem once and storing its result (memoization or tabulation), converting exponential recursion to polynomial time.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_66",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_95",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0062",
+      "name": "Memoization",
+      "aliases": [
+        "Top‑Down DP"
+      ],
+      "description": "Uses a cache (e.g., functools.lru_cache) to store results of recursive calls so each subproblem is evaluated once; applied to Fibonacci yields O(n) time and O(n) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_67",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0063",
+      "name": "Tabulation",
+      "aliases": [
+        "Bottom‑Up DP"
+      ],
+      "description": "Iteratively fills a DP table from base cases upward, often allowing space optimisation; for Fibonacci only two rolling variables are needed, giving O(n) time and O(1) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_68",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0064",
+      "name": "0/1 Knapsack Problem",
+      "aliases": [],
+      "description": "DP table dp[i][w] stores the maximum value achievable with the first i items and capacity w; each cell computed in O(1) from prior cells, yielding O(n·W) time and space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_69",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0065",
+      "name": "Longest Common Subsequence",
+      "aliases": [
+        "LCS"
+      ],
+      "description": "DP table dp[i][j] gives the LCS length of prefixes; recurrence uses match or max of dropping one character, filling an (m+1)×(n+1) table in O(m·n) time and space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_70",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0066",
+      "name": "Longest Increasing Subsequence",
+      "aliases": [
+        "LIS"
+      ],
+      "description": "Maintains piles of smallest possible tail values for increasing subsequences of each length; each number placed via binary search, producing LIS length in O(n log n) time and O(n) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_71",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0067",
+      "name": "Coin Change",
+      "aliases": [
+        "Minimum Coins"
+      ],
+      "description": "DP array dp[a] records the minimum coins needed for amount a; for each amount tries every coin, updating dp[a] = min(dp[a], dp[a‑c]+1); runs in O(amount·|coins|) time and O(amount) space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_72",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0068",
+      "name": "Edit Distance",
+      "aliases": [
+        "Levenshtein"
+      ],
+      "description": "DP table dp[i][j] gives the Levenshtein distance between prefixes; initialization converts empty string to prefix via insertions/deletions; recurrence adds 1 for mismatch, yielding O(m·n) time and space.",
+      "confidence": 0.95,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_73",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0069",
+      "name": "Greedy Algorithm",
+      "aliases": [],
+      "description": "Builds a solution by repeatedly picking the locally optimal choice; correct only when the problem possesses the greedy‑choice property, which must be proven.",
+      "confidence": 0.95,
+      "evidence_count": 3,
+      "evidence": [
+        {
+          "chunk_id": "chunk_74",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_75",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_76",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0070",
+      "name": "Backtracking",
+      "aliases": [],
+      "description": "Systematically explores the solution space via recursion, abandoning a path as soon as it cannot lead to a valid solution; undoes choices to try alternatives, essential for enumerating all configurations.",
+      "confidence": 0.95,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_74",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_75",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0071",
+      "name": "Permutation Generation via Backtracking",
+      "aliases": [],
+      "description": "Generate all n! permutations by fixing one position at a time (recursion depth `start`), swapping each remaining element into that position, recursing on the rest, then undoing the swap (backtracking) to restore shared state for the next branch.",
+      "confidence": 0.98,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_77",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0072",
+      "name": "N-Queens Backtracking with Pruning",
+      "aliases": [],
+      "description": "Place N queens on an N×N board so no two share a row, column, or diagonal. One queen per row is enforced structurally; column and diagonal conflicts are tracked with three sets, enabling O(1) conflict checks that prune entire subtrees before exploration.",
+      "confidence": 0.97,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_78",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0073",
+      "name": "Power Set / Subsets Generation via Backtracking",
+      "aliases": [],
+      "description": "Generate all 2^n subsets of an n-element set. Unlike permutations, every partial path is already a valid subset, so results are recorded at every recursive call (not just at a base case), then extended by including each remaining element in turn with backtracking (pop).",
+      "confidence": 0.97,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_79",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0074",
+      "name": "Trie",
+      "aliases": [
+        "Prefix Tree"
+      ],
+      "description": "A tree where each edge represents one character; root-to-node paths spell prefixes. Supports O(k) insert and lookup for a string of length k via `search` (exact word, requires is_end flag) and `starts_with` (prefix only, path existence suffices).",
+      "confidence": 0.96,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_80",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_81",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0075",
+      "name": "Union-Find",
+      "aliases": [
+        "Disjoint Set Union"
+      ],
+      "description": "Tracks a partition of n elements into disjoint groups using a parent array. `find` follows parent pointers to the root with path compression (rewiring visited nodes directly to root). `union` merges by rank (attaching smaller tree under larger), keeping trees shallow for near-O(1) amortized operations.",
+      "confidence": 0.96,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_80",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_82",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0076",
+      "name": "Kruskal's MST Algorithm",
+      "aliases": [],
+      "description": "Greedy algorithm to build a minimum spanning tree: sort all edges by weight ascending, then iterate adding an edge only if its endpoints are in different Union-Find components (union returns False when they're already connected, serving as the cycle check). Total time O(E log E) dominated by sorting.",
       "confidence": 0.95,
       "evidence_count": 2,
       "evidence": [
         {
           "chunk_id": "chunk_80",
-          "classification": "EXPLANATION"
+          "classification": "UNKNOWN"
         },
         {
           "chunk_id": "chunk_83",
-          "classification": "PROCEDURE"
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0077",
+      "name": "Two Pointers and Sliding Window",
+      "aliases": [],
+      "description": "Algorithmic technique using index arithmetic with two pointers or a sliding window to efficiently traverse and process sequences, reusing sorted data and search primitives.",
+      "confidence": 0.8,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_85",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0078",
+      "name": "Linked List Pointer Rewiring",
+      "aliases": [],
+      "description": "Manipulating node pointers directly instead of performing index-based calculations, notably used in the merge step of merge sort.",
+      "confidence": 0.8,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_86",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0079",
+      "name": "Stack and Queue",
+      "aliases": [
+        "LIFO/FIFO"
+      ],
+      "description": "LIFO (stack) and FIFO (queue) access disciplines underpinning call stack management and graph traversal algorithms (BFS/DFS).",
+      "confidence": 0.82,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_87",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0080",
+      "name": "Heap Sort / Priority Queue",
+      "aliases": [],
+      "description": "Using a heap (weak ordering tree) to achieve O(n log n) sorting and O(log n) access to extremes (min/max); also used in Dijkstra's algorithm.",
+      "confidence": 0.82,
+      "evidence_count": 2,
+      "evidence": [
+        {
+          "chunk_id": "chunk_90",
+          "classification": "UNKNOWN"
+        },
+        {
+          "chunk_id": "chunk_93",
+          "classification": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "concept_id": "concept_0081",
+      "name": "Graph",
+      "aliases": [
+        "Arbitrary Connectivity"
+      ],
+      "description": "Data structure representing arbitrary pairwise connections between elements; explored via BFS/DFS traversal; Kruskal's algorithm builds a minimum spanning tree over a graph.",
+      "confidence": 0.82,
+      "evidence_count": 1,
+      "evidence": [
+        {
+          "chunk_id": "chunk_94",
+          "classification": "UNKNOWN"
         }
       ]
     }

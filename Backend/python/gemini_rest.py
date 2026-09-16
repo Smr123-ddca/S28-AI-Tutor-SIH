@@ -93,10 +93,10 @@ def generate_content(prompt):
             "generationConfig": {"response_mime_type": "application/json"},
         }
 
-        max_attempts = 8
+        max_attempts = 3
         for attempt in range(max_attempts):
             try:
-                response = requests.post(url, json=payload, timeout=90)
+                response = requests.post(url, json=payload, timeout=40)
                 status = response.status_code
                 
                 if status == 404:
@@ -109,11 +109,13 @@ def generate_content(prompt):
                     if retry_after and retry_after.isdigit():
                         wait_time = int(retry_after)
                     else:
-                        wait_time = (2 ** attempt) + random.uniform(1, 4)
+                        wait_time = min(15, (2 ** attempt) + random.uniform(1, 4))
                         
                     print(f"HTTP 429 Quota Exhaustion on '{model}'. Waiting {wait_time:.2f}s (Attempt {attempt+1}/{max_attempts})...", file=sys.stderr)
+                    if attempt == max_attempts - 1:
+                        last_error = RuntimeError(f"Gemini {model} bound exceeded: 429 rate limit exceeded on final attempt")
+                        break
                     time.sleep(wait_time)
-                    last_error = RuntimeError("429 rate limit exceeded")
                     continue # Retry this model
 
                 response.raise_for_status()
@@ -137,11 +139,13 @@ def generate_content(prompt):
                     if retry_after and retry_after.isdigit():
                         wait_time = int(retry_after)
                     else:
-                        wait_time = (2 ** attempt) + random.uniform(1, 4)
+                        wait_time = min(15, (2 ** attempt) + random.uniform(1, 4))
                         
                     print(f"Network exception with HTTP 429 on '{model}'. Waiting {wait_time:.2f}s...", file=sys.stderr)
+                    if attempt == max_attempts - 1:
+                        last_error = e
+                        break
                     time.sleep(wait_time)
-                    last_error = e
                     continue
                 else:
                     print(f"Direct REST request failed for '{model}': {_redact_api_key(e)}", file=sys.stderr)

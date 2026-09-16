@@ -2,13 +2,13 @@ const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 const MOCK_TOKEN_ROLES = {
     'mock-student-jwt-token-xyz': {
-        id: 'mock-student-uuid-101',
+        id: 'fa95b2d7-82ab-472d-a2f0-ce65da3bd342', // Genuine Supabase Dev Profile
         role: 'student',
         display_name: 'Alex Rivers',
         email: 'alex@study.edu'
     },
     'mock-teacher-jwt-token-xyz': {
-        id: 'mock-teacher-uuid-202',
+        id: 'c4b18c64-2d0a-4a27-a00d-3c2ce5293297', // Genuine Supabase Dev Profile
         role: 'teacher',
         display_name: 'Prof. Ananya Sharma',
         email: 'prof@study.edu'
@@ -55,10 +55,12 @@ const authenticate = async (req, res, next) => {
 
         const displayName = profile.display_name || profile.full_name || profile.name || user.user_metadata?.full_name || user.user_metadata?.name || (user.email ? user.email.split('@')[0] : 'Student');
 
+        const activeRole = (profile.role === 'instructor') ? 'teacher' : profile.role;
+
         // Attach user id and role to the request object
         req.user = {
             id: user.id,
-            role: profile.role,
+            role: activeRole,
             display_name: displayName,
             email: user.email || profile.email || ''
         };

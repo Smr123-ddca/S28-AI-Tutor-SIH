@@ -1,0 +1,49 @@
+﻿Γùç injected env (6) from ..\.env // tip: Γîü auth for agents [www.vestauth.com]
+Γùç injected env (0) from .env // tip: Γîÿ custom filepath { path: '/custom/path/.env' }
+=== STARTING P2C-5 LEGACY IMPORT ===
+
+Importing DSA_Code_Reference_Annotated...
+[Warn] DB error fetching chronology: column chunks.chunk_index does not exist
+Success: DSA_Code_Reference_Annotated
+
+Importing Economics_Chunking_Reference...
+[Warn] DB error fetching chronology: column chunks.chunk_index does not exist
+Success: Economics_Chunking_Reference
+
+Importing DBMS_Code_Reference_Annotated...
+[Warn] DB error fetching chronology: column chunks.chunk_index does not exist
+Success: DBMS_Code_Reference_Annotated
+
+=== FINAL REPORT ===
+[
+  {
+    "name": "DSA_Code_Reference_Annotated",
+    "source_chunks": 97,
+    "db_chunks": 0,
+    "source_concepts": 6,
+    "db_concepts": 6,
+    "evidence_links": 0,
+    "chronology": "FAIL",
+    "orphans": 0
+  },
+  {
+    "name": "Economics_Chunking_Reference",
+    "source_chunks": 56,
+    "db_chunks": 0,
+    "source_concepts": 55,
+    "db_concepts": 55,
+    "evidence_links": 0,
+    "chronology": "FAIL",
+    "orphans": 0
+  },
+  {
+    "name": "DBMS_Code_Reference_Annotated",
+    "source_chunks": 52,
+    "db_chunks": 0,
+    "source_concepts": 2,
+    "db_concepts": 2,
+    "evidence_links": 0,
+    "chronology": "FAIL",
+    "orphans": 0
+  }
+]
