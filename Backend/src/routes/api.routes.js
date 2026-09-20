@@ -82,7 +82,15 @@ router.get('/analytics/class', requireRole('teacher'), getClassAnalytics);
 router.get('/analytics/grading', requireRole('teacher'), getClassGrading);
 router.post('/teacher-copilot', requireRole('teacher'), handleTeacherCopilot);
 
-// Courses
+// Classes
+const classController = require('../controllers/class.controller');
+router.get('/classes', requireRole('teacher'), classController.getTeacherClasses);
+router.post('/classes', requireRole('teacher'), classController.createClass);
+router.get('/classes/available', requireRole('student'), classController.getAvailableClasses);
+router.post('/classes/join', requireRole('student'), classController.joinClass);
+router.get('/classes/:classId', requireRole('teacher'), classController.getClassDetails);
+router.get('/student/classes', requireRole('student'), classController.getStudentClasses);
+
 // Courses
 router.get('/courses', getCourses);
 router.post('/courses/:courseName/approve', requireRole('teacher'), approveCourse);
@@ -91,6 +99,7 @@ router.post('/courses/:courseName/publish', requireRole('teacher'), publishCours
 router.get('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').getPrerequisites);
 router.post('/courses/:courseName/prerequisites', requireRole('teacher'), require('../controllers/course.controller').addPrerequisite);
 router.delete('/courses/:courseName/prerequisites/:relationshipId', requireRole('teacher'), require('../controllers/course.controller').deletePrerequisite);
+router.patch('/courses/:courseName/prerequisites/:relationshipId', requireRole('teacher'), require('../controllers/course.controller').updatePrerequisiteType);
 router.get('/courses/:courseName/artifacts', requireRole('teacher'), getArtifacts);
 router.get('/courses/:courseName/download', require('../controllers/course.controller').downloadCourseFile);
 router.delete('/courses/:courseName', requireRole('teacher'), deleteCourse);

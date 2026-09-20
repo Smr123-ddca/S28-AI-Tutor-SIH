@@ -25,7 +25,9 @@ import {
   fetchAssignments,
   submitStudentAssignment
 } from '../services/api';
+
 import { useAuth } from '../context/AuthContext';
+import { StudentClasses } from '../components/classes/StudentClasses';
 
 export function StudentDashboard() {
   const navigate = useNavigate();
@@ -180,6 +182,8 @@ export function StudentDashboard() {
         />
       </section>
 
+      <StudentClasses />
+
       {/* =====================================================================
           2. MY COURSEWORK & GRADES SECTION (PROMINENT STUDENT MARKS VIEW)
           ===================================================================== */}
@@ -219,54 +223,54 @@ export function StudentDashboard() {
               Assignments Hub
             </Button>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <button
-              type="button"
-              onClick={() => setGradesFilter('ALL')}
-              style={{
-                padding: '0.4rem 0.9rem',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                backgroundColor: gradesFilter === 'ALL' ? 'var(--color-ink)' : 'var(--color-white)',
-                color: gradesFilter === 'ALL' ? '#fff' : 'var(--color-text-secondary)',
-                border: '1px solid var(--color-border)',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              All ({submissions.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setGradesFilter('graded')}
-              style={{
-                padding: '0.4rem 0.9rem',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                backgroundColor: gradesFilter === 'graded' ? '#16a34a' : 'var(--color-white)',
-                color: gradesFilter === 'graded' ? '#fff' : 'var(--color-text-secondary)',
-                border: '1px solid var(--color-border)',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              Graded ({gradedSubmissions.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setGradesFilter('ungraded')}
-              style={{
-                padding: '0.4rem 0.9rem',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.82rem',
-                fontWeight: 700,
-                backgroundColor: gradesFilter === 'ungraded' ? 'var(--color-yellow)' : 'var(--color-white)',
-                color: gradesFilter === 'ungraded' ? 'var(--color-ink)' : 'var(--color-text-secondary)',
-                border: '1px solid var(--color-border)',
-                transition: 'all var(--transition-fast)'
-              }}
-            >
-              Under Review ({submissions.length - gradedSubmissions.length})
-            </button>
+              <button
+                type="button"
+                onClick={() => setGradesFilter('ALL')}
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  backgroundColor: gradesFilter === 'ALL' ? 'var(--color-ink)' : 'var(--color-white)',
+                  color: gradesFilter === 'ALL' ? '#fff' : 'var(--color-text-secondary)',
+                  border: '1px solid var(--color-border)',
+                  transition: 'all var(--transition-fast)'
+                }}
+              >
+                All ({submissions.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setGradesFilter('graded')}
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  backgroundColor: gradesFilter === 'graded' ? '#16a34a' : 'var(--color-white)',
+                  color: gradesFilter === 'graded' ? '#fff' : 'var(--color-text-secondary)',
+                  border: '1px solid var(--color-border)',
+                  transition: 'all var(--transition-fast)'
+                }}
+              >
+                Graded ({gradedSubmissions.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setGradesFilter('ungraded')}
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  backgroundColor: gradesFilter === 'ungraded' ? 'var(--color-yellow)' : 'var(--color-white)',
+                  color: gradesFilter === 'ungraded' ? 'var(--color-ink)' : 'var(--color-text-secondary)',
+                  border: '1px solid var(--color-border)',
+                  transition: 'all var(--transition-fast)'
+                }}
+              >
+                Under Review ({submissions.length - gradedSubmissions.length})
+              </button>
             </div>
           </div>
         </div>
@@ -290,10 +294,10 @@ export function StudentDashboard() {
               const maxPts = sub.max_score || 100;
               const formattedDate = sub.submitted_at
                 ? new Date(sub.submitted_at).toLocaleDateString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric'
+                })
                 : 'Recent';
 
               return (

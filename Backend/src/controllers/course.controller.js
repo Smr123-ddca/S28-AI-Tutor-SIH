@@ -459,6 +459,46 @@ async function deletePrerequisite(req, res) {
     }
 }
 
+async function updatePrerequisiteType(req, res) {
+    try {
+        const courseName = req.params.courseName;
+        const relationshipId = req.params.relationshipId;
+        const { relationship_type } = req.body;
+
+        if (!relationship_type || !['REQUIRED', 'SUPPORTING', 'RELATED'].includes(relationship_type.toUpperCase())) {
+            return res.status(400).json({ error: 'Invalid or missing relationship_type' });
+        }
+
+        const courseId = await getCourseIdByName(courseName);
+        if (!courseId) return res.status(404).json({ error: 'Course not found' });
+
+        const { data: existing, error: existingErr } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .select('id')
+            .eq('id', relationshipId)
+            .eq('course_id', courseId)
+            .single();
+
+        if (existingErr || !existing) {
+            return res.status(404).json({ error: 'Relationship not found or does not belong to this course' });
+        }
+
+        const { data: updatedRel, error: updateErr } = await supabaseAdmin
+            .from('prerequisite_relationships')
+            .update({ relationship_type: relationship_type.toUpperCase() })
+            .eq('id', relationshipId)
+            .select()
+            .single();
+
+        if (updateErr) throw new Error(updateErr.message);
+
+        return res.status(200).json(updatedRel);
+    } catch (error) {
+        console.error('Failed to update prerequisite type:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error while updating prerequisite type.' });
+    }
+}
+
 module.exports = {
     getCourses,
     approveCourse,
@@ -467,6 +507,7 @@ module.exports = {
     getPrerequisites,
     addPrerequisite,
     deletePrerequisite,
+    updatePrerequisiteType,
     updatePrerequisites,
     getArtifacts,
     deleteCourse,

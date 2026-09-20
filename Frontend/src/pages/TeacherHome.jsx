@@ -5,6 +5,7 @@ import { fetchLibraryDocuments, deleteCourse, uploadCourseDoc, generatePrerequis
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { TeacherClasses } from '../components/classes/TeacherClasses';
 
 export function TeacherHome() {
     const { session, displayName } = useAuth();
@@ -249,6 +250,8 @@ export function TeacherHome() {
                     <BookOpen size={24} style={{ color: 'var(--color-orange)' }} />
                 </div>
             </section>
+
+            <TeacherClasses availableCourses={documents} />
 
             <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '0.5rem' }}>Course Library</h3>
 

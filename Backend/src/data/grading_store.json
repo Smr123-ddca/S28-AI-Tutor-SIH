@@ -354,8 +354,8 @@
       "submitted_at": "2026-09-02T02:44:57.246Z",
       "grade": null,
       "feedback": null,
-      "ai_suggested_grade": null,
-      "ai_suggested_feedback": null,
+      "ai_suggested_grade": 15,
+      "ai_suggested_feedback": "The submission provides only a brief statement and does not include any actual middleware code, detailed explanation of JWT verification, role‑based authorization, or security best practices. To meet the rubric, you need to implement Express middleware with the correct signature (req, res, next), demonstrate token extraction from headers, verify the JWT with proper error handling, fetch and validate user roles from a database, and apply role‑based checks. Additionally, discuss security considerations such as token storage, secret management, and rate limiting. Providing code snippets and a step‑by‑step walkthrough will greatly improve your score.",
       "status": "ungraded",
       "graded_at": null,
       "graded_by": null

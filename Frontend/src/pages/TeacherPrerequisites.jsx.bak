@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { LayoutDashboard, AlertCircle, Edit3, Settings, BookOpen, Layers, Link as LinkIcon, Network, ArrowDown, Info, ChevronDown, ChevronRight, Plus } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { LayoutDashboard, AlertCircle, Edit3, Settings, BookOpen, Layers, Link as LinkIcon, Network, ArrowDown, Info, ChevronDown, ChevronRight } from 'lucide-react';
 import { Pill } from '../components/common/Pill';
 import { StatCard } from '../components/cards/StatCard';
 import { getCourseArtifacts, fetchLibraryDocuments, approveCourse, reviseCourse, publishCourse, addCoursePrerequisite, deleteCoursePrerequisite } from '../services/api';
@@ -33,9 +33,6 @@ export function TeacherPrerequisites() {
         relationship_type: 'REQUIRED',
         reason: ''
     });
-
-    const [isEditingRelationship, setIsEditingRelationship] = useState(false);
-    const [editRelationshipType, setEditRelationshipType] = useState('REQUIRED');
 
     // UI states for expanding chapters
     const [expandedChapters, setExpandedChapters] = useState({});
@@ -179,23 +176,6 @@ export function TeacherPrerequisites() {
             await deleteCoursePrerequisite(selectedCourse, relationshipId, session?.access_token);
             setForceRefetch(f => f + 1);
             setSelectedItem(null);
-        } catch (err) {
-            alert(err.message);
-        } finally {
-            setActionLoading(false);
-        }
-    };
-
-    const handleRelationshipUpdate = async (relationshipId) => {
-        setActionLoading(true);
-        try {
-            await updateCoursePrerequisite(selectedCourse, relationshipId, editRelationshipType, session?.access_token);
-            setIsEditingRelationship(false);
-            setForceRefetch(f => f + 1);
-            setSelectedItem(prev => ({
-                ...prev,
-                data: { ...prev.data, relationship_type: editRelationshipType }
-            }));
         } catch (err) {
             alert(err.message);
         } finally {
@@ -404,35 +384,9 @@ export function TeacherPrerequisites() {
 
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingBottom: '1rem', borderBottom: '1px solid var(--color-border)' }}>
-                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-secondary)' }}>Relationship:</span>
-                            <Pill size="sm" color={rel.relationship_type?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
-                        </div>
-
-                        {!isEditingRelationship ? (
-                            <button onClick={() => { setEditRelationshipType(rel.relationship_type || 'REQUIRED'); setIsEditingRelationship(true); }} style={{ alignSelf: 'flex-start', padding: '0.4rem 0.75rem', backgroundColor: 'var(--color-offwhite)', color: 'var(--color-ink)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                <Edit3 size={14} /> Change Relationship
-                            </button>
-                        ) : (
-                            <div style={{ padding: '0.75rem', backgroundColor: '#fff', border: '1px solid var(--color-orange)', borderRadius: 'var(--radius-sm)' }}>
-                                <h4 style={{ fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>Relationship Type</h4>
-                                <select
-                                    className="input"
-                                    value={editRelationshipType}
-                                    onChange={e => setEditRelationshipType(e.target.value)}
-                                    style={{ width: '100%', marginBottom: '0.75rem', padding: '0.5rem', fontSize: '0.85rem' }}
-                                >
-                                    <option value="REQUIRED">REQUIRED</option>
-                                    <option value="SUPPORTING">SUPPORTING</option>
-                                    <option value="RELATED">RELATED</option>
-                                </select>
-                                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-                                    <button onClick={() => setIsEditingRelationship(false)} className="btn btn-outline" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }} disabled={actionLoading}>Cancel</button>
-                                    <button onClick={() => handleRelationshipUpdate(rel.id)} className="btn btn-primary" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }} disabled={actionLoading}>Save</button>
-                                </div>
-                            </div>
-                        )}
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <Pill size="sm" color={rel.relationship_type?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Dependency</span>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1rem', backgroundColor: 'var(--color-offwhite)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
@@ -710,61 +664,68 @@ export function TeacherPrerequisites() {
                         </div>
 
                         {/* MIDDLE: PREREQUISITE DEPENDENCY GRAPH OVERVIEW */}
-                        <div className="card-white" style={{ padding: '0', maxHeight: '800px', overflowY: 'auto', backgroundColor: '#fafafa', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ padding: '1.25rem', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', zIndex: 10, position: 'sticky', top: 0 }}>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-ink)' }}>
-                                    <Network size={20} color="var(--color-orange)" /> Dependency Overview
-                                </h3>
-                                <button onClick={() => { setAddForm({ prerequisite_concept_id: '', target_concept_id: '', relationship_type: 'REQUIRED', reason: '' }); setIsAddModalOpen(true); }} className="btn btn-outline" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                                    <Plus size={14} /> Add Relationship
-                                </button>
-                            </div>
+                        <div className="card-white" style={{ padding: '1.25rem', maxHeight: '800px', overflowY: 'auto', backgroundColor: '#fafafa' }}>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-ink)' }}>
+                                <Network size={20} color="var(--color-orange)" /> Dependency Overview
+                            </h3>
 
-                            <div style={{ flex: 1, padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                {relationships.length === 0 ? (
-                                    <div style={{ color: 'gray', fontSize: '0.9rem', textAlign: 'center', padding: '2rem 0' }}>No relationships mapped yet.</div>
-                                ) : (
-                                    relationships.map(rel => {
-                                        const prereq = conceptById.get(rel.prerequisite_concept_id);
-                                        const dependent = conceptById.get(rel.target_concept_id);
-                                        if (!prereq || !dependent) return null;
-
-                                        const isSelected = selectedItem?.type === 'relationship' && selectedItem?.data?.id === rel.id;
+                            {relationships.length === 0 ? (
+                                <div style={{ margin: '4rem auto', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+                                    <AlertCircle size={48} style={{ opacity: 0.2, margin: '0 auto 1rem' }} />
+                                    <p>No prerequisite relationships exist.</p>
+                                </div>
+                            ) : (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                    {Array.from(prerequisitesByDependent.entries()).map(([dependentId, rels]) => {
+                                        const dependentConcept = conceptById.get(dependentId);
+                                        // Gracefully handle unresolved concepts instead of crashing
+                                        const dependentName = dependentConcept ? dependentConcept.name : `[Unknown Concept]`;
 
                                         return (
-                                            <div
-                                                key={rel.id}
-                                                onClick={() => setSelectedItem({ type: 'relationship', data: rel })}
-                                                style={{
-                                                    padding: '1rem',
-                                                    borderRadius: 'var(--radius-sm)',
-                                                    border: isSelected ? '1px solid var(--color-orange)' : '1px solid var(--color-border)',
-                                                    backgroundColor: isSelected ? 'var(--color-orange-subtle)' : '#fff',
-                                                    cursor: 'pointer',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    gap: '0.5rem',
-                                                    boxShadow: isSelected ? '0 0 0 1px var(--color-orange)' : '0 1px 2px rgba(0,0,0,0.05)'
-                                                }}
-                                            >
-                                                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-ink)' }}>
-                                                    {dependent.name}
+                                            <div key={dependentId} style={{ backgroundColor: '#fff', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: '1.25rem', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                                <div
+                                                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--color-purple)' }}>{dependentName}</h4>
                                                 </div>
-                                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                                    <ArrowDown size={14} /> requires
+                                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                    requires <ArrowDown size={12} />
                                                 </div>
-                                                <div style={{ padding: '0.75rem', backgroundColor: 'var(--color-offwhite)', borderRadius: '4px', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                                    <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--color-purple)' }}>{prereq.name}</div>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                        <Pill size="sm" color={rel.relationship_type === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
-                                                        {rel.confidence && <span style={{ fontSize: '0.75rem', color: 'gray' }}>Confidence: {(rel.confidence * 100).toFixed(0)}%</span>}
-                                                    </div>
+
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingLeft: '1rem', borderLeft: '2px solid var(--color-purple-subtle)' }}>
+                                                    {rels.map((rel, idx) => {
+                                                        const prereqConcept = conceptById.get(rel.prerequisite_concept_id);
+                                                        const prereqName = prereqConcept ? prereqConcept.name : `[Unknown Concept]`;
+
+                                                        const isSelectedEdge = selectedItem?.type === 'relationship' && selectedItem?.data === rel;
+
+                                                        return (
+                                                            <div key={idx}
+                                                                onClick={() => setSelectedItem({ type: 'relationship', data: rel })}
+                                                                style={{
+                                                                    padding: '0.75rem',
+                                                                    backgroundColor: isSelectedEdge ? '#fff7ed' : 'var(--color-offwhite)',
+                                                                    borderRadius: 'var(--radius-sm)',
+                                                                    cursor: 'pointer',
+                                                                    border: isSelectedEdge ? '1px solid var(--color-orange)' : '1px solid transparent',
+                                                                    transition: 'all 0.2s'
+                                                                }}
+                                                            >
+                                                                <div style={{ fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
+                                                                    {prereqName}
+                                                                </div>
+                                                                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', fontSize: '0.75rem' }}>
+                                                                    <Pill size="sm" color={rel.relationship_type?.toUpperCase() === 'REQUIRED' ? 'orange' : 'sky'}>{rel.relationship_type}</Pill>
+                                                                    <span style={{ color: 'var(--color-text-muted)', fontWeight: 600 }}>Confidence: {(rel.confidence * 100).toFixed(0)}%</span>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
                                             </div>
                                         );
-                                    })
-                                )}
-                            </div>
+                                    })}
+                                </div>
+                            )}
                         </div>
 
                         {/* RIGHT: DYNAMIC INSPECTOR PANEL */}

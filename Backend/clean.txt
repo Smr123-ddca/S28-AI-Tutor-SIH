@@ -1,0 +1,18 @@
+1. Valid relationship type update
+
+
+2. Invalid relationship type rejected
+
+
+3. Unauthorized (Student Role) rejected
+
+
+4. Relationship from another course rejected (Unassociated)
+Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m403[39m
+Received: [31m200[39m
+    at Object.toBe (C:\Users\HP\OneDrive\Documents\GitHub\S28-AI-Tutor-SIH\Backend\tests\course_prerequisites_update.test.js:105:28)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+5. Nonexistent relationship rejected
