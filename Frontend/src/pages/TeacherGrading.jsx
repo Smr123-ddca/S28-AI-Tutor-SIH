@@ -329,25 +329,28 @@ export function TeacherGrading() {
             >
                 <StatCard
                     tag="Cohort Submissions"
-                    tagColor="orange"
+                    tagColor="purple"
                     number={loading ? '--' : `${submissions.length}`}
                     label="Total Submissions Received"
+                    style={{ borderTop: '4px solid var(--color-purple)' }}
                 />
                 <StatCard
                     tag="Grading Progress"
-                    tagColor="purple"
+                    tagColor="orange"
                     number={loading ? '--' : `${gradedCount} / ${submissions.length}`}
                     label="Graded Submissions"
+                    style={{ borderTop: '4px solid var(--color-orange)' }}
                 />
                 <StatCard
                     tag="Needs Attention"
                     tagColor="yellow"
                     number={loading ? '--' : `${ungradedCount}`}
                     label="Pending Teacher Review"
+                    style={{ borderTop: '4px solid var(--color-yellow)' }}
                 />
                 <StatCard
                     tag="Class Performance"
-                    tagColor="sky"
+                    tagColor="teal"
                     number={
                         loading
                             ? '--'
@@ -356,6 +359,7 @@ export function TeacherGrading() {
                                 : '88%'
                     }
                     label="Average Assigned Grade"
+                    style={{ borderTop: '4px solid var(--color-teal)' }}
                 />
             </section>
 

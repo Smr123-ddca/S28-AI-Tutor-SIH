@@ -7,6 +7,7 @@ import { StatCard } from '../components/cards/StatCard';
 import { PromoIllustration } from '../components/layout/PromoIllustration';
 import { fetchLibraryDocuments } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { TeacherClasses } from '../components/classes/TeacherClasses';
 
 export function TeacherHomeLanding() {
     const navigate = useNavigate();
@@ -106,8 +107,12 @@ export function TeacherHomeLanding() {
                 <StatCard tag="Curriculum Repository" tagColor="purple" number={loading ? '--' : `${documents.length}`} label="Active Source Documents" />
                 <StatCard tag="Semantic Architecture" tagColor="orange" number="C1-C5" label="Enabled Native AI Pipelines" />
                 <StatCard tag="Learning Structure" tagColor="yellow" number="Enabled" label="Prerequisite Mappings Generated" />
-                <StatCard tag="Class Diagnostic" tagColor="red" number="Live" label="Misconception Tracking Active" />
+                <StatCard tag="Classroom Management" tagColor="teal" number="Active" label="Teacher & Student Rosters" />
             </section>
+
+            <TeacherClasses availableCourses={documents} />
+
+
         </div>
     );
 }

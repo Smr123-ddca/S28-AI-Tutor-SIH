@@ -26,6 +26,8 @@ export function Pill({
         return 'bg-tag-yellow';
       case 'purple':
         return 'bg-tag-purple';
+      case 'teal':
+        return 'bg-tag-teal';
       case 'sky':
         return 'bg-tag-sky';
       case 'orange':
@@ -39,7 +41,7 @@ export function Pill({
     }
   };
 
-  const isDarkTag = resolvedColor === 'ink' || resolvedColor === 'orange' || resolvedColor === 'red';
+  const isDarkTag = resolvedColor === 'ink' || resolvedColor === 'orange' || resolvedColor === 'red' || resolvedColor === 'teal';
 
   return (
     <span

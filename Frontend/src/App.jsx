@@ -12,6 +12,7 @@ import { LibraryPage } from './pages/LibraryPage';
 import { TeacherHome } from './pages/TeacherHome';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
 import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
+import { TeacherClassesPage } from './pages/TeacherClassesPage';
 import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 import { TeacherAnalytics } from './pages/TeacherAnalytics';
 import { TeacherGrading } from './pages/TeacherGrading';
@@ -76,10 +77,10 @@ export function App() {
         {/* Teacher-Only Routes */}
         <Route element={<RequireRole role="teacher" />}>
           <Route path="/teacher" element={<TeacherHome />} />
+          <Route path="/teacher/classes" element={<TeacherClassesPage />} />
           <Route path="/teacher/grading" element={<TeacherGrading />} />
           <Route path="/teacher/review" element={<TeacherPrerequisites />} />
           <Route path="/teacher/dashboard" element={<TeacherMisconceptions />} />
-          <Route path="/teacher/grading" element={<TeacherGrading />} />
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
         </Route>
       </Route>

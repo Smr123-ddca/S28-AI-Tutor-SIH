@@ -5,7 +5,6 @@ import { fetchLibraryDocuments, deleteCourse, uploadCourseDoc, generatePrerequis
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { TeacherClasses } from '../components/classes/TeacherClasses';
 
 export function TeacherHome() {
     const { session, displayName } = useAuth();
@@ -102,13 +101,16 @@ export function TeacherHome() {
     const approved = documents.filter(d => d.status === 'approved');
     const pending = documents.filter(d => d.status === 'pending_review' || d.status === 'needs_revision' || d.status === 'draft' || d.status === 'processing');
 
-    const renderCourseCard = (doc, idx, showReviewAction = false) => {
+    const renderCourseCard = (doc, idx, uniqueKey, showReviewAction = false) => {
         const isHighlighted = searchQuery && doc.subject.toLowerCase().includes(searchQuery.toLowerCase());
+        const accentColors = ['purple', 'orange', 'yellow', 'teal'];
+        const rowAccentColor = accentColors[idx % 4];
 
         return (
-            <div key={idx} style={{
+            <div key={uniqueKey} style={{
                 padding: '1.25rem',
                 border: isHighlighted ? '2px solid var(--color-orange)' : '1px solid var(--color-border)',
+                borderTop: `4px solid var(--color-${rowAccentColor})`,
                 borderRadius: 'var(--radius-md)',
                 backgroundColor: isHighlighted ? 'var(--color-orange-subtle)' : '#fff',
                 marginBottom: '0.85rem',
@@ -251,8 +253,6 @@ export function TeacherHome() {
                 </div>
             </section>
 
-            <TeacherClasses availableCourses={documents} />
-
             <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '1rem', borderBottom: '1px solid var(--color-border)', paddingBottom: '0.5rem' }}>Course Library</h3>
 
             {loading ? (<p style={{ color: 'var(--color-text-muted)', margin: '1rem 0' }}>Syncing syllabus materials...</p>) : documents.length === 0 ? (
@@ -265,7 +265,7 @@ export function TeacherHome() {
                     {pending.length > 0 && (
                         <div>
                             <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-orange)', marginBottom: '0.75rem' }}>Pending Review</h4>
-                            {pending.map(doc => renderCourseCard(doc, doc.id, true))}
+                            {pending.map((doc, i) => renderCourseCard(doc, i, doc.id, true))}
                         </div>
                     )}
 
@@ -273,7 +273,7 @@ export function TeacherHome() {
                     {approved.length > 0 && (
                         <div>
                             <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-purple)', marginBottom: '0.75rem' }}>Approved (Ready to Publish)</h4>
-                            {approved.map(doc => renderCourseCard(doc, doc.id, true))}
+                            {approved.map((doc, i) => renderCourseCard(doc, i, doc.id, true))}
                         </div>
                     )}
 
@@ -281,7 +281,7 @@ export function TeacherHome() {
                     {published.length > 0 && (
                         <div>
                             <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#15803d', marginBottom: '0.75rem' }}>Published & Active</h4>
-                            {published.map(doc => renderCourseCard(doc, doc.id, false))}
+                            {published.map((doc, i) => renderCourseCard(doc, i, doc.id, false))}
                         </div>
                     )}
                 </div>

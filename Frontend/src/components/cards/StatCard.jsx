@@ -39,6 +39,6 @@ export function StatCard({
       <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 500 }}>
         {label}
       </div>
-    </div>
+    </div >
   );
 }

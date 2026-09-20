@@ -1,0 +1,32 @@
+{
+  "teacher": {
+    "id": "9ab265e9-a934-477c-8fc4-9a922e120183",
+    "email": "gsmrutishriya@gmail.com"
+  },
+  "student": {
+    "id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+    "email": "gsmrutishriya12@gmail.com"
+  },
+  "classes": [
+    {
+      "id": "5614e189-f5d5-4dd7-aaf8-d066d23f9d07",
+      "name": "DSA — Section A",
+      "join_code": "DSA-E1RR"
+    },
+    {
+      "id": "03b678f5-6fb7-46e7-8a41-b41ad6ed8362",
+      "name": "DBMS — Section B",
+      "join_code": "DBM-BX45"
+    },
+    {
+      "id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "name": "Economics — Section A",
+      "join_code": "ECO-A00W"
+    },
+    {
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "join_code": "IES-PA1I"
+    }
+  ]
+}

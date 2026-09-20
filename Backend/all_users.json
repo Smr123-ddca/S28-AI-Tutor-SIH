@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "0f9765da-fad6-4d17-9bba-f3163ba11198",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_0645bf13-8514-454d-8b62-ac298baab717@example.com",
+    "email_confirmed_at": "2026-09-17T17:05:27.952525Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:05:27.952525Z",
+    "last_sign_in_at": "2026-09-17T17:05:28.602479Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:05:27.94862Z",
+    "updated_at": "2026-09-17T17:05:28.605166Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "e0c295c2-f72b-4800-960a-edd6fec1a67d",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_b3a893fe-4092-4125-9b38-09e5a1f6105f@example.com",
+    "email_confirmed_at": "2026-09-17T17:05:26.053691Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:05:26.053691Z",
+    "last_sign_in_at": "2026-09-17T17:05:27.587919Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:05:26.050006Z",
+    "updated_at": "2026-09-17T17:05:27.590582Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "eabef109-54c6-4d63-93cc-31c29f047a9a",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_91590d11-0f87-4c5a-b2f3-91952030d5c2@example.com",
+    "email_confirmed_at": "2026-09-17T17:05:24.240124Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:05:24.240124Z",
+    "last_sign_in_at": "2026-09-17T17:05:25.275719Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:05:24.235329Z",
+    "updated_at": "2026-09-17T17:05:25.278446Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "8601cfb8-93db-4e22-a9e4-7c8a05062224",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_1ac7408b-5666-4085-95f9-c3e164a44ff4@example.com",
+    "email_confirmed_at": "2026-09-17T17:04:43.845828Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:04:43.845828Z",
+    "last_sign_in_at": "2026-09-17T17:04:44.619122Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:04:43.842112Z",
+    "updated_at": "2026-09-17T17:04:44.627705Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "c7cfeab7-3f16-45e1-a126-1ad121afaa3d",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_54281c31-06a3-4755-ad3c-95001e62df7a@example.com",
+    "email_confirmed_at": "2026-09-17T17:04:42.787475Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:04:42.787475Z",
+    "last_sign_in_at": "2026-09-17T17:04:43.474525Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:04:42.783302Z",
+    "updated_at": "2026-09-17T17:04:43.477493Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "4282ec3c-1ca6-4f88-acca-344c855325b2",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_d00e695c-98c2-4849-9895-dd62fa408885@example.com",
+    "email_confirmed_at": "2026-09-17T17:04:41.750956Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:04:41.750956Z",
+    "last_sign_in_at": "2026-09-17T17:04:42.414135Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:04:41.746453Z",
+    "updated_at": "2026-09-17T17:04:42.417669Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "7e87dd6d-5413-4cb0-9ee5-1eacac773783",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_d01afb9b-eb20-40b0-ab32-737d1a226e18@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:49.586523Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:49.586523Z",
+    "last_sign_in_at": "2026-09-17T17:03:50.209958Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:49.583203Z",
+    "updated_at": "2026-09-17T17:03:50.212404Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "6cedf379-85a2-48e5-a2de-0bfc472bdf03",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_7f38a7d8-e763-4dc3-9b62-18cb188c95f2@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:48.044549Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:48.044549Z",
+    "last_sign_in_at": "2026-09-17T17:03:49.221053Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:48.041159Z",
+    "updated_at": "2026-09-17T17:03:49.223537Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "32591d30-e8fe-41a3-908f-64fca82210e4",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_d99e96ba-e171-4cfc-b443-396ffdaaecd1@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:47.076382Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:47.076382Z",
+    "last_sign_in_at": "2026-09-17T17:03:47.694853Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:47.072118Z",
+    "updated_at": "2026-09-17T17:03:47.69786Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "2bb635ff-2ace-46d6-b740-97daf062c0b6",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_605c0dd4-e51c-45be-9805-83ad6ad6b23f@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:09.604987Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:09.604987Z",
+    "last_sign_in_at": "2026-09-17T17:03:10.278712Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:09.60161Z",
+    "updated_at": "2026-09-17T17:03:10.28176Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "974a0991-089c-4125-a530-a30cc1c2a856",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_3fb1213f-eaea-4226-a8f6-c6b01ff67718@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:08.535251Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:08.535251Z",
+    "last_sign_in_at": "2026-09-17T17:03:09.223951Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:08.530138Z",
+    "updated_at": "2026-09-17T17:03:09.226607Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "ecaebf85-d08e-4ca2-b014-f701d1b50062",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_98ca44cc-38ea-40c8-90c7-8cf03c9a3541@example.com",
+    "email_confirmed_at": "2026-09-17T17:03:07.462239Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:03:07.462239Z",
+    "last_sign_in_at": "2026-09-17T17:03:08.147815Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:03:07.44376Z",
+    "updated_at": "2026-09-17T17:03:08.155577Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "50b92f2c-77b8-4bfa-8e4f-fd3534afd446",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_d8edc9f6-9ec3-4c00-8924-5ceb9e1db32a@example.com",
+    "email_confirmed_at": "2026-09-17T17:02:03.741019Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:02:03.741019Z",
+    "last_sign_in_at": "2026-09-17T17:02:04.395114Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:02:03.736609Z",
+    "updated_at": "2026-09-17T17:02:04.397732Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "81950db5-d289-4bcd-b05a-b791d96f18b3",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_f6181573-4f2f-41ba-b843-29c6240b518a@example.com",
+    "email_confirmed_at": "2026-09-17T17:02:02.718757Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:02:02.718757Z",
+    "last_sign_in_at": "2026-09-17T17:02:03.383763Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:02:02.712122Z",
+    "updated_at": "2026-09-17T17:02:03.386763Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "b0aed3cc-1e5d-4476-a2df-ea7b0a05c7ae",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_22d36664-ae9f-4716-9ee5-37dfc99871e5@example.com",
+    "email_confirmed_at": "2026-09-17T17:02:01.710254Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:02:01.710254Z",
+    "last_sign_in_at": "2026-09-17T17:02:02.362293Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:02:01.706962Z",
+    "updated_at": "2026-09-17T17:02:02.364953Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "82d74bc8-3928-413d-8ccb-5851c93da6f1",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_cabc2c72-853e-4778-b32e-b4e803c31343@example.com",
+    "email_confirmed_at": "2026-09-17T17:01:42.038553Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:01:42.038553Z",
+    "last_sign_in_at": "2026-09-17T17:01:42.702416Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:01:42.033045Z",
+    "updated_at": "2026-09-17T17:01:42.705637Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "c6a2e622-8de2-45d6-a1c1-fb82e96484e9",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_b8af927f-115a-4b9f-84bd-1c8d4ce30826@example.com",
+    "email_confirmed_at": "2026-09-17T17:01:40.981298Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:01:40.981298Z",
+    "last_sign_in_at": "2026-09-17T17:01:41.662121Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:01:40.976063Z",
+    "updated_at": "2026-09-17T17:01:41.665312Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "50e9e8c9-3d0e-4437-a444-646c6ac2003d",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_dfbe1a13-dad6-4a47-aa38-e6c0884207ad@example.com",
+    "email_confirmed_at": "2026-09-17T17:01:38.928039Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T17:01:38.928039Z",
+    "last_sign_in_at": "2026-09-17T17:01:40.581169Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T17:01:38.902657Z",
+    "updated_at": "2026-09-17T17:01:40.591088Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "6b975aed-ae09-43d7-9249-8ffeddba5357",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_a60f2c9f-3866-4ba8-ab2b-67e7cc3ebf9d@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:31.286916Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:31.286916Z",
+    "last_sign_in_at": "2026-09-17T16:59:31.929808Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:31.283531Z",
+    "updated_at": "2026-09-17T16:59:31.932484Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "30e850c2-a1fc-467e-8464-db322eb7d496",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_82111a11-a73e-4ade-a0ba-4af226147d8b@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:30.229316Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:30.229316Z",
+    "last_sign_in_at": "2026-09-17T16:59:30.916803Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:30.22497Z",
+    "updated_at": "2026-09-17T16:59:30.9194Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "02b0c84c-cf4d-44d7-bd61-a9bbd17ab511",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_3eaecdf6-5908-4959-827b-e2e45f5b1af3@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:29.214801Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:29.214801Z",
+    "last_sign_in_at": "2026-09-17T16:59:29.863725Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:29.210896Z",
+    "updated_at": "2026-09-17T16:59:29.866453Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "e9587401-5b3c-40eb-8468-5089fc2aaa3d",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_0d1cbfca-d95d-4a25-be11-9867c7cda117@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:10.757452Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:10.757452Z",
+    "last_sign_in_at": "2026-09-17T16:59:11.830817Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:10.7525Z",
+    "updated_at": "2026-09-17T16:59:11.833667Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "e51066d8-214f-4867-956c-bae843d094b0",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_4bd69b34-8862-4d57-85ab-29fb348fa6ad@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:09.706694Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:09.706694Z",
+    "last_sign_in_at": "2026-09-17T16:59:10.377544Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:09.702722Z",
+    "updated_at": "2026-09-17T16:59:10.380223Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "a51e3e7f-5ac9-4a62-8317-b52f1a8144a9",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_10ed1462-6619-40bf-928f-c92ea09942f4@example.com",
+    "email_confirmed_at": "2026-09-17T16:59:08.670615Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:59:08.670615Z",
+    "last_sign_in_at": "2026-09-17T16:59:09.335544Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:59:08.661938Z",
+    "updated_at": "2026-09-17T16:59:09.33885Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "f335b584-9f78-4f78-be65-12557798a16f",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_92f7ad29-a586-4562-beb7-4532e553f12a@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:34.527166Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:34.527166Z",
+    "last_sign_in_at": "2026-09-17T16:58:35.207513Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:34.523343Z",
+    "updated_at": "2026-09-17T16:58:35.210969Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "ad37b3f1-2639-4454-87e6-f822e8e2d315",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_71c26468-5c50-4976-aca2-10ae7f1cde51@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:33.141769Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:33.141769Z",
+    "last_sign_in_at": "2026-09-17T16:58:33.820034Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:33.137939Z",
+    "updated_at": "2026-09-17T16:58:33.822719Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "c1237cfa-f476-4311-86b9-841ec0a36ff7",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_3bd97016-8971-48f4-8591-1a2a6081221c@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:32.085428Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:32.085428Z",
+    "last_sign_in_at": "2026-09-17T16:58:32.763209Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:32.08101Z",
+    "updated_at": "2026-09-17T16:58:32.765802Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "7bf50892-b609-4e14-9a57-8811c5cffb36",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "student1_f18f3326-d0d8-443e-bc53-384e78c01ac0@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:13.214966Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:13.214966Z",
+    "last_sign_in_at": "2026-09-17T16:58:13.888717Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:13.209673Z",
+    "updated_at": "2026-09-17T16:58:13.891533Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "3f67a617-d3e6-4af0-a794-37340bccdbe0",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher2_37a3453e-31c6-402b-9e96-561e498e1fd8@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:11.921687Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:11.921687Z",
+    "last_sign_in_at": "2026-09-17T16:58:12.837561Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:11.917411Z",
+    "updated_at": "2026-09-17T16:58:12.841773Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "ac211d59-4bf3-401d-9935-e6d478687dd6",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher1_b79a38dc-2dbb-46d2-a55c-54ad0eeb6ed2@example.com",
+    "email_confirmed_at": "2026-09-17T16:58:09.97822Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:58:09.97822Z",
+    "last_sign_in_at": "2026-09-17T16:58:11.531785Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:58:09.944682Z",
+    "updated_at": "2026-09-17T16:58:11.544082Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "dbdb9333-df25-4a84-8578-c7ca05a8c564",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_035829a9-bfae-412c-8678-eb66a857ea9f@example.com",
+    "email_confirmed_at": "2026-09-17T16:53:11.017Z",
+    "phone": "",
+    "confirmed_at": "2026-09-17T16:53:11.017Z",
+    "last_sign_in_at": "2026-09-17T16:53:12.224747Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-17T16:53:10.920787Z",
+    "updated_at": "2026-09-17T16:53:12.272239Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "d06c17f9-e523-431f-823b-9aa380f46538",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_c4738e61-ea7f-4305-9fc6-5af470f1c35a@example.com",
+    "email_confirmed_at": "2026-09-16T15:43:37.602686Z",
+    "phone": "",
+    "confirmed_at": "2026-09-16T15:43:37.602686Z",
+    "last_sign_in_at": "2026-09-16T15:43:38.21625Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-16T15:43:37.597941Z",
+    "updated_at": "2026-09-16T15:43:38.218718Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "c3c046dd-4e54-45ea-9f75-02005f189b27",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_3244f108-64a3-4756-80f8-63c3059ad374@example.com",
+    "email_confirmed_at": "2026-09-16T15:43:29.305973Z",
+    "phone": "",
+    "confirmed_at": "2026-09-16T15:43:29.305973Z",
+    "last_sign_in_at": "2026-09-16T15:43:29.95955Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-16T15:43:29.256409Z",
+    "updated_at": "2026-09-16T15:43:30.000327Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "264dbf1a-92cd-42d7-82ab-27ce3e76da64",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "mock-student@learnify.local",
+    "email_confirmed_at": "2026-09-15T15:23:29.091524Z",
+    "phone": "",
+    "confirmed_at": "2026-09-15T15:23:29.091524Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "name": "Mock Student (Dev)",
+      "role": "student"
+    },
+    "identities": null,
+    "created_at": "2026-09-15T15:23:29.085444Z",
+    "updated_at": "2026-09-15T15:23:29.092526Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "c59eaf6e-b1f6-43c6-8c63-f3868deb3642",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "mock-teacher@learnify.local",
+    "email_confirmed_at": "2026-09-15T15:23:27.413728Z",
+    "phone": "",
+    "confirmed_at": "2026-09-15T15:23:27.413728Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "name": "Mock Teacher (Dev)",
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-15T15:23:27.380989Z",
+    "updated_at": "2026-09-15T15:23:27.41498Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "11b14bb8-4c14-4931-803f-13ffbc7b5f3e",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_019b1e25-96a8-469c-8490-573f8ce87d23@example.com",
+    "email_confirmed_at": "2026-09-06T12:35:10.494743Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:35:10.494743Z",
+    "last_sign_in_at": "2026-09-06T12:35:11.957852Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:35:10.469565Z",
+    "updated_at": "2026-09-06T12:35:11.96781Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "6ccdf1ee-fa5d-4638-ab47-a2afb5b4702b",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_b8be091b-e28f-43f8-9141-331f81707098@example.com",
+    "email_confirmed_at": "2026-09-06T12:31:45.181745Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:31:45.181745Z",
+    "last_sign_in_at": "2026-09-06T12:31:45.80001Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:31:45.176749Z",
+    "updated_at": "2026-09-06T12:31:45.805274Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "ad9784d0-1fa4-4867-a8bc-2f088b7116b5",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_1c809165-a1cd-45d1-a384-b0cffd39947a@example.com",
+    "email_confirmed_at": "2026-09-06T12:31:36.955429Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:31:36.955429Z",
+    "last_sign_in_at": "2026-09-06T12:31:38.458634Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:31:36.914792Z",
+    "updated_at": "2026-09-06T12:31:38.46919Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "747ffdac-8016-4181-8b08-394aec483f52",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_281cf865-1a64-4d89-844e-c5d514faca3e@example.com",
+    "email_confirmed_at": "2026-09-06T12:24:05.012883Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:24:05.012883Z",
+    "last_sign_in_at": "2026-09-06T12:24:05.6033Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:24:05.005422Z",
+    "updated_at": "2026-09-06T12:24:05.605805Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "b7e87982-ecd2-4a3a-93af-c5ab9bbd2872",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_e9211a59-3d4e-4741-adbb-bc514c75a121@example.com",
+    "email_confirmed_at": "2026-09-06T12:23:59.169641Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:23:59.169641Z",
+    "last_sign_in_at": "2026-09-06T12:24:00.230357Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:23:59.137663Z",
+    "updated_at": "2026-09-06T12:24:00.236735Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "489dfc0a-abc5-476b-8062-5190ebb17605",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_5c062b57-9eb0-42d7-96a7-4c090d1f6592@example.com",
+    "email_confirmed_at": "2026-09-06T12:20:38.681426Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:20:38.681426Z",
+    "last_sign_in_at": "2026-09-06T12:20:39.289626Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:20:38.677369Z",
+    "updated_at": "2026-09-06T12:20:39.296726Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "9c3b3117-aabb-411a-923d-2246cce6ebe1",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_1e6fa143-1abb-40be-b821-e9ec8fda332f@example.com",
+    "email_confirmed_at": "2026-09-06T12:20:32.633951Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:20:32.633951Z",
+    "last_sign_in_at": "2026-09-06T12:20:33.718236Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:20:32.612841Z",
+    "updated_at": "2026-09-06T12:20:33.725628Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "231a00bd-9904-4df6-bb24-4d41d9aa8468",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_5dc53529-502b-4683-9cb6-2e3962557e12@example.com",
+    "email_confirmed_at": "2026-09-06T12:16:51.894467Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:16:51.894467Z",
+    "last_sign_in_at": "2026-09-06T12:16:52.515631Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:16:51.887564Z",
+    "updated_at": "2026-09-06T12:16:52.520299Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "6bb5a56b-cca5-4504-8513-d4f2652523d8",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_4ebda28a-a1e0-42ac-a582-d51f92faa180@example.com",
+    "email_confirmed_at": "2026-09-06T12:16:43.310688Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:16:43.310688Z",
+    "last_sign_in_at": "2026-09-06T12:16:44.47099Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:16:43.286719Z",
+    "updated_at": "2026-09-06T12:16:44.480697Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "addffa8f-f96b-4ca4-baea-f5ddf07e2004",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_c17a57ec-d7c1-4492-98ef-8697881509fa@example.com",
+    "email_confirmed_at": "2026-09-06T12:09:13.246779Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:09:13.246779Z",
+    "last_sign_in_at": "2026-09-06T12:09:13.860253Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:09:13.23974Z",
+    "updated_at": "2026-09-06T12:09:13.862702Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "691b1c2a-d860-4b61-baac-46988e8b56aa",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_e809f3e9-6214-4633-a549-46808246c8b5@example.com",
+    "email_confirmed_at": "2026-09-06T12:09:04.895417Z",
+    "phone": "",
+    "confirmed_at": "2026-09-06T12:09:04.895417Z",
+    "last_sign_in_at": "2026-09-06T12:09:06.50535Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-06T12:09:04.812866Z",
+    "updated_at": "2026-09-06T12:09:06.539227Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "f18c1a2a-d924-454a-be6a-e7787fd56f35",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_f22022a9-4193-41af-af5c-2ae74047b97a@example.com",
+    "email_confirmed_at": "2026-09-05T07:43:35.934456Z",
+    "phone": "",
+    "confirmed_at": "2026-09-05T07:43:35.934456Z",
+    "last_sign_in_at": "2026-09-05T07:43:36.874617Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-05T07:43:35.928177Z",
+    "updated_at": "2026-09-05T07:43:36.880806Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "0d93a44b-70c5-467d-9110-6c67455c2ca2",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "prereq_teacher_5d6bb398-319c-4f40-ab64-ff326e6de27f@example.com",
+    "email_confirmed_at": "2026-09-05T07:43:13.267984Z",
+    "phone": "",
+    "confirmed_at": "2026-09-05T07:43:13.267984Z",
+    "last_sign_in_at": "2026-09-05T07:43:16.20277Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-05T07:43:13.216491Z",
+    "updated_at": "2026-09-05T07:43:16.218491Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "bad5fce7-5cb4-4ba2-a454-bd80b66f4f5b",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_c92dbdae-e69b-43aa-94b7-b331bb34dd65@example.com",
+    "email_confirmed_at": "2026-09-05T04:19:50.287501Z",
+    "phone": "",
+    "confirmed_at": "2026-09-05T04:19:50.287501Z",
+    "last_sign_in_at": "2026-09-05T04:19:51.647647Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-05T04:19:50.281858Z",
+    "updated_at": "2026-09-05T04:19:51.653161Z",
+    "is_anonymous": false
+  },
+  {
+    "id": "490b0834-d3dc-4ba4-8938-b576a090a9e7",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "teacher_upload_3b9f90f9-1d88-4053-99c1-6a8d41e243b9@example.com",
+    "email_confirmed_at": "2026-09-05T04:19:15.040127Z",
+    "phone": "",
+    "confirmed_at": "2026-09-05T04:19:15.040127Z",
+    "last_sign_in_at": "2026-09-05T04:19:17.274493Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": [
+        "email"
+      ]
+    },
+    "user_metadata": {
+      "email_verified": true,
+      "role": "teacher"
+    },
+    "identities": null,
+    "created_at": "2026-09-05T04:19:14.998127Z",
+    "updated_at": "2026-09-05T04:19:17.282069Z",
+    "is_anonymous": false
+  }
+]

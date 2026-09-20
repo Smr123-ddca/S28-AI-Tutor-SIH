@@ -577,24 +577,28 @@ export function TeacherAnalytics() {
                         marginBottom: '2.5rem'
                     }}>
                         <StatCard
-                            tag="Students" tagColor="orange"
+                            tag="Students" tagColor="purple"
                             number={summaryStats.students}
                             label="Active Students"
+                            style={{ borderTop: '4px solid var(--color-purple)' }}
                         />
                         <StatCard
-                            tag="Mastery" tagColor="purple"
+                            tag="Mastery" tagColor="orange"
                             number={summaryStats.avgMastery !== null ? `${summaryStats.avgMastery}%` : '—'}
                             label="Avg Class Mastery"
+                            style={{ borderTop: '4px solid var(--color-orange)' }}
                         />
                         <StatCard
-                            tag="Concepts" tagColor="sky"
+                            tag="Concepts" tagColor="yellow"
                             number={summaryStats.concepts}
                             label="Concepts with Activity"
+                            style={{ borderTop: '4px solid var(--color-yellow)' }}
                         />
                         <StatCard
-                            tag="Attention" tagColor="red"
+                            tag="Attention" tagColor="teal"
                             number={summaryStats.needingAttention}
                             label="Students Need Support"
+                            style={{ borderTop: '4px solid var(--color-teal)' }}
                         />
                     </section>
 
