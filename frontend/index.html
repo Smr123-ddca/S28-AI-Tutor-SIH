@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Smart Board Capture
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="container">
+
+
+    <header>
+
+        <h1>
+            Smart Board Capture
+        </h1>
+
+        <p>
+            Preserve everything written during class automatically.
+        </p>
+
+    </header>
+
+
+    <div class="status-card">
+
+        <span
+            id="statusDot"
+            class="status-dot"
+        ></span>
+
+        <span id="statusText">
+            Ready to start class
+        </span>
+
+    </div>
+
+
+    <section class="camera-section">
+
+        <div
+            id="cameraContainer"
+            class="camera-container"
+        >
+
+            <video
+                id="camera"
+                autoplay
+                muted
+                playsinline
+            ></video>
+
+
+            <div
+                id="cameraPlaceholder"
+                class="camera-placeholder"
+            >
+
+                <div class="camera-icon">
+                    📷
+                </div>
+
+                <p>
+                    Camera will appear here
+                </p>
+
+            </div>
+
+
+            <div
+                id="selectionBox"
+                class="selection-box hidden"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <div
+        id="selectionInstructions"
+        class="instructions hidden"
+    >
+
+        <strong>
+            Select the board area
+        </strong>
+
+        <p>
+            Drag a rectangle around the board.
+            Only changes inside this area will be captured.
+        </p>
+
+    </div>
+
+
+    <section class="controls">
+
+
+        <button
+            id="startBtn"
+            class="start-button"
+        >
+            START CLASS
+        </button>
+
+
+        <button
+            id="selectBoardBtn"
+            class="select-button hidden"
+        >
+            SELECT BOARD AREA
+        </button>
+
+
+        <button
+            id="confirmBoardBtn"
+            class="confirm-button hidden"
+        >
+            CONFIRM BOARD
+        </button>
+
+
+        <button
+            id="endBtn"
+            class="end-button"
+            disabled
+        >
+            END CLASS
+        </button>
+
+
+        <button
+            id="readBoardBtn"
+            class="select-button hidden"
+        >
+            READ BOARD WITH AI
+        </button>
+        <button
+        id="generatePdfBtn"
+        class="hidden"
+    >
+        Generate PDF
+    </button>
+
+    <button
+        id="generatePptBtn"
+        class="hidden"
+    >
+        Generate PPT
+    </button>
+
+
+    </section>
+
+
+    <section class="info">
+
+
+        <div class="info-item">
+
+            <span class="label">
+                Session
+            </span>
+
+            <span
+                id="sessionText"
+                class="value"
+            >
+                Not started
+            </span>
+
+        </div>
+
+
+        <div class="info-item">
+
+            <span class="label">
+                Useful frames
+            </span>
+
+            <span
+                id="frameCount"
+                class="value"
+            >
+                0
+            </span>
+
+        </div>
+
+
+        <div class="info-item">
+
+            <span class="label">
+                Capture
+            </span>
+
+            <span
+                id="captureStatus"
+                class="value"
+            >
+                Not active
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- AI RESULT -->
+
+    <section
+        id="aiResult"
+        class="result hidden"
+    >
+
+        <h2>
+            AI Board Reading
+        </h2>
+
+        <div id="boardContent"></div>
+
+    </section>
+
+
+    <section
+        id="result"
+        class="result hidden"
+    >
+
+        <h2>
+            Capture Complete
+        </h2>
+
+        <p id="resultText"></p>
+
+        <button
+            id="newClassBtn"
+            class="new-button"
+        >
+            START NEW CLASS
+        </button>
+
+    </section>
+
+
+    <canvas
+        id="captureCanvas"
+        class="hidden"
+    ></canvas>
+
+
+</main>
+
+
+<script src="/static/app.js"></script>
+
+</body>
+
+</html>

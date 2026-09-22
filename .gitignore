@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Generated board captures
+data/captures/
+
+# Generated diagrams and documents
+generated_diagrams/
+*.pdf
+*.pptx
+
+# Node
+node_modules/

@@ -1,0 +1,391 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #f5f7fa;
+
+    color: #1f2937;
+}
+
+
+.container {
+
+    width: 90%;
+
+    max-width: 1000px;
+
+    margin: 40px auto;
+}
+
+
+header {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+
+header h1 {
+
+    margin-bottom: 8px;
+
+    font-size: 32px;
+}
+
+
+header p {
+
+    color: #6b7280;
+
+    margin: 0;
+}
+
+
+/* STATUS */
+
+.status-card {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    background: white;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+.status-dot {
+
+    width: 10px;
+
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #9ca3af;
+}
+
+
+.status-dot.active {
+
+    background: #22c55e;
+}
+
+
+.status-dot.error {
+
+    background: #ef4444;
+}
+
+
+/* CAMERA */
+
+.camera-container {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    background: #111827;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+
+video {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+.camera-placeholder {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #9ca3af;
+}
+
+
+.camera-icon {
+
+    font-size: 50px;
+
+    margin-bottom: 10px;
+}
+
+
+/* BOARD SELECTION */
+
+.selection-box {
+
+    position: absolute;
+
+    border: 3px solid #22c55e;
+
+    background: rgba(
+        34,
+        197,
+        94,
+        0.12
+    );
+
+    pointer-events: none;
+}
+
+
+.instructions {
+
+    background: white;
+
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+    text-align: center;
+}
+
+
+.instructions p {
+
+    margin: 6px 0 0;
+
+    color: #6b7280;
+}
+
+
+/* INFO */
+
+.info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    margin-top: 20px;
+}
+
+
+.info-item {
+
+    background: white;
+
+    padding: 18px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+.label {
+
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    margin-bottom: 6px;
+}
+
+
+.value {
+
+    font-size: 17px;
+
+    font-weight: bold;
+}
+
+
+/* CONTROLS */
+
+.controls {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+}
+
+
+button {
+
+    border: none;
+
+    padding: 14px 24px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+button:disabled {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+.start-button {
+
+    background: #111827;
+
+    color: white;
+}
+
+
+.select-button {
+
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.confirm-button {
+
+    background: #16a34a;
+
+    color: white;
+}
+
+
+.end-button {
+
+    background: #dc2626;
+
+    color: white;
+}
+
+
+.new-button {
+
+    background: #111827;
+
+    color: white;
+}
+
+
+/* RESULT */
+
+.result {
+
+    background: white;
+
+    margin-top: 30px;
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+
+.result h2 {
+
+    margin-top: 0;
+}
+
+
+.hidden {
+
+    display: none !important;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .container {
+
+        width: 95%;
+
+        margin: 20px auto;
+    }
+
+
+    .info {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .controls {
+
+        flex-direction: column;
+    }
+
+
+    button {
+
+        width: 100%;
+    }
+
+}
