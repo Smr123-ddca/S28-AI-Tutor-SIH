@@ -58,10 +58,12 @@ export function ChatPage() {
   const handleSend = (customText, originalVagueQuestion = null) => {
     const textToSend = customText || inputQuery;
     if (!textToSend.trim() || isCurrentGenerating) return;
+    const classIdParam = searchParams.get('class_id');
 
     sendMessage({
       question: textToSend,
       customSubject: currentSubject,
+      classId: classIdParam,
       originalVagueQuestion
     });
     setInputQuery('');

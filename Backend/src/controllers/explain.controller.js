@@ -68,7 +68,7 @@ async function explain(req, res) {
 
     let tStart = performance.now();
 
-    const { question, session_id, context_limit = 6, subject } = req.body;
+    const { question, session_id, context_limit = 6, subject, class_id } = req.body;
     const student_id = req.user?.id || req.body.student_id;
 
     if (!question) {
@@ -81,10 +81,44 @@ async function explain(req, res) {
     }
 
     const { supabaseAdmin } = require('../lib/supabaseAdmin');
-    const { data: targetCourse } = await supabaseAdmin.from('courses').select('name').eq('status', 'published').or(`name.eq.${subject},domain.eq.${subject}`).single();
+    let targetCourse = null;
+
+    if (class_id) {
+        const { data: membership, error: membershipErr } = await supabaseAdmin
+            .from('class_members')
+            .select(`
+                class_id,
+                student_id,
+                classes!inner (
+                   course_id,
+                   status
+                )
+            `)
+            .eq('class_id', class_id)
+            .eq('student_id', student_id)
+            .maybeSingle();
+
+        if (membershipErr || !membership) {
+            console.warn(`[SECURITY] Context forbidden: Student ${student_id} is not a member of class ${class_id}`);
+            return res.status(403).json({ error: "Context forbidden: Student is not a member of the requested class." });
+        }
+
+        // Derive authoritative course directly from class_id!
+        const { data: authCourse } = await supabaseAdmin
+            .from('courses')
+            .select('id, name')
+            .eq('id', membership.classes.course_id)
+            .single();
+
+        targetCourse = authCourse;
+    } else {
+        // Global Practice uses client parameter strictly
+        const { data: cData } = await supabaseAdmin.from('courses').select('id, name').eq('status', 'published').or(`name.eq.${subject},domain.eq.${subject}`).single();
+        targetCourse = cData;
+    }
 
     if (!targetCourse) {
-        return res.status(403).json({ error: "Cannot query an unpublished or non-existent subject." });
+        return res.status(403).json({ error: "Cannot query an unpublished or non-existent subject/course." });
     }
 
     if (process.env.DEBUG_TIMING === 'true') recordT('AuthAndValidation', tStart);
@@ -525,21 +559,44 @@ Generate exactly 2 short practice questions based on the factual material.
 
                 // Store practice questions with expected_answer for accurate validation
                 if (supabaseAdmin) {
-                    const insertPayload = validQuestions.map(pq => ({
-                        student_id,
-                        session_id: targetSession,
-                        chunk_id: chunkId,
-                        subject: subject || 'General',
-                        question: pq.question,
-                        concept: pq.concept,
-                        hint_1: pq.hint_1,
-                        hint_2: pq.hint_2,
-                        expected_answer: pq.expected_answer || null,
-                        status: 'pending'
-                    }));
-
                     (async () => {
                         try {
+                            const insertPayload = await Promise.all(validQuestions.map(async pq => {
+                                let conceptId = null;
+                                if (pq.concept && targetCourse?.id) {
+                                    const { data: cData, error: cErr } = await supabaseAdmin.from('concepts')
+                                        .select('id')
+                                        .eq('course_id', targetCourse.id)
+                                        .eq('name', pq.concept.trim())
+                                        .maybeSingle();
+
+                                    if (cErr) {
+                                        console.warn(`[TELEMETRY] Concept Resolution Ambiguity/Error over "${pq.concept}":`, cErr.message);
+                                        conceptId = null;
+                                    } else if (cData) {
+                                        conceptId = cData.id;
+                                        console.log(`[TELEMETRY] Concept Resolved successfully: ${pq.concept} -> ${conceptId}`);
+                                    } else {
+                                        console.warn(`[TELEMETRY] Concept Resolution Failed: 0 canonical records found matching "${pq.concept}" exactly.`);
+                                    }
+                                }
+                                return {
+                                    student_id,
+                                    session_id: targetSession,
+                                    chunk_id: chunkId,
+                                    subject: subject || 'General',
+                                    course_id: targetCourse?.id || null,
+                                    class_id: class_id || null,
+                                    concept_id: conceptId,
+                                    question: pq.question,
+                                    concept: pq.concept,
+                                    hint_1: pq.hint_1,
+                                    hint_2: pq.hint_2,
+                                    expected_answer: pq.expected_answer || null,
+                                    status: 'pending'
+                                };
+                            }));
+
                             const { error } = await supabaseAdmin.from('practice_questions').insert(insertPayload);
                             if (error) console.error("Failed to asynchronously store practice questions:", error);
                         } catch (e) {

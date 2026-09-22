@@ -1,0 +1,30 @@
+{
+  "q": {
+    "id": "e570d2df-cde0-4ae7-86bd-0065d7b9a2a2",
+    "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+    "session_id": null,
+    "chunk_id": null,
+    "subject": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+    "question": "Test question?",
+    "concept": "34ce6d7f-4474-47c1-988d-1d92e5683f02",
+    "hint_1": null,
+    "hint_2": null,
+    "status": "pending",
+    "created_at": "2026-09-20T17:57:23.550942+00:00",
+    "completed_at": null,
+    "hints_requested": 0,
+    "answer_revealed": false
+  },
+  "a": {
+    "id": "4ea5f071-0f15-4b15-b385-18f39b908b5f",
+    "practice_question_id": "e570d2df-cde0-4ae7-86bd-0065d7b9a2a2",
+    "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+    "answer": "test",
+    "evaluation": "correct",
+    "attempt_number": 1,
+    "hints_used": 0,
+    "answer_revealed": false,
+    "created_at": "2026-09-20T17:57:23.873851+00:00",
+    "tutor_response": null
+  }
+}

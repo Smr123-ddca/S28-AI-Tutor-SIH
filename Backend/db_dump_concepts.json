@@ -1,0 +1,14 @@
+{
+  "c": [
+    {
+      "id": "34ce6d7f-4474-47c1-988d-1d92e5683f02",
+      "course_id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+      "concept_alias": "concept_0001",
+      "name": "Backtracking for Permutations",
+      "description": "A recursive algorithm that generates all n! permutations of a list by fixing one position at a time, swapping elements into place, recursing on the remainder, and undoing the swap (backtracking) to restore state before trying the next candidate.",
+      "confidence": 0.95,
+      "created_at": "2026-09-15T17:47:20.194927+00:00"
+    }
+  ],
+  "mem": []
+}

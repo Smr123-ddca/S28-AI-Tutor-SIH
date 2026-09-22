@@ -83,6 +83,26 @@ async function seedClassroom() {
             }
 
             createdClasses.push(targetClass);
+
+            // Fetch a pool of 12 auth users to act as students, excluding the teacher
+            const demoUsers = users.filter(u => u.id !== tProfile.id).slice(0, 12);
+
+            for (const dp of demoUsers) {
+                // Upsert checking to prevent duplicate enrollment
+                const { data: extMem } = await supabaseAdmin
+                    .from('class_members')
+                    .select('id')
+                    .eq('class_id', targetClass.id)
+                    .eq('student_id', dp.id)
+                    .single();
+
+                if (!extMem) {
+                    await supabaseAdmin.from('class_members').insert({
+                        class_id: targetClass.id,
+                        student_id: dp.id
+                    });
+                }
+            }
         }
 
         fs.writeFileSync('seed_demo_classroom_output.json', JSON.stringify({

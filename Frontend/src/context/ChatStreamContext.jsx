@@ -19,7 +19,7 @@ export function ChatStreamProvider({ children }) {
 
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
-  
+
   // messagesBySession: { [sessionId: string]: Array<Message> }
   // '__draft__' key holds draft messages before session_id is provisioned
   const [messagesBySession, setMessagesBySession] = useState({});
@@ -134,7 +134,7 @@ export function ChatStreamProvider({ children }) {
   }, [playSound]);
 
   // Send message - Fully decoupled from component lifecycle
-  const sendMessage = useCallback(async ({ question, customSubject, originalVagueQuestion = null }) => {
+  const sendMessage = useCallback(async ({ question, customSubject, classId, originalVagueQuestion = null }) => {
     const textToSend = question?.trim();
     if (!textToSend) return;
 
@@ -172,7 +172,8 @@ export function ChatStreamProvider({ children }) {
           student_id: studentId,
           session_id: activeSid,
           token,
-          subject: targetSubject
+          subject: targetSubject,
+          class_id: classId
         };
 
         if (originalVagueQuestion) {

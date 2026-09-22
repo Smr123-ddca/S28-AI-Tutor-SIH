@@ -133,7 +133,7 @@ export function StudentClasses() {
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
                     {classes.map(cls => (
-                        <div key={cls.id} className="card-white" style={{ padding: '1.25rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
+                        <div key={cls.id} className="card-white" onClick={() => navigate('/chat?subject=' + encodeURIComponent(cls.course_name) + '&class_id=' + cls.id)} style={{ cursor: 'pointer', padding: '1.25rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
                             <div style={{ marginBottom: '1rem' }}>
                                 <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>{cls.name}</h4>
                                 <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
