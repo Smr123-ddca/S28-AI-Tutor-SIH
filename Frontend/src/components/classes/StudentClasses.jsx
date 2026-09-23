@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Users, BookOpen, Check, X } from 'lucide-react';
 import { Button } from '../common/Button';
 import { fetchAvailableClasses, fetchStudentClasses, joinStudentClass } from '../../services/api';
@@ -7,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 export function StudentClasses() {
     const { session } = useAuth();
     const token = session?.access_token;
+    const navigate = useNavigate();
 
     const [classes, setClasses] = useState([]);
     const [availableClasses, setAvailableClasses] = useState([]);
@@ -132,26 +134,51 @@ export function StudentClasses() {
                 </div>
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-                    {classes.map(cls => (
-                        <div key={cls.id} className="card-white" onClick={() => navigate('/chat?subject=' + encodeURIComponent(cls.course_name) + '&class_id=' + cls.id)} style={{ cursor: 'pointer', padding: '1.25rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
-                            <div style={{ marginBottom: '1rem' }}>
-                                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>{cls.name}</h4>
-                                <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                                    <BookOpen size={14} /> {cls.course_name}
-                                </div>
-                            </div>
+                    {classes.map((cls, idx) => {
+                        const colors = ['purple', 'orange', 'yellow', 'teal'];
+                        const theme = colors[idx % colors.length];
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-bg-secondary)', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
-                                <div style={{ width: '32px', height: '32px', backgroundColor: 'var(--color-orange-subtle)', color: 'var(--color-orange)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
-                                    {cls.teacher_name.charAt(0).toUpperCase()}
+                        return (
+                            <div
+                                key={cls.id}
+                                className="card-white"
+                                onClick={() => navigate('/chat?subject=' + encodeURIComponent(cls.course_name) + '&class_id=' + cls.id)}
+                                style={{
+                                    cursor: 'pointer',
+                                    padding: '1.25rem',
+                                    border: '1px solid var(--color-border)',
+                                    borderTop: `4px solid var(--color-${theme})`,
+                                    borderRadius: 'var(--radius-md)',
+                                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.06)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'none';
+                                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                                }}
+                            >
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--color-ink)', marginBottom: '0.25rem' }}>{cls.name}</h4>
+                                    <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                        <BookOpen size={14} /> {cls.course_name}
+                                    </div>
                                 </div>
-                                <div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Instructor</div>
-                                    <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>{cls.teacher_name}</div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', backgroundColor: 'var(--color-bg-secondary)', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
+                                    <div style={{ width: '32px', height: '32px', backgroundColor: `var(--color-${theme}-subtle)`, color: `var(--color-${theme})`, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
+                                        {cls.teacher_name.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Instructor</div>
+                                        <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>{cls.teacher_name}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </section>

@@ -1,0 +1,20 @@
+{
+  "inputs": {
+    "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+    "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a"
+  },
+  "membership": {
+    "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+    "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+    "classes": {
+      "status": "active",
+      "course_id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac"
+    }
+  },
+  "membershipErr": null,
+  "authCourse": {
+    "id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac",
+    "name": "Economics_Chunking_Reference"
+  },
+  "authCourseErr": null
+}

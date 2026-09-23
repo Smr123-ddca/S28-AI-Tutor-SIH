@@ -20,6 +20,10 @@ export function ChatStreamProvider({ children }) {
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
 
+  // Maintain an ephemeral map of session Context definitions directly mapping 
+  // class mappings intrinsically securing decoupled chat environments safely
+  const sessionContextRef = useRef({});
+
   // messagesBySession: { [sessionId: string]: Array<Message> }
   // '__draft__' key holds draft messages before session_id is provisioned
   const [messagesBySession, setMessagesBySession] = useState({});
@@ -139,7 +143,31 @@ export function ChatStreamProvider({ children }) {
     if (!textToSend) return;
 
     const targetSubject = customSubject || currentSubject;
-    const activeSid = currentSessionId;
+    let activeSid = currentSessionId;
+
+    // Construct identity securely resolving generic structural bounds
+    const targetClassId = classId || null;
+
+    if (activeSid) {
+      const boundContext = sessionContextRef.current[activeSid];
+      if (boundContext) {
+        // Context strictly bound, enforce identity match securely mapping cross-course overrides
+        if (boundContext.subject !== targetSubject || boundContext.classId !== targetClassId) {
+          console.warn(`[Context Guard] Dropping stale session ${activeSid} to avoid 403 context violation natively.`);
+          activeSid = null;
+        }
+      } else {
+        // Newly loaded session from sidebar without formal tracking, assign immediately
+        const selected = sessions.find((s) => s.id === activeSid);
+        if (selected && selected.course !== targetSubject) {
+          activeSid = null;
+        } else if (activeSid) {
+          // Pin the loaded session definitively to the exact execution matrix
+          sessionContextRef.current[activeSid] = { classId: targetClassId, subject: targetSubject };
+        }
+      }
+    }
+
     const sessionKey = activeSid || '__draft__';
 
     // Prevent duplicate sending on the same active session if already generating
@@ -212,6 +240,8 @@ export function ChatStreamProvider({ children }) {
         // If a new session was created and user is currently viewing the draft, switch to the new session ID
         if (!activeSid && resolvedSessionId) {
           setCurrentSessionId(resolvedSessionId);
+          // Pin the newly created session securely resolving origin organically
+          sessionContextRef.current[resolvedSessionId] = { classId: targetClassId, subject: targetSubject };
         }
 
         // Refresh sidebar sessions list

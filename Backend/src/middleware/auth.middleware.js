@@ -2,7 +2,7 @@ const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 const MOCK_TOKEN_ROLES = {
     'mock-student-jwt-token-xyz': {
-        id: 'fa95b2d7-82ab-472d-a2f0-ce65da3bd342', // Genuine Supabase Dev Profile
+        id: '3d999019-498e-4d72-a4c2-dc194c25948a', // Test Context
         role: 'student',
         display_name: 'Alex Rivers',
         email: 'alex@study.edu'

@@ -1,0 +1,287 @@
+{
+  "api_memberships": [
+    {
+      "joined_at": "2026-09-22T06:33:49.465259+00:00",
+      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "classes": {
+        "id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+        "name": "Economics — Section A",
+        "status": "active",
+        "courses": {
+          "name": "Economics_Chunking_Reference"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-22T06:33:08.470112+00:00",
+      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:45.392256+00:00",
+      "student_id": "ecaebf85-d08e-4ca2-b014-f701d1b50062",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:44.853713+00:00",
+      "student_id": "974a0991-089c-4125-a530-a30cc1c2a856",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:44.275866+00:00",
+      "student_id": "2bb635ff-2ace-46d6-b740-97daf062c0b6",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:43.751714+00:00",
+      "student_id": "32591d30-e8fe-41a3-908f-64fca82210e4",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:43.244089+00:00",
+      "student_id": "6cedf379-85a2-48e5-a2de-0bfc472bdf03",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:42.733895+00:00",
+      "student_id": "7e87dd6d-5413-4cb0-9ee5-1eacac773783",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:42.223049+00:00",
+      "student_id": "4282ec3c-1ca6-4f88-acca-344c855325b2",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    },
+    {
+      "joined_at": "2026-09-20T18:03:41.705542+00:00",
+      "student_id": "c7cfeab7-3f16-45e1-a126-1ad121afaa3d",
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "classes": {
+        "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+        "name": "IES — Section A",
+        "status": "active",
+        "courses": {
+          "name": "IES_Demo_Course_Structured"
+        },
+        "section": "A",
+        "profiles": {
+          "display_name": "smruti t"
+        }
+      }
+    }
+  ],
+  "api_error": null,
+  "safeClasses": [
+    {
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+      "id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "name": "Economics — Section A",
+      "section": "A",
+      "course_name": "Economics_Chunking_Reference",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-22T06:33:49.465259+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-22T06:33:08.470112+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "ecaebf85-d08e-4ca2-b014-f701d1b50062",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:45.392256+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "974a0991-089c-4125-a530-a30cc1c2a856",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:44.853713+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "2bb635ff-2ace-46d6-b740-97daf062c0b6",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:44.275866+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "32591d30-e8fe-41a3-908f-64fca82210e4",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:43.751714+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "6cedf379-85a2-48e5-a2de-0bfc472bdf03",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:43.244089+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "7e87dd6d-5413-4cb0-9ee5-1eacac773783",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:42.733895+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "4282ec3c-1ca6-4f88-acca-344c855325b2",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:42.223049+00:00",
+      "status": "active"
+    },
+    {
+      "class_id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "student_id": "c7cfeab7-3f16-45e1-a126-1ad121afaa3d",
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "section": "A",
+      "course_name": "IES_Demo_Course_Structured",
+      "teacher_name": "smruti t",
+      "joined_at": "2026-09-20T18:03:41.705542+00:00",
+      "status": "active"
+    }
+  ]
+}

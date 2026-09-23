@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CitationChip } from './CitationChip';
 import { PracticeQuestionCard } from './PracticeQuestionCard';
 import { Pill } from '../common/Pill';
@@ -26,6 +26,7 @@ export function MessageBubble({
   onSelectOption,
   className = ''
 }) {
+  const [activePracticeIndex, setActivePracticeIndex] = useState(0);
   // User message
   if (message.role === 'user') {
     return (
@@ -304,24 +305,46 @@ export function MessageBubble({
                   <Pill color="yellow" size="sm">
                     Practice Check
                   </Pill>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                    Test your understanding before moving forward:
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                    Question {activePracticeIndex + 1} of {practice_questions.length}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {practice_questions.map((pq, pqIdx) => {
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {(() => {
+                    const pq = practice_questions[activePracticeIndex];
                     const defaultChunkId = results && results.length > 0 ? results[0].id : 'chunk_bst_01';
                     return (
                       <PracticeQuestionCard
-                        key={pqIdx}
+                        key={`pq-${activePracticeIndex}`}
                         question={pq}
-                        index={pqIdx}
+                        index={activePracticeIndex}
                         chunkId={defaultChunkId}
                         studentId={studentId}
                       />
                     );
-                  })}
+                  })()}
+
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
+                    {activePracticeIndex > 0 && (
+                      <button
+                        className="btn btn-outline btn-sm"
+                        onClick={() => setActivePracticeIndex(p => p - 1)}
+                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+                      >
+                        Previous
+                      </button>
+                    )}
+                    {activePracticeIndex < practice_questions.length - 1 && (
+                      <button
+                        className="btn btn-orange btn-sm"
+                        onClick={() => setActivePracticeIndex(p => p + 1)}
+                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+                      >
+                        Next Question
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

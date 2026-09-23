@@ -1,0 +1,59 @@
+{
+  "code": 200,
+  "obj": {
+    "status": "insufficient_evidence",
+    "message": "I don't have approved course material covering this. To ensure academic rigor and avoid hallucinations, I can only explain concepts within your official curriculum.",
+    "results": [
+      {
+        "id": "chunk_39",
+        "topic": "Economics_Chunking_Reference",
+        "section_label": "9.1 Inflation and the Price Level",
+        "text": "Inflation is a sustained increase in the general price level of goods and services over time. A\ncommon measure uses a price index to track the cost of a representative basket. Inflation reduces\nthe purchasing power of money when incomes do not rise at the same rate as prices. Moderate\nEconomics Reference — structured for retrieval/chunking demos\nPage 10\ninflation can occur in growing economies, but high or unstable inflation can complicate saving,\ninvestment, contracts and household planning.\nInflation can arise from demand-side pressures, cost increases or changes in expectations.\nDemand-pull inflation occurs when aggregate demand grows faster than the economy's productive\ncapacity. Cost-push pressure can arise from higher wages, energy prices, imported inputs or supply\ndisruptions. In practice, inflation may have several causes at once, and identifying the dominant\nmechanism is important for choosing an appropriate policy response.",
+        "score": 0.040422604172722164
+      },
+      {
+        "id": "chunk_2",
+        "topic": "Economics_Chunking_Reference",
+        "section_label": "ECONOMICS",
+        "text": "A structured theory reference for AI-tutor ingestion, retrieval and presentation demos\nPurpose. This document is deliberately organized into chapters, sections, subsections, definitions,\nexplanations, examples, and comparison points. The structure makes it useful as realistic\nteacher-uploaded material for demonstrating semantic/TF-IDF retrieval and source-grounded\nexplanations.\nSuggested chunking target: preserve subsection boundaries where possible; merge short adjacent\nunits and split only at paragraph boundaries when a section becomes too large.",
+        "score": 0
+      },
+      {
+        "id": "chunk_3",
+        "topic": "Economics_Chunking_Reference",
+        "section_label": "Contents",
+        "text": "• 1. Foundations of Economics\n• 2. Demand, Supply and Market Equilibrium\n• 3. Elasticity\n• 4. Consumer Behaviour and Utility\n• 5. Production and Costs\n• 6. Market Structures\n• 7. National Income and Macroeconomic Indicators\n• 8. Money, Banking and Monetary Policy\n• 9. Inflation and Unemployment\n• 10. Fiscal Policy and Economic Stabilisation\n• 11. International Trade and Exchange Rates\n• 12. Development, Inequality and Sustainable Growth\nEconomics Reference — structured for retrieval/chunking demos\nPage 2",
+        "score": 0
+      },
+      {
+        "id": "chunk_4",
+        "topic": "Economics_Chunking_Reference",
+        "section_label": "1. Foundations of Economics",
+        "text": "Chapter focus. This chapter contains 4 theory segments. Each segment is self-contained enough to\nserve as a retrieval unit while remaining connected to the broader chapter.",
+        "score": 0
+      },
+      {
+        "id": "chunk_5",
+        "topic": "Economics_Chunking_Reference",
+        "section_label": "1.1 What is Economics?",
+        "text": "Economics is the study of how individuals, firms, governments and societies make choices when\nresources are limited and human wants are numerous. The central problem is scarcity: land, labour,\ncapital, time, information and natural resources cannot satisfy every possible use at the same time.\nBecause resources are scarce, choosing one option usually means giving up another. Economics\ntherefore studies both the choices themselves and the incentives that shape those choices.\nMicroeconomics examines decisions made by individual consumers, firms and markets. It asks\nquestions such as why a household buys one product rather than another, how a firm decides its\noutput, and how prices coordinate buyers and sellers. Macroeconomics studies the economy as a\nwhole, including national income, inflation, unemployment, economic growth and stabilisation\npolicy. The two perspectives are connected: millions of individual decisions collectively influence\naggregate outcomes.",
+        "score": 0
+      }
+    ],
+    "diagnostics": {
+      "queryType": "COMPLETE",
+      "signals": [
+        "sufficient_content"
+      ],
+      "contentTokens": [
+        "start",
+        "practice",
+        "session"
+      ],
+      "contextUsed": false,
+      "contextTopics": [],
+      "expansionApplied": false
+    },
+    "session_id": "285bf792-556f-4eee-9311-02c54778dd90"
+  }
+}

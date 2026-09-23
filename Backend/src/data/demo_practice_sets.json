@@ -1,0 +1,106 @@
+{
+  "DSA_Code_Reference_Annotated": [
+    {
+      "question": "What is time complexity and why is it important?",
+      "concept": "Time Complexity",
+      "concept_id": null,
+      "hint_1": "Think about execution duration.",
+      "hint_2": "It scales with input size.",
+      "expected_answer": "It measures the time an algorithm takes relative to the input size."
+    },
+    {
+      "question": "How does space complexity differ from time complexity?",
+      "concept": "Space Complexity",
+      "concept_id": null,
+      "hint_1": "Think about RAM.",
+      "hint_2": "Memory vs CPU cycles.",
+      "expected_answer": "Space complexity measures the memory required, while time complexity measures the execution time."
+    },
+    {
+      "question": "What does Big-O notation uniquely represent in algorithm analysis?",
+      "concept": "Big-O Notation",
+      "concept_id": null,
+      "hint_1": "Does it represent the best case?",
+      "hint_2": "It represents the maximum growth rate.",
+      "expected_answer": "The upper bound or worst-case complexity of an algorithm."
+    }
+  ],
+  "DBMS_Code_Reference_Annotated": [
+    {
+      "question": "What is the primary function of a Database Management System (DBMS)?",
+      "concept": "Database Management System",
+      "concept_id": null,
+      "hint_1": "It acts as an interface.",
+      "hint_2": "It handles data storage and retrieval.",
+      "expected_answer": "To create, manage, and query a database efficiently and securely."
+    },
+    {
+      "question": "Why is Data Independence a critical advantage of a DBMS?",
+      "concept": "Data Independence",
+      "concept_id": null,
+      "hint_1": "Think about modifying data structures.",
+      "hint_2": "Logical vs Physical separation.",
+      "expected_answer": "It allows changes in the schema at one level without affecting the upper levels."
+    },
+    {
+      "question": "What fundamental structure does the Relational Data Model use to store data?",
+      "concept": "Relational Data Model",
+      "concept_id": null,
+      "hint_1": "Think about spreadsheets.",
+      "hint_2": "Two-dimensional matrices of records.",
+      "expected_answer": "Tables (or relations) consisting of rows and columns."
+    }
+  ],
+  "Economics_Chunking_Reference": [
+    {
+      "question": "How does scarcity force societies to make economic choices?",
+      "concept": "Scarcity",
+      "concept_id": "e4247e1d-c955-4c4a-85a0-8d57172294b6",
+      "hint_1": "Consider unlimited wants.",
+      "hint_2": "Not everything can be produced at once.",
+      "expected_answer": "Resources are limited but wants are infinite, requiring trade-offs."
+    },
+    {
+      "question": "If you spend an hour studying instead of working for $15, what is the opportunity cost?",
+      "concept": "Opportunity Cost",
+      "concept_id": "c09820f5-22fa-4a37-ac5a-8d110432368f",
+      "hint_1": "What did you give up?",
+      "hint_2": "The next best alternative.",
+      "expected_answer": "$15 and the experience of working."
+    },
+    {
+      "question": "According to the law of demand, what happens when the price of a good increases?",
+      "concept": "Demand",
+      "concept_id": "dc02fe8a-b57a-4f57-8ef6-e00aa0ba40d1",
+      "hint_1": "Think from a consumer's perspective.",
+      "hint_2": "Higher prices usually discourage purchases.",
+      "expected_answer": "The quantity demanded decreases."
+    }
+  ],
+  "IES_Demo_Course_Structured": [
+    {
+      "question": "What defines an Embedded System compared to a general-purpose computer?",
+      "concept": "Embedded System",
+      "concept_id": "1e56e38a-17c4-493f-b82c-a1a0979d31bf",
+      "hint_1": "Think about its specific purpose.",
+      "hint_2": "It is not meant for general computing like a PC.",
+      "expected_answer": "It performs a dedicated function within a larger mechanical or electrical system."
+    },
+    {
+      "question": "What is the primary constraint of a Real-Time System?",
+      "concept": "Real-Time System",
+      "concept_id": "4d27371b-76b1-493d-8eac-f9a9f9fb2dcb",
+      "hint_1": "Think about pacemakers.",
+      "hint_2": "Missing a deadline causes failure.",
+      "expected_answer": "It must respond to inputs within strict, deterministic time constraints."
+    },
+    {
+      "question": "How does Harvard Architecture differ from Von Neumann Architecture?",
+      "concept": "Harvard Architecture",
+      "concept_id": null,
+      "hint_1": "Think about memory access.",
+      "hint_2": "Simultaneous fetching of data and instructions.",
+      "expected_answer": "It uses separate memory spaces and buses for instructions and data."
+    }
+  ]
+}

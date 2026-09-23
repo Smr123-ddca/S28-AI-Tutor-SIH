@@ -1,34 +1,21 @@
 {
-  "q": [
+  "courses": [
     {
-      "id": "11b1123d-070b-4c9a-b0b6-3292262477a5",
-      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
-      "session_id": null,
-      "chunk_id": "chunk_2",
-      "subject": "temporary-subject",
-      "question": "How is the rotation amount k adjusted if it is larger than the length of the array?",
-      "concept": "Modulo Arithmetic in Array Rotation",
-      "hint_1": "Check the second line of the rotate_left function.",
-      "hint_2": "It uses the modulo operator (%) with the length of the array.",
-      "status": "completed",
-      "created_at": "2026-08-29T12:21:12.689357+00:00",
-      "completed_at": "2026-08-30T19:18:15.014+00:00",
-      "hints_requested": 2,
-      "answer_revealed": false
+      "id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac",
+      "name": "Economics_Chunking_Reference"
+    },
+    {
+      "id": "d2675f1a-9122-4ded-b2a3-3b431bc4d97d",
+      "name": "DBMS_Code_Reference_Annotated"
+    },
+    {
+      "id": "b02c40fe-6563-40a9-acfc-f736a8bebdc2",
+      "name": "IES_Demo_Course_Structured"
+    },
+    {
+      "id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+      "name": "DSA_Code_Reference_Annotated"
     }
   ],
-  "a": [
-    {
-      "id": "1c7729a9-0493-4a74-997b-c989afeb6f83",
-      "practice_question_id": "aaa3ba4a-cb45-4187-9621-bf568715e806",
-      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
-      "answer": "An object stays at rest or a state of constant motion unless or until acted upon by an external force\n",
-      "evaluation": "correct",
-      "attempt_number": 1,
-      "hints_used": 0,
-      "answer_revealed": false,
-      "created_at": "2026-08-27T17:22:55.595993+00:00",
-      "tutor_response": null
-    }
-  ]
+  "concepts": null
 }

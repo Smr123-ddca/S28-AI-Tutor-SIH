@@ -140,7 +140,7 @@ async function getClassDetails(req, res) {
             .select(`
                 id,
                 joined_at,
-                profiles ( id, display_name, full_name, name, email )
+                profiles ( id, display_name )
             `)
             .eq('class_id', classId)
             .order('joined_at', { ascending: false });
@@ -153,8 +153,8 @@ async function getClassDetails(req, res) {
             members: members.map(m => ({
                 id: m.profiles.id,
                 joined_at: m.joined_at,
-                name: m.profiles.display_name || m.profiles.full_name || m.profiles.name || m.profiles.email,
-                email: m.profiles.email
+                name: m.profiles.display_name || 'Student',
+                email: 'hidden'
             }))
         });
     } catch (error) {
@@ -175,7 +175,7 @@ async function getAvailableClasses(req, res) {
             .select(`
                 id, name, section,
                 courses ( name ),
-                profiles!teacher_id ( display_name, full_name, name )
+                profiles!teacher_id ( display_name )
             `)
             .eq('status', 'active');
 
@@ -188,7 +188,7 @@ async function getAvailableClasses(req, res) {
                 name: c.name,
                 section: c.section,
                 course_name: c.courses ? c.courses.name : null,
-                teacher_name: p.display_name || p.full_name || p.name || 'Instructor'
+                teacher_name: p.display_name || 'Instructor'
             };
         });
 
@@ -270,7 +270,7 @@ async function getStudentClasses(req, res) {
                 classes (
                     id, name, section, status,
                     courses ( name ),
-                    profiles!teacher_id ( display_name, full_name, name )
+                    profiles!teacher_id ( display_name )
                 )
             `)
             .eq('student_id', student_id)
@@ -286,7 +286,7 @@ async function getStudentClasses(req, res) {
                 name: c.name,
                 section: c.section,
                 course_name: c.courses ? c.courses.name : null,
-                teacher_name: p.display_name || p.full_name || p.name || 'Instructor',
+                teacher_name: p.display_name || 'Instructor',
                 joined_at: m.joined_at,
                 status: c.status
             };

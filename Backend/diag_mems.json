@@ -1,0 +1,83 @@
+{
+  "mems": [
+    {
+      "id": "f6504023-f2a6-433d-a188-4ff4e4c205d0",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "0f9765da-fad6-4d17-9bba-f3163ba11198",
+      "joined_at": "2026-09-20T18:03:33.21568+00:00"
+    },
+    {
+      "id": "c92d6e85-e50e-483f-b02c-7164589c17f7",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "e0c295c2-f72b-4800-960a-edd6fec1a67d",
+      "joined_at": "2026-09-20T18:03:33.729879+00:00"
+    },
+    {
+      "id": "388275d4-27e3-4b77-84ca-54e9cc004134",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "eabef109-54c6-4d63-93cc-31c29f047a9a",
+      "joined_at": "2026-09-20T18:03:34.262097+00:00"
+    },
+    {
+      "id": "a25fc557-dd4f-4163-9e8d-9613cb8965e5",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "8601cfb8-93db-4e22-a9e4-7c8a05062224",
+      "joined_at": "2026-09-20T18:03:34.78994+00:00"
+    },
+    {
+      "id": "005aedd2-cfbf-4641-9bba-1b4e9b2ff5c9",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "c7cfeab7-3f16-45e1-a126-1ad121afaa3d",
+      "joined_at": "2026-09-20T18:03:35.296314+00:00"
+    },
+    {
+      "id": "7c1dfb2e-10fb-4f00-b235-fa97a81e597a",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "4282ec3c-1ca6-4f88-acca-344c855325b2",
+      "joined_at": "2026-09-20T18:03:35.797085+00:00"
+    },
+    {
+      "id": "c8914d17-cc21-4f75-88c5-f24d4f6460dc",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "7e87dd6d-5413-4cb0-9ee5-1eacac773783",
+      "joined_at": "2026-09-20T18:03:36.298812+00:00"
+    },
+    {
+      "id": "8b334c4d-70c3-425c-9ac7-90085b0978ad",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "6cedf379-85a2-48e5-a2de-0bfc472bdf03",
+      "joined_at": "2026-09-20T18:03:36.825091+00:00"
+    },
+    {
+      "id": "0016b04f-1997-441e-a418-05c017c6cfe9",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "32591d30-e8fe-41a3-908f-64fca82210e4",
+      "joined_at": "2026-09-20T18:03:37.34613+00:00"
+    },
+    {
+      "id": "edb36d1d-9936-4f7b-a991-aa83f8420890",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "2bb635ff-2ace-46d6-b740-97daf062c0b6",
+      "joined_at": "2026-09-20T18:03:37.857199+00:00"
+    },
+    {
+      "id": "8dfb3e83-b364-47ab-a38f-4a5156bb7562",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "974a0991-089c-4125-a530-a30cc1c2a856",
+      "joined_at": "2026-09-20T18:03:38.360518+00:00"
+    },
+    {
+      "id": "d4c3adc9-3b62-4a66-a1eb-470835907830",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "ecaebf85-d08e-4ca2-b014-f701d1b50062",
+      "joined_at": "2026-09-20T18:03:38.886508+00:00"
+    },
+    {
+      "id": "b2479ecf-11df-445d-bde8-27d280fe6744",
+      "class_id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "student_id": "3d999019-498e-4d72-a4c2-dc194c25948a",
+      "joined_at": "2026-09-22T06:33:49.465259+00:00"
+    }
+  ],
+  "memErr": null
+}

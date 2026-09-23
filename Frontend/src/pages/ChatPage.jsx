@@ -35,20 +35,27 @@ export function ChatPage() {
 
   // Handle URL deep links (?session_id=... or ?q=...)
   useEffect(() => {
+    const subjectParam = searchParams.get('subject') || searchParams.get('course');
     const sessionIdParam = searchParams.get('session_id');
     const queryParam = searchParams.get('q');
-    const subjectParam = searchParams.get('subject') || searchParams.get('course');
 
+    let subjectChanged = false;
     if (subjectParam && (!currentSubject || currentSubject !== subjectParam)) {
       setCurrentSubject(subjectParam);
+      subjectChanged = true;
     }
 
     if (sessionIdParam && sessionIdParam !== currentSessionId) {
       selectSession(sessionIdParam);
-    } else if (queryParam) {
+    } else if (!sessionIdParam && (subjectChanged || currentSessionId)) {
+      // Clear sticky session state when jumping to a new class completely organically natively
+      if (typeof newChat === 'function') newChat();
+    }
+
+    if (queryParam) {
       setInputQuery(queryParam);
     }
-  }, [searchParams, selectSession, currentSubject, setCurrentSubject, currentSessionId]);
+  }, [searchParams, selectSession, currentSubject, setCurrentSubject, currentSessionId, newChat]);
 
   // Scroll to bottom when messages change or generation starts
   useEffect(() => {
@@ -272,31 +279,44 @@ export function ChatPage() {
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '0.4rem' }}>
                   What do you want to learn today?
                 </h3>
-                <p style={{ fontSize: '0.9rem', maxWidth: '420px' }}>
-                  Ask any question from your curriculum. The tutor provides syllabus-grounded explanations, source citations, and practice checks.
+                <p style={{ fontSize: '0.9rem', maxWidth: '420px', marginBottom: '1.5rem' }}>
+                  Ask any question from your curriculum, or start a core practice sequence to verify your conceptual foundation.
                 </p>
 
-                <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-ink)' }}>Query Subject Context:</label>
-                  <select
-                    value={currentSubject || ''}
-                    onChange={(e) => setCurrentSubject(e.target.value)}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      borderRadius: 'var(--radius-sm)',
-                      border: '1.5px solid var(--color-border)',
-                      backgroundColor: 'var(--color-white)',
-                      outline: 'none',
-                      fontSize: '0.9rem',
-                      fontWeight: 500,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {subjects.length === 0 && <option value="">Loading subjects...</option>}
-                    {subjects.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+                  {currentSubject && (
+                    <Button
+                      variant="orange"
+                      size="lg"
+                      onClick={() => handleSend("Start a practice session focusing specifically on the topic.")}
+                      style={{ padding: '0.8rem 2rem', fontSize: '1.05rem', fontWeight: 700, borderRadius: 'var(--radius-full)' }}
+                    >
+                      Begin Practice Mastery Sequence
+                    </Button>
+                  )}
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                    <label style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-ink)' }}>Query Subject Context:</label>
+                    <select
+                      value={currentSubject || ''}
+                      onChange={(e) => setCurrentSubject(e.target.value)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        borderRadius: 'var(--radius-sm)',
+                        border: '1.5px solid var(--color-border)',
+                        backgroundColor: 'var(--color-white)',
+                        outline: 'none',
+                        fontSize: '0.9rem',
+                        fontWeight: 500,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {subjects.length === 0 && <option value="">Loading subjects...</option>}
+                      {subjects.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
             )}

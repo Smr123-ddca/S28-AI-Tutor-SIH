@@ -361,6 +361,39 @@ async function explain(req, res) {
         }
 
         // ════════════════════════════════════════════════════════════════
+        // STEP 4.6: Practice Override Bypasser
+        // ════════════════════════════════════════════════════════════════
+        if (process.env.DEMO_MODE === 'true' && questionToProcess.toLowerCase().includes('start a practice session')) {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const practicePath = path.join(__dirname, '../data/demo_practice_sets.json');
+                if (fs.existsSync(practicePath)) {
+                    const practiceSets = JSON.parse(fs.readFileSync(practicePath, 'utf8'));
+
+                    if (practiceSets[subject]) {
+                        console.log(`[DEMO PRACTICE] Overriding LLM for subject: ${subject}`);
+                        demoMatch = {
+                            question: questionToProcess,
+                            response: {
+                                status: "answered",
+                                message: "Here are 3 fundamental practice questions from the core syllabus to evaluate your mastery.",
+                                practice_questions: practiceSets[subject],
+                                classification: "concept_question"
+                            }
+                        };
+                        isDemoBypass = true;
+
+                        // Fake a chunk so downstream validators don't crash
+                        demoMatchingChunk = results && results.length > 0 ? results[0] : { id: 'mock_chunk_123' };
+                    }
+                }
+            } catch (e) {
+                console.error("Practice mock logic failed:", e);
+            }
+        }
+
+        // ════════════════════════════════════════════════════════════════
         // STEP 5: Evidence gate (unchanged at 0.30)
         // ════════════════════════════════════════════════════════════════
         let eStart = performance.now();
@@ -562,22 +595,19 @@ Generate exactly 2 short practice questions based on the factual material.
                     (async () => {
                         try {
                             const insertPayload = await Promise.all(validQuestions.map(async pq => {
-                                let conceptId = null;
-                                if (pq.concept && targetCourse?.id) {
+                                let conceptId = pq.concept_id || null;
+                                if (!conceptId && pq.concept && targetCourse?.id) {
+                                    // Fallback to alias matching if no exact ID was pre-provided by Demo Mode
                                     const { data: cData, error: cErr } = await supabaseAdmin.from('concepts')
                                         .select('id')
                                         .eq('course_id', targetCourse.id)
-                                        .eq('name', pq.concept.trim())
+                                        .eq('concept_alias', pq.concept.trim())
                                         .maybeSingle();
 
                                     if (cErr) {
                                         console.warn(`[TELEMETRY] Concept Resolution Ambiguity/Error over "${pq.concept}":`, cErr.message);
-                                        conceptId = null;
                                     } else if (cData) {
                                         conceptId = cData.id;
-                                        console.log(`[TELEMETRY] Concept Resolved successfully: ${pq.concept} -> ${conceptId}`);
-                                    } else {
-                                        console.warn(`[TELEMETRY] Concept Resolution Failed: 0 canonical records found matching "${pq.concept}" exactly.`);
                                     }
                                 }
                                 return {
