@@ -71,8 +71,9 @@ export async function fetchMisconceptions(token) {
   return await res.json();
 }
 
-export async function fetchDemoClassAnalytics(token) {
-  const res = await fetch('/api/analytics/demo-class', {
+export async function fetchDemoClassAnalytics(token, subject = 'All') {
+  const encSubject = encodeURIComponent(subject);
+  const res = await fetch(`/api/analytics/demo-class?subject=${encSubject}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {}
   });
   if (!res.ok) throw new Error('Failed to fetch demo class analytics');

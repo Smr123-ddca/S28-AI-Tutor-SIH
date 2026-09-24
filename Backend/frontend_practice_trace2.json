@@ -1,0 +1,42 @@
+{
+  "step1_db": {
+    "id": "f5d938b8-6841-4c43-bda9-68877f48bb88",
+    "role": "assistant",
+    "content": "Attached Explanation",
+    "response_json": {
+      "status": "answered",
+      "practice_questions": [
+        {
+          "hint_1": "What is the single most valuable alternative given up?",
+          "concept": "Opportunity Cost",
+          "question": "You have two hours available. You can either: A) Study for an exam. B) Work a shift earning ₹400. C) Watch a movie. You choose to study. What is the opportunity cost of your decision?\n\nA. The cost of your textbook\nB. ₹400 and the value of the next-best alternative\nC. The amount of time spent studying\nD. Zero, because studying is free",
+          "expected_answer": "B"
+        }
+      ],
+      "explanation_segments": [
+        {
+          "text": "Absolutely. Let's test the idea."
+        }
+      ]
+    },
+    "created_at": "2026-09-24T16:29:38.899462+00:00"
+  },
+  "step2_mapped": {
+    "role": "bot",
+    "status": "answered",
+    "practice_questions": [
+      {
+        "hint_1": "What is the single most valuable alternative given up?",
+        "concept": "Opportunity Cost",
+        "question": "You have two hours available. You can either: A) Study for an exam. B) Work a shift earning ₹400. C) Watch a movie. You choose to study. What is the opportunity cost of your decision?\n\nA. The cost of your textbook\nB. ₹400 and the value of the next-best alternative\nC. The amount of time spent studying\nD. Zero, because studying is free",
+        "expected_answer": "B"
+      }
+    ],
+    "explanation_segments": [
+      {
+        "text": "Absolutely. Let's test the idea."
+      }
+    ]
+  },
+  "step3_has_practice": true
+}

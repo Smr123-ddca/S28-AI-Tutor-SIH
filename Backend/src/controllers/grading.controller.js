@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
 const { generateWithFallback } = require('../services/llm.router');
+const { resolveDisplayName } = require('../utils/demoIdentities');
 
 const STORE_PATH = path.join(__dirname, '../data/grading_store.json');
 
@@ -178,27 +179,19 @@ async function createAssignment(req, res) {
     return res.status(201).json({ status: 'success', assignment: newAssignment });
 }
 
-const KNOWN_STUDENT_NAMES = {
-    '55199574-0473-43cf-9994-6ee252a49342': 'Smruti Pradhan',
-    '3d999019-498e-4d72-a4c2-dc194c25948a': 'Smruti Pradhan',
-    'e47b1029-7928-4bc2-8a12-fc194c25948b': 'Aarav Sharma',
-    'mock-student-uuid-101': 'Alex Rivers',
-    'student-test-submission-uuid': 'Alex Rivers'
-};
-
 function resolveStudentName(sub, profile) {
-    if (profile) {
-        const name = profile.display_name || profile.full_name || profile.name || (profile.email ? profile.email.split('@')[0] : null);
-        if (name && name !== 'Student') return name;
-    }
-    if (sub && sub.student_name && sub.student_name !== 'Student') {
-        return sub.student_name;
-    }
     const id = (sub && sub.student_id) || (profile && profile.id);
-    if (id && KNOWN_STUDENT_NAMES[id]) {
-        return KNOWN_STUDENT_NAMES[id];
+    let name = null;
+
+    if (profile) {
+        name = profile.display_name || profile.full_name || profile.name || (profile.email ? profile.email.split('@')[0] : null);
     }
-    return (sub && sub.student_name) || 'Student';
+
+    if (!name && sub && sub.student_name) {
+        name = sub.student_name;
+    }
+
+    return resolveDisplayName(id, name);
 }
 
 /**
@@ -387,9 +380,7 @@ async function submitAssignment(req, res) {
         return res.status(400).json({ error: 'assignment_id and submission_text are required.' });
     }
 
-    const resolvedName = (req.user.display_name && req.user.display_name !== 'Student')
-        ? req.user.display_name
-        : (req.body.student_name || KNOWN_STUDENT_NAMES[studentId] || 'Student');
+    const resolvedName = resolveDisplayName(studentId, (req.user.display_name || req.body.student_name));
 
     const newSub = {
         id: `sub-${Date.now()}`,

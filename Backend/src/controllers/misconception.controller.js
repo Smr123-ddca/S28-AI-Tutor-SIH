@@ -99,7 +99,8 @@ async function getMisconceptions(req, res) {
 
 async function getDemoAnalytics(req, res) {
     try {
-        const demoData = getDeterministicDemoData();
+        const subject = req.query.subject || 'All';
+        const demoData = getDeterministicDemoData(subject);
         return res.json(demoData);
     } catch (e) {
         console.error("Demo data error:", e);

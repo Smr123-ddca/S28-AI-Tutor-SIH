@@ -13,7 +13,6 @@ import { TeacherHome } from './pages/TeacherHome';
 import { TeacherPrerequisites } from './pages/TeacherPrerequisites';
 import { TeacherHomeLanding } from './pages/TeacherHomeLanding';
 import { TeacherClassesPage } from './pages/TeacherClassesPage';
-import { TeacherMisconceptions } from './pages/TeacherMisconceptions';
 import { TeacherAnalytics } from './pages/TeacherAnalytics';
 import { TeacherGrading } from './pages/TeacherGrading';
 import { IngestionProvider } from './context/IngestionContext';
@@ -80,7 +79,6 @@ export function App() {
           <Route path="/teacher/classes" element={<TeacherClassesPage />} />
           <Route path="/teacher/grading" element={<TeacherGrading />} />
           <Route path="/teacher/review" element={<TeacherPrerequisites />} />
-          <Route path="/teacher/dashboard" element={<TeacherMisconceptions />} />
           <Route path="/teacher/analytics" element={<TeacherAnalytics />} />
         </Route>
       </Route>

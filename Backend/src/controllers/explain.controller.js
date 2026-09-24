@@ -118,6 +118,14 @@ async function explain(req, res) {
         targetCourse = cData;
     }
 
+    const { checkDemoChatOverride } = require('../utils/demoChatResponses');
+    const demoOverride = checkDemoChatOverride(question, subject);
+
+    if (!targetCourse && demoOverride) {
+        // Bypass strict global authorization constraints for the safe Demo path 
+        targetCourse = { name: subject };
+    }
+
     if (!targetCourse) {
         return res.status(403).json({ error: "Cannot query an unpublished or non-existent subject/course." });
     }
@@ -166,6 +174,11 @@ async function explain(req, res) {
         if (process.env.DEBUG_TIMING === 'true') fs.appendFileSync('timing.log', `------\n`);
         return res.json(statusObj);
     };
+
+    // Execute Immediate Presentation Payload
+    if (demoOverride) {
+        return respondAndLog(demoOverride);
+    }
 
     try {
         // ════════════════════════════════════════════════════════════════

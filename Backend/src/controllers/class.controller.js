@@ -1,4 +1,5 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
+const { resolveDisplayName } = require('../utils/demoIdentities');
 
 /**
  * Normalizes a join code for consistent lookup
@@ -139,6 +140,7 @@ async function getClassDetails(req, res) {
             .from('class_members')
             .select(`
                 id,
+                student_id,
                 joined_at,
                 profiles ( id, display_name )
             `)
@@ -151,9 +153,9 @@ async function getClassDetails(req, res) {
             ...classData,
             course_name: classData.courses ? classData.courses.name : null,
             members: members.map(m => ({
-                id: m.profiles.id,
+                id: m.profiles?.id || m.student_id,
                 joined_at: m.joined_at,
-                name: m.profiles.display_name || 'Student',
+                name: resolveDisplayName(m.profiles?.id || m.student_id, m.profiles?.display_name),
                 email: 'hidden'
             }))
         });

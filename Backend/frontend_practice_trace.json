@@ -1,0 +1,98 @@
+{
+  "step1_db": {
+    "id": "d3563e86-eea3-4f98-8b45-040d852ae5d8",
+    "role": "assistant",
+    "content": "In Newtonian mechanics, momentum is the product of an object's mass and velocity. Consequently, any moving object has momentum.\nMomentum is classified as a vector quantity, which means it possesses both a magnitude and a direction.\nThe magnitude of momentum depends on mass and speed; the greater an object's mass or velocity, the greater its momentum.",
+    "response_json": {
+      "status": "answered",
+      "results": [
+        {
+          "id": "chunk_9",
+          "text": "In Newtonian mechanics, momentum is the product of the mass and velocity of an object. It is a vector quantity, possessing a magnitude and a direction. If an object is moving, it has momentum. The greater an object's mass or the greater its velocity, the greater its momentum.",
+          "score": 0.5121475197315839,
+          "topic": "Physics",
+          "section_label": "Chapter 3, Section 1: Momentum"
+        },
+        {
+          "id": "chunk_1",
+          "text": "Newton's second law of motion states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The equation is commonly written as F = ma, where F is the net force, m is the mass, and a is the acceleration. This law explains how the velocity of an object changes when it is subjected to an external force.",
+          "score": 0,
+          "topic": "Physics",
+          "section_label": "Chapter 2, Section 3: Newton's Second Law"
+        },
+        {
+          "id": "chunk_2",
+          "text": "Newton's third law of motion states that for every action, there is an equal and opposite reaction. This means that if object A exerts a force on object B, then object B exerts a force of equal magnitude and opposite direction back on object A. These forces constantly happen in pairs called action-reaction pairs.",
+          "score": 0,
+          "topic": "Physics",
+          "section_label": "Chapter 2, Section 4: Newton's Third Law"
+        }
+      ],
+      "practice_questions": [
+        "What two properties of an object are multiplied together to calculate its momentum?",
+        "Is momentum a scalar quantity or a vector quantity?"
+      ],
+      "explanation_segments": [
+        {
+          "text": "In Newtonian mechanics, momentum is the product of an object's mass and velocity. Consequently, any moving object has momentum.",
+          "source_chunk_id": "chunk_9"
+        },
+        {
+          "text": "Momentum is classified as a vector quantity, which means it possesses both a magnitude and a direction.",
+          "source_chunk_id": "chunk_9"
+        },
+        {
+          "text": "The magnitude of momentum depends on mass and speed; the greater an object's mass or velocity, the greater its momentum.",
+          "source_chunk_id": "chunk_9"
+        }
+      ]
+    },
+    "created_at": "2026-08-25T18:44:05.607436+00:00"
+  },
+  "step2_mapped": {
+    "role": "bot",
+    "status": "answered",
+    "results": [
+      {
+        "id": "chunk_9",
+        "text": "In Newtonian mechanics, momentum is the product of the mass and velocity of an object. It is a vector quantity, possessing a magnitude and a direction. If an object is moving, it has momentum. The greater an object's mass or the greater its velocity, the greater its momentum.",
+        "score": 0.5121475197315839,
+        "topic": "Physics",
+        "section_label": "Chapter 3, Section 1: Momentum"
+      },
+      {
+        "id": "chunk_1",
+        "text": "Newton's second law of motion states that the acceleration of an object is directly proportional to the net force acting on it and inversely proportional to its mass. The equation is commonly written as F = ma, where F is the net force, m is the mass, and a is the acceleration. This law explains how the velocity of an object changes when it is subjected to an external force.",
+        "score": 0,
+        "topic": "Physics",
+        "section_label": "Chapter 2, Section 3: Newton's Second Law"
+      },
+      {
+        "id": "chunk_2",
+        "text": "Newton's third law of motion states that for every action, there is an equal and opposite reaction. This means that if object A exerts a force on object B, then object B exerts a force of equal magnitude and opposite direction back on object A. These forces constantly happen in pairs called action-reaction pairs.",
+        "score": 0,
+        "topic": "Physics",
+        "section_label": "Chapter 2, Section 4: Newton's Third Law"
+      }
+    ],
+    "practice_questions": [
+      "What two properties of an object are multiplied together to calculate its momentum?",
+      "Is momentum a scalar quantity or a vector quantity?"
+    ],
+    "explanation_segments": [
+      {
+        "text": "In Newtonian mechanics, momentum is the product of an object's mass and velocity. Consequently, any moving object has momentum.",
+        "source_chunk_id": "chunk_9"
+      },
+      {
+        "text": "Momentum is classified as a vector quantity, which means it possesses both a magnitude and a direction.",
+        "source_chunk_id": "chunk_9"
+      },
+      {
+        "text": "The magnitude of momentum depends on mass and speed; the greater an object's mass or velocity, the greater its momentum.",
+        "source_chunk_id": "chunk_9"
+      }
+    ]
+  },
+  "step3_has_practice": true
+}

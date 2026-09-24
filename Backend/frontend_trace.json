@@ -1,0 +1,26 @@
+{
+  "step1_db": {
+    "id": "8508586c-228a-425f-a601-024b7b43253c",
+    "role": "assistant",
+    "content": "I don't have approved course material covering this.",
+    "response_json": {
+      "status": "insufficient_evidence",
+      "message": "I don't have approved course material covering this.",
+      "results": []
+    },
+    "created_at": "2026-08-25T18:33:16.716045+00:00"
+  },
+  "step2_mapped": {
+    "role": "bot",
+    "status": "insufficient_evidence",
+    "message": "I don't have approved course material covering this.",
+    "results": []
+  },
+  "step3_render_vars": {
+    "status": "insufficient_evidence",
+    "has_segments": false,
+    "botMessage": "I don't have approved course material covering this.",
+    "dbContent": "I don't have approved course material covering this."
+  },
+  "step4_will_render_text": true
+}

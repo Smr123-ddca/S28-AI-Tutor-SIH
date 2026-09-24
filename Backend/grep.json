@@ -1,0 +1,11 @@
+[
+  "42:                                 expected_answer: \"B\",\r",
+  "130:                                 expected_answer: \"A\"\r",
+  "144:                         expected_answer: \"INNER JOIN\",\r",
+  "152:                         expected_answer: \"They are included with NULL values for right table columns.\",\r",
+  "189:                         expected_answer: \"Dedicated function\",\r",
+  "197:                         expected_answer: \"Microcontroller\",\r",
+  "298:                     expected_answer: q.expected_answer\r",
+  "327:                         answer: q.expected_answer, // perfect match\r",
+  "440:                     { role: 'user', content: `For the first one, I think the answer is ${practiceQuestionsObj[0].expected_answer}.` },\r"
+]
