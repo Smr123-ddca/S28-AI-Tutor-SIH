@@ -85,14 +85,14 @@ export function IconRail() {
     },
     {
       to: '/teacher/dashboard',
-      icon: LayoutDashboard,
-      title: 'Analytics Dashboard',
+      icon: BarChart2,
+      title: 'Class Analytics (Demo)',
       roles: ['teacher']
     },
     {
       to: '/teacher/analytics',
-      icon: BarChart2,
-      title: 'Class Analytics',
+      icon: LayoutDashboard,
+      title: 'Student Performance',
       roles: ['teacher']
     }
   ];

@@ -2,7 +2,7 @@ const express = require('express');
 const { retrieve } = require('../controllers/retrieval.controller');
 const { explain } = require('../controllers/explain.controller');
 const { recordSessionEvent, detectGap } = require('../controllers/gap.controller');
-const { getMisconceptions } = require('../controllers/misconception.controller');
+const { getMisconceptions, getDemoAnalytics } = require('../controllers/misconception.controller');
 const { getChatLogs, getSessions, getSessionMessages, createSession, updateSessionTitle, deleteSession } = require('../controllers/chatlog.controller');
 const { authenticate, requireRole } = require('../middleware/auth.middleware');
 const { uploadMiddleware, handleUpload, generatePrerequisites, getBatch, subscribeProgress, getIngestStatus } = require('../controllers/ingest.controller');
@@ -79,6 +79,7 @@ router.get('/ingest/batch/:batchId', requireRole('teacher'), (req, res) => {
 
 // Analytics & Co-pilot (Teacher Only)
 router.get('/analytics/class', requireRole('teacher'), getClassAnalytics);
+router.get('/analytics/demo-class', requireRole('teacher'), getDemoAnalytics);
 router.get('/analytics/grading', requireRole('teacher'), getClassGrading);
 router.post('/teacher-copilot', requireRole('teacher'), handleTeacherCopilot);
 

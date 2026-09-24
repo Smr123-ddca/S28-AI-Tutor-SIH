@@ -71,6 +71,14 @@ export async function fetchMisconceptions(token) {
   return await res.json();
 }
 
+export async function fetchDemoClassAnalytics(token) {
+  const res = await fetch('/api/analytics/demo-class', {
+    headers: token ? { Authorization: `Bearer ${token}` } : {}
+  });
+  if (!res.ok) throw new Error('Failed to fetch demo class analytics');
+  return await res.json();
+}
+
 export async function updateSessionTitle(sessionId, title, token) {
   const res = await fetch(`/api/sessions/${sessionId}/title`, {
     method: 'PUT',

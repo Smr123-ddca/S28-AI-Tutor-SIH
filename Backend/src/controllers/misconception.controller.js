@@ -1,5 +1,6 @@
 const { getAllSessionEvents, getLikelyGaps } = require('./gap.controller');
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
+const { getDeterministicDemoData } = require('../utils/demoDataGenerator');
 
 async function getMisconceptions(req, res) {
     const { data: events, error } = await getAllSessionEvents();
@@ -96,6 +97,17 @@ async function getMisconceptions(req, res) {
     });
 }
 
+async function getDemoAnalytics(req, res) {
+    try {
+        const demoData = getDeterministicDemoData();
+        return res.json(demoData);
+    } catch (e) {
+        console.error("Demo data error:", e);
+        return res.status(500).json({ error: "Failed to generate demo data" });
+    }
+}
+
 module.exports = {
-    getMisconceptions
+    getMisconceptions,
+    getDemoAnalytics
 };
