@@ -1,0 +1,46 @@
+[
+  {
+    "id": "5614e189-f5d5-4dd7-aaf8-d066d23f9d07",
+    "course_id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+    "teacher_id": "9ab265e9-a934-477c-8fc4-9a922e120183",
+    "name": "DSA — Section A",
+    "section": "A",
+    "join_code": "DSA-E1RR",
+    "status": "active",
+    "created_at": "2026-09-20T15:51:47.983118+00:00",
+    "updated_at": "2026-09-20T15:51:47.983118+00:00"
+  },
+  {
+    "id": "03b678f5-6fb7-46e7-8a41-b41ad6ed8362",
+    "course_id": "d2675f1a-9122-4ded-b2a3-3b431bc4d97d",
+    "teacher_id": "9ab265e9-a934-477c-8fc4-9a922e120183",
+    "name": "DBMS — Section B",
+    "section": "B",
+    "join_code": "DBM-BX45",
+    "status": "active",
+    "created_at": "2026-09-20T15:51:48.556193+00:00",
+    "updated_at": "2026-09-20T15:51:48.556193+00:00"
+  },
+  {
+    "id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+    "course_id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac",
+    "teacher_id": "9ab265e9-a934-477c-8fc4-9a922e120183",
+    "name": "Economics — Section A",
+    "section": "A",
+    "join_code": "ECO-A00W",
+    "status": "active",
+    "created_at": "2026-09-20T15:51:49.131801+00:00",
+    "updated_at": "2026-09-20T15:51:49.131801+00:00"
+  },
+  {
+    "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+    "course_id": "b02c40fe-6563-40a9-acfc-f736a8bebdc2",
+    "teacher_id": "9ab265e9-a934-477c-8fc4-9a922e120183",
+    "name": "IES — Section A",
+    "section": "A",
+    "join_code": "IES-PA1I",
+    "status": "active",
+    "created_at": "2026-09-20T15:51:49.733201+00:00",
+    "updated_at": "2026-09-20T15:51:49.733201+00:00"
+  }
+]

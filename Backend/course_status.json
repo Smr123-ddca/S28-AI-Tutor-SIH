@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac",
+    "name": "Economics_Chunking_Reference",
+    "status": "published"
+  },
+  {
+    "id": "d2675f1a-9122-4ded-b2a3-3b431bc4d97d",
+    "name": "DBMS_Code_Reference_Annotated",
+    "status": "published"
+  },
+  {
+    "id": "b02c40fe-6563-40a9-acfc-f736a8bebdc2",
+    "name": "IES_Demo_Course_Structured",
+    "status": "published"
+  },
+  {
+    "id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+    "name": "DSA_Code_Reference_Annotated",
+    "status": "published"
+  }
+]

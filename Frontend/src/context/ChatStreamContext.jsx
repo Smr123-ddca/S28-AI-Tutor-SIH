@@ -149,21 +149,13 @@ export function ChatStreamProvider({ children }) {
     const targetClassId = classId || null;
 
     if (activeSid) {
-      const boundContext = sessionContextRef.current[activeSid];
-      if (boundContext) {
-        // Context strictly bound, enforce identity match securely mapping cross-course overrides
-        if (boundContext.subject !== targetSubject || boundContext.classId !== targetClassId) {
-          console.warn(`[Context Guard] Dropping stale session ${activeSid} to avoid 403 context violation natively.`);
+      const selected = sessions.find((s) => s.id === activeSid);
+      if (selected) {
+        // Strict DB-Native Identity Matrix Execution
+        const selectedClassId = selected.class_id || null;
+        if (selectedClassId !== targetClassId || selected.course !== targetSubject) {
+          console.warn(`[Context Guard] Dropping inherently mismatched session ${activeSid} protecting DB validation boundaries.`);
           activeSid = null;
-        }
-      } else {
-        // Newly loaded session from sidebar without formal tracking, assign immediately
-        const selected = sessions.find((s) => s.id === activeSid);
-        if (selected && selected.course !== targetSubject) {
-          activeSid = null;
-        } else if (activeSid) {
-          // Pin the loaded session definitively to the exact execution matrix
-          sessionContextRef.current[activeSid] = { classId: targetClassId, subject: targetSubject };
         }
       }
     }
@@ -240,8 +232,6 @@ export function ChatStreamProvider({ children }) {
         // If a new session was created and user is currently viewing the draft, switch to the new session ID
         if (!activeSid && resolvedSessionId) {
           setCurrentSessionId(resolvedSessionId);
-          // Pin the newly created session securely resolving origin organically
-          sessionContextRef.current[resolvedSessionId] = { classId: targetClassId, subject: targetSubject };
         }
 
         // Refresh sidebar sessions list

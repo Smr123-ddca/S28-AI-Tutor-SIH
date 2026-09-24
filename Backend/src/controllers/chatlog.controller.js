@@ -1,7 +1,7 @@
 const { supabaseAdmin } = require('../lib/supabaseAdmin');
 
 async function recordChatLog(entry) {
-    const { student_id, session_id, question, response, course } = entry;
+    const { student_id, session_id, question, response, course, class_id } = entry;
     if (!supabaseAdmin) {
         console.warn("Skipping external chat log record: Supabase not configured.");
         return null;
@@ -15,6 +15,7 @@ async function recordChatLog(entry) {
 
             const insertData = { student_id, title };
             if (course) insertData.course = course;
+            if (class_id) insertData.class_id = class_id;
 
             const { data: sessionData, error: sessionError } = await supabaseAdmin
                 .from('chat_sessions')
@@ -80,7 +81,7 @@ async function getSessions(req, res) {
 
     let query = supabaseAdmin
         .from('chat_sessions')
-        .select('id, title, last_message_at, course')
+        .select('id, title, last_message_at, course, class_id')
         .eq('student_id', student_id)
         .order('last_message_at', { ascending: false });
 
@@ -140,12 +141,12 @@ async function createSession(req, res) {
 
     const { data, error } = await supabaseAdmin
         .from('chat_sessions')
-        .insert({ student_id, title: 'New Chat', course })
+        .insert({ student_id, title: 'New Chat', course, class_id: req.body.class_id || null })
         .select()
         .single();
 
     if (error) return res.status(500).json({ error: error.message });
-    return res.json({ id: data.id, title: data.title, course: data.course });
+    return res.json({ id: data.id, title: data.title, course: data.course, class_id: data.class_id });
 }
 
 async function updateSessionTitle(req, res) {

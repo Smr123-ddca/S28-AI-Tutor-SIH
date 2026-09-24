@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Send,
   Plus,
@@ -13,6 +13,7 @@ import { useChatStream } from '../context/ChatStreamContext';
 
 export function ChatPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {
     sessions,
     currentSessionId,
@@ -154,7 +155,10 @@ export function ChatPage() {
                 }}
               >
                 <div
-                  onClick={() => selectSession(s.id)}
+                  onClick={() => {
+                    selectSession(s.id);
+                    navigate(`?session_id=${encodeURIComponent(s.id)}`);
+                  }}
                   style={{
                     flex: 1,
                     overflow: 'hidden',

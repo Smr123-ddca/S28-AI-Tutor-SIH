@@ -1,0 +1,42 @@
+{
+  "cls": [
+    {
+      "id": "5614e189-f5d5-4dd7-aaf8-d066d23f9d07",
+      "name": "DSA — Section A",
+      "course_id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8"
+    },
+    {
+      "id": "03b678f5-6fb7-46e7-8a41-b41ad6ed8362",
+      "name": "DBMS — Section B",
+      "course_id": "d2675f1a-9122-4ded-b2a3-3b431bc4d97d"
+    },
+    {
+      "id": "dcb2c4de-ea57-434a-82d2-f5342ba5a08d",
+      "name": "Economics — Section A",
+      "course_id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac"
+    },
+    {
+      "id": "08dae53a-a199-49f1-8e63-85226f31642e",
+      "name": "IES — Section A",
+      "course_id": "b02c40fe-6563-40a9-acfc-f736a8bebdc2"
+    }
+  ],
+  "crs": [
+    {
+      "id": "1b7467a6-a44b-40ec-82ac-da02e02e18ac",
+      "name": "Economics_Chunking_Reference"
+    },
+    {
+      "id": "d2675f1a-9122-4ded-b2a3-3b431bc4d97d",
+      "name": "DBMS_Code_Reference_Annotated"
+    },
+    {
+      "id": "b02c40fe-6563-40a9-acfc-f736a8bebdc2",
+      "name": "IES_Demo_Course_Structured"
+    },
+    {
+      "id": "91bd14ec-9f5f-4370-9591-f7343bdc8ed8",
+      "name": "DSA_Code_Reference_Annotated"
+    }
+  ]
+}

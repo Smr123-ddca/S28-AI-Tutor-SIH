@@ -1,6 +1,17 @@
 {
   "assignments": [
     {
+      "id": "asg-1790176511016",
+      "course_name": "DBMS_Code_Reference_Annotated",
+      "title": "Transactions & ACID Properties",
+      "description": "Analyze serializability and 2-phase locking protocol.",
+      "rubric": "Correctness: 50, Isolation levels: 50",
+      "max_score": 100,
+      "due_date": null,
+      "created_by": "teacher-123",
+      "created_at": "2026-09-23T15:15:11.016Z"
+    },
+    {
       "id": "asg-1788502570845",
       "course_name": "DBMS_Code_Reference_Annotated",
       "title": "Transactions & ACID Properties",
@@ -211,6 +222,21 @@
     }
   ],
   "submissions": [
+    {
+      "id": "sub-1790176510977",
+      "assignment_id": "asg-103",
+      "student_id": "student-test-submission-uuid",
+      "student_name": "Alex Rivers",
+      "submission_text": "Student solution explaining Express auth middleware.",
+      "submitted_at": "2026-09-23T15:15:10.977Z",
+      "grade": null,
+      "feedback": null,
+      "ai_suggested_grade": null,
+      "ai_suggested_feedback": null,
+      "status": "ungraded",
+      "graded_at": null,
+      "graded_by": null
+    },
     {
       "id": "sub-1788502570751",
       "assignment_id": "asg-103",
@@ -447,7 +473,7 @@
       "ai_suggested_grade": 92,
       "ai_suggested_feedback": "Excellent explanation of join algorithms with accurate complexity details.",
       "status": "graded",
-      "graded_at": "2026-09-04T06:16:11.206Z",
+      "graded_at": "2026-09-23T15:15:11.150Z",
       "graded_by": "teacher-123"
     },
     {

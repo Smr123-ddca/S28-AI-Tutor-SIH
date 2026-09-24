@@ -99,6 +99,7 @@ async function explain(req, res) {
             .maybeSingle();
 
         if (membershipErr || !membership) {
+            console.error('\n\n[403 TRACE]\nclass_id:', class_id, '\nstudent_id:', student_id, '\nerror:', membershipErr, '\nuser:', req.user);
             console.warn(`[SECURITY] Context forbidden: Student ${student_id} is not a member of class ${class_id}`);
             return res.status(403).json({ error: "Context forbidden: Student is not a member of the requested class." });
         }
@@ -140,7 +141,8 @@ async function explain(req, res) {
                     student_id,
                     session_id: session_id || 'untracked',
                     question: question,
-                    course: subject, // still logging to 'course' field in DB for now
+                    course: targetCourse.name, // log to the authoritative resolved course
+                    class_id: class_id || null, // explicitly track class origin natively
                     response: statusObj
                 }).then(loggedData => {
                     if (process.env.DEBUG_TIMING === 'true') recordT('Persistence', pStart);
@@ -178,22 +180,30 @@ async function explain(req, res) {
             if (supabaseAdmin) {
                 const { data: validSession } = await supabaseAdmin
                     .from('chat_sessions')
-                    .select('id, course')
+                    .select('id, course, class_id')
                     .eq('id', session_id)
                     .eq('student_id', student_id)
                     .single();
 
                 if (validSession) {
                     if (validSession.course) {
-                        if (validSession.course !== subject) {
+                        if (validSession.course !== targetCourse.name) {
                             return res.status(403).json({ error: "Session subject mismatch. This session belongs to another subject." });
                         }
                     } else {
                         // Legacy session where course IS NULL. Establish course association safely.
                         await supabaseAdmin
                             .from('chat_sessions')
-                            .update({ course: subject })
+                            .update({ course: targetCourse.name })
                             .eq('id', session_id);
+                    }
+
+                    // Strict Class Context Boundaries
+                    if (validSession.class_id && validSession.class_id !== class_id) {
+                        return res.status(403).json({ error: "Session context mismatch. This session is strictly bound to another class." });
+                    }
+                    if (!validSession.class_id && class_id) {
+                        return res.status(403).json({ error: "Context forbidden. Global historical sessions cannot be retroactively injected into a class context." });
                     }
 
                     const { data: pastMessages } = await supabaseAdmin
